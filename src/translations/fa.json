@@ -1,0 +1,56 @@
+{
+  "tabs": {
+    "home": "خانه",
+    "search": "جستجو",
+    "notifications": "اعلان‌ها",
+    "profile": "پروفایل"
+  },
+  "drawer": {
+    "home": "خانه",
+    "settings": "تنظیمات",
+    "help": "راهنما",
+    "about": "درباره ما"
+  },
+  "screens": {
+    "home": {
+      "title": "خانه",
+      "subtitle": "تب اصلی — کشو تنظیمات و موارد دیگر را میزبان است.",
+      "openDrawer": "باز کردن کشو",
+      "goSearch": "رفتن به جستجو با query",
+      "goSettings": "رفتن به تنظیمات (کشو)"
+    },
+    "search": {
+      "title": "جستجو",
+      "subtitleWithQuery": "پارامتر اختیاری query: \"{{query}}\"",
+      "subtitleDefault": "هنگام ناوبری، { query } را ارسال کنید."
+    },
+    "notifications": {
+      "title": "اعلان‌ها",
+      "subtitle": "شمارنده نشان تب از src/state/notificationBadge.ts وصل شده است."
+    },
+    "profile": {
+      "title": "پروفایل",
+      "subtitleWithUser": "پارامتر اختیاری userId: {{userId}}",
+      "subtitleDefault": "با { userId } ناوبری کنید تا اینجا دیده شود."
+    },
+    "settings": {
+      "title": "تنظیمات",
+      "subtitle": "از کشو باز شده — هدر در این شاخه ناوبری نمایش داده می‌شود.",
+      "languageSection": "زبان",
+      "languagePersian": "فارسی",
+      "languageEnglish": "English"
+    },
+    "help": {
+      "title": "راهنما",
+      "subtitle": "ناوبری ثانویه از طریق کشو، همان الگوی مقاله."
+    },
+    "about": {
+      "title": "درباره ما",
+      "subtitle": "Innoghte — ترکیب تب + کشو."
+    }
+  },
+  "drawerFooter": {
+    "logout": "خروج",
+    "version": "نسخه {{version}}"
+  }
+}

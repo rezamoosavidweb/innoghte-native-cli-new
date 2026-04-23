@@ -1,0 +1,56 @@
+{
+  "tabs": {
+    "home": "Home",
+    "search": "Search",
+    "notifications": "Notifications",
+    "profile": "Profile"
+  },
+  "drawer": {
+    "home": "Home",
+    "settings": "Settings",
+    "help": "Help",
+    "about": "About"
+  },
+  "screens": {
+    "home": {
+      "title": "Home",
+      "subtitle": "Primary tab — drawer hosts settings and more.",
+      "openDrawer": "Open drawer",
+      "goSearch": "Go to Search with query",
+      "goSettings": "Go to Settings (drawer)"
+    },
+    "search": {
+      "title": "Search",
+      "subtitleWithQuery": "Optional route param query: \"{{query}}\"",
+      "subtitleDefault": "Pass { query } when navigating here."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "subtitle": "Tab badge count is wired from src/state/notificationBadge.ts."
+    },
+    "profile": {
+      "title": "Profile",
+      "subtitleWithUser": "Optional userId param: {{userId}}",
+      "subtitleDefault": "Navigate with { userId } to see it here."
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Opened from the drawer — header shown on this stack branch.",
+      "languageSection": "Language",
+      "languagePersian": "فارسی",
+      "languageEnglish": "English"
+    },
+    "help": {
+      "title": "Help",
+      "subtitle": "Secondary navigation via drawer, same pattern as the article."
+    },
+    "about": {
+      "title": "About",
+      "subtitle": "Innoghte — tab + drawer composition."
+    }
+  },
+  "drawerFooter": {
+    "logout": "Log out",
+    "version": "Version {{version}}"
+  }
+}
