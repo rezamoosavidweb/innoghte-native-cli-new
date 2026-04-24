@@ -4,8 +4,8 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 
-import type { DrawerParamList } from '../navigation/types';
-import { useLegacyMenuPlaceholderStyles } from '../theme/drawerPlaceholderScreensThemed';
+import type { DrawerParamList } from '@/navigation/types';
+import { useLegacyMenuPlaceholderStyles } from '@/screens/themed/drawerPlaceholderScreens.styles';
 
 type Props = DrawerScreenProps<DrawerParamList>;
 

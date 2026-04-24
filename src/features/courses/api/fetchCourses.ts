@@ -1,4 +1,4 @@
-import { SEED_COURSES, type Course } from '../data/seedCourses';
+import { SEED_COURSES, type Course } from '@/features/courses/data/seedCourses';
 
 const FAKE_LATENCY_MS = 1000;
 

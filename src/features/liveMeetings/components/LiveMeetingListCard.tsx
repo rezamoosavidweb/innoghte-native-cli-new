@@ -3,11 +3,11 @@ import { Image, Pressable, Text, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
-import { formatPriceForApp } from '../../../lib/formatLocaleNumbers';
-import { isPurchasedProduct } from '../../../lib/purchasedProductIds';
-import type { ProductListCardStyles } from '../../../theme/productListCardThemed';
-import { useProductListCardStyles } from '../../../theme/productListCardThemed';
-import type { LiveMeetingType } from '../data/seedLiveMeetings';
+import { formatPriceForApp } from '@/lib/formatLocaleNumbers';
+import { isPurchasedProduct } from '@/lib/purchasedProductIds';
+import type { ProductListCardStyles } from '@/components/themed/ProductListCard.styles';
+import { useProductListCardStyles } from '@/components/themed/ProductListCard.styles';
+import type { LiveMeetingType } from '@/features/liveMeetings/data/seedLiveMeetings';
 
 const PRICE_DISPLAY_DIVISOR = 10;
 
@@ -108,7 +108,7 @@ const LiveMeetingListCardComponent = ({ item }: Props) => {
                 pressed ? [s.buttonSuccess, s.pressed] : s.buttonSuccess
               }
             >
-              <Text style={s.buttonPrimaryText}>{t('courses.buy')}</Text>
+              <Text style={s.buttonSuccessText}>{t('courses.buy')}</Text>
             </Pressable>
           </>
         )}

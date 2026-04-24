@@ -1,4 +1,4 @@
-import type { PublicAlbumTrack } from '../types';
+import type { PublicAlbumTrack } from '@/features/publicAlbums/types';
 
 /** Static sample — legacy drawer `Albums` used `getPublicCourses(1)`; replace with API when wired. */
 export const SEED_PUBLIC_ALBUM_TRACKS: readonly PublicAlbumTrack[] = [

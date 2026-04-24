@@ -10,19 +10,18 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { LiveMeetingListCard } from '../features/liveMeetings/components/LiveMeetingListCard';
-import type { LiveMeetingType } from '../features/liveMeetings/data/seedLiveMeetings';
-import { useLiveMeetingsQuery } from '../features/liveMeetings/hooks/useLiveMeetingsQuery';
-import type { DrawerParamList } from '../navigation/types';
+import { LiveMeetingListCard } from '@/features/liveMeetings/components/LiveMeetingListCard';
+import type { LiveMeetingType } from '@/features/liveMeetings/data/seedLiveMeetings';
+import { useLiveMeetingsQuery } from '@/features/liveMeetings/hooks/useLiveMeetingsQuery';
+import type { DrawerParamList } from '@/navigation/types';
 import {
   flashListContentGutters,
+  flashListEstimatedItemSize,
   flashListRowSeparators,
   useNavScreenShellStyles,
-} from '../theme/navScreenLayout';
+} from '@/theme';
 
 type Props = DrawerScreenProps<DrawerParamList, 'LiveMeetings'>;
-
-const ESTIMATED = 280;
 
 const Sep = React.memo(function Sep() {
   return <View style={flashListRowSeparators.h12} />;
@@ -68,7 +67,7 @@ const LiveMeetingsScreenComponent = (_props: Props) => {
         data={data ?? []}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
-        estimatedItemSize={ESTIMATED}
+        estimatedItemSize={flashListEstimatedItemSize.liveMeeting}
         ItemSeparatorComponent={Sep}
         contentContainerStyle={flashListContentGutters.standard}
         showsVerticalScrollIndicator={false}

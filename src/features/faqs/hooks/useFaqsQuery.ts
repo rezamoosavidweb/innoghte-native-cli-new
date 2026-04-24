@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { fetchFaqs } from '../api/fetchFaqs';
-import { FAQS_QUERY_KEY } from '../constants/queryKeys';
+import { fetchFaqs } from '@/features/faqs/api/fetchFaqs';
+import { FAQS_QUERY_KEY } from '@/features/faqs/constants/queryKeys';
 
 const STALE_TIME_MS = 30 * 60 * 1000;
 

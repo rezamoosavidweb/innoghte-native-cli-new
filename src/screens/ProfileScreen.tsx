@@ -2,8 +2,8 @@ import * as React from 'react';
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
 
-import { ScreenScaffold } from '../components/ScreenScaffold';
-import type { TabParamList } from '../navigation/types';
+import { ScreenScaffold } from '@/components/ScreenScaffold';
+import type { TabParamList } from '@/navigation/types';
 
 type Props = BottomTabScreenProps<TabParamList, 'Profile'>;
 

@@ -3,14 +3,14 @@ import { Image, Pressable, Text, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
-import type { ProductListCardStyles } from '../../../theme/productListCardThemed';
-import { useProductListCardStyles } from '../../../theme/productListCardThemed';
+import type { ProductListCardStyles } from '@/components/themed/ProductListCard.styles';
+import { useProductListCardStyles } from '@/components/themed/ProductListCard.styles';
 import {
   formatNumberForApp,
   formatPriceForApp,
-} from '../../../lib/formatLocaleNumbers';
-import { isPurchasedProduct } from '../../../lib/purchasedProductIds';
-import type { Course } from '../data/seedCourses';
+} from '@/lib/formatLocaleNumbers';
+import { isPurchasedProduct } from '@/lib/purchasedProductIds';
+import type { Course } from '@/features/courses/data/seedCourses';
 
 const PRICE_DISPLAY_DIVISOR = 10;
 
@@ -170,7 +170,7 @@ const CourseListCardComponent = ({ course }: CourseListCardProps) => {
                 pressed ? [s.buttonSuccess, s.pressed] : s.buttonSuccess
               }
             >
-              <Text style={s.buttonPrimaryText}>{t('courses.buy')}</Text>
+              <Text style={s.buttonSuccessText}>{t('courses.buy')}</Text>
             </Pressable>
           </>
         )}

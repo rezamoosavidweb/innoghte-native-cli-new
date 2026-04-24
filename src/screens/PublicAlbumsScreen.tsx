@@ -10,19 +10,18 @@ import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { PublicAlbumTrackCard } from '../features/publicAlbums/components/PublicAlbumTrackCard';
-import type { PublicAlbumTrack } from '../features/publicAlbums/types';
-import { usePublicAlbumTracksQuery } from '../features/publicAlbums/hooks/usePublicAlbumTracksQuery';
-import type { DrawerParamList } from '../navigation/types';
+import { PublicAlbumTrackCard } from '@/features/publicAlbums/components/PublicAlbumTrackCard';
+import type { PublicAlbumTrack } from '@/features/publicAlbums/types';
+import { usePublicAlbumTracksQuery } from '@/features/publicAlbums/hooks/usePublicAlbumTracksQuery';
+import type { DrawerParamList } from '@/navigation/types';
 import {
   flashListContentGutters,
+  flashListEstimatedItemSize,
   flashListRowSeparators,
   useNavScreenShellStyles,
-} from '../theme/navScreenLayout';
+} from '@/theme';
 
 type Props = DrawerScreenProps<DrawerParamList, 'PublicAlbums'>;
-
-const ESTIMATED = 320;
 
 const Sep = React.memo(function Sep() {
   return <View style={flashListRowSeparators.h14} />;
@@ -68,7 +67,7 @@ const PublicAlbumsScreenComponent = (_props: Props) => {
         data={data ?? []}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
-        estimatedItemSize={ESTIMATED}
+        estimatedItemSize={flashListEstimatedItemSize.publicAlbumTrack}
         ItemSeparatorComponent={Sep}
         contentContainerStyle={flashListContentGutters.drawerWide}
         showsVerticalScrollIndicator={false}

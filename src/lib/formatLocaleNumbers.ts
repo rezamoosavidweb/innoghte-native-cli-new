@@ -1,4 +1,4 @@
-import i18n from '../translations';
+import i18n from '@/translations';
 
 export function formatNumberForLocale(value: number, language: string): string {
   return value.toLocaleString(language);

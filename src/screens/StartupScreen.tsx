@@ -7,8 +7,8 @@ import { Button } from '@react-navigation/elements';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import type { DrawerParamList } from '../navigation/types';
-import { useStartupScreenStyles } from '../theme/drawerPlaceholderScreensThemed';
+import type { DrawerParamList } from '@/navigation/types';
+import { useStartupScreenStyles } from '@/screens/themed/drawerPlaceholderScreens.styles';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Startup'>;
 

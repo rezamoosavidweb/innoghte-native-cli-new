@@ -2,8 +2,8 @@ import * as React from 'react';
 import type { DrawerScreenProps } from '@react-navigation/drawer';
 import { useTranslation } from 'react-i18next';
 
-import { ScreenScaffold } from '../components/ScreenScaffold';
-import type { DrawerParamList } from '../navigation/types';
+import { ScreenScaffold } from '@/components/ScreenScaffold';
+import type { DrawerParamList } from '@/navigation/types';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Help'>;
 

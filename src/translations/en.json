@@ -80,7 +80,11 @@
       "subtitle": "Opened from the drawer — header shown on this stack branch.",
       "languageSection": "Language",
       "languagePersian": "فارسی",
-      "languageEnglish": "English"
+      "languageEnglish": "English",
+      "themeSection": "Appearance",
+      "themeSystem": "System",
+      "themeLight": "Light",
+      "themeDark": "Dark"
     },
     "help": {
       "title": "Help",

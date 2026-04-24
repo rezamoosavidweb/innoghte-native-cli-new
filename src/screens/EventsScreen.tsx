@@ -10,19 +10,18 @@ import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { EventListCard } from '../features/events/components/EventListCard';
-import type { EventType } from '../features/events/data/seedEvents';
-import { useEventsQuery } from '../features/events/hooks/useEventsQuery';
-import type { DrawerParamList } from '../navigation/types';
+import { EventListCard } from '@/features/events/components/EventListCard';
+import type { EventType } from '@/features/events/data/seedEvents';
+import { useEventsQuery } from '@/features/events/hooks/useEventsQuery';
+import type { DrawerParamList } from '@/navigation/types';
 import {
   flashListContentGutters,
+  flashListEstimatedItemSize,
   flashListRowSeparators,
   useNavScreenShellStyles,
-} from '../theme/navScreenLayout';
+} from '@/theme';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Events'>;
-
-const ESTIMATED = 300;
 
 const Sep = React.memo(function Sep() {
   return <View style={flashListRowSeparators.h12} />;
@@ -68,7 +67,7 @@ const EventsScreenComponent = (_props: Props) => {
         data={data ?? []}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
-        estimatedItemSize={ESTIMATED}
+        estimatedItemSize={flashListEstimatedItemSize.event}
         ItemSeparatorComponent={Sep}
         contentContainerStyle={flashListContentGutters.standard}
         showsVerticalScrollIndicator={false}

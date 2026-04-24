@@ -1,6 +1,6 @@
 import { I18nManager } from 'react-native';
 
-import type { AppLanguage } from '../bootstrap/readAppLanguage';
+import type { AppLanguage } from '@/bootstrap/readAppLanguage';
 
 export type { AppLanguage };
 

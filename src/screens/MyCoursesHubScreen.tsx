@@ -7,10 +7,10 @@ import type { CompositeNavigationProp } from '@react-navigation/native';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 
-import type { DrawerParamList, TabParamList } from '../navigation/types';
-import { useMyCoursesHubStyles } from '../theme/myCoursesHubThemed';
+import type { DrawerParamList, TabParamList } from '@/navigation/types';
+import { useMyCoursesHubStyles } from '@/screens/themed/myCoursesHubScreen.styles';
 
 type Props = BottomTabScreenProps<TabParamList, 'MyCourses'>;
 
@@ -97,11 +97,11 @@ const MyCoursesHubScreenComponent = (_props: Props) => {
   return (
     <ScrollView
       style={s.scroll}
-      contentContainerStyle={styles.scrollContent}
+      contentContainerStyle={s.scrollContent}
       keyboardShouldPersistTaps="handled"
     >
       <Text style={s.subtitle}>{t('screens.myCoursesHub.subtitle')}</Text>
-      <View style={styles.list}>
+      <View style={s.list}>
         {HUB_ROWS.map(row => (
           <HubMenuRow
             key={row.id}
@@ -120,15 +120,3 @@ const MyCoursesHubScreenComponent = (_props: Props) => {
 
 export const MyCoursesHubScreen = React.memo(MyCoursesHubScreenComponent);
 MyCoursesHubScreen.displayName = 'MyCoursesHubScreen';
-
-const styles = StyleSheet.create({
-  scrollContent: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 32,
-    gap: 16,
-  },
-  list: {
-    gap: 12,
-  },
-});

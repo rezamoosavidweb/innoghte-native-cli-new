@@ -80,7 +80,11 @@
       "subtitle": "از کشو باز شده — هدر در این شاخه ناوبری نمایش داده می‌شود.",
       "languageSection": "زبان",
       "languagePersian": "فارسی",
-      "languageEnglish": "English"
+      "languageEnglish": "English",
+      "themeSection": "ظاهر",
+      "themeSystem": "هماهنگ با سیستم",
+      "themeLight": "روشن",
+      "themeDark": "تاریک"
     },
     "help": {
       "title": "راهنما",

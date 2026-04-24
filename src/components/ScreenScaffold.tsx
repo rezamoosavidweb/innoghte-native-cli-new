@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Text, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 
-import { useScreenScaffoldStyles } from '../theme/navScreenLayout';
+import { useScreenScaffoldStyles } from '@/theme';
 
 type Props = {
   title: string;

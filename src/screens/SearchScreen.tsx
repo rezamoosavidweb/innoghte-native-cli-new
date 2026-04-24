@@ -3,8 +3,8 @@ import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
-import { ScreenScaffold } from '../components/ScreenScaffold';
-import type { TabParamList } from '../navigation/types';
+import { ScreenScaffold } from '@/components/ScreenScaffold';
+import type { TabParamList } from '@/navigation/types';
 
 type Props = BottomTabScreenProps<TabParamList, 'Search'>;
 

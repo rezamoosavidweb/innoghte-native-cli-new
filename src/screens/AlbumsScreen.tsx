@@ -6,19 +6,18 @@ import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { AlbumListCard } from '../features/albums/components/AlbumListCard';
-import type { Album } from '../features/albums/data/seedAlbums';
-import { useAlbumsQuery } from '../features/albums/hooks/useAlbumsQuery';
-import type { TabParamList } from '../navigation/types';
+import { AlbumListCard } from '@/features/albums/components/AlbumListCard';
+import type { Album } from '@/features/albums/data/seedAlbums';
+import { useAlbumsQuery } from '@/features/albums/hooks/useAlbumsQuery';
+import type { TabParamList } from '@/navigation/types';
 import {
   flashListContentGutters,
+  flashListEstimatedItemSize,
   flashListRowSeparators,
   useNavScreenShellStyles,
-} from '../theme/navScreenLayout';
+} from '@/theme';
 
 type Props = BottomTabScreenProps<TabParamList, 'Albums'>;
-
-const ESTIMATED_ALBUM_ITEM_SIZE = 260;
 
 const Separator = React.memo(function AlbumsListSeparator() {
   return <View style={flashListRowSeparators.h12} />;
@@ -67,7 +66,7 @@ const AlbumsScreenComponent = (_props: Props) => {
         data={listData}
         renderItem={renderAlbumItem}
         keyExtractor={keyExtractor}
-        estimatedItemSize={ESTIMATED_ALBUM_ITEM_SIZE}
+        estimatedItemSize={flashListEstimatedItemSize.album}
         ItemSeparatorComponent={Separator}
         contentContainerStyle={flashListContentGutters.standard}
         showsVerticalScrollIndicator={false}

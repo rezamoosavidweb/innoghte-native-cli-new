@@ -1,4 +1,4 @@
-import { SEED_ALBUMS, type Album } from '../data/seedAlbums';
+import { SEED_ALBUMS, type Album } from '@/features/albums/data/seedAlbums';
 
 const FAKE_LATENCY_MS = 1000;
 

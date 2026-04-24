@@ -3,9 +3,9 @@ import { Image, Pressable, Text, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
-import { isPurchasedProduct } from '../../../lib/purchasedProductIds';
-import { usePublicAlbumTrackStyles } from '../../../theme/publicAlbumTrackThemed';
-import type { PublicAlbumTrack } from '../types';
+import { isPurchasedProduct } from '@/lib/purchasedProductIds';
+import { usePublicAlbumTrackStyles } from '@/components/themed/PublicAlbumTrack.styles';
+import type { PublicAlbumTrack } from '@/features/publicAlbums/types';
 
 type Props = { item: PublicAlbumTrack };
 
@@ -55,10 +55,10 @@ const PublicAlbumTrackCardComponent = ({ item }: Props) => {
             accessibilityRole="button"
             onPress={noop}
             style={({ pressed }) =>
-              pressed ? [s.btnLight, s.pressed] : s.btnLight
+              pressed ? [s.primaryBtn, s.pressed] : s.primaryBtn
             }
           >
-            <Text style={s.btnLightTxt}>{t('courses.show')}</Text>
+            <Text style={s.primaryBtnText}>{t('courses.show')}</Text>
           </Pressable>
         ) : (
           <>
@@ -78,7 +78,7 @@ const PublicAlbumTrackCardComponent = ({ item }: Props) => {
                 pressed ? [s.success, s.pressed] : s.success
               }
             >
-              <Text style={s.btnLightTxt}>{t('courses.buy')}</Text>
+              <Text style={s.successBtnText}>{t('courses.buy')}</Text>
             </Pressable>
           </>
         )}

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { fetchCourses } from '../api/fetchCourses';
-import { COURSES_QUERY_KEY } from '../constants/queryKeys';
+import { fetchCourses } from '@/features/courses/api/fetchCourses';
+import { COURSES_QUERY_KEY } from '@/features/courses/constants/queryKeys';
 
 const STALE_TIME_MS = 5 * 60 * 1000;
 

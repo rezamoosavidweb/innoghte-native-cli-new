@@ -6,12 +6,12 @@ import {
   type StateStorage,
 } from 'zustand/middleware';
 
-import type { AppLanguage } from '../bootstrap/readAppLanguage';
-import { StorageService } from '../lib/storage.service';
-import { i18n, initI18n } from '../translations';
-import { applyRtlForLanguage, isRtlLanguage } from '../utils/i18n-rtl';
+import type { AppLanguage } from '@/bootstrap/readAppLanguage';
+import { StorageService } from '@/lib/storage.service';
+import { i18n, initI18n } from '@/translations';
+import { applyRtlForLanguage, isRtlLanguage } from '@/utils/i18n-rtl';
 
-import { LANGUAGE_STORAGE_KEY } from './languageStorageKey';
+import { LANGUAGE_STORAGE_KEY } from '@/stores/languageStorageKey';
 
 const languagePersistStorage: StateStorage = {
   getItem: (name) => StorageService.getString(name),

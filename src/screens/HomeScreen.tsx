@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
+
+import { useHomeScreenStyles } from '@/screens/themed/homeScreen.styles';
 import type { CompositeNavigationProp } from '@react-navigation/native';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
@@ -7,8 +9,8 @@ import type { DrawerNavigationProp } from '@react-navigation/drawer';
 import { Button } from '@react-navigation/elements';
 import { useTranslation } from 'react-i18next';
 
-import { ScreenScaffold } from '../components/ScreenScaffold';
-import type { DrawerParamList, TabParamList } from '../navigation/types';
+import { ScreenScaffold } from '@/components/ScreenScaffold';
+import type { DrawerParamList, TabParamList } from '@/navigation/types';
 
 /** Tab + parent drawer — use this with `useNavigation` (static navigators omit `navigation` on screen props). */
 export type HomeNavigation = CompositeNavigationProp<
@@ -19,6 +21,7 @@ export type HomeNavigation = CompositeNavigationProp<
 const HomeScreenComponent = () => {
   const navigation = useNavigation<HomeNavigation>();
   const { t } = useTranslation();
+  const styles = useHomeScreenStyles();
 
   return (
     <ScreenScaffold
@@ -52,12 +55,3 @@ const HomeScreenComponent = () => {
 
 export const HomeScreen = React.memo(HomeScreenComponent);
 HomeScreen.displayName = 'HomeScreen';
-
-const styles = StyleSheet.create({
-  actions: {
-    marginTop: 8,
-    width: '100%',
-    maxWidth: 320,
-    gap: 10,
-  },
-});

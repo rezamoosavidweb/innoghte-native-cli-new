@@ -1,5 +1,5 @@
-import { SEED_PUBLIC_ALBUM_TRACKS } from '../data/seedPublicAlbumTracks';
-import type { PublicAlbumTrack } from '../types';
+import { SEED_PUBLIC_ALBUM_TRACKS } from '@/features/publicAlbums/data/seedPublicAlbumTracks';
+import type { PublicAlbumTrack } from '@/features/publicAlbums/types';
 
 const LATENCY_MS = 600;
 

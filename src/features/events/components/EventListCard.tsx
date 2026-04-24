@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next';
 import {
   formatNumberForApp,
   formatPriceForApp,
-} from '../../../lib/formatLocaleNumbers';
-import { useEventListCardStyles } from '../../../theme/eventListCardThemed';
-import type { EventType } from '../data/seedEvents';
+} from '@/lib/formatLocaleNumbers';
+import { useEventListCardStyles } from '@/components/themed/EventListCard.styles';
+import type { EventType } from '@/features/events/data/seedEvents';
 
 const PRICE_DIVISOR = 10;
 
@@ -87,7 +87,7 @@ const EventListCardComponent = ({ item }: Props) => {
               pressed ? [s.successBtn, s.pressed] : s.successBtn
             }
           >
-            <Text style={s.btnLight}>{t('events.registerInfo')}</Text>
+            <Text style={s.btnSuccessText}>{t('events.registerInfo')}</Text>
           </Pressable>
         ) : isUpcoming && eventType === 'workshop' ? (
           <>
@@ -107,7 +107,7 @@ const EventListCardComponent = ({ item }: Props) => {
                 pressed ? [s.successBtn, s.pressed] : s.successBtn
               }
             >
-              <Text style={s.btnLight}>{t('courses.buy')}</Text>
+              <Text style={s.btnSuccessText}>{t('courses.buy')}</Text>
             </Pressable>
           </>
         ) : (
@@ -118,7 +118,7 @@ const EventListCardComponent = ({ item }: Props) => {
               pressed ? [s.primaryBtn, s.pressed] : s.primaryBtn
             }
           >
-            <Text style={s.btnLight}>{t('courses.moreInformation')}</Text>
+            <Text style={s.btnPrimaryText}>{t('courses.moreInformation')}</Text>
           </Pressable>
         )}
       </View>

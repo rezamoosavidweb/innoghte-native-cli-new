@@ -12,15 +12,17 @@ import {
   View,
 } from 'react-native';
 
-import type { DrawerParamList } from '../navigation/types';
-import { useLoginScreenStyles } from '../theme/drawerPlaceholderScreensThemed';
+import type { DrawerParamList } from '@/navigation/types';
+import { pickSemantic } from '@/theme';
+import { useLoginScreenStyles } from '@/screens/themed/drawerPlaceholderScreens.styles';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Login'>;
 
 const LoginScreenComponent = (_props: Props) => {
-  const { colors } = useTheme();
+  const { colors, dark } = useTheme();
   const { t } = useTranslation();
   const s = useLoginScreenStyles(colors);
+  const semantic = pickSemantic(dark);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -41,7 +43,7 @@ const LoginScreenComponent = (_props: Props) => {
           autoCapitalize="none"
           keyboardType="email-address"
           placeholder={t('screens.login.email')}
-          placeholderTextColor={colors.text}
+          placeholderTextColor={semantic.textMuted}
           value={email}
           onChangeText={setEmail}
           style={s.input}
@@ -50,7 +52,7 @@ const LoginScreenComponent = (_props: Props) => {
           accessibilityLabel={t('screens.login.password')}
           secureTextEntry
           placeholder={t('screens.login.password')}
-          placeholderTextColor={colors.text}
+          placeholderTextColor={semantic.textMuted}
           value={password}
           onChangeText={setPassword}
           style={s.input}

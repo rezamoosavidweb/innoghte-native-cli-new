@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { fetchPublicAlbumTracks } from '../api/fetchPublicAlbumTracks';
-import { PUBLIC_ALBUM_TRACKS_QUERY_KEY } from '../constants/queryKeys';
+import { fetchPublicAlbumTracks } from '@/features/publicAlbums/api/fetchPublicAlbumTracks';
+import { PUBLIC_ALBUM_TRACKS_QUERY_KEY } from '@/features/publicAlbums/constants/queryKeys';
 
 const STALE_TIME_MS = 5 * 60 * 1000;
 

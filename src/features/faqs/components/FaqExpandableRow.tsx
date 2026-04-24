@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 
-import { useFaqExpandableRowStyles } from '../../../theme/faqExpandableRowThemed';
+import { useFaqExpandableRowStyles } from '@/components/themed/FaqExpandableRow.styles';
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);

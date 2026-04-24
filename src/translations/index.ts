@@ -1,10 +1,10 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-import type { AppLanguage } from '../bootstrap/readAppLanguage';
+import type { AppLanguage } from '@/bootstrap/readAppLanguage';
 
-import en from './en.json';
-import fa from './fa.json';
+import en from '@/translations/en.json';
+import fa from '@/translations/fa.json';
 
 const resources = {
   en: { translation: en },

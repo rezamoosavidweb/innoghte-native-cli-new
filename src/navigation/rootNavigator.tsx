@@ -1,77 +1,52 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Platform, StyleSheet, Text } from 'react-native';
+import type { Theme } from '@react-navigation/native';
+import { StyleSheet, Text } from 'react-native';
 
-import type { AppLanguage } from '../bootstrap/readAppLanguage';
-import { isRtlLanguage } from '../utils/i18n-rtl';
+import { CustomDrawerContent } from '@/components/CustomDrawerContent';
+import { DrawerMenuButton } from '@/components/DrawerMenuButton';
+import { AboutScreen } from '@/screens/AboutScreen';
+import { AlbumsScreen } from '@/screens/AlbumsScreen';
+import { CoursesScreen } from '@/screens/CoursesScreen';
+import { EventsScreen } from '@/screens/EventsScreen';
+import { ExampleScreen } from '@/screens/ExampleScreen';
+import { FaqsScreen } from '@/screens/FaqsScreen';
+import { HelpScreen } from '@/screens/HelpScreen';
+import { HomeScreen } from '@/screens/HomeScreen';
+import { LegacyMenuPlaceholderScreen } from '@/screens/LegacyMenuPlaceholderScreen';
+import { LiveMeetingsScreen } from '@/screens/LiveMeetingsScreen';
+import { LoginScreen } from '@/screens/LoginScreen';
+import { MyCoursesHubScreen } from '@/screens/MyCoursesHubScreen';
+import { NotificationsScreen } from '@/screens/NotificationsScreen';
+import { ProfileScreen } from '@/screens/ProfileScreen';
+import { PublicAlbumsScreen } from '@/screens/PublicAlbumsScreen';
+import { SearchScreen } from '@/screens/SearchScreen';
+import { SettingsScreen } from '@/screens/SettingsScreen';
+import { StartupScreen } from '@/screens/StartupScreen';
+import { NOTIFICATION_BADGE_COUNT } from '@/state/notificationBadge';
+import {
+  drawerChrome,
+  fontWeight,
+  mainTabBarLabelStyle,
+  mainTabHeaderTitleStyle,
+  pickSemantic,
+  tabBarSurfaceStyle,
+} from '@/theme';
+import i18n from '@/translations';
 
-import { CustomDrawerContent } from '../components/CustomDrawerContent';
-import { DrawerMenuButton } from '../components/DrawerMenuButton';
-import { AboutScreen } from '../screens/AboutScreen';
-import { AlbumsScreen } from '../screens/AlbumsScreen';
-import { CoursesScreen } from '../screens/CoursesScreen';
-import { EventsScreen } from '../screens/EventsScreen';
-import { ExampleScreen } from '../screens/ExampleScreen';
-import { FaqsScreen } from '../screens/FaqsScreen';
-import { HelpScreen } from '../screens/HelpScreen';
-import { HomeScreen } from '../screens/HomeScreen';
-import { LegacyMenuPlaceholderScreen } from '../screens/LegacyMenuPlaceholderScreen';
-import { LiveMeetingsScreen } from '../screens/LiveMeetingsScreen';
-import { LoginScreen } from '../screens/LoginScreen';
-import { MyCoursesHubScreen } from '../screens/MyCoursesHubScreen';
-import { NotificationsScreen } from '../screens/NotificationsScreen';
-import { ProfileScreen } from '../screens/ProfileScreen';
-import { PublicAlbumsScreen } from '../screens/PublicAlbumsScreen';
-import { SearchScreen } from '../screens/SearchScreen';
-import { SettingsScreen } from '../screens/SettingsScreen';
-import { StartupScreen } from '../screens/StartupScreen';
-import { NOTIFICATION_BADGE_COUNT } from '../state/notificationBadge';
-import { appBrand } from '../theme/navigationTheme';
-import i18n from '../translations';
-
+import { isDrawerPhysicalRight } from '@/navigation/drawerLayout';
 import {
   getDrawerLeafTranslatedFields,
   getDrawerMainTabsOptions,
   getExtraDrawerLeafOptions,
   getTranslatedTabFields,
   type ExtraDrawerLeafKey,
-} from './i18nScreenOptions';
-import { TabBarGlyph } from './tabBarConfig';
-import type { DrawerParamList, MainTabScreenName, TabParamList } from './types';
+} from '@/navigation/i18nScreenOptions';
+import { TabBarGlyph } from '@/navigation/tabBarConfig';
+import type { DrawerParamList, MainTabScreenName, TabParamList } from '@/navigation/types';
 
-function resolvedAppLanguage(): AppLanguage {
-  return i18n.language === 'en' ? 'en' : 'fa';
-}
-
-const drawerOpensFromEnd = isRtlLanguage(resolvedAppLanguage());
-
-const mainTabHeaderStyle = StyleSheet.create({
-  bar: { backgroundColor: appBrand.headerBg },
-}).bar;
-
-const mainTabHeaderTitleStyle = StyleSheet.create({
-  title: { fontWeight: '700' as const },
-}).title;
-
-const mainTabBarLabelStyle = StyleSheet.create({
-  label: { fontSize: 12, fontWeight: '600' as const },
-}).label;
-
-function tabBarSurfaceStyle(theme: {
-  colors: { card: string; border: string };
-}) {
-  return StyleSheet.create({
-    tabBar: {
-      backgroundColor: theme.colors.card,
-      borderTopColor: theme.colors.border,
-      borderTopWidth: StyleSheet.hairlineWidth,
-      height: Platform.OS === 'ios' ? 88 : 64,
-      paddingBottom: Platform.OS === 'ios' ? 28 : 10,
-      paddingTop: 8,
-    },
-  }).tabBar;
-}
+const drawerOpensFromEnd = isDrawerPhysicalRight();
 
 const DrawerGlyph = React.memo(function DrawerGlyph({
   symbol,
@@ -85,7 +60,11 @@ const DrawerGlyph = React.memo(function DrawerGlyph({
   const s = React.useMemo(
     () =>
       StyleSheet.create({
-        glyph: { fontWeight: '600' as const, color, fontSize: size - 2 },
+        glyph: {
+          fontWeight: fontWeight.semibold,
+          color,
+          fontSize: size - 2,
+        },
       }),
     [color, size],
   );
@@ -98,51 +77,27 @@ const drawerIcon =
   ({ color, size }: { color: string; size: number }) =>
     <DrawerGlyph symbol={symbol} color={color} size={size} />;
 
-const drawerChrome = StyleSheet.create({
-  drawer: {
-    width: '78%',
-    backgroundColor: '#ffffff',
-  },
-  radiusFromEnd: {
-    borderTopLeftRadius: 20,
-    borderBottomLeftRadius: 20,
-  },
-  radiusFromStart: {
-    borderTopRightRadius: 20,
-    borderBottomRightRadius: 20,
-  },
-  drawerLabel: {
-    marginStart: -8,
-    fontSize: 16,
-    fontWeight: '500' as const,
-  },
-  drawerItem: {
-    borderRadius: 8,
-    marginHorizontal: 8,
-    marginVertical: 4,
-  },
-});
-
 function mainTabsScreenOptions({
   route,
   theme,
 }: {
   route: { name: string };
-  theme: { colors: { card: string; border: string } };
+  theme: Theme;
 }) {
   const t = i18n.t.bind(i18n);
   const { tabBarLabel, title } = getTranslatedTabFields(t, String(route.name));
+  const s = pickSemantic(theme.dark);
 
   return {
     lazy: true,
     unmountOnBlur: false,
     headerLeft: () => <DrawerMenuButton />,
-    headerStyle: mainTabHeaderStyle,
-    headerTintColor: appBrand.headerForeground,
+    headerStyle: { backgroundColor: s.headerBg },
+    headerTintColor: s.headerForeground,
     headerTitleStyle: mainTabHeaderTitleStyle,
     title,
-    tabBarActiveTintColor: appBrand.tabActive,
-    tabBarInactiveTintColor: appBrand.tabInactive,
+    tabBarActiveTintColor: s.tabActive,
+    tabBarInactiveTintColor: s.tabInactive,
     tabBarStyle: tabBarSurfaceStyle(theme),
     tabBarLabelStyle: mainTabBarLabelStyle,
     tabBarLabel,
@@ -224,22 +179,25 @@ function extraLeafOptions(leaf: ExtraDrawerLeafKey, icon: string) {
 
 export const rootNavigator = createDrawerNavigator<DrawerParamList>({
   drawerContent: props => <CustomDrawerContent {...props} />,
-  screenOptions: {
-    drawerPosition: drawerOpensFromEnd ? 'right' : 'left',
-    drawerActiveBackgroundColor: appBrand.drawerActiveBg,
-    drawerActiveTintColor: appBrand.drawerActiveTint,
-    drawerInactiveTintColor: appBrand.drawerInactiveTint,
-    drawerLabelStyle: drawerChrome.drawerLabel,
-    drawerItemStyle: drawerChrome.drawerItem,
-    drawerStyle: [
-      drawerChrome.drawer,
-      drawerOpensFromEnd
-        ? drawerChrome.radiusFromEnd
-        : drawerChrome.radiusFromStart,
-    ],
-    swipeEnabled: true,
-    overlayColor: 'rgba(0,0,0,0.45)',
-    keyboardDismissMode: 'on-drag',
+  screenOptions: ({ theme }) => {
+    const s = pickSemantic(theme.dark);
+    return {
+      drawerPosition: drawerOpensFromEnd ? 'right' : 'left',
+      drawerActiveBackgroundColor: s.drawerActiveBg,
+      drawerActiveTintColor: s.drawerActiveTint,
+      drawerInactiveTintColor: s.drawerInactiveTint,
+      drawerLabelStyle: drawerChrome.drawerLabel,
+      drawerItemStyle: drawerChrome.drawerItem,
+      drawerStyle: [
+        drawerChrome.drawer,
+        drawerOpensFromEnd
+          ? drawerChrome.radiusFromEnd
+          : drawerChrome.radiusFromStart,
+      ],
+      swipeEnabled: true,
+      overlayColor: s.overlay,
+      keyboardDismissMode: 'on-drag' as const,
+    };
   },
   screens: {
     MainTabs: {

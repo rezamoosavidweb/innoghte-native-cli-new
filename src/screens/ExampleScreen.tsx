@@ -5,8 +5,8 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 
-import type { DrawerParamList } from '../navigation/types';
-import { useExampleScreenStyles } from '../theme/drawerPlaceholderScreensThemed';
+import type { DrawerParamList } from '@/navigation/types';
+import { useExampleScreenStyles } from '@/screens/themed/drawerPlaceholderScreens.styles';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Example'>;
 

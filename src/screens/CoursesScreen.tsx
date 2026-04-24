@@ -6,24 +6,18 @@ import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { CourseListCard } from '../features/courses/components/CourseListCard';
-import type { Course } from '../features/courses/data/seedCourses';
-import { useCoursesQuery } from '../features/courses/hooks/useCoursesQuery';
-import type { TabParamList } from '../navigation/types';
+import { CourseListCard } from '@/features/courses/components/CourseListCard';
+import type { Course } from '@/features/courses/data/seedCourses';
+import { useCoursesQuery } from '@/features/courses/hooks/useCoursesQuery';
+import type { TabParamList } from '@/navigation/types';
 import {
   flashListContentGutters,
+  flashListEstimatedItemSize,
   flashListRowSeparators,
   useNavScreenShellStyles,
-} from '../theme/navScreenLayout';
+} from '@/theme';
 
 type Props = BottomTabScreenProps<TabParamList, 'Courses'>;
-
-/**
- * Approximate average row height for a course card (FlashList uses this to
- * size the initial window; see https://shopify.github.io/flash-list/docs/estimated-item-size).
- * Prefer slightly smaller than true average when unsure (FlashList guidance).
- */
-const ESTIMATED_COURSE_ITEM_SIZE = 300;
 
 const Separator = React.memo(function CoursesListSeparator() {
   return <View style={flashListRowSeparators.h12} />;
@@ -72,7 +66,7 @@ const CoursesScreenComponent = (_props: Props) => {
         data={listData}
         renderItem={renderCourseItem}
         keyExtractor={keyExtractor}
-        estimatedItemSize={ESTIMATED_COURSE_ITEM_SIZE}
+        estimatedItemSize={flashListEstimatedItemSize.course}
         ItemSeparatorComponent={Separator}
         contentContainerStyle={flashListContentGutters.standard}
         showsVerticalScrollIndicator={false}

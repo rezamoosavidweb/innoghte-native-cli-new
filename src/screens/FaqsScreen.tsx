@@ -3,7 +3,6 @@ import {
   ActivityIndicator,
   Pressable,
   ScrollView,
-  StyleSheet,
   Text,
   TextInput,
   View,
@@ -14,18 +13,21 @@ import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { useShallow } from 'zustand/react/shallow';
 import { useTranslation } from 'react-i18next';
 
-import { FaqExpandableRow } from '../features/faqs/components/FaqExpandableRow';
-import { useFaqsQuery } from '../features/faqs/hooks/useFaqsQuery';
-import type { TabParamList } from '../navigation/types';
+import { FaqExpandableRow } from '@/features/faqs/components/FaqExpandableRow';
+import { useFaqsQuery } from '@/features/faqs/hooks/useFaqsQuery';
+import type { TabParamList } from '@/navigation/types';
 import {
+  flashListEstimatedItemSize,
   flashListRowSeparators,
+  pickSemantic,
   useNavScreenShellStyles,
-} from '../theme/navScreenLayout';
+} from '@/theme';
 import {
   useFaqsCategoryChipStyles,
+  useFaqsScreenLayoutStyles,
   useFaqsSearchInputStyles,
-} from '../theme/faqsScreenThemed';
-import { useFaqHubStore } from '../stores/faqHub.store';
+} from '@/screens/themed/faqsScreen.styles';
+import { useFaqHubStore } from '@/stores/faqHub.store';
 
 type Props = BottomTabScreenProps<TabParamList, 'Faqs'>;
 
@@ -34,8 +36,6 @@ type FaqRow = {
   question: string;
   answer: string;
 };
-
-const ESTIMATED_ROW = 72;
 
 const CategoryChip = React.memo(function CategoryChip({
   title,
@@ -69,9 +69,11 @@ ListSep.displayName = 'ListSep';
 const FaqsScreenComponent = (_props: Props) => {
   const { data, isPending, isError, error } = useFaqsQuery();
   const { t, i18n } = useTranslation();
-  const { colors } = useTheme();
+  const { colors, dark } = useTheme();
+  const semantic = pickSemantic(dark);
   const shell = useNavScreenShellStyles(colors);
   const inputS = useFaqsSearchInputStyles(colors);
+  const layout = useFaqsScreenLayoutStyles();
   const { activeCategoryId, searchQuery, setActiveCategoryId, setSearchQuery } =
     useFaqHubStore(
       useShallow(s => ({
@@ -146,11 +148,11 @@ const FaqsScreenComponent = (_props: Props) => {
   }
 
   return (
-    <View style={[shell.safe, styles.faqsRootPad]}>
+    <View style={[shell.safe, layout.faqsRootPad]}>
       <TextInput
         accessibilityLabel={t('screens.faqs.searchLabel')}
         placeholder={t('screens.faqs.searchPlaceholder')}
-        placeholderTextColor={colors.text}
+        placeholderTextColor={semantic.textMuted}
         value={searchQuery}
         onChangeText={setSearchQuery}
         style={inputS.input}
@@ -158,7 +160,7 @@ const FaqsScreenComponent = (_props: Props) => {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.chipsRow}
+        contentContainerStyle={layout.chipsRow}
       >
         {(data ?? []).map(cat => (
           <CategoryChip
@@ -176,9 +178,9 @@ const FaqsScreenComponent = (_props: Props) => {
         data={rows}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
-        estimatedItemSize={ESTIMATED_ROW}
+        estimatedItemSize={flashListEstimatedItemSize.faq}
         ItemSeparatorComponent={ListSep}
-        contentContainerStyle={styles.listPad}
+        contentContainerStyle={layout.listPad}
         extraData={`${i18n.language}-${expandedId}-${rows.length}`}
       />
     </View>
@@ -187,15 +189,3 @@ const FaqsScreenComponent = (_props: Props) => {
 
 export const FaqsScreen = React.memo(FaqsScreenComponent);
 FaqsScreen.displayName = 'FaqsScreen';
-
-const styles = StyleSheet.create({
-  faqsRootPad: { paddingTop: 12 },
-  chipsRow: {
-    paddingHorizontal: 12,
-    paddingBottom: 12,
-    gap: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  listPad: { paddingHorizontal: 16, paddingBottom: 24 },
-});

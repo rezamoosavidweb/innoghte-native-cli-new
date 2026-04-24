@@ -1,6 +1,6 @@
-import { StorageService } from '../lib/storage.service';
+import { StorageService } from '@/lib/storage.service';
 
-import { LANGUAGE_STORAGE_KEY } from '../stores/languageStorageKey';
+import { LANGUAGE_STORAGE_KEY } from '@/stores/languageStorageKey';
 
 export type AppLanguage = 'fa' | 'en';
 
