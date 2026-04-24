@@ -33,3 +33,36 @@ export function getDrawerLeafTranslatedFields(
     drawerLabel: title,
   } as const;
 }
+
+const EXTRA_DRAWER_LABELS = {
+  publicAlbums: 'drawer.publicAlbums',
+  liveMeetings: 'drawer.liveMeetings',
+  events: 'drawer.events',
+  example: 'drawer.example',
+  startup: 'drawer.startup',
+  login: 'drawer.login',
+  podcast: 'drawer.podcast',
+  meditation: 'drawer.meditation',
+  reading: 'drawer.reading',
+  listening: 'drawer.listening',
+  writing: 'drawer.writing',
+  privateConsultation: 'drawer.privateConsultation',
+  donation: 'drawer.donation',
+  aboutUs: 'drawer.aboutUs',
+  collaboration: 'drawer.collaboration',
+  liveMeetingOverview: 'drawer.liveMeetingOverview',
+} as const;
+
+export type ExtraDrawerLeafKey = keyof typeof EXTRA_DRAWER_LABELS;
+
+export function getExtraDrawerLeafOptions(
+  t: TFunction,
+  leaf: ExtraDrawerLeafKey,
+) {
+  const title = t(EXTRA_DRAWER_LABELS[leaf]);
+  return {
+    headerShown: true as const,
+    title,
+    drawerLabel: title,
+  } as const;
+}

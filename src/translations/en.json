@@ -1,7 +1,11 @@
 {
   "tabs": {
     "home": "Home",
+    "mycourses": "My courses",
     "search": "Search",
+    "courses": "Courses",
+    "albums": "Albums",
+    "faqs": "FAQs",
     "notifications": "Notifications",
     "profile": "Profile"
   },
@@ -9,7 +13,23 @@
     "home": "Home",
     "settings": "Settings",
     "help": "Help",
-    "about": "About"
+    "about": "About",
+    "publicAlbums": "Public album tracks",
+    "liveMeetings": "Live meetings",
+    "events": "Events",
+    "example": "Example",
+    "startup": "Startup",
+    "login": "Sign in",
+    "podcast": "Podcast",
+    "meditation": "Meditation",
+    "reading": "Reading",
+    "listening": "Listening",
+    "writing": "Writing",
+    "privateConsultation": "Private consultation",
+    "donation": "Donation",
+    "aboutUs": "About us",
+    "collaboration": "Collaboration",
+    "liveMeetingOverview": "Live meeting (overview)"
   },
   "screens": {
     "home": {
@@ -17,7 +37,29 @@
       "subtitle": "Primary tab — drawer hosts settings and more.",
       "openDrawer": "Open drawer",
       "goSearch": "Go to Search with query",
+      "goMyCourses": "Go to My courses hub",
+      "goCourses": "Go to Courses tab",
       "goSettings": "Go to Settings (drawer)"
+    },
+    "courses": {
+      "loading": "Loading courses…",
+      "error": "Could not load courses."
+    },
+    "albums": {
+      "loading": "Loading albums…",
+      "error": "Could not load albums."
+    },
+    "myCoursesHub": {
+      "subtitle": "Browse courses, albums, and more — same hub as the legacy app.",
+      "comingSoonTitle": "Coming soon",
+      "comingSoonMessage": "This section is not migrated yet.",
+      "menu": {
+        "courses": "Courses",
+        "albums": "Albums",
+        "liveMeeting": "Live meeting",
+        "support": "Support services",
+        "events": "Events"
+      }
     },
     "search": {
       "title": "Search",
@@ -47,7 +89,76 @@
     "about": {
       "title": "About",
       "subtitle": "Innoghte — tab + drawer composition."
+    },
+    "faqs": {
+      "loading": "Loading FAQs…",
+      "error": "Could not load FAQs.",
+      "searchLabel": "Search FAQs",
+      "searchPlaceholder": "Search questions…"
+    },
+    "liveMeetings": {
+      "loading": "Loading live meetings…",
+      "error": "Could not load live meetings."
+    },
+    "events": {
+      "loading": "Loading events…",
+      "error": "Could not load events."
+    },
+    "publicAlbums": {
+      "loading": "Loading public album…",
+      "error": "Could not load public album."
+    },
+    "example": {
+      "title": "Example",
+      "subtitle": "Legacy demo screen (theme/language toggles lived in the old app).",
+      "goStartup": "Open Startup (drawer)",
+      "goMainTabs": "Back to main tabs"
+    },
+    "startup": {
+      "title": "Startup",
+      "body": "Legacy stack entry screen — use the buttons below to explore.",
+      "goExample": "Open Example (drawer)",
+      "goMain": "Open main tabs"
+    },
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Demo form migrated from the legacy app (no backend yet).",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Continue",
+      "demoTitle": "Demo",
+      "demoMessage": "Auth is not wired in this build."
     }
+  },
+  "events": {
+    "remainingCapacity": "Remaining capacity",
+    "statusLabel": "Status",
+    "status": {
+      "past": "Past",
+      "upcoming": "Upcoming",
+      "ongoing": "Ongoing",
+      "unknown": "Unknown"
+    },
+    "registerInfo": "More information / register"
+  },
+  "publicAlbums": {
+    "musicCount": "Tracks",
+    "trackUnit": "tracks"
+  },
+  "legacyMenu": {
+    "title": "Legacy section",
+    "body": "This drawer entry matches the old Innoghte menu. Hook APIs or dedicated flows here when you are ready."
+  },
+  "courses": {
+    "productType": "Product type",
+    "chaptersCount": "Chapters",
+    "price": "Price",
+    "show": "View",
+    "moreInformation": "More info",
+    "buy": "Buy",
+    "package": "Package",
+    "normal": "Course",
+    "currency": "Toman"
   },
   "drawerFooter": {
     "logout": "Log out",

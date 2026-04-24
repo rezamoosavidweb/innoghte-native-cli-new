@@ -36,6 +36,12 @@ const HomeScreenComponent = () => {
         >
           {t('screens.home.goSearch')}
         </Button>
+        <Button onPress={() => navigation.navigate('MyCourses')}>
+          {t('screens.home.goMyCourses')}
+        </Button>
+        <Button onPress={() => navigation.navigate('Courses')}>
+          {t('screens.home.goCourses')}
+        </Button>
         <Button onPress={() => navigation.navigate('Settings')}>
           {t('screens.home.goSettings')}
         </Button>

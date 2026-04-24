@@ -1,22 +1,24 @@
-import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import type { DrawerScreenProps } from '@react-navigation/drawer';
 import { useTheme } from '@react-navigation/native';
+import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 
+import type { AppLanguage } from '../bootstrap/readAppLanguage';
 import { ScreenScaffold } from '../components/ScreenScaffold';
 import type { DrawerParamList } from '../navigation/types';
-import type { AppLanguage } from '../bootstrap/readAppLanguage';
 import { useLanguageStore } from '../stores/language.store';
+import { useScreenScaffoldStyles } from '../theme/navScreenLayout';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Settings'>;
 
 const SettingsScreenComponent = (_props: Props) => {
   const { t } = useTranslation();
   const { colors } = useTheme();
+  const scaffold = useScreenScaffoldStyles(colors);
   const { currentLanguage, setLanguage } = useLanguageStore(
-    useShallow((s) => ({
+    useShallow(s => ({
       currentLanguage: s.currentLanguage,
       setLanguage: s.setLanguage,
     })),
@@ -35,7 +37,7 @@ const SettingsScreenComponent = (_props: Props) => {
       subtitle={t('screens.settings.subtitle')}
     >
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+        <Text style={scaffold.sectionTitle}>
           {t('screens.settings.languageSection')}
         </Text>
         <View style={styles.row}>
@@ -48,7 +50,9 @@ const SettingsScreenComponent = (_props: Props) => {
             accessibilityRole="button"
             accessibilityState={{ selected: currentLanguage === 'fa' }}
           >
-            <Text style={styles.chipText}>{t('screens.settings.languagePersian')}</Text>
+            <Text style={styles.chipText}>
+              {t('screens.settings.languagePersian')}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[
@@ -59,7 +63,9 @@ const SettingsScreenComponent = (_props: Props) => {
             accessibilityRole="button"
             accessibilityState={{ selected: currentLanguage === 'en' }}
           >
-            <Text style={styles.chipText}>{t('screens.settings.languageEnglish')}</Text>
+            <Text style={styles.chipText}>
+              {t('screens.settings.languageEnglish')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -76,11 +82,6 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 320,
     gap: 12,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    alignSelf: 'flex-start',
   },
   row: {
     flexDirection: 'row',
