@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { fetchAlbums } from '@/features/albums/api/fetchAlbums';
+import { fetchAlbums } from '@/features/albums/api';
 import { ALBUMS_QUERY_KEY } from '@/features/albums/constants/queryKeys';
 
 const STALE_TIME_MS = 5 * 60 * 1000;

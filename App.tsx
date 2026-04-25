@@ -11,9 +11,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { I18nextProvider } from 'react-i18next';
 import { useTranslation } from 'react-i18next';
 
-import { rootNavigator } from '@/navigation/rootNavigator';
-import { AppThemeProvider, useAppTheme } from '@/theme';
-import i18n from '@/translations';
+import { rootNavigator } from '@/shared/navigation/rootNavigator';
+import { AppThemeProvider, useAppTheme } from '@/shared/styles/theme';
+import i18n from '@/shared/translations';
 
 export const queryClient = new QueryClient({
   defaultOptions: {

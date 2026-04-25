@@ -1,0 +1,164 @@
+import * as React from 'react';
+import { Image, Pressable, Text, View } from 'react-native';
+import { useTheme } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+
+import { formatPriceForApp } from '@/shared/utils/lib/formatLocaleNumbers';
+import { isPurchasedProduct } from '@/shared/utils/lib/purchasedProductIds';
+import type { ProductListCardStyles } from '@/features/courses/styles/productListCard.styles';
+import { useProductListCardStyles } from '@/features/courses/styles/productListCard.styles';
+import type { Album } from '@/features/albums/types';
+
+const PRICE_DISPLAY_DIVISOR = 10;
+
+function noop(): void {}
+
+type AlbumListCardProps = {
+  album: Album;
+};
+
+const AlbumTypeBadge = React.memo(function AlbumTypeBadge({
+  isPackage,
+  s,
+}: {
+  isPackage: boolean;
+  s: ProductListCardStyles;
+}) {
+  const { t } = useTranslation();
+  const label = isPackage ? t('courses.package') : t('courses.normal');
+
+  return (
+    <View style={[s.badge, isPackage ? s.badgePackage : null]}>
+      <Text style={s.badgeText}>{label}</Text>
+    </View>
+  );
+});
+AlbumTypeBadge.displayName = 'AlbumTypeBadge';
+
+const AlbumInfoRow = React.memo(function AlbumInfoRow({
+  label,
+  value,
+  s,
+}: {
+  label: string;
+  value: string | React.ReactNode;
+  s: ProductListCardStyles;
+}) {
+  return (
+    <View style={s.infoRow}>
+      <Text style={s.infoLabel}>{label}</Text>
+      {typeof value === 'string' ? (
+        <Text style={s.infoValue} numberOfLines={3} ellipsizeMode="tail">
+          {value}
+        </Text>
+      ) : (
+        value
+      )}
+    </View>
+  );
+});
+AlbumInfoRow.displayName = 'AlbumInfoRow';
+
+const AlbumCardHeader = React.memo(function AlbumCardHeader({
+  title,
+  imageUri,
+  s,
+}: {
+  title: string;
+  imageUri: string | undefined;
+  s: ProductListCardStyles;
+}) {
+  const [failed, setFailed] = React.useState(false);
+
+  return (
+    <View style={s.headerRow}>
+      <View style={s.headerTextCol}>
+        <Text style={s.title} numberOfLines={3}>
+          {title}
+        </Text>
+      </View>
+      {!failed && imageUri ? (
+        <Image
+          accessibilityIgnoresInvertColors
+          source={{ uri: imageUri }}
+          style={s.thumb}
+          onError={() => {
+            setFailed(true);
+          }}
+        />
+      ) : (
+        <View style={[s.thumb, s.imagePlaceholder]}>
+          <Text style={s.placeholderGlyph}>▣</Text>
+        </View>
+      )}
+    </View>
+  );
+});
+AlbumCardHeader.displayName = 'AlbumCardHeader';
+
+const AlbumListCardComponent = ({ album }: AlbumListCardProps) => {
+  const { t } = useTranslation();
+  const { colors } = useTheme();
+  const s = useProductListCardStyles(colors);
+  const purchased = isPurchasedProduct(album.id);
+  const imageUri = album.image_media[0]?.src;
+  const displayPrice = formatPriceForApp(
+    (album.price ?? 0) / PRICE_DISPLAY_DIVISOR,
+    t('courses.currency'),
+  );
+
+  return (
+    <View style={s.card}>
+      <AlbumCardHeader title={album.title_fa} imageUri={imageUri} s={s} />
+
+      <View style={s.metaBlock}>
+        <AlbumInfoRow
+          label={t('courses.productType')}
+          value={<AlbumTypeBadge isPackage={!!album.package} s={s} />}
+          s={s}
+        />
+        <AlbumInfoRow label={t('courses.price')} value={displayPrice} s={s} />
+      </View>
+
+      <View style={s.actionsRow}>
+        {purchased ? (
+          <Pressable
+            accessibilityRole="button"
+            onPress={noop}
+            style={({ pressed }) =>
+              pressed ? [s.buttonPrimary, s.pressed] : s.buttonPrimary
+            }
+          >
+            <Text style={s.buttonPrimaryText}>{t('courses.show')}</Text>
+          </Pressable>
+        ) : (
+          <>
+            <Pressable
+              accessibilityRole="button"
+              onPress={noop}
+              style={({ pressed }) =>
+                pressed ? [s.buttonOutlined, s.pressed] : s.buttonOutlined
+              }
+            >
+              <Text style={s.buttonOutlinedText}>
+                {t('courses.moreInformation')}
+              </Text>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              onPress={noop}
+              style={({ pressed }) =>
+                pressed ? [s.buttonSuccess, s.pressed] : s.buttonSuccess
+              }
+            >
+              <Text style={s.buttonSuccessText}>{t('courses.buy')}</Text>
+            </Pressable>
+          </>
+        )}
+      </View>
+    </View>
+  );
+};
+
+export const AlbumListCard = React.memo(AlbumListCardComponent);
+AlbumListCard.displayName = 'AlbumListCard';

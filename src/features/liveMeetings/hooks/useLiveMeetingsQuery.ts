@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { fetchLiveMeetings } from '@/features/liveMeetings/api/fetchLiveMeetings';
+import { fetchLiveMeetings } from '@/features/liveMeetings/api';
 import { LIVE_MEETINGS_QUERY_KEY } from '@/features/liveMeetings/constants/queryKeys';
 
 const STALE_TIME_MS = 5 * 60 * 1000;
