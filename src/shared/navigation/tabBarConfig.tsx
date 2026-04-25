@@ -1,6 +1,6 @@
+import { Badge } from '@react-navigation/elements';
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Badge } from '@react-navigation/elements';
 
 import { fontWeight, spacing } from '@/shared/styles/theme';
 
@@ -8,12 +8,9 @@ import type { MainTabScreenName } from '@/shared/navigation/types';
 
 const TAB_GLYPH: Record<MainTabScreenName, string> = {
   Home: '🏠',
-  MyCourses: '🗂️',
-  Search: '🔍',
-  Courses: '🎓',
-  Albums: '💿',
+  Services: '🛠️',
+  Experiences: '✨',
   Faqs: '❓',
-  Notifications: '🔔',
   Profile: '👤',
 };
 
@@ -76,9 +73,9 @@ export function TabBarGlyph({
       >
         {glyph}
       </Text>
-      {routeName === 'Notifications' ? (
-        <View style={styles.badgeAnchor}>
-          <Badge visible={badgeCount > 0} size={spacing.base}>
+      {badgeCount > 0 ? (
+        <View style={styles.badgeAnchor} accessibilityElementsHidden>
+          <Badge visible size={spacing.base}>
             {badgeCount > 99 ? '99+' : badgeCount}
           </Badge>
         </View>

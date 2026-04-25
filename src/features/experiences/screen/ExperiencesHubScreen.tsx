@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import type { DrawerParamList, TabParamList } from '@/shared/navigation/types';
-import { useExperincesHubStyles } from '@/features/experience/styles';
+import { useExperincesHubStyles } from '@/features/experiences/styles';
 
 type Props = BottomTabScreenProps<TabParamList, 'Experiences'>;
 
