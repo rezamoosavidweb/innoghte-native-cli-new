@@ -5,6 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { ScreenScaffold } from '@/shared/components/ScreenScaffold';
 import type { TabParamList } from '@/shared/navigation/types';
 
+/**
+ * Reached only when authenticated (see `MainTabs` Profile `tabPress` listener
+ * in `rootNavigator`). From other screens, use:
+ * `const { navigate } = useProtectedNavigation(); navigate('Profile');`
+ */
 type Props = BottomTabScreenProps<TabParamList, 'Profile'>;
 
 const ProfileScreenComponent = ({ route }: Props) => {

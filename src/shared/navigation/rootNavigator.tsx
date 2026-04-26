@@ -4,6 +4,7 @@ import type { Theme } from '@react-navigation/native';
 import * as React from 'react';
 import { StyleSheet, Text } from 'react-native';
 
+import { useAuthStore } from '@/auth/auth.store';
 import { AboutScreen } from '@/features/about/screen/AboutScreen';
 import { LoginScreen } from '@/features/auth/screen/LoginScreen';
 import { EventsScreen } from '@/features/events/screen/EventsScreen';
@@ -41,6 +42,7 @@ import {
   type ExtraDrawerLeafKey,
 } from '@/shared/navigation/i18nScreenOptions';
 import { TabBarGlyph } from '@/shared/navigation/tabBarConfig';
+import { protectedNavigate } from '@/shared/navigation/protectedNavigation';
 import type {
   DrawerParamList,
   MainTabScreenName,
@@ -131,7 +133,17 @@ const mainTabs = createBottomTabNavigator<TabParamList>({
     Experiences: ExperiencesHubScreen,
     Home: HomeScreen,
     Faqs: FaqsScreen,
-    Profile: ProfileScreen,
+    Profile: {
+      screen: ProfileScreen,
+      listeners: ({ navigation }) => ({
+        tabPress: e => {
+          if (!useAuthStore.getState().isAuthenticated) {
+            e.preventDefault();
+            protectedNavigate(navigation, 'Profile');
+          }
+        },
+      }),
+    },
   },
 });
 

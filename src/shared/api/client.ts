@@ -1,6 +1,7 @@
 import ky, { HTTPError } from 'ky';
 
-import { clearAccessToken, getAccessToken } from '@/shared/api/modules/auth.storage';
+import { useAuthStore } from '@/auth/auth.store';
+import { getAccessToken } from '@/shared/api/modules/auth.storage';
 
 type ApiErrorPayload = {
   message?: string;
@@ -59,7 +60,7 @@ export const apiClient = ky.create({
         }
 
         if (state.error.response.status === 401) {
-          clearAccessToken();
+          useAuthStore.getState().logout();
         }
 
         const message =

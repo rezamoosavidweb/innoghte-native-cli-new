@@ -11,6 +11,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { I18nextProvider } from 'react-i18next';
 import { useTranslation } from 'react-i18next';
 
+import { navigationRef } from '@/shared/navigation/navigationRef';
 import { rootNavigator } from '@/shared/navigation/rootNavigator';
 import { AppThemeProvider, useAppTheme } from '@/shared/styles/theme';
 import i18n from '@/shared/translations';
@@ -33,7 +34,11 @@ const AppNavigation = React.memo(function AppNavigation() {
       <StatusBar
         barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'}
       />
-      <Navigation theme={navigationTheme} key={i18nInstance.language} />
+      <Navigation
+        ref={navigationRef}
+        theme={navigationTheme}
+        key={i18nInstance.language}
+      />
     </>
   );
 });

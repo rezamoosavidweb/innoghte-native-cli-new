@@ -36,3 +36,17 @@ export type DrawerParamList = {
 };
 
 export type MainTabScreenName = keyof TabParamList;
+
+/** Drawer screens addressable without nesting through `MainTabs`. */
+export type DrawerLeafRouteName = Exclude<keyof DrawerParamList, 'MainTabs'>;
+
+/**
+ * Any leaf the app can deep-link or protect as a single destination (tabs or drawer).
+ */
+export type AppLeafRouteName = keyof TabParamList | DrawerLeafRouteName;
+
+export type LeafRouteParams<N extends AppLeafRouteName> = N extends keyof TabParamList
+  ? TabParamList[N]
+  : N extends DrawerLeafRouteName
+    ? DrawerParamList[N]
+    : never;
