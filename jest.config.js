@@ -11,6 +11,6 @@ module.exports = {
   },
   // Preset only transpiles react-native / @react-native*; @react-navigation ships ESM.
   transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|@react-navigation|react-native-drawer-layout|react-native-reanimated|react-native-worklets)/)',
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|@react-navigation|react-native-drawer-layout|react-native-reanimated|react-native-worklets|ky)/)',
   ],
 };

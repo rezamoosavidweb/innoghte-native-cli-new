@@ -1,223 +1,209 @@
-# Innoghte (React Native)
+# Innoghte — React Native Client
 
-This project now follows a **feature-based architecture** with a strict separation between feature-local code and shared/global code.
+A production-oriented React Native application structured for **domain-driven design (DDD)**, **clear layering**, and **long-term scalability**. The codebase separates bootstrap code, feature domains, cross-cutting infrastructure, and a shared design system so teams can grow features in isolation without entangling business logic across the tree.
 
-## New Source Structure
+---
+
+## Overview
+
+- **Modular architecture**: Feature work lives under `src/domains/<domain>`; the shell wires navigation and providers under `src/app`.
+- **Domain boundaries**: Each domain owns its API surface, state shapes, hooks, screens, and UI pieces. Cross-domain coupling is minimized; shared concerns live in `src/shared` and `src/ui`.
+- **Team scale**: Predictable folder layouts, barrel exports, and import aliases reduce onboarding time and review friction.
+
+---
+
+## Architecture
+
+Four primary layers compose the application:
+
+| Layer | Role |
+|--------|------|
+| **`app/`** | Application bootstrap: providers, static navigation composition, startup flow, auth-aware navigation helpers. **No business rules**—only wiring and shell behavior. |
+| **`domains/`** | **Business capabilities**: auth, catalog content, user-facing hubs, settings, support flows, etc. Each domain follows a consistent internal layout (see below). |
+| **`shared/`** | **Framework-level infrastructure**: HTTP client, persistence, i18n, global query keys, navigation ref, purchase ports, and **contracts** (shared types—not feature UI). |
+| **`ui/`** | **Design system**: theme tokens, global components, layout primitives used across domains. Domains should not reimplement spacing, typography, or chrome here. |
+
+### High-level layout
 
 ```text
 src/
-  features/
-    {feature-name}/
-      components/
-        forms/
-        cards/
-        list/
-      constants/
-      screen/
-      api/
-      hooks/
-      styles/
-      store/
-      types/
-      data/
-  shared/
-    components/
-    hooks/
-    utils/
-    constants/
-    styles/
-    api/
-    navigation/
-    types/
-    store/
-    translations/
-    bootstrap/
+├── app/                 # Bootstrap, navigation shell, providers, startup
+├── domains/             # Feature domains (business + product UI)
+├── shared/              # Infra, contracts, cross-cutting utilities
+└── ui/                  # Global design system (theme, components, layout)
 ```
 
-## Architecture Rules
-
-- Put code in `src/features/{feature}` when it is used only by that feature.
-- Put code in `src/shared` when it is reused by multiple features or is application-wide.
-- Keep screens inside each feature: `src/features/{feature}/screen/{Feature}Screen.tsx`.
-- Keep feature API + hooks colocated: `api/` and `hooks/`.
-- Keep feature-specific styles inside `styles/`.
-
-## Shared vs Feature
-
-- **Feature folder** examples:
-  - `src/features/albums/components/cards/AlbumListCard.tsx`
-  - `src/features/auth/components/forms/LoginForm.tsx`
-  - `src/features/events/screen/EventsScreen.tsx`
-- **Shared folder** examples:
-  - `src/shared/navigation/rootNavigator.tsx`
-  - `src/shared/styles/theme/index.ts`
-  - `src/shared/components/ScreenScaffold.tsx`
-  - `src/shared/api/client.ts`
-
-## Add a New Feature
-
-1. Create `src/features/{newFeature}`.
-2. Add at least:
-   - `screen/{NewFeature}Screen.tsx`
-   - `api/index.ts`
-   - `hooks/use{NewFeature}.ts`
-   - `types/index.ts` and `types/schema.ts` (if validation/types are needed)
-3. Add feature components under `components/forms`, `components/cards`, or `components/list`.
-4. Register the screen in `src/shared/navigation/rootNavigator.tsx`.
-
-## Best Practices
-
-- Use `@/` absolute imports.
-- Avoid cross-feature deep imports; consume via each feature’s public files.
-- Keep naming consistent:
-  - feature folders: `camelCase`
-  - component/screen files: `PascalCase`
-  - hooks: `useXxx.ts`
-- Do not duplicate shared logic; move it to `src/shared`.
-
-## Authentication & protected navigation
-
-The app uses a small **Zustand auth store** (MMKV-persisted token + flags), **navigation helpers** that queue the intended screen when the user is logged out, and a **hook** for screens and buttons.
-
-### Auth store (`useAuthStore`)
-
-**File:** `src/auth/auth.store.ts`
-
-**When to use**
-
-- After a successful login API response: persist the session and align the HTTP client token.
-- On logout (explicit sign-out or forced logout after `401`).
-- When you need read-only checks: `isAuthenticated`, `accessToken` (prefer selectors to limit re-renders).
-
-**What is persisted (MMKV via Zustand `persist`):** `isAuthenticated`, `accessToken`.  
-**Not persisted:** in-memory `pendingNavigation` (cleared on `logout`).
-
-**Examples**
-
-```ts
-import { useAuthStore } from '@/auth/auth.store';
-
-// Login success (e.g. in your auth feature after the API returns a token)
-useAuthStore.getState().setAuth({ accessToken: token });
-
-// Then resume the screen the user wanted before login (see below)
-import { completePendingAuthNavigation } from '@/shared/navigation/protectedNavigation';
-completePendingAuthNavigation();
-
-// Logout
-useAuthStore.getState().logout();
-
-// Subscribe in a component (selector avoids extra re-renders)
-const isAuthenticated = useAuthStore(s => s.isAuthenticated);
-```
-
-`setAuth` / rehydration also syncs `src/shared/api/modules/auth.storage` so `apiClient` keeps sending `Authorization`.
+**Dependency direction (intended):** `app` → `domains` + `shared` + `ui`; `domains` → `shared` + `ui`; `shared` and `ui` do not depend on `domains`.
 
 ---
 
-### Protected navigation helpers
+## Domain structure
 
-**File:** `src/shared/navigation/protectedNavigation.ts`  
-**Root ref:** `src/shared/navigation/navigationRef.ts` (attached to `Navigation` in `App.tsx`)
+Each domain under `src/domains/<name>/` follows a **standard template**:
 
-| API | When to use |
-|-----|----------------|
-| `protectedNavigate(navigation, name, params?)` / `navigateProtected` | Default choice: go to a **leaf** route (tab or drawer screen). If logged out, stores **pending navigation** and opens **Login**. |
-| `navigateToAppLeaf(navigation, name, params?)` | **Already authenticated** flows only: jump to a leaf without an auth check (e.g. internal routing after login). |
-| `protectedPush(navigation, name, params?)` | Stack flows: uses `navigation.push` when available; otherwise falls back like `protectedNavigate`. |
-| `protectedDispatch(navigation, action)` | You already have a **React Navigation action** (`CommonActions.navigate`, `StackActions.push`, …) and want the same “queue + Login” behavior when logged out. |
-| `completePendingAuthNavigation()` | Call **once after** `setAuth` so the user lands on the queued route, or on **Home** if nothing was queued. Uses `navigationRef`. |
-
-**Typed route names** are `AppLeafRouteName` in `src/shared/navigation/types.ts` (tab names like `Profile`, drawer leaves like `Settings`, etc.). Helpers map tab targets through `MainTabs` automatically.
-
-**Example (imperative, e.g. listener / callback)**
-
-```ts
-import { useAuthStore } from '@/auth/auth.store';
-import { protectedNavigate } from '@/shared/navigation/protectedNavigation';
-
-// `navigation` from React Navigation (e.g. screen listener props)
-protectedNavigate(navigation, 'Profile');
-protectedNavigate(navigation, 'Profile', { userId: '42' });
+```text
+domains/<domain>/
+├── api/           # HTTP calls, fetchers, thin service wrappers (no React hooks)
+├── model/         # Entities, DTOs, Zod schemas, stores, domain constants
+├── hooks/         # React Query, composition, domain-specific hook logic
+├── screens/       # Route-level screens: layout + wiring to hooks (no direct HTTP)
+├── ui/            # Domain-scoped components, cards, forms, styles
+├── index.ts       # Public exports for the domain (optional but recommended)
 ```
 
-**Example (post-login)**
+### Responsibilities
 
-```ts
-useAuthStore.getState().setAuth({ accessToken: token });
-completePendingAuthNavigation();
+- **`api/`** — Network I/O only. Call sites return data or throw; no UI, no `useQuery` / `useMutation`.
+- **`model/`** — Types, mapping from API payloads, validation schemas, Zustand slices that belong to this domain.
+- **`hooks/`** — TanStack Query usage, derived state, orchestration consumed by screens and domain UI.
+- **`screens/`** — Page components: connect hooks to presentational pieces. **Do not import `getApiClient()` or raw fetchers here.**
+- **`ui/`** — Reusable pieces **within** the domain (e.g. list cards, forms). Shared visual primitives stay in `src/ui`.
+
+Some domains include **sub-areas** (e.g. `support/faqs/`) when a subdomain is large enough to own its own `api` / `model` / `hooks` / `screens` / `ui`. The **root** `support/` folder may carry placeholder modules so top-level structure stays consistent as features grow.
+
+**Example domains in this repo:** `auth`, `courses`, `events`, `media`, `live`, `settings`, `support`, `user`, `search`, `home` (includes the Services tab hub screen), `experiences`.
+
+---
+
+## Data flow
+
+Intended flow for server-backed features:
+
+```text
+Screen  →  hook (e.g. React Query)  →  api/ fetcher  →  HTTP  →  backend
+                ↓
+            model / cache
+                ↓
+Screen + domain ui  ←  typed data + loading/error state
+```
+
+- **Screens** subscribe to hooks and render **domain `ui/`** components.
+- **Hooks** own caching, retries, and mutation side effects (invalidation, optimistic updates where applicable).
+- **`api/`** remains easy to test and mock: pure async functions over the shared HTTP layer.
+
+Auth-gated navigation (e.g. redirect to login and resume intent) is coordinated from **`app/bridge/auth`** together with the auth store in **`domains/auth/model`**.
+
+---
+
+## Shared layer (`src/shared`)
+
+| Area | Purpose |
+|------|---------|
+| **`infra/http`** | HTTP client (`ky`-based), base URL resolution, parsing helpers, errors. |
+| **`infra/storage`** | MMKV-backed storage helpers; Zustand persistence adapters where used. |
+| **`infra/i18n`** | i18next resources and RTL/locale helpers. |
+| **`infra/query`** | Shared **query key factories** to avoid cache collisions across domains. |
+| **`infra/navigation`** | `navigationRef` and other navigation infrastructure. |
+| **`contracts`** | Route param types, pagination shapes, and other **cross-domain TypeScript contracts**. |
+| **`purchases`** | Abstraction for “is this product purchased?”—domains consume the port, not store shape. |
+| **`utils`** | Small, framework-agnostic helpers. |
+
+Keep **`shared`** free of feature-specific screens or product copy. If it’s only used by one domain, it usually belongs in that domain.
+
+---
+
+## UI system (`src/ui`)
+
+- **`theme/`** — Design tokens: color scales, spacing, typography, navigation chrome, semantic helpers (e.g. light/dark).
+- **`components/`** — Reusable building blocks (e.g. scaffold, form fields, chrome buttons).
+- **`layout/`** — Shell layout (drawer content, context providers for shell UI).
+
+Domains import tokens and primitives from `@/ui/...` instead of hard-coding raw values where possible.
+
+---
+
+## Adding a new domain
+
+1. **Create** `src/domains/<myDomain>/` with folders: `api`, `model`, `hooks`, `screens`, `ui` (use `export {}` or a short comment in `index.ts` files until real code exists).
+2. **Define** types and schemas in `model/`; add fetchers in `api/` using the shared HTTP client.
+3. **Add** `hooks/use<MyFeature>.ts` (or several hooks) that call `api/` via TanStack Query or local state as needed.
+4. **Implement** `screens/<MyScreen>.tsx` that uses hooks only—no direct `api/` calls from the screen file.
+5. **Place** reusable domain widgets in `ui/` (cards, forms, local styles).
+6. **Export** public entry points from `domains/<myDomain>/index.ts` (screens, hooks, types you want other layers to use—keep the surface small).
+7. **Register** the screen in `src/app/bridge/rootNavigator.tsx` (or the appropriate navigator module) and extend `shared/contracts/navigationApp` if new route names or params are introduced.
+
+---
+
+## Tech stack
+
+| Technology | Usage |
+|------------|--------|
+| **React Native** `0.85.x` | Application runtime |
+| **React** `19.x` | UI |
+| **TypeScript** | Strict typing across layers |
+| **React Navigation** `7.x` | Drawer + tabs + stack-style composition |
+| **TanStack React Query** `5.x` | Server state, caching, mutations |
+| **Zustand** | Client state (e.g. auth, settings) |
+| **react-native-mmkv** | Fast key-value persistence |
+| **ky** | HTTP client built on `fetch` |
+| **Zod** | Runtime validation / schemas (where used) |
+| **react-hook-form** + **@hookform/resolvers** | Form state in complex flows |
+| **i18next** / **react-i18next** | Localization |
+| **Jest** | Unit tests |
+| **ESLint** (+ import/boundary rules) | Linting and layer discipline |
+
+**Node:** `>= 22.11.0` (see `package.json` `engines`).
+
+---
+
+## Coding standards
+
+- **No API calls in screens** — Screens call hooks; hooks call `api/`.
+- **Hooks own React-facing logic** — Query keys, `enabled` flags, mutations, and composition live next to the domain.
+- **`api/` stays pure** — No `useState`, no navigation, no i18n side effects unless unavoidable at the transport edge (prefer mapping in `model/`).
+- **`shared` is not a dumping ground** — Only truly cross-cutting or multi-domain code.
+- **Imports** — Prefer the `@/` alias (`tsconfig` paths) for `src/*`.
+- **Naming** — Hooks: `useXxx.ts`; screens/components: `PascalCase`; domain folders: lowercase or consistent camelCase per existing domains.
+
+---
+
+## Philosophy
+
+- **Modularity** — Domains are the unit of change; shrinking blast radius is a design goal.
+- **Scalability** — New product areas add a folder and exports, not a rewrite of global state.
+- **Separation of concerns** — Transport, state, presentation, and shell wiring have distinct homes.
+- **Feature isolation** — Avoid deep imports across domains; expose minimal public APIs via `index.ts` where practical.
+
+---
+
+## Getting started
+
+### Prerequisites
+
+- Node.js **≥ 22.11.0**
+- Yarn or npm (lockfile: `yarn.lock`)
+- Xcode (iOS) / Android SDK (Android) per React Native docs
+
+### Install
+
+```bash
+yarn install
+# or: npm install
+```
+
+### Run Metro
+
+```bash
+yarn start
+```
+
+### Run on device / simulator
+
+```bash
+yarn ios
+# or
+yarn android
+```
+
+### Lint & test
+
+```bash
+yarn lint
+yarn test
 ```
 
 ---
 
-### Hook: `useProtectedNavigation`
+## License / confidentiality
 
-**File:** `src/hooks/useProtectedNavigation.ts`
-
-**When to use**
-
-- Inside **any screen or component** that has access to React Navigation context and should trigger a **login-gated** navigation (buttons, list rows, “My purchases”, etc.).
-
-**API:** `navigate`, `push`, `dispatch` — each wraps the corresponding protected helper with the current `navigation` object.
-
-**Example**
-
-```tsx
-import { Button } from 'react-native';
-import { useProtectedNavigation } from '@/hooks/useProtectedNavigation';
-
-export function GoToProfileButton() {
-  const { navigate } = useProtectedNavigation();
-
-  return <Button title="Profile" onPress={() => navigate('Profile')} />;
-}
-```
-
-**Tab press guard (built-in example):** the **Profile** tab in `src/shared/navigation/rootNavigator.tsx` uses a `tabPress` listener: if the user is not authenticated, the default switch is prevented and `protectedNavigate` sends them to **Login** while queueing **Profile**.
-
----
-
-### Deep linking & auth (`linkingAuth`)
-
-**File:** `src/shared/navigation/linkingAuth.ts`
-
-**When to use**
-
-- When you configure React Navigation **`linking`** on the static root navigator: wrap `getStateFromPath` so cold starts on a protected URL **store the intended leaf** in `pendingNavigation` and return a **Login** root state instead.
-
-**Example (conceptual)**
-
-```ts
-import { getStateFromPath } from '@react-navigation/native';
-import {
-  APP_LINKING_PREFIXES,
-  createAuthAwareGetStateFromPath,
-} from '@/shared/navigation/linkingAuth';
-
-const authAwareGetStateFromPath = createAuthAwareGetStateFromPath(
-  getStateFromPath,
-  /* your linking config */
-);
-
-// Pass prefixes + authAwareGetStateFromPath into Navigation `linking` when you enable it.
-void APP_LINKING_PREFIXES;
-```
-
-After the user logs in, still call `completePendingAuthNavigation()` so the deep link target is applied.
-
----
-
-### Secure storage (auth persist)
-
-**Files:** `src/storage/mmkv.ts`, `src/storage/zustand-mmkv-storage.ts`
-
-The auth store persists through a **synchronous MMKV** adapter (`innoghte-secure` instance). Optional encryption is driven by env vars (see `src/storage/mmkv.ts`). Use `clearAllStorage()` only when you intend to wipe that MMKV file; then reset or rehydrate app state (e.g. `logout()`) so memory matches disk.
-
-## Run
-
-```sh
-npm install
-npm start
-npm run android
-# or npm run ios
-```
+This repository is **private** (`"private": true` in `package.json`). Treat source and configuration as confidential unless your organization states otherwise.

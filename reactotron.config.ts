@@ -3,7 +3,7 @@ import type { ReactotronReactNative } from 'reactotron-react-native';
 import Reactotron from 'reactotron-react-native';
 import mmkvPlugin from 'reactotron-react-native-mmkv';
 
-import { storage } from '@/shared/utils/lib/storage';
+import { storage } from '@/shared/infra/storage/storage.default';
 
 import config from './app.json';
 

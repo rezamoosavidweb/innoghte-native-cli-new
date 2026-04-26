@@ -4,7 +4,6 @@ module.exports = {
   extends: '@react-native',
   parserOptions: {
     babelOptions: {
-      // Babel resolves config from process cwd; IDE/monorepo roots often differ.
       cwd: __dirname,
     },
   },
@@ -12,59 +11,76 @@ module.exports = {
 
   settings: {
     'boundaries/elements': [
+      { type: 'app', pattern: 'src/app/*' },
       { type: 'shared', pattern: 'src/shared/*' },
-      { type: 'feature', pattern: 'src/features/*' },
-
-      // internal layers
-      { type: 'api', pattern: 'src/features/*/api/*' },
-      { type: 'hooks', pattern: 'src/features/*/hooks/*' },
-      { type: 'components', pattern: 'src/features/*/components/*' },
-      { type: 'screen', pattern: 'src/features/*/screen/*' },
+      { type: 'ui', pattern: 'src/ui/*' },
+      { type: 'domain', pattern: 'src/domains/*' },
     ],
   },
 
   rules: {
-    /**
-     * 🚫 Prevent cross-feature imports
-     */
     'boundaries/dependencies': 'off',
-
-    /**
-     * 🚫 No deep imports (important!)
-     */
     'import/no-internal-modules': [
       'error',
       {
-        forbid: ['src/features/*/*/*', 'src/shared/*/*/*'],
+        forbid: [
+          'src/domains/*/*/*/*/*',
+          'src/app/*/*/*/*',
+          'src/shared/*/*/*/*',
+          'src/ui/*/*/*/*',
+        ],
       },
     ],
-
-    /**
-     * 🚫 No relative imports across features
-     */
-    'no-restricted-imports': [
-      'error',
-      {
-        patterns: ['../features/*', '../../features/*'],
-      },
-    ],
-
-    /**
-     * ✅ Enforce absolute imports
-     */
+    'no-restricted-imports': 'off',
     'import/no-relative-parent-imports': 'error',
-
-    /**
-     * 🚫 Prevent circular dependencies
-     */
     'import/no-cycle': 'off',
-
-    /**
-     * ✅ Optional: file naming consistency
-     */
     'import/no-useless-path-segments': 'error',
   },
   overrides: [
+    {
+      files: ['src/app/**/*.{ts,tsx}'],
+      excludedFiles: ['src/app/bridge/**/*.{ts,tsx}'],
+      rules: {
+        'no-restricted-imports': [
+          'error',
+          {
+            patterns: [
+              {
+                group: ['@/domains/*', '@/domains/**'],
+                message:
+                  'app: only app/bridge may import @/domains; keep App shell decoupled',
+              },
+            ],
+          },
+        ],
+      },
+    },
+    {
+      files: ['src/ui/**/*.{ts,tsx}'],
+      rules: {
+        'no-restricted-imports': [
+          'error',
+          {
+            patterns: [
+              {
+                group: [
+                  '@app/*',
+                  '@/app/*',
+                  '@/domains/*',
+                  '@/domains/**',
+                  '@/shared/infra/*',
+                  '@/shared/infra/**',
+                  '@/shared/utils/*',
+                  '@/shared/utils/**',
+                ],
+                message:
+                  'ui: only @/ui/** and @/shared/contracts/** (and external deps)',
+              },
+            ],
+          },
+        ],
+      },
+    },
     {
       files: ['__tests__/**/*.{js,jsx,ts,tsx}'],
       rules: {
