@@ -12,6 +12,6 @@ export { type LiveMeetingType } from '@/domains/live/model/liveMeeting.entities'
 export async function fetchLiveMeetings(): Promise<readonly LiveMeetingType[]> {
   const result = await parseJsonResponse<
     Record<string, unknown>[] | { data?: Record<string, unknown>[] }
-  >(getApiClient().get(endpoints.public.liveMeeting.replace(/^\//, '')));
+  >(getApiClient().get(endpoints.public.liveMeeting));
   return normalizeListResponse(result).map(mapLiveMeetingItem);
 }

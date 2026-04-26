@@ -1,1 +1,1 @@
-export {};
+export { fetchAndApplyPurchasedProductIds } from './fetchPurchasedProductIds';

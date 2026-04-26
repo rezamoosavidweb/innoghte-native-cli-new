@@ -8,7 +8,7 @@ export { type FaqType } from '../model/entities';
 
 export async function fetchFaqs(): Promise<readonly FaqType[]> {
   const result = await parseJsonResponse<FaqType[] | { data?: FaqType[] }>(
-    getApiClient().get(endpoints.public.faq.replace(/^\//, '')),
+    getApiClient().get(endpoints.public.faq),
   );
   return normalizeListResponse(result);
 }

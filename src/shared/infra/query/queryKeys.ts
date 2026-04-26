@@ -1,3 +1,5 @@
+export const AUTH_USER_QUERY_KEY = ['auth', 'user'] as const;
+
 export const COURSES_QUERY_KEY = ['courses'] as const;
 
 /** Distinct from courses query keys; avoids cache collisions with other lists. */

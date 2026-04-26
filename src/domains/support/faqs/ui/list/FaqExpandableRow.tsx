@@ -1,40 +1,30 @@
 import * as React from 'react';
-import {
-  LayoutAnimation,
-  Platform,
-  Pressable,
-  Text,
-  UIManager,
-  View,
-} from 'react-native';
+import { LayoutAnimation, Pressable, Text, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 
 import { useFaqExpandableRowStyles } from '@/domains/support/faqs/ui';
 
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
-
 type Props = {
   question: string;
   answer: string;
-  expanded: boolean;
-  onToggle: () => void;
 };
 
 export const FaqExpandableRow = React.memo(function FaqExpandableRow({
   question,
   answer,
-  expanded,
-  onToggle,
 }: Props) {
   const { colors } = useTheme();
   const s = useFaqExpandableRowStyles(colors);
+  const [expanded, setExpanded] = React.useState(false);
+
+  React.useEffect(() => {
+    setExpanded(false);
+  }, [question, answer]);
 
   const handlePress = React.useCallback(() => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    onToggle();
-  }, [onToggle]);
+    setExpanded(v => !v);
+  }, []);
 
   return (
     <View style={s.wrap}>
@@ -51,3 +41,4 @@ export const FaqExpandableRow = React.memo(function FaqExpandableRow({
     </View>
   );
 });
+FaqExpandableRow.displayName = 'FaqExpandableRow';

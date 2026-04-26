@@ -7,10 +7,11 @@ import type { CompositeNavigationProp } from '@react-navigation/native';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 
 import type { DrawerParamList, TabParamList } from '@/shared/contracts/navigationApp';
 import { useExperiencesHubStyles } from '@/domains/experiences/ui/experiencesHub.styles';
+import { HubMenuRow } from '@/ui/components/HubMenuRow';
 
 type Props = BottomTabScreenProps<TabParamList, 'Experiences'>;
 
@@ -37,37 +38,6 @@ const HUB_ROWS: readonly HubRowConfig[] = [
   { id: 'listening', icon: '🌐', titleKey: 'listening', action: 'listening' },
   { id: 'reading', icon: '💚', titleKey: 'reading', action: 'reading' },
 ] as const;
-
-type HubStyles = ReturnType<typeof useExperiencesHubStyles>;
-
-const HubMenuRow = React.memo(function HubMenuRow({
-  icon,
-  title,
-  onPress,
-  s,
-}: {
-  icon: string;
-  title: string;
-  onPress: () => void;
-  s: HubStyles;
-}) {
-  return (
-    <Pressable
-      accessibilityRole="button"
-      onPress={onPress}
-      style={({ pressed }) =>
-        pressed ? [s.menuRow, s.menuRowPressed] : s.menuRow
-      }
-    >
-      <View style={s.menuRowLeft}>
-        <Text style={s.menuIcon}>{icon}</Text>
-        <Text style={s.menuTitle}>{title}</Text>
-      </View>
-      <Text style={s.chevron}>›</Text>
-    </Pressable>
-  );
-});
-HubMenuRow.displayName = 'HubMenuRow';
 
 const ExperiencesHubScreenComponent = (_props: Props) => {
   const navigation = useNavigation<ExperiencesHubNavigation>();
@@ -103,13 +73,13 @@ const ExperiencesHubScreenComponent = (_props: Props) => {
       contentContainerStyle={s.scrollContent}
       keyboardShouldPersistTaps="handled"
     >
-      <Text style={s.subtitle}>{t('screens.experinces.subtitle')}</Text>
+      <Text style={s.subtitle}>{t('screens.experiences.subtitle')}</Text>
       <View style={s.list}>
         {HUB_ROWS.map(row => (
           <HubMenuRow
             key={row.id}
             icon={row.icon}
-            title={t(`screens.experinces.menu.${row.titleKey}`)}
+            title={t(`screens.experiences.menu.${row.titleKey}`)}
             s={s}
             onPress={() => {
               onRowPress(row);

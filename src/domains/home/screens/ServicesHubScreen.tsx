@@ -7,10 +7,11 @@ import type { CompositeNavigationProp } from '@react-navigation/native';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 
 import type { DrawerParamList, TabParamList } from '@/shared/contracts/navigationApp';
 import { useServicesHubStyles } from '@/domains/home/ui/servicesHub.styles';
+import { HubMenuRow } from '@/ui/components/HubMenuRow';
 
 type Props = BottomTabScreenProps<TabParamList, 'Services'>;
 
@@ -35,37 +36,6 @@ const HUB_ROWS: readonly HubRowConfig[] = [
   },
   { id: 'albums', icon: '💿', titleKey: 'albums', action: 'albums' },
 ] as const;
-
-type HubStyles = ReturnType<typeof useServicesHubStyles>;
-
-const HubMenuRow = React.memo(function HubMenuRow({
-  icon,
-  title,
-  onPress,
-  s,
-}: {
-  icon: string;
-  title: string;
-  onPress: () => void;
-  s: HubStyles;
-}) {
-  return (
-    <Pressable
-      accessibilityRole="button"
-      onPress={onPress}
-      style={({ pressed }) =>
-        pressed ? [s.menuRow, s.menuRowPressed] : s.menuRow
-      }
-    >
-      <View style={s.menuRowLeft}>
-        <Text style={s.menuIcon}>{icon}</Text>
-        <Text style={s.menuTitle}>{title}</Text>
-      </View>
-      <Text style={s.chevron}>›</Text>
-    </Pressable>
-  );
-});
-HubMenuRow.displayName = 'HubMenuRow';
 
 const ServicesHubScreenComponent = (_props: Props) => {
   const navigation = useNavigation<ServicesHubNavigation>();

@@ -19,21 +19,18 @@ import {
   spacing,
 } from '@/ui/theme';
 
-const DEMO_USER = {
-  name: 'Alex Rivera',
-  email: 'alex@example.com',
-  initials: 'AR',
-} as const;
-
 export const CustomDrawerContent = React.memo(function CustomDrawerContent(
   props: DrawerContentComponentProps,
 ) {
   const { state, navigation, descriptors } = props;
   const { t } = useTranslation();
-  const { onRequestLogout, isDrawerOnPhysicalRight: isDrawerOnRight } =
+  const { onRequestLogout, isDrawerOnPhysicalRight: isDrawerOnRight, user: drawerUser } =
     useShellDrawerModel();
   const { colors, dark } = useTheme();
   const s = pickSemantic(dark);
+  const displayName = drawerUser.displayName;
+  const emailLine = drawerUser.emailLine;
+  const avatarInitials = drawerUser.avatarInitials;
 
   const styles = React.useMemo(
     () =>
@@ -134,11 +131,11 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
       <View style={styles.sheet}>
         <View style={styles.profileSection}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>{DEMO_USER.initials}</Text>
+            <Text style={styles.avatarText}>{avatarInitials}</Text>
           </View>
           <View style={styles.profileInfo}>
-            <Text style={styles.userName}>{DEMO_USER.name}</Text>
-            <Text style={styles.userEmail}>{DEMO_USER.email}</Text>
+            <Text style={styles.userName}>{displayName}</Text>
+            <Text style={styles.userEmail}>{emailLine}</Text>
           </View>
         </View>
 

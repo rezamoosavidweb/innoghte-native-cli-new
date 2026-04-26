@@ -30,7 +30,19 @@
     "donation": "کمک مالی",
     "aboutUs": "دربارهٔ ما",
     "collaboration": "همکاری",
-    "liveMeetingOverview": "جلسه زنده (معرفی)"
+    "liveMeetingOverview": "جلسه زنده (معرفی)",
+    "user": {
+      "signedOut": "وارد نشده‌اید",
+      "signInHint": "ورود از منوی تب «پروفایل»",
+      "fallbackName": "کاربر",
+      "noEmail": "—"
+    }
+  },
+  "app": {
+    "errorBoundary": {
+      "title": "مشکلی رخ داد",
+      "hint": "در صورت ادامه مشکل، برنامه را ببندید و دوباره باز کنید."
+    }
   },
   "screens": {
     "home": {

@@ -190,13 +190,21 @@ export function completePendingAuthNavigation(): void {
   if (nav.isReady()) {
     run();
   } else {
+    if (pendingAuthNavigationUnsubscribe) {
+      return;
+    }
     const unsub = nav.addListener('state', () => {
-      if (nav.isReady()) {
-        unsub();
-        run();
+      if (!nav.isReady()) {
+        return;
       }
+      pendingAuthNavigationUnsubscribe = null;
+      unsub();
+      run();
     });
+    pendingAuthNavigationUnsubscribe = unsub;
   }
 }
+
+let pendingAuthNavigationUnsubscribe: (() => void) | null = null;
 
 export { StackActions };

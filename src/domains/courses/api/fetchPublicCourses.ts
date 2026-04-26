@@ -5,6 +5,6 @@ import type { PublicCoursesResponse } from '@/domains/courses/model/courseApi.dt
 
 export async function getPublicCourses(): Promise<PublicCoursesResponse> {
   return parseJsonResponse<PublicCoursesResponse>(
-    getApiClient().get(endpoints.public.courses.replace(/^\//, '')),
+    getApiClient().get(endpoints.public.courses),
   );
 }

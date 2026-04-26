@@ -1,11 +1,8 @@
 import RNRestart from 'react-native-restart';
 import { create } from 'zustand';
-import {
-  createJSONStorage,
-  persist,
-  type StateStorage,
-} from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
+import { createStorageServiceStateStorage } from '@/shared/infra/storage/createStorageServiceAdapter';
 import { StorageService } from '@/shared/infra/storage/storage.service';
 import type { AppLanguage } from '@/shared/contracts/locale';
 import { i18n, initI18n } from '@/shared/infra/i18n';
@@ -13,15 +10,7 @@ import { applyRtlForLanguage, isRtlLanguage } from '@/shared/infra/i18n/i18n-rtl
 
 import { LANGUAGE_STORAGE_KEY } from '@/domains/settings/model/languageStorageKey';
 
-const languagePersistStorage: StateStorage = {
-  getItem: (name) => StorageService.getString(name),
-  setItem: (name, value) => {
-    StorageService.setString(name, value);
-  },
-  removeItem: (name) => {
-    StorageService.remove(name);
-  },
-};
+const languagePersistStorage = createStorageServiceStateStorage();
 
 type LanguageState = {
   currentLanguage: AppLanguage;

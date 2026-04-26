@@ -9,6 +9,6 @@ export { type EventType } from '@/domains/events/model/event.entities';
 export async function fetchEvents(): Promise<readonly EventType[]> {
   const result = await parseJsonResponse<
     Record<string, unknown>[] | { data?: Record<string, unknown>[] }
-  >(getApiClient().get(endpoints.public.events.replace(/^\//, '')));
+  >(getApiClient().get(endpoints.public.events));
   return normalizeListResponse(result).map(mapEventItem);
 }

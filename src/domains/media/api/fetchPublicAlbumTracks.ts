@@ -43,7 +43,7 @@ function mapPublicCourseToAlbumTrack(item: PublicCourseListItem): PublicAlbumTra
 
 export async function fetchPublicAlbumTracks(): Promise<readonly PublicAlbumTrack[]> {
   const response = await parseJsonResponse<PublicCoursesListPayload>(
-    getApiClient().get(endpoints.public.courses.replace(/^\//, '')),
+    getApiClient().get(endpoints.public.courses),
   );
   return (response.data ?? []).map(mapPublicCourseToAlbumTrack);
 }

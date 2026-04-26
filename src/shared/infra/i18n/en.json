@@ -30,7 +30,19 @@
     "donation": "Donation",
     "aboutUs": "About us",
     "collaboration": "Collaboration",
-    "liveMeetingOverview": "Live meeting (overview)"
+    "liveMeetingOverview": "Live meeting (overview)",
+    "user": {
+      "signedOut": "Signed out",
+      "signInHint": "Sign in from the Profile tab",
+      "fallbackName": "User",
+      "noEmail": "—"
+    }
+  },
+  "app": {
+    "errorBoundary": {
+      "title": "Something went wrong",
+      "hint": "If this keeps happening, close and restart the app."
+    }
   },
   "screens": {
     "home": {
@@ -60,6 +72,15 @@
         "liveMeeting": "Live meeting",
         "support": "Support services",
         "events": "Events"
+      }
+    },
+    "experiences": {
+      "subtitle": "Primary tab — the drawer still hosts settings and more.",
+      "menu": {
+        "meditation": "Meditation",
+        "writing": "Writing",
+        "listening": "Listening",
+        "reading": "Reading"
       }
     },
     "search": {

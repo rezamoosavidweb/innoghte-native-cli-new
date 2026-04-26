@@ -83,8 +83,6 @@ const FaqsScreenComponent = (_props: Props) => {
         setSearchQuery: s.setSearchQuery,
       })),
     );
-  const [expandedId, setExpandedId] = React.useState<number | null>(null);
-
   React.useEffect(() => {
     if (data?.length && activeCategoryId === null) {
       setActiveCategoryId(data[0].id);
@@ -112,17 +110,8 @@ const FaqsScreenComponent = (_props: Props) => {
   }, [data, activeCategoryId, searchQuery]);
 
   const renderItem: ListRenderItem<FaqRow> = React.useCallback(
-    ({ item }) => (
-      <FaqExpandableRow
-        question={item.question}
-        answer={item.answer}
-        expanded={expandedId === item.id}
-        onToggle={() => {
-          setExpandedId(prev => (prev === item.id ? null : item.id));
-        }}
-      />
-    ),
-    [expandedId],
+    ({ item }) => <FaqExpandableRow question={item.question} answer={item.answer} />,
+    [],
   );
 
   const keyExtractor = React.useCallback((item: FaqRow) => String(item.id), []);
@@ -169,7 +158,6 @@ const FaqsScreenComponent = (_props: Props) => {
             active={cat.id === activeCategoryId}
             onPress={() => {
               setActiveCategoryId(cat.id);
-              setExpandedId(null);
             }}
           />
         ))}
@@ -181,7 +169,7 @@ const FaqsScreenComponent = (_props: Props) => {
         estimatedItemSize={flashListEstimatedItemSize.faq}
         ItemSeparatorComponent={ListSep}
         contentContainerStyle={layout.listPad}
-        extraData={`${i18n.language}-${expandedId}-${rows.length}`}
+        extraData={`${i18n.language}-${rows.length}`}
       />
     </View>
   );

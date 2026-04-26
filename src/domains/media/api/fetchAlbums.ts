@@ -7,6 +7,6 @@ import { mapAlbumItem, type Album } from '@/domains/media/model/album.entities';
 export async function fetchAlbums(): Promise<readonly Album[]> {
   const result = await parseJsonResponse<
     Record<string, unknown>[] | { data?: Record<string, unknown>[] }
-  >(getApiClient().get(endpoints.public.albums.replace(/^\//, '')));
+  >(getApiClient().get(endpoints.public.albums));
   return normalizeListResponse(result).map(mapAlbumItem);
 }

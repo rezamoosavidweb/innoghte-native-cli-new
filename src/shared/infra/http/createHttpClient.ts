@@ -19,9 +19,10 @@ const defaultOptions: Options = {
 
 /** Configured API transport. Auth is wired in `app/bridge/wireAppHttpClient`. */
 export function createApiTransport(prefix: string, auth: HttpAuthHooks) {
+  const base = `${prefix.replace(/\/$/, '')}/`;
   return ky.create({
     ...defaultOptions,
-    prefix,
+    prefix: base,
     hooks: {
       beforeRequest: [
         ({ request }) => {

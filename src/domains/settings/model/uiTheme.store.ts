@@ -1,12 +1,8 @@
 import { Appearance } from 'react-native';
 import { create } from 'zustand';
-import {
-  createJSONStorage,
-  persist,
-  type StateStorage,
-} from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
-import { StorageService } from '@/shared/infra/storage/storage.service';
+import { createStorageServiceStateStorage } from '@/shared/infra/storage/createStorageServiceAdapter';
 import type { ThemePreference } from '@/shared/contracts/theme';
 
 import { UI_THEME_STORAGE_KEY } from '@/domains/settings/model/uiThemeStorageKey';
@@ -18,15 +14,7 @@ type UiThemeState = {
   setPreference: (p: ThemePreference) => void;
 };
 
-const uiThemePersistStorage: StateStorage = {
-  getItem: name => StorageService.getString(name),
-  setItem: (name, value) => {
-    StorageService.setString(name, value);
-  },
-  removeItem: name => {
-    StorageService.remove(name);
-  },
-};
+const uiThemePersistStorage = createStorageServiceStateStorage();
 
 export const useUiThemeStore = create<UiThemeState>()(
   persist(

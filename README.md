@@ -1,209 +1,172 @@
 # Innoghte — React Native Client
 
-A production-oriented React Native application structured for **domain-driven design (DDD)**, **clear layering**, and **long-term scalability**. The codebase separates bootstrap code, feature domains, cross-cutting infrastructure, and a shared design system so teams can grow features in isolation without entangling business logic across the tree.
+A production-oriented React Native app built with **strict layering**, **domain-driven** folders, and **ESLint boundary rules** so features can grow in isolation with minimal cross-coupling.
 
 ---
 
 ## Overview
 
-- **Modular architecture**: Feature work lives under `src/domains/<domain>`; the shell wires navigation and providers under `src/app`.
-- **Domain boundaries**: Each domain owns its API surface, state shapes, hooks, screens, and UI pieces. Cross-domain coupling is minimized; shared concerns live in `src/shared` and `src/ui`.
-- **Team scale**: Predictable folder layouts, barrel exports, and import aliases reduce onboarding time and review friction.
+- **Modular layout**: Work lives in `src/domains/<domain>`; the shell (navigation, providers, cross-domain wiring) lives in `src/app`.
+- **Domain boundaries**: Each domain ships `api/`, `model/`, `hooks/`, `screens/`, and often `ui/`, with small public surfaces through `index.ts` where it helps.
+- **Shared vs UI**: `src/shared` holds infrastructure and contracts; `src/ui` is the design system and global layout. **`ui` does not import from `domains`**—shell data for chrome (e.g. drawer user) is passed via **`ShellDrawerContext`** from **`app/bridge/BridgeShell`**.
 
 ---
 
 ## Architecture
 
-Four primary layers compose the application:
+Four primary layers:
 
 | Layer | Role |
 |--------|------|
-| **`app/`** | Application bootstrap: providers, static navigation composition, startup flow, auth-aware navigation helpers. **No business rules**—only wiring and shell behavior. |
-| **`domains/`** | **Business capabilities**: auth, catalog content, user-facing hubs, settings, support flows, etc. Each domain follows a consistent internal layout (see below). |
-| **`shared/`** | **Framework-level infrastructure**: HTTP client, persistence, i18n, global query keys, navigation ref, purchase ports, and **contracts** (shared types—not feature UI). |
-| **`ui/`** | **Design system**: theme tokens, global components, layout primitives used across domains. Domains should not reimplement spacing, typography, or chrome here. |
+| **`app/`** | Bootstrap, static navigation, providers, `BridgeShell` composition, auth-aware navigation (`protectedNavigate`, `completePendingAuthNavigation`). No business rules—wiring only. |
+| **`domains/`** | Business capabilities: auth, courses, media, live, events, settings, support, user, home, experiences, search, etc. |
+| **`shared/`** | HTTP, storage adapters, i18n, query keys, navigation ref, contracts, purchase port, utilities. |
+| **`ui/`** | Theme tokens, global components, layout (e.g. `CustomDrawerContent`), `ErrorBoundary`. |
 
-### High-level layout
+**Dependency direction:** `app` → `domains` + `shared` + `ui`; `domains` → `shared` + `ui`; `shared` and `ui` must not depend on `domains` (enforced by `eslint-plugin-boundaries`).
 
 ```text
 src/
-├── app/                 # Bootstrap, navigation shell, providers, startup
-├── domains/             # Feature domains (business + product UI)
-├── shared/              # Infra, contracts, cross-cutting utilities
-└── ui/                  # Global design system (theme, components, layout)
+├── app/                 # BridgeShell, root navigator, protected navigation, startup
+├── domains/              # Feature domains
+├── shared/              # Infra, contracts, cross-cutting utils
+└── ui/                  # Design system, ErrorBoundary, drawer chrome
 ```
 
-**Dependency direction (intended):** `app` → `domains` + `shared` + `ui`; `domains` → `shared` + `ui`; `shared` and `ui` do not depend on `domains`.
-
----
-
-## Domain structure
-
-Each domain under `src/domains/<name>/` follows a **standard template**:
+### Domain template
 
 ```text
 domains/<domain>/
-├── api/           # HTTP calls, fetchers, thin service wrappers (no React hooks)
-├── model/         # Entities, DTOs, Zod schemas, stores, domain constants
-├── hooks/         # React Query, composition, domain-specific hook logic
-├── screens/       # Route-level screens: layout + wiring to hooks (no direct HTTP)
-├── ui/            # Domain-scoped components, cards, forms, styles
-├── index.ts       # Public exports for the domain (optional but recommended)
+├── api/           # Async fetchers only (no React hooks)
+├── model/         # DTOs, Zod schemas, Zustand stores, constants
+├── hooks/         # React Query, composition hooks
+├── screens/       # Route screens: hooks + layout (no direct getApiClient)
+├── ui/            # Domain-scoped components
+└── index.ts       # Public exports (optional)
 ```
 
-### Responsibilities
+**Examples in this repo:** `auth`, `courses`, `events`, `media`, `live`, `settings`, `support` (e.g. `faqs/`), `user`, `home`, `experiences`, `search`.
 
-- **`api/`** — Network I/O only. Call sites return data or throw; no UI, no `useQuery` / `useMutation`.
-- **`model/`** — Types, mapping from API payloads, validation schemas, Zustand slices that belong to this domain.
-- **`hooks/`** — TanStack Query usage, derived state, orchestration consumed by screens and domain UI.
-- **`screens/`** — Page components: connect hooks to presentational pieces. **Do not import `getApiClient()` or raw fetchers here.**
-- **`ui/`** — Reusable pieces **within** the domain (e.g. list cards, forms). Shared visual primitives stay in `src/ui`.
-
-Some domains include **sub-areas** (e.g. `support/faqs/`) when a subdomain is large enough to own its own `api` / `model` / `hooks` / `screens` / `ui`. The **root** `support/` folder may carry placeholder modules so top-level structure stays consistent as features grow.
-
-**Example domains in this repo:** `auth`, `courses`, `events`, `media`, `live`, `settings`, `support`, `user`, `search`, `home` (includes the Services tab hub screen), `experiences`.
+Subdomains (e.g. `support/faqs/`) mirror the same internal layout when a feature is large enough.
 
 ---
 
 ## Data flow
 
-Intended flow for server-backed features:
-
 ```text
-Screen  →  hook (e.g. React Query)  →  api/ fetcher  →  HTTP  →  backend
-                ↓
-            model / cache
-                ↓
-Screen + domain ui  ←  typed data + loading/error state
+Screen → hook (React Query / Zustand) → api/ → HTTP → backend
+          ↓
+        model / cache
 ```
 
-- **Screens** subscribe to hooks and render **domain `ui/`** components.
-- **Hooks** own caching, retries, and mutation side effects (invalidation, optimistic updates where applicable).
-- **`api/`** remains easy to test and mock: pure async functions over the shared HTTP layer.
-
-Auth-gated navigation (e.g. redirect to login and resume intent) is coordinated from **`app/bridge/auth`** together with the auth store in **`domains/auth/model`**.
+- **Navigation after login** — `LoginScreen` calls `completePendingAuthNavigation()` so intents queued by `protectedNavigate` / `protectedPush` are applied instead of a hardcoded destination.
+- **Auth-gated routes** — Tab (`Profile`) and selected drawer items (`MyCourses`, `LiveMeetings`, `Events`) use listeners to send unauthenticated users through the same flow.
 
 ---
 
-## Shared layer (`src/shared`)
+## HTTP & API contracts
+
+- **Client:** `ky` via `createApiTransport` / `createAppHttpClient` in `shared/infra/http` (retries for GETs on 408/429/5xx, 401 → logout hook).
+- **Base URL:** `resolveApiBaseUrl()` — override with `API_BASE_URL` or `REACT_NATIVE_API_URL` (default staging API is documented in project tooling; check `resolveBaseUrl.ts`).
+- **Paths:** `endpoints` use **no leading slash**; the client normalizes the base URL with a single trailing `/` so paths join consistently—avoid manual `.replace(/^\//, …)` at call sites.
+- **JSON:** `parseJsonResponse(request)` optionally takes a **Zod schema**; prefer schemas for **auth and other sensitive boundaries**, and expand coverage for public list endpoints over time. Legacy call sites may still use an unchecked cast when `schema` is omitted.
+- **Auth token:** The access token is stored only in the **Zustand auth persist slice** (secure MMKV). `getAccessToken()` for the HTTP client reads the in-memory store first, then the persisted JSON for the same key, so the first request after cold start can still attach `Authorization` before rehydration finishes.
+
+### Purchases (product gating)
+
+- The **`purchases` port** (`shared/purchases`) exposes `isProductPurchased(id)`; the **user** domain registers the implementation at startup (`registerUserPurchaseLookup`).
+- Purchased product IDs are loaded with **`fetchAndApplyPurchasedProductIds()`** (authenticated) when the user signs in; the store is cleared on logout. The endpoint key is **`endpoints.user.purchasedProductIds`**—**align the path and response shape** with your backend (the client tolerates several `data` shapes and fails open to an empty set on error).
+
+---
+
+## Shell, drawer, and errors
+
+- **`BridgeShell`** wires theme, **`ErrorBoundary`**, `ShellDrawerProvider`, purchase registration, and **drawer user snapshot** (`ShellDrawerUserSnapshot` in `shared/contracts/shellUi.ts`) from `useAuthStore` + `useCurrentUser`, so `CustomDrawerContent` stays in `ui/` without importing domains.
+- **Zustand + default MMKV** — `createStorageServiceStateStorage()` in `shared/infra/storage/createStorageServiceAdapter.ts` backs theme and language persist; **auth tokens** do not use the unencrypted default instance.
+
+### Bootstrap (`index.js`)
+
+- Android **layout animation** for expandable UI is enabled once at startup (`UIManager.setLayoutAnimationEnabledExperimental`), not inside leaf components.
+
+---
+
+## Shared layer highlights (`src/shared`)
 
 | Area | Purpose |
 |------|---------|
-| **`infra/http`** | HTTP client (`ky`-based), base URL resolution, parsing helpers, errors. |
-| **`infra/storage`** | MMKV-backed storage helpers; Zustand persistence adapters where used. |
-| **`infra/i18n`** | i18next resources and RTL/locale helpers. |
-| **`infra/query`** | Shared **query key factories** to avoid cache collisions across domains. |
-| **`infra/navigation`** | `navigationRef` and other navigation infrastructure. |
-| **`contracts`** | Route param types, pagination shapes, and other **cross-domain TypeScript contracts**. |
-| **`purchases`** | Abstraction for “is this product purchased?”—domains consume the port, not store shape. |
-| **`utils`** | Small, framework-agnostic helpers. |
-
-Keep **`shared`** free of feature-specific screens or product copy. If it’s only used by one domain, it usually belongs in that domain.
+| **`infra/http`** | `createHttpClient`, `parseJsonResponse`, `endpoints`, `ApiError`. |
+| **`infra/storage`** | MMKV helpers, `zustand-mmkv-storage` (secure), `createStorageServiceStateStorage` for Zustand JSON persist. |
+| **`infra/i18n`** | i18next resources, RTL helpers. |
+| **`infra/query`** | Shared query keys (e.g. `AUTH_USER_QUERY_KEY`, courses, albums, …). |
+| **`contracts`** | Navigation types, `ShellDrawerUiModel`, pagination, theme/locale, purchase port types. |
+| **`purchases`** | In-process `isProductPurchased` indirection. |
+| **`utils`** | e.g. `initialsFromDisplayName`, `resolveColorScheme`. |
 
 ---
 
-## UI system (`src/ui`)
+## UI layer (`src/ui`)
 
-- **`theme/`** — Design tokens: color scales, spacing, typography, navigation chrome, semantic helpers (e.g. light/dark).
-- **`components/`** — Reusable building blocks (e.g. scaffold, form fields, chrome buttons).
-- **`layout/`** — Shell layout (drawer content, context providers for shell UI).
-
-Domains import tokens and primitives from `@/ui/...` instead of hard-coding raw values where possible.
+- **`theme/`** — Tokens, navigation chrome, semantic colors.
+- **`components/`** — e.g. `ErrorBoundary`, `HubMenuRow`, form fields.
+- **`layout/`** — `CustomDrawerContent`, `ShellDrawerContext`.
 
 ---
 
 ## Adding a new domain
 
-1. **Create** `src/domains/<myDomain>/` with folders: `api`, `model`, `hooks`, `screens`, `ui` (use `export {}` or a short comment in `index.ts` files until real code exists).
-2. **Define** types and schemas in `model/`; add fetchers in `api/` using the shared HTTP client.
-3. **Add** `hooks/use<MyFeature>.ts` (or several hooks) that call `api/` via TanStack Query or local state as needed.
-4. **Implement** `screens/<MyScreen>.tsx` that uses hooks only—no direct `api/` calls from the screen file.
-5. **Place** reusable domain widgets in `ui/` (cards, forms, local styles).
-6. **Export** public entry points from `domains/<myDomain>/index.ts` (screens, hooks, types you want other layers to use—keep the surface small).
-7. **Register** the screen in `src/app/bridge/rootNavigator.tsx` (or the appropriate navigator module) and extend `shared/contracts/navigationApp` if new route names or params are introduced.
+1. Add `src/domains/<name>/` with `api`, `model`, `hooks`, `screens`, `ui` as needed.
+2. Define types and Zod schemas in `model/`; implement fetchers in `api/` using `getApiClient()`.
+3. Expose React Query (or other) hooks from `hooks/`.
+4. Build `screens/` using hooks only.
+5. Export a minimal surface from `index.ts` if other modules need it.
+6. Register routes in `app/bridge/rootNavigator.tsx` and update `shared/contracts/navigationApp.ts` for params and route names. For protected behavior, follow existing **tab** / **drawer** listener patterns.
 
 ---
 
 ## Tech stack
 
-| Technology | Usage |
-|------------|--------|
-| **React Native** `0.85.x` | Application runtime |
+| Technology | Role |
+|------------|------|
+| **React Native** `0.85.x` | Runtime |
 | **React** `19.x` | UI |
-| **TypeScript** | Strict typing across layers |
-| **React Navigation** `7.x` | Drawer + tabs + stack-style composition |
-| **TanStack React Query** `5.x` | Server state, caching, mutations |
-| **Zustand** | Client state (e.g. auth, settings) |
-| **react-native-mmkv** | Fast key-value persistence |
-| **ky** | HTTP client built on `fetch` |
-| **Zod** | Runtime validation / schemas (where used) |
-| **react-hook-form** + **@hookform/resolvers** | Form state in complex flows |
-| **i18next** / **react-i18next** | Localization |
-| **Jest** | Unit tests |
-| **ESLint** (+ import/boundary rules) | Linting and layer discipline |
+| **TypeScript** | Typing |
+| **React Navigation** `7.x` | Drawer + tabs (static config) |
+| **TanStack React Query** `5.x` | Server state |
+| **Zustand** | Client state (auth, theme, FAQ hub, …) with MMKV persist where used |
+| **react-native-mmkv** | Fast storage (default + secure instances) |
+| **ky** | HTTP on `fetch` |
+| **Zod** | Runtime validation at JSON boundaries (expand over time) |
+| **i18next** / **react-i18next** | i18n + RTL |
+| **ESLint** + **eslint-plugin-boundaries** | Layer rules |
 
 **Node:** `>= 22.11.0` (see `package.json` `engines`).
 
 ---
 
-## Coding standards
+## Commands
 
-- **No API calls in screens** — Screens call hooks; hooks call `api/`.
-- **Hooks own React-facing logic** — Query keys, `enabled` flags, mutations, and composition live next to the domain.
-- **`api/` stays pure** — No `useState`, no navigation, no i18n side effects unless unavoidable at the transport edge (prefer mapping in `model/`).
-- **`shared` is not a dumping ground** — Only truly cross-cutting or multi-domain code.
-- **Imports** — Prefer the `@/` alias (`tsconfig` paths) for `src/*`.
-- **Naming** — Hooks: `useXxx.ts`; screens/components: `PascalCase`; domain folders: lowercase or consistent camelCase per existing domains.
-
----
-
-## Philosophy
-
-- **Modularity** — Domains are the unit of change; shrinking blast radius is a design goal.
-- **Scalability** — New product areas add a folder and exports, not a rewrite of global state.
-- **Separation of concerns** — Transport, state, presentation, and shell wiring have distinct homes.
-- **Feature isolation** — Avoid deep imports across domains; expose minimal public APIs via `index.ts` where practical.
+| Command | Description |
+|--------|-------------|
+| `yarn` | Install dependencies |
+| `yarn start` | Metro bundler |
+| `yarn ios` / `yarn android` | Run on simulator / device |
+| `yarn android:apk` | Android release APK |
+| `yarn android:bundle` | Android App Bundle |
+| `yarn lint` | ESLint (`src/`, `__tests__/`, `App.tsx`) |
+| `yarn test` | Jest |
+| `yarn test -- --testPathPattern=<file>` | Single test file |
 
 ---
 
-## Getting started
+## Coding standards (short)
 
-### Prerequisites
-
-- Node.js **≥ 22.11.0**
-- Yarn or npm (lockfile: `yarn.lock`)
-- Xcode (iOS) / Android SDK (Android) per React Native docs
-
-### Install
-
-```bash
-yarn install
-# or: npm install
-```
-
-### Run Metro
-
-```bash
-yarn start
-```
-
-### Run on device / simulator
-
-```bash
-yarn ios
-# or
-yarn android
-```
-
-### Lint & test
-
-```bash
-yarn lint
-yarn test
-```
+- **Screens** do not call `getApiClient()` or raw `api/` imports—use domain hooks.
+- **`api/`** stays async and side-effect free except HTTP (map/normalize in `model/` when possible).
+- **Boundaries** — respect `eslint-plugin-boundaries`; do not make `ui` or `shared` depend on `domains`.
+- **Imports** — Prefer `@/` paths (`tsconfig`).
 
 ---
 
 ## License / confidentiality
 
-This repository is **private** (`"private": true` in `package.json`). Treat source and configuration as confidential unless your organization states otherwise.
+This package is **private** (`"private": true` in `package.json`). Treat the repository as confidential unless your organization policy says otherwise.

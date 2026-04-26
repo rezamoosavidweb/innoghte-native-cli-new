@@ -1,10 +1,7 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-import {
-  clearAccessToken,
-  setAccessToken,
-} from '@/domains/auth/api/auth.storage';
+import { ZUSTAND_AUTH_PERSIST_KEY } from '@/domains/auth/model/authPersistKey';
 import { zustandMMKVStorage } from '@/shared/infra/storage/zustand-mmkv-storage';
 
 export type PendingNavigation = {
@@ -32,7 +29,6 @@ export const useAuthStore = create<AuthStoreState>()(
       pendingNavigation: null,
 
       setAuth: ({ accessToken }) => {
-        setAccessToken(accessToken);
         set({
           accessToken,
           isAuthenticated: true,
@@ -40,7 +36,6 @@ export const useAuthStore = create<AuthStoreState>()(
       },
 
       logout: () => {
-        clearAccessToken();
         set({
           accessToken: null,
           isAuthenticated: false,
@@ -57,18 +52,12 @@ export const useAuthStore = create<AuthStoreState>()(
       },
     }),
     {
-      name: 'innoghte-auth',
+      name: ZUSTAND_AUTH_PERSIST_KEY,
       storage: createJSONStorage(() => zustandMMKVStorage),
       partialize: state => ({
         isAuthenticated: state.isAuthenticated,
         accessToken: state.accessToken,
       }),
-      onRehydrateStorage: () => (state, error) => {
-        if (error || !state?.accessToken) {
-          return;
-        }
-        setAccessToken(state.accessToken);
-      },
     },
   ),
 );

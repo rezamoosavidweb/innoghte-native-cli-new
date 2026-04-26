@@ -17,4 +17,4 @@ export type {
   MainTabScreenName,
   TabParamList,
 } from './navigationApp';
-export type { ShellDrawerUiModel } from './shellUi';
+export type { ShellDrawerUiModel, ShellDrawerUserSnapshot } from './shellUi';

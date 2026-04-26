@@ -42,11 +42,7 @@ import {
   type ExtraDrawerLeafKey,
 } from '@/app/navigation/i18nScreenOptions';
 import { TabBarGlyph } from '@/app/navigation/tabBarConfig';
-import type {
-  DrawerParamList,
-  MainTabScreenName,
-  TabParamList,
-} from '@/shared/contracts/navigationApp';
+import type { DrawerParamList, MainTabScreenName, TabParamList } from '@/shared/contracts/navigationApp';
 
 const drawerOpensFromEnd = isDrawerPhysicalRight();
 
@@ -186,6 +182,24 @@ function extraLeafOptions(leaf: ExtraDrawerLeafKey, icon: string) {
   };
 }
 
+function protectedAuthDrawerScreen(
+  target: 'MyCourses' | 'LiveMeetings' | 'Events',
+) {
+  return {
+    listeners: (props: {
+      navigation: { dispatch: (action: { type: string; payload?: object }) => void };
+    }) => ({
+      drawerItemPress: (e: { preventDefault: () => void }) => {
+        if (useAuthStore.getState().isAuthenticated) {
+          return;
+        }
+        e.preventDefault();
+        protectedNavigate(props.navigation, target);
+      },
+    }),
+  };
+}
+
 export const rootNavigator = createDrawerNavigator<DrawerParamList>({
   drawerContent: props => <CustomDrawerContent {...props} />,
   screenOptions: ({ theme }) => {
@@ -232,6 +246,7 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
     MyCourses: {
       screen: MyCoursesHubScreen,
       options: () => extraLeafOptions('myCourses', '🎓'),
+      ...protectedAuthDrawerScreen('MyCourses'),
     },
     PublicCourses: {
       screen: CoursesScreen,
@@ -240,10 +255,12 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
     LiveMeetings: {
       screen: LiveMeetingsScreen,
       options: () => extraLeafOptions('liveMeetings', '🌐'),
+      ...protectedAuthDrawerScreen('LiveMeetings'),
     },
     Events: {
       screen: EventsScreen,
       options: () => extraLeafOptions('events', '📅'),
+      ...protectedAuthDrawerScreen('Events'),
     },
     Startup: {
       screen: StartupScreen,

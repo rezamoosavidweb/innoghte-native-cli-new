@@ -2,8 +2,13 @@
  * @format
  */
 
+import { Platform, UIManager } from 'react-native';
 import 'react-native-gesture-handler';
 import { AppRegistry } from 'react-native';
+
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 import { name as appName } from './app.json';
 
 // if (__DEV__) {
