@@ -1,1 +1,1 @@
-export {};
+export { useQuickAccess } from './useQuickAccess';

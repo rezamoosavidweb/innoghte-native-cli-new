@@ -1,7 +1,11 @@
 import { getApiClient } from '@/shared/infra/http';
 import { parseJsonResponse } from '@/shared/infra/http/parseJson';
 import { endpoints } from '@/shared/infra/http/endpoints';
-import { loginResponseSchema, userResponseSchema } from '@/domains/auth/model/authHttp.schemas';
+import {
+  loginResponseSchema,
+  registerResponseSchema,
+  userResponseSchema,
+} from '@/domains/auth/model/authHttp.schemas';
 import { useAuthStore } from '@/domains/auth/model/auth.store';
 import type {
   LoginBodyType,
@@ -24,8 +28,9 @@ export async function login(body: LoginBodyType): Promise<LoginResponse> {
 }
 
 export async function register(body: RegisterBodyType): Promise<RegisterResponse> {
-  return parseJsonResponse<RegisterResponse>(
+  return parseJsonResponse(
     getApiClient().post(endpoints.auth.register, { json: body }),
+    registerResponseSchema,
   );
 }
 

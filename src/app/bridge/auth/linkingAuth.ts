@@ -1,7 +1,7 @@
 import type { NavigationState, PartialState } from '@react-navigation/native';
 import { getStateFromPath } from '@react-navigation/native';
 
-import { useAuthStore } from '@/domains/auth/model/auth.store';
+import { AuthService } from '@/domains/auth';
 
 /**
  * URL prefixes for `Navigation` `linking.prefixes`. Extend per environment.
@@ -46,7 +46,7 @@ export function createAuthAwareGetStateFromPath(
   return (path, config) => {
     const state = baseGetStateFromPath(path, config ?? options);
 
-    if (!state || useAuthStore.getState().isAuthenticated) {
+    if (!state || AuthService.isAuthenticated()) {
       return state;
     }
 
@@ -55,7 +55,7 @@ export function createAuthAwareGetStateFromPath(
       return state;
     }
 
-    useAuthStore.getState().setPendingNavigation({
+    AuthService.setPendingNavigation({
       name: leaf.name,
       params: leaf.params,
     });

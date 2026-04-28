@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { InputField } from '@/ui/components/form/InputField';
 
@@ -10,10 +11,13 @@ type Props = {
 };
 
 export function MobileLoginForm({ value, onChangeText, onBlur, error }: Props) {
+  const { t } = useTranslation();
+  const label = t('screens.login.mobile');
+
   return (
     <InputField
-      accessibilityLabel="Mobile"
-      placeholder="Mobile"
+      accessibilityLabel={label}
+      placeholder={label}
       keyboardType="phone-pad"
       value={value}
       onChangeText={onChangeText}

@@ -1,1 +1,1 @@
-export {};
+export { fetchQuickAccess } from './fetchQuickAccess';

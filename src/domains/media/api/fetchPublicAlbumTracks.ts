@@ -3,6 +3,7 @@ import { getApiClient } from '@/shared/infra/http';
 import { endpoints } from '@/shared/infra/http/endpoints';
 
 import type { PublicAlbumTrack } from '@/domains/media/model/publicAlbum.entities';
+import { publicAlbumTracksResponseSchema } from '@/domains/media/model/schemas';
 
 /**
  * Intentional duplicate of the public-courses list fetch (no import from
@@ -14,10 +15,6 @@ type PublicCourseListItem = {
   medias: Array<{ id: number; type: 'audio' | 'image' | 'video'; src: string }>;
   chapters: unknown[];
   duration: string | null;
-};
-
-type PublicCoursesListPayload = {
-  data?: PublicCourseListItem[];
 };
 
 function mapPublicCourseToAlbumTrack(item: PublicCourseListItem): PublicAlbumTrack {
@@ -42,8 +39,10 @@ function mapPublicCourseToAlbumTrack(item: PublicCourseListItem): PublicAlbumTra
 }
 
 export async function fetchPublicAlbumTracks(): Promise<readonly PublicAlbumTrack[]> {
-  const response = await parseJsonResponse<PublicCoursesListPayload>(
+  const response = await parseJsonResponse(
     getApiClient().get(endpoints.public.courses),
+    publicAlbumTracksResponseSchema,
   );
-  return (response.data ?? []).map(mapPublicCourseToAlbumTrack);
+  const data = (response.data ?? []) as PublicCourseListItem[];
+  return data.map(mapPublicCourseToAlbumTrack);
 }

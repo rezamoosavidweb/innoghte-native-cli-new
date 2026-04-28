@@ -4,7 +4,7 @@ import {
   StackActions,
 } from '@react-navigation/native';
 
-import { useAuthStore, type PendingNavigation } from '@/domains/auth/model/auth.store';
+import { AuthService, type PendingNavigation } from '@/domains/auth';
 import { navigationRef } from '@/shared/infra/navigation/navigationRef';
 import type {
   AppLeafRouteName,
@@ -59,7 +59,7 @@ function queuePendingIfNeeded(name: AppLeafRouteName, params?: unknown): void {
   if (name === 'Login') {
     return;
   }
-  useAuthStore.getState().setPendingNavigation({
+  AuthService.setPendingNavigation({
     name,
     params:
       params && typeof params === 'object'
@@ -76,7 +76,7 @@ export function protectedNavigate<N extends AppLeafRouteName>(
   name: N,
   params?: LeafRouteParams<N>,
 ): void {
-  if (useAuthStore.getState().isAuthenticated) {
+  if (AuthService.isAuthenticated()) {
     navigateToAppLeaf(
       navigation,
       name,
@@ -98,7 +98,7 @@ export function protectedPush<N extends AppLeafRouteName>(
   name: N,
   params?: LeafRouteParams<N>,
 ): void {
-  if (!useAuthStore.getState().isAuthenticated) {
+  if (!AuthService.isAuthenticated()) {
     queuePendingIfNeeded(name, params);
     dispatchLogin(navigation);
     return;
@@ -146,14 +146,14 @@ export function protectedDispatch(
   navigation: NavigateDispatchable,
   action: NavigationAction,
 ): void {
-  if (useAuthStore.getState().isAuthenticated) {
+  if (AuthService.isAuthenticated()) {
     navigation.dispatch(action);
     return;
   }
 
   const pending = pendingFromNavigateLikeAction(action);
   if (pending && pending.name !== 'Login') {
-    useAuthStore.getState().setPendingNavigation(pending);
+    AuthService.setPendingNavigation(pending);
   }
 
   if (
@@ -175,7 +175,7 @@ export function completePendingAuthNavigation(): void {
   }
 
   const run = () => {
-    const pending = useAuthStore.getState().consumePendingNavigation();
+    const pending = AuthService.consumePendingNavigation();
     if (pending) {
       navigateToAppLeaf(
         nav,

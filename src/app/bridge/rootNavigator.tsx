@@ -4,7 +4,7 @@ import type { Theme } from '@react-navigation/native';
 import * as React from 'react';
 import { StyleSheet, Text } from 'react-native';
 
-import { useAuthStore } from '@/domains/auth/model/auth.store';
+import { AuthService } from '@/domains/auth';
 import { protectedNavigate } from '@/app/bridge/auth/protectedNavigation';
 import { AboutScreen } from '@/domains/support/about/screens/AboutScreen';
 import { LoginScreen } from '@/domains/auth/screens/LoginScreen';
@@ -19,6 +19,7 @@ import { PublicAlbumsScreen } from '@/domains/media/screens/PublicAlbumsScreen';
 import { SettingsScreen } from '@/domains/settings/screens/SettingsScreen';
 import { StartupScreen } from '@/app/startup/StartupScreen';
 import { CoursesScreen } from '@/domains/courses/screens/CoursesScreen';
+import { SearchScreen } from '@/domains/search';
 import { CustomDrawerContent } from '@/ui/layout/CustomDrawerContent';
 import { DrawerMenuButton } from '@/ui/components/DrawerMenuButton';
 import { NOTIFICATION_BADGE_COUNT } from '@/domains/user/model/notificationBadge';
@@ -132,7 +133,7 @@ const mainTabs = createBottomTabNavigator<TabParamList>({
       screen: ProfileScreen,
       listeners: ({ navigation }) => ({
         tabPress: e => {
-          if (!useAuthStore.getState().isAuthenticated) {
+          if (!AuthService.isAuthenticated()) {
             e.preventDefault();
             protectedNavigate(navigation, 'Profile');
           }
@@ -190,7 +191,7 @@ function protectedAuthDrawerScreen(
       navigation: { dispatch: (action: { type: string; payload?: object }) => void };
     }) => ({
       drawerItemPress: (e: { preventDefault: () => void }) => {
-        if (useAuthStore.getState().isAuthenticated) {
+        if (AuthService.isAuthenticated()) {
           return;
         }
         e.preventDefault();
@@ -309,6 +310,10 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
     LiveMeetingOverview: {
       screen: LegacyMenuPlaceholderScreen,
       options: () => extraLeafOptions('liveMeetingOverview', '📡'),
+    },
+    Search: {
+      screen: SearchScreen,
+      options: () => extraLeafOptions('search', '🔎'),
     },
   },
 });

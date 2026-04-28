@@ -1,13 +1,14 @@
 import * as React from 'react';
-import { DrawerActions, useNavigation, useTheme } from '@react-navigation/native';
+import { DrawerActions, useTheme } from '@react-navigation/native';
 import { StyleSheet, Text } from 'react-native';
 import { HeaderButton } from '@react-navigation/elements';
 
+import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { pickSemantic } from '@/ui/theme';
 
 /** Opens the parent drawer from screens nested under `MainTabs` (see article “Strategy 1”). */
 export const DrawerMenuButton = React.memo(function DrawerMenuButton() {
-  const navigation = useNavigation();
+  const navigation = useAppNavigation();
   const theme = useTheme();
   const s = pickSemantic(theme.dark);
 

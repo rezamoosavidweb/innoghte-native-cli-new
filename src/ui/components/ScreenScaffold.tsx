@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Text, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 
+import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
 import { useScreenScaffoldStyles } from '@/ui/theme';
 
 type Props = {
@@ -22,7 +23,7 @@ export const ScreenScaffold = React.memo(function ScreenScaffold({
     <View style={s.root}>
       <Text style={s.title}>{title}</Text>
       {subtitle ? <Text style={s.subtitle}>{subtitle}</Text> : null}
-      {children}
+      <ErrorBoundary>{children}</ErrorBoundary>
     </View>
   );
 });

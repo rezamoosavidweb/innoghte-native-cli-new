@@ -1,17 +1,11 @@
-import {
-  useNavigation,
-  useTheme,
-  type NavigationProp,
-  type ParamListBase,
-} from '@react-navigation/native';
+import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, Text, View } from 'react-native';
 
 import { useMyCoursesHubStyles } from '@/domains/user/ui/myCoursesHub.styles';
+import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { HubMenuRow } from '@/ui/components/HubMenuRow';
-
-type HubNav = NavigationProp<ParamListBase>;
 
 type HubRowConfig = {
   readonly id: string;
@@ -29,7 +23,7 @@ const HUB_ROWS: readonly HubRowConfig[] = [
 ] as const;
 
 const MyCoursesHubScreenComponent = () => {
-  const navigation = useNavigation<HubNav>();
+  const navigation = useAppNavigation();
   const { t } = useTranslation();
   const { colors } = useTheme();
   const s = useMyCoursesHubStyles(colors);
@@ -38,10 +32,10 @@ const MyCoursesHubScreenComponent = () => {
     (row: HubRowConfig) => {
       switch (row.action) {
         case 'courses':
-          navigation.navigate('Courses');
+          navigation.navigate('PublicCourses');
           return;
         case 'albums':
-          navigation.navigate('Albums');
+          navigation.navigate('PublicAlbums');
           return;
         case 'help':
           navigation.navigate('Help');

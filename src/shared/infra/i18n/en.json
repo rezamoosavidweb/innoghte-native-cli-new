@@ -31,6 +31,7 @@
     "aboutUs": "About us",
     "collaboration": "Collaboration",
     "liveMeetingOverview": "Live meeting (overview)",
+    "search": "Search",
     "user": {
       "signedOut": "Signed out",
       "signInHint": "Sign in from the Profile tab",
@@ -52,7 +53,13 @@
       "goSearch": "Go to Search with query",
       "goMyCourses": "Go to My courses hub",
       "goCourses": "Go to Courses tab",
-      "goSettings": "Go to Settings (drawer)"
+      "goSettings": "Go to Settings (drawer)",
+      "quickAccess": {
+        "title": "Quick access",
+        "subtitle": "Tap a card to jump straight in.",
+        "empty": "Nothing to show right now.",
+        "error": "Could not load quick access."
+      }
     },
     "courses": {
       "loading": "Loading courses…",
@@ -150,6 +157,7 @@
       "title": "Sign in",
       "subtitle": "Demo form migrated from the legacy app (no backend yet).",
       "email": "Email",
+      "mobile": "Mobile",
       "password": "Password",
       "submit": "Continue",
       "demoTitle": "Demo",

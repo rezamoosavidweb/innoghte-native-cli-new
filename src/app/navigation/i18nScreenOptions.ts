@@ -52,6 +52,7 @@ const EXTRA_DRAWER_LABELS = {
   aboutUs: 'drawer.aboutUs',
   collaboration: 'drawer.collaboration',
   liveMeetingOverview: 'drawer.liveMeetingOverview',
+  search: 'drawer.search',
 } as const;
 
 export type ExtraDrawerLeafKey = keyof typeof EXTRA_DRAWER_LABELS;

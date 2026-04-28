@@ -32,6 +32,8 @@ export type DrawerParamList = {
   AboutUs: undefined;
   Collaboration: undefined;
   LiveMeetingOverview: undefined;
+  /** Dev / demo drawer route — accepts optional query for SearchScreen subtitle. */
+  Search: { query?: string } | undefined;
 };
 
 export type MainTabScreenName = keyof TabParamList;

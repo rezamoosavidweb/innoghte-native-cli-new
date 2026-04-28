@@ -1,19 +1,19 @@
 import { Button } from '@react-navigation/elements';
 import type { DrawerScreenProps } from '@react-navigation/drawer';
-import { useNavigation, useTheme } from '@react-navigation/native';
-import type { DrawerNavigationProp } from '@react-navigation/drawer';
+import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
+import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { useStartupScreenStyles } from '@/app/startup/styles';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Startup'>;
 
 const StartupScreenComponent = (_props: Props) => {
-  const navigation = useNavigation<DrawerNavigationProp<DrawerParamList>>();
+  const navigation = useAppNavigation();
   const { colors } = useTheme();
   const { t } = useTranslation();
   const s = useStartupScreenStyles(colors);

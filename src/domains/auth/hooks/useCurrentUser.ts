@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getUser } from '@/domains/auth/api/auth.service';
 import { useAuthStore } from '@/domains/auth/model/auth.store';
-import { AUTH_USER_QUERY_KEY } from '@/shared/infra/query/queryKeys';
+import { AUTH_USER_QUERY_KEY } from '@/domains/auth/model/queryKeys';
 
 /**
  * User profile for the signed-in session (refetch on focus can be added later).

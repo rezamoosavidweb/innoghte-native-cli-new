@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { EVENTS_QUERY_KEY } from '@/shared/infra/query/queryKeys';
+import { EVENTS_QUERY_KEY } from '@/domains/events/model/queryKeys';
 import { fetchEvents } from '@/domains/events/api';
 
 const STALE_TIME_MS = 5 * 60 * 1000;

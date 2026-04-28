@@ -10,3 +10,9 @@ export {
 } from './createHttpClient';
 export { getApiClient, initAppHttpClient } from './appHttpClient';
 export { resolveApiBaseUrl } from './resolveBaseUrl';
+export {
+  fireAndForget,
+  reportApiError,
+  subscribeToApiErrors,
+  type ApiErrorListener,
+} from './reportApiError';

@@ -1,1 +1,1 @@
-export { registerUserPurchaseLookup } from './registerUserPurchaseLookup';
+export {};

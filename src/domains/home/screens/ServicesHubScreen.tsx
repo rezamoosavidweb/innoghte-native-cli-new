@@ -1,24 +1,15 @@
-import type {
-  BottomTabNavigationProp,
-  BottomTabScreenProps,
-} from '@react-navigation/bottom-tabs';
-import type { DrawerNavigationProp } from '@react-navigation/drawer';
-import type { CompositeNavigationProp } from '@react-navigation/native';
-import { useNavigation, useTheme } from '@react-navigation/native';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, Text, View } from 'react-native';
 
-import type { DrawerParamList, TabParamList } from '@/shared/contracts/navigationApp';
+import type { TabParamList } from '@/shared/contracts/navigationApp';
+import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { useServicesHubStyles } from '@/domains/home/ui/servicesHub.styles';
 import { HubMenuRow } from '@/ui/components/HubMenuRow';
 
 type Props = BottomTabScreenProps<TabParamList, 'Services'>;
-
-export type ServicesHubNavigation = CompositeNavigationProp<
-  BottomTabNavigationProp<TabParamList, 'Services'>,
-  DrawerNavigationProp<DrawerParamList>
->;
 
 type HubRowConfig = {
   readonly id: string;
@@ -38,7 +29,7 @@ const HUB_ROWS: readonly HubRowConfig[] = [
 ] as const;
 
 const ServicesHubScreenComponent = (_props: Props) => {
-  const navigation = useNavigation<ServicesHubNavigation>();
+  const navigation = useAppNavigation();
   const { t } = useTranslation();
   const { colors } = useTheme();
   const s = useServicesHubStyles(colors);

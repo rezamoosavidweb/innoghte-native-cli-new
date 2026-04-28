@@ -1,8 +1,8 @@
-import { getAccessToken } from '@/domains/auth/api/auth.storage';
-import { useAuthStore } from '@/domains/auth/model/auth.store';
-import { initAppHttpClient } from '@/shared/infra/http';
+import { AuthService } from '@/domains/auth';
+import { initAppHttpClient, reportApiError } from '@/shared/infra/http';
 
 initAppHttpClient({
-  getAccessToken,
-  onUnauthorized: () => useAuthStore.getState().logout(),
+  getAccessToken: () => AuthService.getToken(),
+  onUnauthorized: () => AuthService.clearLocalAuth(),
+  onApiError: reportApiError,
 });

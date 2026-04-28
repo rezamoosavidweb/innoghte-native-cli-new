@@ -3,12 +3,14 @@ import { parseJsonResponse } from '@/shared/infra/http/parseJson';
 import { endpoints } from '@/shared/infra/http/endpoints';
 import { normalizeListResponse } from '@/shared/infra/http/normalizeListResponse';
 import type { FaqType } from '../model/entities';
+import { faqsListResponseSchema } from '../model/schemas';
 
 export { type FaqType } from '../model/entities';
 
 export async function fetchFaqs(): Promise<readonly FaqType[]> {
-  const result = await parseJsonResponse<FaqType[] | { data?: FaqType[] }>(
+  const result = await parseJsonResponse(
     getApiClient().get(endpoints.public.faq),
+    faqsListResponseSchema,
   );
-  return normalizeListResponse(result);
+  return normalizeListResponse(result) as FaqType[];
 }

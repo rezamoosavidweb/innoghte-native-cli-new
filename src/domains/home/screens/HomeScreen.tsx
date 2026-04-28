@@ -1,47 +1,50 @@
+import { useTheme } from '@react-navigation/native';
+import { useQueryClient } from '@tanstack/react-query';
 import * as React from 'react';
-import { View } from 'react-native';
+import { RefreshControl, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { homeKeys } from '@/domains/home/model/queryKeys';
 import { useHomeScreenStyles } from '@/domains/home/ui/homeScreen.styles';
-import { DrawerActions, useNavigation, type NavigationProp, type ParamListBase } from '@react-navigation/native';
-import { Button } from '@react-navigation/elements';
-import { useTranslation } from 'react-i18next';
-
-import { ScreenScaffold } from '@/ui/components/ScreenScaffold';
-
-type HomeNav = NavigationProp<ParamListBase> & { dispatch: (a: { type: string }) => void };
+import { QuickAccess } from '@/domains/home/ui/QuickAccess';
+import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
 
 const HomeScreenComponent = () => {
-  const navigation = useNavigation<HomeNav>();
-  const { t } = useTranslation();
-  const styles = useHomeScreenStyles();
+  const { colors } = useTheme();
+  const styles = useHomeScreenStyles(colors);
+  const queryClient = useQueryClient();
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await queryClient.invalidateQueries({ queryKey: homeKeys.all });
+    } finally {
+      setRefreshing(false);
+    }
+  }, [queryClient]);
 
   return (
-    <ScreenScaffold
-      title={t('screens.home.title')}
-      subtitle={t('screens.home.subtitle')}
-    >
-      <View style={styles.actions}>
-        <Button onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-          {t('screens.home.openDrawer')}
-        </Button>
-        <Button
-          onPress={() =>
-            navigation.navigate('Search', { query: 'react native' })
+    <SafeAreaView style={styles.safe} edges={['left', 'right']}>
+      <ErrorBoundary>
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor={colors.primary}
+              colors={[colors.primary]}
+            />
           }
         >
-          {t('screens.home.goSearch')}
-        </Button>
-        <Button onPress={() => navigation.navigate('MyCourses')}>
-          {t('screens.home.goMyCourses')}
-        </Button>
-        <Button onPress={() => navigation.navigate('Courses')}>
-          {t('screens.home.goCourses')}
-        </Button>
-        <Button onPress={() => navigation.navigate('Settings')}>
-          {t('screens.home.goSettings')}
-        </Button>
-      </View>
-    </ScreenScaffold>
+          <QuickAccess />
+          {/* Future home sections plug in here. */}
+        </ScrollView>
+      </ErrorBoundary>
+    </SafeAreaView>
   );
 };
 

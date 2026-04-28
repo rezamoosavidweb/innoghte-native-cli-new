@@ -5,6 +5,7 @@ export const endpoints = {
     liveMeeting: 'api/website/live_list',
     events: 'api/website/event_list',
     faq: 'api/v1/faq',
+    quickAccess: 'api/v1/public/quick-access',
   },
   auth: {
     login: 'api/v1/login',

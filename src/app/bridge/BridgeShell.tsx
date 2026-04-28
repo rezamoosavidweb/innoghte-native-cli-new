@@ -5,11 +5,10 @@ import { useTranslation } from 'react-i18next';
 
 import { logout } from '@/domains/auth/api/auth.service';
 import { useCurrentUser } from '@/domains/auth/hooks/useCurrentUser';
-import { useAuthStore } from '@/domains/auth/model/auth.store';
+import { useIsAuthenticated } from '@/domains/auth';
 import { useUiThemeStore } from '@/domains/settings/model/uiTheme.store';
-import { registerUserPurchaseLookup } from '@/domains/user/hooks/registerUserPurchaseLookup';
-import { fetchAndApplyPurchasedProductIds } from '@/domains/user/api/fetchPurchasedProductIds';
-import { usePurchasedProductIdsStore } from '@/domains/user/model/purchases/purchasedProductIds.store';
+import { UserService } from '@/domains/user';
+import { fireAndForget } from '@/shared/infra/http';
 import { navigationRef } from '@/shared/infra/navigation/navigationRef';
 import { initialsFromDisplayName } from '@/shared/utils/initialsFromDisplayName';
 import { resolveColorScheme } from '@/shared/utils/resolveColorScheme';
@@ -18,7 +17,7 @@ import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
 import { ShellDrawerProvider } from '@/ui/layout/ShellDrawerContext';
 import { AppThemeProvider } from '@/ui/theme';
 
-registerUserPurchaseLookup();
+UserService.registerPurchaseLookup();
 
 type BridgeShellProps = { children: React.ReactNode };
 
@@ -45,7 +44,7 @@ export function BridgeShell({ children }: BridgeShellProps) {
     }
   }, []);
 
-  const isAuthenticated = useAuthStore(s => s.isAuthenticated);
+  const isAuthenticated = useIsAuthenticated();
   const { data: userRes } = useCurrentUser();
   const user = userRes?.data;
 
@@ -73,9 +72,9 @@ export function BridgeShell({ children }: BridgeShellProps) {
 
   React.useEffect(() => {
     if (isAuthenticated) {
-      fetchAndApplyPurchasedProductIds().catch(() => {});
+      fireAndForget(UserService.refreshPurchasedProductIds());
     } else {
-      usePurchasedProductIdsStore.getState().clear();
+      UserService.clearPurchasedProductIds();
     }
   }, [isAuthenticated]);
 

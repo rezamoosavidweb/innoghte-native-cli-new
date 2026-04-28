@@ -6,6 +6,11 @@ import { resolveApiBaseUrl } from '@/shared/infra/http/resolveBaseUrl';
 export type HttpAuthHooks = {
   getAccessToken: () => string | null;
   onUnauthorized: () => void;
+  /**
+   * Single funnel for every API error normalized below. Wired in
+   * `app/bridge/wireAppHttpClient.ts` to `reportApiError`.
+   */
+  onApiError: (error: ApiError | Error) => void;
 };
 
 const defaultOptions: Options = {
@@ -37,6 +42,7 @@ export function createApiTransport(prefix: string, auth: HttpAuthHooks) {
       beforeError: [
         async state => {
           if (!(state.error instanceof HTTPError)) {
+            auth.onApiError(state.error);
             return state.error;
           }
 
@@ -53,7 +59,9 @@ export function createApiTransport(prefix: string, auth: HttpAuthHooks) {
 
           const message =
             payload?.message ?? `Request failed with status ${state.error.response.status}`;
-          return new ApiError(message, state.error.response.status, payload);
+          const apiError = new ApiError(message, state.error.response.status, payload);
+          auth.onApiError(apiError);
+          return apiError;
         },
       ],
     },

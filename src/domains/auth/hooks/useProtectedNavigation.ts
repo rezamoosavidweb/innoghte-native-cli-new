@@ -1,12 +1,8 @@
-import type {
-  NavigationAction,
-  NavigationProp,
-  ParamListBase,
-} from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
+import type { NavigationAction } from '@react-navigation/native';
 import * as React from 'react';
 
 import type { AppLeafRouteName, LeafRouteParams } from '@/shared/contracts/navigationApp';
+import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import {
   protectedDispatch,
   protectedNavigate,
@@ -25,12 +21,8 @@ type ProtectedNavigationApi = {
   dispatch: (action: NavigationAction) => void;
 };
 
-/**
- * Uses a widened navigation handle so tab/drawer composites work without
- * augmenting global `RootParamList` (which would force repo-wide param sync).
- */
 export function useProtectedNavigation(): ProtectedNavigationApi {
-  const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const navigation = useAppNavigation();
 
   return React.useMemo(
     () => ({

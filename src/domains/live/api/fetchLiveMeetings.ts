@@ -6,12 +6,14 @@ import {
   mapLiveMeetingItem,
   type LiveMeetingType,
 } from '@/domains/live/model/liveMeeting.entities';
+import { liveMeetingsListResponseSchema } from '@/domains/live/model/schemas';
 
 export { type LiveMeetingType } from '@/domains/live/model/liveMeeting.entities';
 
 export async function fetchLiveMeetings(): Promise<readonly LiveMeetingType[]> {
-  const result = await parseJsonResponse<
-    Record<string, unknown>[] | { data?: Record<string, unknown>[] }
-  >(getApiClient().get(endpoints.public.liveMeeting));
+  const result = await parseJsonResponse(
+    getApiClient().get(endpoints.public.liveMeeting),
+    liveMeetingsListResponseSchema,
+  );
   return normalizeListResponse(result).map(mapLiveMeetingItem);
 }

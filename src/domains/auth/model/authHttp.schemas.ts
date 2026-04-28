@@ -13,6 +13,11 @@ export const loginResponseSchema = z.object({
   message: z.string(),
 });
 
+export const registerResponseSchema = z.object({
+  data: tokenDataSchema,
+  message: z.string(),
+});
+
 export const userResponseSchema = z.object({
   data: z
     .object({
