@@ -5,6 +5,7 @@ import { RefreshControl, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { homeKeys } from '@/domains/home/model/queryKeys';
+import { Comments } from '@/domains/home/ui/Comments';
 import { useHomeScreenStyles } from '@/domains/home/ui/homeScreen.styles';
 import { QuickAccess } from '@/domains/home/ui/QuickAccess';
 import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
@@ -41,6 +42,7 @@ const HomeScreenComponent = () => {
           }
         >
           <QuickAccess />
+          <Comments />
           {/* Future home sections plug in here. */}
         </ScrollView>
       </ErrorBoundary>
