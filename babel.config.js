@@ -8,6 +8,7 @@ module.exports = {
         root: ['./src'],
         alias: {
           '@': './src',
+          appPackage: require('path').resolve(__dirname, 'package.json'),
         },
         extensions: [
           '.ios.js',

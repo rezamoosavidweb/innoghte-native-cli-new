@@ -18,7 +18,7 @@ import {
   radius,
   spacing,
 } from '@/ui/theme';
-import { version as appVersion } from '../../../package.json';
+import { version as appVersion } from 'appPackage';
 
 const staticDrawerStyles = StyleSheet.create({
   safe: {
