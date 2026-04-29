@@ -1,6 +1,6 @@
 import '@/app/bridge/wireAppHttpClient';
 import * as React from 'react';
-import { StatusBar, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { createStaticNavigation } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useTranslation } from 'react-i18next';
@@ -16,13 +16,10 @@ const Navigation = createStaticNavigation(rootNavigator);
 
 const AppNavigation = React.memo(function AppNavigation() {
   const { i18n: i18nInstance } = useTranslation();
-  const { colorScheme, navigationTheme } = useAppTheme();
+  const { navigationTheme } = useAppTheme();
 
   return (
     <>
-      <StatusBar
-        barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'}
-      />
       <Navigation
         ref={navigationRef}
         theme={navigationTheme}

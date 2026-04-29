@@ -19,6 +19,7 @@ import { PublicAlbumsScreen } from '@/domains/media/screens/PublicAlbumsScreen';
 import { SettingsScreen } from '@/domains/settings/screens/SettingsScreen';
 import { StartupScreen } from '@/app/startup/StartupScreen';
 import { CoursesScreen } from '@/domains/courses/screens/CoursesScreen';
+import { CollapsibleHeaderExampleScreen } from '@/app/examples/CollapsibleHeaderExampleScreen';
 import { SearchScreen } from '@/domains/search';
 import { CustomDrawerContent } from '@/ui/layout/CustomDrawerContent';
 import { DrawerMenuButton } from '@/ui/components/DrawerMenuButton';
@@ -43,7 +44,11 @@ import {
   type ExtraDrawerLeafKey,
 } from '@/app/navigation/i18nScreenOptions';
 import { TabBarGlyph } from '@/app/navigation/tabBarConfig';
-import type { DrawerParamList, MainTabScreenName, TabParamList } from '@/shared/contracts/navigationApp';
+import type {
+  DrawerParamList,
+  MainTabScreenName,
+  TabParamList,
+} from '@/shared/contracts/navigationApp';
 
 const drawerOpensFromEnd = isDrawerPhysicalRight();
 
@@ -91,6 +96,7 @@ function mainTabsScreenOptions({
     lazy: true,
     unmountOnBlur: false,
     headerLeft: () => <DrawerMenuButton />,
+    // headerShown: false,
     headerStyle: { backgroundColor: s.headerBg },
     headerTintColor: s.headerForeground,
     headerTitleStyle: mainTabHeaderTitleStyle,
@@ -188,7 +194,9 @@ function protectedAuthDrawerScreen(
 ) {
   return {
     listeners: (props: {
-      navigation: { dispatch: (action: { type: string; payload?: object }) => void };
+      navigation: {
+        dispatch: (action: { type: string; payload?: object }) => void;
+      };
     }) => ({
       drawerItemPress: (e: { preventDefault: () => void }) => {
         if (AuthService.isAuthenticated()) {
@@ -206,6 +214,8 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
   screenOptions: ({ theme }) => {
     const s = pickSemantic(theme.dark);
     return {
+      headerStyle: { backgroundColor: s.headerBg },
+      headerTintColor: s.headerForeground,
       drawerPosition: drawerOpensFromEnd ? 'right' : 'left',
       drawerActiveBackgroundColor: s.drawerActiveBg,
       drawerActiveTintColor: s.drawerActiveTint,
@@ -314,6 +324,10 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
     Search: {
       screen: SearchScreen,
       options: () => extraLeafOptions('search', '🔎'),
+    },
+    CollapsibleHeaderExample: {
+      screen: CollapsibleHeaderExampleScreen,
+      options: () => extraLeafOptions('collapsibleHeaderExample', '🔝'),
     },
   },
 });

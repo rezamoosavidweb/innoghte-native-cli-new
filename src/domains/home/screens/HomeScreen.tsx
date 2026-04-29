@@ -53,7 +53,7 @@ const HomeScreenComponent = () => {
 
   const bannerItems = React.useMemo<ReadonlyArray<BannerItemData>>(
     () =>
-      HOME_BANNER_MOCK.map((item) => ({
+      HOME_BANNER_MOCK.map(item => ({
         ...item,
         cta: t('screens.home.banner.cta'),
         onPress: handleBannerCta,

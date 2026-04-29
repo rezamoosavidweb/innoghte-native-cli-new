@@ -16,6 +16,7 @@ import { isDrawerPhysicalRight } from '@/app/navigation/drawerLayout';
 import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
 import { ShellDrawerProvider } from '@/ui/layout/ShellDrawerContext';
 import { AppThemeProvider } from '@/ui/theme';
+import { StatusBarChromeProvider } from '@/ui/statusBar';
 
 UserService.registerPurchaseLookup();
 
@@ -91,7 +92,9 @@ export function BridgeShell({ children }: BridgeShellProps) {
   return (
     <ErrorBoundary>
       <AppThemeProvider colorScheme={colorScheme}>
-        <ShellDrawerProvider value={shellDrawer}>{children}</ShellDrawerProvider>
+        <StatusBarChromeProvider>
+          <ShellDrawerProvider value={shellDrawer}>{children}</ShellDrawerProvider>
+        </StatusBarChromeProvider>
       </AppThemeProvider>
     </ErrorBoundary>
   );

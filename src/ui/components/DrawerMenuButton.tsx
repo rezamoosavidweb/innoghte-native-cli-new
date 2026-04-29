@@ -7,7 +7,12 @@ import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { pickSemantic } from '@/ui/theme';
 
 /** Opens the parent drawer from screens nested under `MainTabs` (see article “Strategy 1”). */
-export const DrawerMenuButton = React.memo(function DrawerMenuButton() {
+export const DrawerMenuButton = React.memo(function DrawerMenuButton({
+  iconColor,
+}: {
+  /** When set, overrides semantic header foreground (e.g. white on a hero image). */
+  iconColor?: string;
+} = {}) {
   const navigation = useAppNavigation();
   const theme = useTheme();
   const s = pickSemantic(theme.dark);
@@ -19,10 +24,10 @@ export const DrawerMenuButton = React.memo(function DrawerMenuButton() {
           fontSize: 22,
           fontWeight: '600',
           paddingHorizontal: 4,
-          color: s.headerForeground,
+          color: iconColor ?? s.headerForeground,
         },
       }),
-    [s.headerForeground],
+    [iconColor, s.headerForeground],
   );
 
   return (

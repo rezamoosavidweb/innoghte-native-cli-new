@@ -75,8 +75,7 @@ export function useBannerStyles(
         },
         item: {
           flex: 1,
-          marginHorizontal:
-            variant === 'hero' ? 0 : BANNER_HORIZONTAL_INSET,
+          marginHorizontal: variant === 'hero' ? 0 : BANNER_HORIZONTAL_INSET,
           borderRadius: variant === 'hero' ? 0 : radius.xl,
           overflow: 'hidden',
           backgroundColor: themeColors.card,
@@ -145,16 +144,16 @@ export function useBannerStyles(
         },
         title: {
           color: palette.white,
-          fontSize: fontSize['2xl'],
+          fontSize: fontSize.xl,
           fontWeight: fontWeight.bold,
           lineHeight: lineHeight.relaxed,
           textAlign: 'right',
         },
         subtitle: {
           color: palette.white,
-          fontSize: fontSize.md,
-          lineHeight: lineHeight.normal,
-          opacity: 0.85,
+          fontSize: fontSize.xl,
+          fontWeight: fontWeight.bold,
+          lineHeight: lineHeight.relaxed,
           textAlign: 'right',
         },
         ctaRow: {
@@ -162,9 +161,9 @@ export function useBannerStyles(
           marginTop: spacing.sm,
         },
         ctaRowHero: {
-          width: '100%',
+          flexShrink: 0,
           marginTop: spacing.sm,
-          alignSelf: 'stretch',
+          alignSelf: 'center',
         },
         ctaButton: {
           alignSelf: 'flex-start',

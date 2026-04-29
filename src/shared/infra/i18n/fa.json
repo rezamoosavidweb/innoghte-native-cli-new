@@ -32,6 +32,7 @@
     "collaboration": "همکاری",
     "liveMeetingOverview": "جلسه زنده (معرفی)",
     "search": "جستجو",
+    "collapsibleHeaderExample": "هدر جمع‌شونده (نمونه)",
     "user": {
       "signedOut": "وارد نشده‌اید",
       "signInHint": "ورود از منوی تب «پروفایل»",

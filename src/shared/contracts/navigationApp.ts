@@ -34,6 +34,8 @@ export type DrawerParamList = {
   LiveMeetingOverview: undefined;
   /** Dev / demo drawer route — accepts optional query for SearchScreen subtitle. */
   Search: { query?: string } | undefined;
+  /** Demo: collapsible header on scroll. */
+  CollapsibleHeaderExample: undefined;
 };
 
 export type MainTabScreenName = keyof TabParamList;

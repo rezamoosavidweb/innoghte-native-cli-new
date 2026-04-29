@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 
 import type { BannerStyles } from '@/domains/home/ui/Banner/banner.styles';
-import { spacing } from '@/ui/theme';
 
 /** First headline line with accent segment (legacy web “آسمان” color). */
 export type BannerTitleAccent = {
@@ -71,8 +70,8 @@ function BannerItemComponent({ item, styles }: BannerItemProps) {
     const lampWidth = lampHeight * 0.5;
     const parSize = Math.min(windowWidth * 0.68, 280);
     const parTop = windowHeight * 0.42;
-    const lampTop = windowHeight * 0.06;
-    const lampLeft = spacing['2xl'];
+    const lampTop = -4;
+    const lampLeft = Math.round(windowWidth * 0.575);
     return {
       lampHeight,
       lampWidth,
@@ -92,7 +91,7 @@ function BannerItemComponent({ item, styles }: BannerItemProps) {
         width: decorationLayout.lampWidth,
         height: decorationLayout.lampHeight,
         zIndex: 1,
-      }) as const,
+      } as const),
     [decorationLayout],
   );
 
@@ -105,7 +104,7 @@ function BannerItemComponent({ item, styles }: BannerItemProps) {
         right: 0,
         alignItems: 'center' as const,
         zIndex: 3,
-      }) as const,
+      } as const),
     [decorationLayout.parTop],
   );
 
@@ -165,13 +164,13 @@ function BannerItemComponent({ item, styles }: BannerItemProps) {
       ) : null}
 
       {titleRest ? (
-        <Text style={styles.title} numberOfLines={3}>
+        <Text style={styles.title} numberOfLines={6}>
           {titleRest}
         </Text>
       ) : null}
 
       {subtitle ? (
-        <Text style={styles.subtitle} numberOfLines={5}>
+        <Text style={styles.subtitle} numberOfLines={6}>
           {subtitle}
         </Text>
       ) : null}
@@ -184,9 +183,19 @@ function BannerItemComponent({ item, styles }: BannerItemProps) {
             hitSlop={HIT_SLOP}
             onPress={handlePress}
             disabled={!onPress}
-            style={onPress ? (hero ? ctaHeroStyle : ctaStyle) : hero ? styles.ctaButtonHero : styles.ctaButton}
+            style={
+              onPress
+                ? hero
+                  ? ctaHeroStyle
+                  : ctaStyle
+                : hero
+                ? styles.ctaButtonHero
+                : styles.ctaButton
+            }
           >
-            <Text style={styles.ctaText}>{cta}</Text>
+            <Text style={styles.ctaText} numberOfLines={hero ? 1 : undefined}>
+              {cta}
+            </Text>
           </Pressable>
         </View>
       ) : null}
@@ -238,7 +247,9 @@ function BannerItemComponent({ item, styles }: BannerItemProps) {
         resizeMode="cover"
         accessibilityIgnoresInvertColors
       >
-        {showOverlay ? <View style={styles.overlay} pointerEvents="none" /> : null}
+        {showOverlay ? (
+          <View style={styles.overlay} pointerEvents="none" />
+        ) : null}
         {hasCopy ? renderCopyColumn(false) : null}
       </ImageBackground>
     )

@@ -32,6 +32,7 @@
     "collaboration": "Collaboration",
     "liveMeetingOverview": "Live meeting (overview)",
     "search": "Search",
+    "collapsibleHeaderExample": "Collapsible header (demo)",
     "user": {
       "signedOut": "Signed out",
       "signInHint": "Sign in from the Profile tab",
