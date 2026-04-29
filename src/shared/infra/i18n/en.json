@@ -166,6 +166,17 @@
       "submit": "Continue",
       "demoTitle": "Demo",
       "demoMessage": "Auth is not wired in this build."
+    },
+    "breathing": {
+      "phase": {
+        "inhale": "Breathe in",
+        "hold": "Hold",
+        "exhale": "Breathe out"
+      },
+      "sessionRemaining": "Session: {{seconds}} s",
+      "start": "Start",
+      "pause": "Pause",
+      "resume": "Resume"
     }
   },
   "events": {

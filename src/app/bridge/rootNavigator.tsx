@@ -20,6 +20,7 @@ import { SettingsScreen } from '@/domains/settings/screens/SettingsScreen';
 import { StartupScreen } from '@/app/startup/StartupScreen';
 import { CoursesScreen } from '@/domains/courses/screens/CoursesScreen';
 import { CollapsibleHeaderExampleScreen } from '@/app/examples/CollapsibleHeaderExampleScreen';
+import { BreathingScreen } from '@/domains/breathing';
 import { SearchScreen } from '@/domains/search';
 import { CustomDrawerContent } from '@/ui/layout/CustomDrawerContent';
 import { DrawerMenuButton } from '@/ui/components/DrawerMenuButton';
@@ -286,7 +287,7 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
       options: () => extraLeafOptions('podcast', '🎙️'),
     },
     Meditation: {
-      screen: LegacyMenuPlaceholderScreen,
+      screen: BreathingScreen,
       options: () => extraLeafOptions('meditation', '🧘'),
     },
     Reading: {

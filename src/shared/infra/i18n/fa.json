@@ -166,6 +166,17 @@
       "submit": "ادامه",
       "demoTitle": "دمو",
       "demoMessage": "احراز هویت در این نسخه وصل نشده است."
+    },
+    "breathing": {
+      "phase": {
+        "inhale": "دم",
+        "hold": "نگه‌داشت",
+        "exhale": "بازدم"
+      },
+      "sessionRemaining": "زمان جلسه: {{seconds}} ثانیه",
+      "start": "شروع",
+      "pause": "توقف",
+      "resume": "ادامه"
     }
   },
   "events": {
