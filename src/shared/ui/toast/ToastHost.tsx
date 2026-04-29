@@ -18,6 +18,30 @@ import {
 
 const AUTO_HIDE_MS = 4500;
 
+const staticToastBannerStyles = StyleSheet.create({
+  overlay: {
+    ...StyleSheet.absoluteFill,
+    justifyContent: 'flex-end',
+    pointerEvents: 'box-none',
+  },
+  padBase: {
+    paddingHorizontal: spacing.lg,
+    alignItems: 'center',
+  },
+  bannerShell: {
+    width: '100%',
+    maxWidth: 440,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.md,
+    borderRadius: radius.md,
+  },
+  labelBase: {
+    fontSize: fontSize.sm + 1,
+    fontWeight: fontWeight.medium,
+    textAlign: 'center',
+  },
+});
+
 type ToastBannerProps = {
   payload: ToastPayload;
   colors: ThemeColors;
@@ -33,43 +57,40 @@ const ToastBanner = React.memo(function ToastBanner({
   const backgroundColor = isError ? colors.errorBg : colors.successBg;
   const textColor = isError ? colors.errorText : colors.successText;
 
-  const s = React.useMemo(
-    () =>
-      StyleSheet.create({
-        overlay: {
-          ...StyleSheet.absoluteFill,
-          justifyContent: 'flex-end',
-          pointerEvents: 'box-none',
-        },
-        pad: {
-          paddingHorizontal: spacing.lg,
-          paddingBottom: Math.max(insetBottom, spacing.sm) + spacing.sm,
-          alignItems: 'center',
-        },
-        banner: {
-          width: '100%',
-          maxWidth: 440,
-          paddingVertical: spacing.md,
-          paddingHorizontal: spacing.md,
-          borderRadius: radius.md,
-          backgroundColor,
-        },
-        label: {
-          fontSize: fontSize.sm + 1,
-          fontWeight: fontWeight.medium,
-          color: textColor,
-          textAlign: 'center',
-          lineHeight: (fontSize.sm + 1) * 1.45,
-        },
-      }),
-    [backgroundColor, insetBottom, textColor],
+  const padStyle = React.useMemo(
+    () => [
+      staticToastBannerStyles.padBase,
+      {
+        paddingBottom: Math.max(insetBottom, spacing.sm) + spacing.sm,
+      },
+    ],
+    [insetBottom],
+  );
+
+  const bannerStyle = React.useMemo(
+    () => [
+      staticToastBannerStyles.bannerShell,
+      { backgroundColor },
+    ],
+    [backgroundColor],
+  );
+
+  const labelStyle = React.useMemo(
+    () => [
+      staticToastBannerStyles.labelBase,
+      {
+        color: textColor,
+        lineHeight: (fontSize.sm + 1) * 1.45,
+      },
+    ],
+    [textColor],
   );
 
   return (
-    <View style={s.overlay} accessibilityLiveRegion="polite">
-      <View style={s.pad}>
-        <View style={s.banner}>
-          <Text style={s.label}>{payload.message}</Text>
+    <View style={staticToastBannerStyles.overlay} accessibilityLiveRegion="polite">
+      <View style={padStyle}>
+        <View style={bannerStyle}>
+          <Text style={labelStyle}>{payload.message}</Text>
         </View>
       </View>
     </View>

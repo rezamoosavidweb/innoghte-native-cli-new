@@ -20,6 +20,7 @@ import {
 import type { TicketThreadAuthorRole } from '@/domains/support/model/ticket.types';
 import { useTicketScreenStyles } from '@/domains/support/ui/ticketScreen.styles';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
+import { formatTsIso } from '@/shared/utils/formatTsIso';
 import {
   flashListContentGutters,
   pickSemantic,
@@ -27,15 +28,6 @@ import {
 } from '@/ui/theme';
 
 type Props = DrawerScreenProps<DrawerParamList, 'TicketDetailScreen'>;
-
-function formatTsIso(iso: string, locale: string): string {
-  try {
-    const ms = Date.parse(iso);
-    return new Date(ms).toLocaleString(locale === 'fa' ? 'fa-IR' : undefined);
-  } catch {
-    return iso;
-  }
-}
 
 export const TicketDetailScreen = React.memo(function TicketDetailScreen({
   route,

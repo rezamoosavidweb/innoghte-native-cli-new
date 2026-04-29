@@ -18,6 +18,67 @@ import {
   radius,
   spacing,
 } from '@/ui/theme';
+import { version as appVersion } from '../../../package.json';
+
+const staticDrawerStyles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
+  profileSectionBase: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: spacing['3xl'],
+    paddingVertical: spacing.base,
+  },
+  avatar: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+  },
+  avatarText: {
+    color: colorPrimitives.white,
+    fontSize: fontSize.lg,
+    fontWeight: fontWeight.bold,
+  },
+  profileInfo: {
+    marginLeft: 14,
+    flex: 1,
+  },
+  dividerHairline: {
+    height: StyleSheet.hairlineWidth,
+    marginHorizontal: spacing.md,
+  },
+  scrollContent: {
+    paddingTop: spacing.sm,
+  },
+  footer: {
+    paddingBottom: spacing.sm,
+  },
+  footerItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: spacing['3xl'],
+  },
+  footerIconGlyph: {
+    fontSize: fontSize.lg,
+    marginRight: spacing.md - 2,
+  },
+  footerItemTextBase: {
+    fontSize: fontSize.base,
+    fontWeight: fontWeight.semibold,
+  },
+  versionBase: {
+    fontSize: fontSize.sm,
+    textAlign: 'center',
+    marginTop: 4,
+    marginBottom: spacing.sm,
+  },
+});
 
 export const CustomDrawerContent = React.memo(function CustomDrawerContent(
   props: DrawerContentComponentProps,
@@ -32,118 +93,77 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
   const emailLine = drawerUser.emailLine;
   const avatarInitials = drawerUser.avatarInitials;
 
-  const styles = React.useMemo(
-    () =>
-      StyleSheet.create({
-        safe: {
-          flex: 1,
-          backgroundColor: 'transparent',
-        },
-        profileSection: {
-          flexDirection: 'row',
-          alignItems: 'center',
-          paddingHorizontal: spacing['3xl'],
-          paddingVertical: spacing.base,
-          backgroundColor: s.drawerMutedSurface,
-        },
-        avatar: {
-          width: 56,
-          height: 56,
-          borderRadius: 28,
+  const dynamicStyles = React.useMemo(
+    () => ({
+      profileSection: [
+        staticDrawerStyles.profileSectionBase,
+        { backgroundColor: s.drawerMutedSurface },
+      ],
+      avatar: [
+        staticDrawerStyles.avatar,
+        {
           backgroundColor: s.drawerActiveTint,
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderWidth: 2,
           borderColor: s.drawerActiveTint,
         },
-        avatarText: {
-          color: colorPrimitives.white,
-          fontSize: fontSize.lg,
-          fontWeight: fontWeight.bold,
-        },
-        profileInfo: {
-          marginLeft: 14,
-          flex: 1,
-        },
-        userName: {
-          fontSize: fontSize.base + 1,
-          fontWeight: fontWeight.bold,
-          color: colors.text,
-        },
-        userEmail: {
-          fontSize: fontSize.md,
-          color: s.textSecondary,
-          marginTop: 2,
-        },
-        divider: {
-          height: StyleSheet.hairlineWidth,
-          backgroundColor: colors.border,
-          marginHorizontal: spacing.md,
-        },
-        scrollContent: {
-          paddingTop: spacing.sm,
-        },
-        footer: {
-          paddingBottom: spacing.sm,
-        },
-        footerItem: {
-          flexDirection: 'row',
-          alignItems: 'center',
-          paddingVertical: 14,
-          paddingHorizontal: spacing['3xl'],
-        },
-        footerIcon: {
-          fontSize: fontSize.lg,
-          color: s.danger,
-          marginRight: spacing.md - 2,
-        },
-        footerItemText: {
-          fontSize: fontSize.base,
-          color: s.danger,
-          fontWeight: fontWeight.semibold,
-        },
-        version: {
-          fontSize: fontSize.sm,
-          color: s.textMuted,
-          textAlign: 'center',
-          marginTop: 4,
-          marginBottom: spacing.sm,
-        },
-        sheet: {
-          flex: 1,
-          backgroundColor: colors.card,
-          borderTopLeftRadius: isDrawerOnRight ? radius['2xl'] : 0,
-          borderBottomLeftRadius: isDrawerOnRight ? radius['2xl'] : 0,
-          borderTopRightRadius: isDrawerOnRight ? 0 : radius['2xl'],
-          borderBottomRightRadius: isDrawerOnRight ? 0 : radius['2xl'],
-          overflow: 'hidden',
-        },
-      }),
+      ],
+      userName: {
+        fontSize: fontSize.base + 1,
+        fontWeight: fontWeight.bold,
+        color: colors.text,
+      },
+      userEmail: {
+        fontSize: fontSize.md,
+        color: s.textSecondary,
+        marginTop: 2,
+      },
+      divider: [
+        staticDrawerStyles.dividerHairline,
+        { backgroundColor: colors.border },
+      ],
+      footerIconGlyph: [
+        staticDrawerStyles.footerIconGlyph,
+        { color: s.danger },
+      ],
+      footerItemText: [
+        staticDrawerStyles.footerItemTextBase,
+        { color: s.danger },
+      ],
+      version: [staticDrawerStyles.versionBase, { color: s.textMuted }],
+      sheet: {
+        flex: 1,
+        backgroundColor: colors.card,
+        borderTopLeftRadius: isDrawerOnRight ? radius['2xl'] : 0,
+        borderBottomLeftRadius: isDrawerOnRight ? radius['2xl'] : 0,
+        borderTopRightRadius: isDrawerOnRight ? 0 : radius['2xl'],
+        borderBottomRightRadius: isDrawerOnRight ? 0 : radius['2xl'],
+        overflow: 'hidden' as const,
+      },
+    }),
     [colors.border, colors.card, colors.text, isDrawerOnRight, s],
   );
 
-  const handleLogout = async (): Promise<void> => {
-    await onRequestLogout();
-  };
+  const handleLogout = React.useCallback(() => {
+    return onRequestLogout();
+  }, [onRequestLogout]);
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
-      <View style={styles.sheet}>
-        <View style={styles.profileSection}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>{avatarInitials}</Text>
+    <SafeAreaView style={staticDrawerStyles.safe} edges={['top', 'bottom']}>
+      <View style={dynamicStyles.sheet}>
+        <View style={dynamicStyles.profileSection}>
+          <View style={dynamicStyles.avatar}>
+            <Text style={staticDrawerStyles.avatarText}>{avatarInitials}</Text>
           </View>
-          <View style={styles.profileInfo}>
-            <Text style={styles.userName}>{displayName}</Text>
-            <Text style={styles.userEmail}>{emailLine}</Text>
+          <View style={staticDrawerStyles.profileInfo}>
+            <Text style={dynamicStyles.userName}>{displayName}</Text>
+            <Text style={dynamicStyles.userEmail}>{emailLine}</Text>
           </View>
         </View>
 
-        <View style={styles.divider} />
+        <View style={dynamicStyles.divider} />
 
         <DrawerContentScrollView
           {...props}
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={staticDrawerStyles.scrollContent}
         >
           <DrawerItemList
             state={state}
@@ -152,16 +172,16 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
           />
         </DrawerContentScrollView>
 
-        <View style={styles.footer}>
-          <View style={styles.divider} />
-          <TouchableOpacity style={styles.footerItem} onPress={handleLogout}>
-            <Text style={styles.footerIcon}>⎋</Text>
-            <Text style={styles.footerItemText}>
+        <View style={staticDrawerStyles.footer}>
+          <View style={dynamicStyles.divider} />
+          <TouchableOpacity style={staticDrawerStyles.footerItem} onPress={handleLogout}>
+            <Text style={dynamicStyles.footerIconGlyph}>⎋</Text>
+            <Text style={dynamicStyles.footerItemText}>
               {t('drawerFooter.logout')}
             </Text>
           </TouchableOpacity>
-          <Text style={styles.version}>
-            {t('drawerFooter.version', { version: '0.0.1' })}
+          <Text style={dynamicStyles.version}>
+            {t('drawerFooter.version', { version: appVersion })}
           </Text>
         </View>
       </View>

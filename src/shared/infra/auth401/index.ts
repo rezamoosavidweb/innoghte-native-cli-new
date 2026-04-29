@@ -57,6 +57,9 @@ export {
   getGlobalAuth401Defaults,
   setGlobalAuth401Defaults,
 } from '@/shared/infra/auth401/globalDefaults';
+export {
+  configureAuth401Bridge,
+} from '@/shared/infra/auth401/configureBridge';
 export { handleKy401Unauthorized, type Ky401UnauthorizedDetail } from '@/shared/infra/auth401/handleKy401';
 export { useAuth401ScreenScope } from '@/shared/infra/auth401/useAuth401ScreenScope';
 export { pushAuth401ScreenPolicy, getFocusedAuth401ScreenPolicy } from '@/shared/infra/auth401/screenScope';

@@ -1,4 +1,4 @@
-import { getAccessToken } from '@/domains/auth/api/auth.storage';
+import { getAuth401AccessToken } from '@/shared/infra/auth401/configureBridge';
 import { isOnLoginScreen } from '@/shared/infra/auth401/captureRoute';
 import { navigationRef } from '@/shared/infra/navigation/navigationRef';
 
@@ -70,7 +70,7 @@ function attachLoginArrivalLatch(): void {
  * and skips when already showing Login or session is valid again.
  */
 export function safeNavigateToLoginFrom401(): void {
-  if (getAccessToken()) {
+  if (getAuth401AccessToken()) {
     resetAuth401LoginNavigationGuard();
     return;
   }

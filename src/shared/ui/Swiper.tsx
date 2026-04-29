@@ -3,10 +3,8 @@ import * as React from 'react';
 import {
   Dimensions,
   FlatList,
-  I18nManager,
   StyleSheet,
   View,
-  type LayoutChangeEvent,
   type ListRenderItem,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
@@ -18,14 +16,6 @@ import { spacing } from '@/ui/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const DEFAULT_GAP = spacing.md;
-
-/** Toggle off when the bug is solved. Logs are filterable by `[Swiper]`. */
-const DEBUG = true;
-const dlog = (...args: unknown[]) => {
-  if (DEBUG) {
-    console.log('[Swiper]', ...args);
-  }
-};
 
 export type SwiperRenderItem<T> = (item: T, index: number) => React.ReactNode;
 
@@ -78,23 +68,7 @@ export function Swiper<T>({
     Math.max(spacing.base, (SCREEN_WIDTH - itemWidth) / 2);
 
   React.useEffect(() => {
-    dlog('config', {
-      SCREEN_WIDTH,
-      isRTL: I18nManager.isRTL,
-      itemCount,
-      itemWidth,
-      gap,
-      snapInterval,
-      sidePadding,
-    });
-  }, [gap, itemCount, itemWidth, sidePadding, snapInterval]);
-
-  React.useEffect(() => {
     if (indexRef.current >= itemCount) {
-      dlog('itemCount shrunk below indexRef — resetting to 0', {
-        prev: indexRef.current,
-        itemCount,
-      });
       indexRef.current = 0;
       setActiveIndex(0);
       listRef.current?.scrollToOffset({ offset: 0, animated: false });
@@ -108,13 +82,6 @@ export function Swiper<T>({
       const idx = Math.max(0, Math.min(raw, itemCount - 1));
       const wasIndex = indexRef.current;
       const drift = idx !== wasIndex;
-      dlog('onMomentumScrollEnd', {
-        offsetX,
-        raw,
-        idx,
-        wasIndex,
-        drift,
-      });
       if (drift) {
         indexRef.current = idx;
         setActiveIndex(idx);
@@ -133,18 +100,9 @@ export function Swiper<T>({
     [gap, itemWidth],
   );
 
-  const onCellLayout = React.useCallback(
-    (index: number) => (e: LayoutChangeEvent) => {
-      const { width: w, height: h, x, y } = e.nativeEvent.layout;
-      dlog('cell layout', { index, w, h, x, y });
-    },
-    [],
-  );
-
   const renderListItem: ListRenderItem<T> = React.useCallback(
     ({ item, index }) => (
       <View
-        onLayout={onCellLayout(index)}
         style={
           index === itemCount - 1 ? cellStyles.cellLast : cellStyles.cell
         }
@@ -152,7 +110,7 @@ export function Swiper<T>({
         {renderItem(item, index)}
       </View>
     ),
-    [cellStyles, itemCount, onCellLayout, renderItem],
+    [cellStyles, itemCount, renderItem],
   );
 
   const getItemLayout = React.useCallback(
@@ -163,10 +121,6 @@ export function Swiper<T>({
     }),
     [snapInterval],
   );
-
-  const onContentSizeChange = React.useCallback((w: number, h: number) => {
-    dlog('contentSize', { width: w, height: h });
-  }, []);
 
   if (itemCount === 0) return null;
 
@@ -188,7 +142,6 @@ export function Swiper<T>({
         windowSize={5}
         removeClippedSubviews={false}
         contentContainerStyle={{ paddingHorizontal: sidePadding }}
-        onContentSizeChange={onContentSizeChange}
         onMomentumScrollEnd={onMomentumScrollEnd}
       />
 

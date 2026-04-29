@@ -98,7 +98,7 @@ getApiClient().get(path, withKyAuth401Context({ strategy: 'no_redirect' }));
 
 ## HTTP & API contracts
 
-- **Client:** `ky` via `createApiTransport` / `createAppHttpClient` in `shared/infra/http` (retries for GETs on 408/429/5xx; **401** responses go through the **Auth401** policy pipeline — see **Authentication & 401 Handling** above).
+- **Client:** `ky` via `createAppHttpClient` in `shared/infra/http/createHttpClient.ts` (retries for GETs on 408/429/5xx; **401** responses go through the **Auth401** policy pipeline — see **Authentication & 401 Handling** above).
 - **Base URL:** `resolveApiBaseUrl()` — override with `API_BASE_URL` or `REACT_NATIVE_API_URL` (default staging API is documented in project tooling; check `resolveBaseUrl.ts`).
 - **Paths:** `endpoints` use **no leading slash**; the client normalizes the base URL with a single trailing `/` so paths join consistently—avoid manual `.replace(/^\//, …)` at call sites.
 - **JSON:** `parseJsonResponse(request)` optionally takes a **Zod schema**; prefer schemas for **auth and other sensitive boundaries**, and expand coverage for public list endpoints over time. Legacy call sites may still use an unchecked cast when `schema` is omitted.
@@ -175,11 +175,11 @@ Screens that load a **list** from TanStack Query should use a single pattern so 
 | **`fetchNextPageWithBackoff`** | Up to 3 attempts, 300 / 600 / 1200 ms between failures; **cancel-safe** via mounted check. |
 | **`useFlashListScrollMemory`** | Blur → save offset, focus → **`scrollToOffset`**; **`restorePagingLockRef`** blocks **`onEndReached`** for **600 ms** after restore (separate from TanStack `inFlight`). |
 | **`scrollMemoryStore`** | In-memory LRU (**30** keys max — evicts oldest) instead of unbounded growth. |
-| **`listPerformanceProfile`** | Android API ≤29 → lower **`onEndReachedThreshold`**, coarser **`scrollEventThrottle`**, slightly reduced **`estimatedItemSize`** factor. |
+| **`useListPerformanceProfile`** (`shared/infra/device/`) | Android API ≤29 → lower **`onEndReachedThreshold`**, coarser **`scrollEventThrottle`**, slightly reduced **`estimatedItemSize`** factor. |
 
 **FlashList practices used**
 
-- **`extraData`** omitted when row components subscribe to i18n/theme via hooks (avoids list-wide invalidation on language toggles).
+- **`extraData`** — omit when row components subscribe to i18n/theme via hooks (avoids list-wide invalidation on language toggles); pass `i18n.language` explicitly only when the row component needs the current language as a prop.
 - **`RefreshControl`** **`useMemo`**’d; **`estimatedItemSize`** / **`onEndReachedThreshold`** / **`scrollEventThrottle`** / **`decelerationRate`** from **`useListPerformanceProfile`** (low vs normal).
 - **Footer only** for next-page loading — no fake list rows, so **keys stay unique** and the query cache is untouched.
 
@@ -228,6 +228,7 @@ import { useAppInfiniteList } from '@/shared/lib/infiniteList';
 | **Zustand** | Client state (auth, theme, FAQ hub, …) with MMKV persist where used |
 | **react-native-mmkv** | Fast storage (default + secure instances) |
 | **ky** | HTTP on `fetch` |
+| **Reactotron** | Dev-only debugger — network, MMKV, logs (`reactotron.config.ts`) |
 | **Zod** | Runtime validation at JSON boundaries (expand over time) |
 | **i18next** / **react-i18next** | i18n + RTL |
 | **ESLint** + **eslint-plugin-boundaries** | Layer rules |

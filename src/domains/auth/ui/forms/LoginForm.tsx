@@ -58,8 +58,6 @@ export function LoginForm({ isSubmitting, apiError, onSubmit }: Props) {
   );
 
   const submit = form.handleSubmit(async values => {
-    console.log('[loginScreen]', { values });
-
     await onSubmit({
       type: values.mode,
       password: values.password.trim(),
@@ -72,7 +70,6 @@ export function LoginForm({ isSubmitting, apiError, onSubmit }: Props) {
       remember: 1,
     });
   });
-  console.log('[loginScreen]', { apiError });
 
   return (
     <>
@@ -135,11 +132,15 @@ export function LoginForm({ isSubmitting, apiError, onSubmit }: Props) {
 
       {apiError ? <Text style={s.errorText}>{apiError}</Text> : null}
       {!apiError ? (
-        <Text style={s.helperText}>Use your app credentials to continue.</Text>
+        <Text style={s.helperText}>
+          {t('screens.login.credentialsHelper')}
+        </Text>
       ) : null}
 
       <Button disabled={isSubmitting} onPress={submit}>
-        {isSubmitting ? 'Signing in...' : t('screens.login.submit')}
+        {isSubmitting
+          ? t('screens.login.signingIn')
+          : t('screens.login.submit')}
       </Button>
     </>
   );

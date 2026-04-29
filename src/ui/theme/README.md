@@ -1,15 +1,16 @@
-# Design system (`src/theme`)
+# Design system (`src/ui/theme`)
 
-This directory holds **only** the design system and the app theme **provider**. Screen- and component-level `StyleSheet` hooks live next to UI:
+This directory holds **only** the design system and the app theme **provider**. Screen- and component-level `StyleSheet` hooks are co-located with the code that uses them:
 
-- `src/components/themed/*.styles.ts` — shared card / row styles used by features.
-- `src/screens/themed/*.styles.ts` — screen-specific style hooks.
+- `src/domains/<domain>/ui/*.styles.ts` — domain-scoped screen and component style hooks.
+- `src/shared/ui/**/*.styles.ts` — shared cross-domain component styles (e.g. `productListCard.styles.ts`).
+- `src/ui/theme/formField.styles.ts` — global form-field styles (exception: lives in theme because it's consumed by `ui/` components).
 
-Import the public API from **`src/theme`** (barrel `index.ts`).
+Import the public API from **`@/ui/theme`** (barrel `index.ts`).
 
 ## Layout
 
-```
+```text
 theme/
   index.ts                 # public exports
   core/
@@ -41,28 +42,36 @@ import {
   pickSemantic,
   useNavScreenShellStyles,
   navigationThemes,
-} from '../theme';
+} from '@/ui/theme';
 ```
 
 Prefer **`colors`** (primitives) for raw ramps; **`semantic`** / **`useTheme().colors`** for UI. `designTokens` includes **`palette`** as an alias of **`colors`** for older snippets.
 
 ### Screen / component styles
 
+Style hooks are co-located with their component or screen, not inside `theme/`. Each accepts `colors` from `useTheme()` and returns a `StyleSheet.create(...)` object:
+
 ```tsx
-import { useFaqsScreenLayoutStyles } from '../screens/themed/faqsScreen.styles';
-import { useProductListCardStyles } from '../components/themed/ProductListCard.styles';
+// src/domains/support/faqs/ui/faqsScreen.styles.ts
+export function useFaqsScreenStyles(colors: ThemeColors) {
+  return StyleSheet.create({ ... });
+}
+
+// In the screen:
+const { colors } = useTheme();
+const s = useFaqsScreenStyles(colors);
 ```
 
 ### Provider
 
 ```tsx
-import { AppThemeProvider, useAppTheme } from '../theme';
+import { AppThemeProvider, useAppTheme, useThemeColors } from '@/ui/theme';
 ```
 
 ## Rules
 
-- Do **not** add new `*Themed.ts` files under `theme/` — add `*.styles.ts` under `components/themed` or `screens/themed`.
-- Keep **`theme/`** free of feature or screen business logic.
+- Keep **`theme/`** free of feature or screen business logic — no domain imports, no screen-specific styles.
+- Add new `*.styles.ts` files co-located with the component or screen they style (inside the domain's `ui/` folder or `shared/ui/`), not inside `theme/`.
 - Avoid shadowing `useTheme().colors` with `import { colors }`; use `import { colors as colorPrimitives }` when you need both.
 
 ## Performance

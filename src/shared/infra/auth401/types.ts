@@ -1,4 +1,4 @@
-import type { PendingNavigation } from '@/domains/auth';
+import type { PendingNavigation } from '@/shared/contracts/pendingNavigation';
 
 /** How to resume after the user signs in again following a 401. */
 export type Auth401RedirectStrategy =

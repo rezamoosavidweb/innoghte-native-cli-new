@@ -7,9 +7,12 @@ import { ScrollView, Text, View } from 'react-native';
 import type { TabParamList } from '@/shared/contracts/navigationApp';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { useExperiencesHubStyles } from '@/domains/experiences/ui/experiencesHub.styles';
-import { HubMenuRow } from '@/ui/components/HubMenuRow';
+import {
+  HubMenuRow,
+  type HubMenuRowStyleSet,
+} from '@/ui/components/HubMenuRow';
 
-type Props = BottomTabScreenProps<TabParamList, 'Experiences'>;
+type Props = BottomTabScreenProps<TabParamList>;
 
 type HubRowConfig = {
   readonly id: string;
@@ -30,33 +33,48 @@ const HUB_ROWS: readonly HubRowConfig[] = [
   { id: 'reading', icon: '💚', titleKey: 'reading', action: 'reading' },
 ] as const;
 
-const ExperiencesHubScreenComponent = (_props: Props) => {
+type ExperiencesHubMenuRowProps = {
+  row: HubRowConfig;
+  title: string;
+  s: HubMenuRowStyleSet;
+};
+
+const ExperiencesHubMenuRow = React.memo(function ExperiencesHubMenuRow({
+  row,
+  title,
+  s,
+}: ExperiencesHubMenuRowProps) {
   const navigation = useAppNavigation();
+
+  const onPress = React.useCallback(() => {
+    switch (row.action) {
+      case 'meditation':
+        navigation.navigate('Meditation');
+        return;
+      case 'writing':
+        navigation.navigate('Writing');
+        return;
+      case 'listening':
+        navigation.navigate('Listening');
+        return;
+      case 'reading':
+        navigation.navigate('Reading');
+        return;
+      default:
+        return;
+    }
+  }, [navigation, row.action]);
+
+  return (
+    <HubMenuRow icon={row.icon} title={title} s={s} onPress={onPress} />
+  );
+});
+ExperiencesHubMenuRow.displayName = 'ExperiencesHubMenuRow';
+
+const ExperiencesHubScreenComponent = (_props: Props) => {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const s = useExperiencesHubStyles(colors);
-
-  const onRowPress = React.useCallback(
-    (row: HubRowConfig) => {
-      switch (row.action) {
-        case 'meditation':
-          navigation.navigate('Meditation');
-          return;
-        case 'writing':
-          navigation.navigate('Writing');
-          return;
-        case 'listening':
-          navigation.navigate('Listening');
-          return;
-        case 'reading':
-          navigation.navigate('Reading');
-          return;
-        default:
-          return;
-      }
-    },
-    [navigation],
-  );
 
   return (
     <ScrollView
@@ -67,14 +85,11 @@ const ExperiencesHubScreenComponent = (_props: Props) => {
       <Text style={s.subtitle}>{t('screens.experiences.subtitle')}</Text>
       <View style={s.list}>
         {HUB_ROWS.map(row => (
-          <HubMenuRow
+          <ExperiencesHubMenuRow
             key={row.id}
-            icon={row.icon}
+            row={row}
             title={t(`screens.experiences.menu.${row.titleKey}`)}
             s={s}
-            onPress={() => {
-              onRowPress(row);
-            }}
           />
         ))}
       </View>

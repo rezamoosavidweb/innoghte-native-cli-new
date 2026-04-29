@@ -55,9 +55,6 @@ export async function fetchNextPageWithBackoff(
         if (opts.isMounted()) {
           safeRun(() => opts.onExhausted?.(lastCatch));
         }
-        safeRun(() => {
-          console.warn('[pagination] fetchNextPage exhausted:', lastCatch);
-        });
         return;
       }
 

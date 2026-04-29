@@ -1,7 +1,11 @@
 export { AccountScreen } from './screens/AccountScreen';
 export { EditProfileScreen } from './screens/EditProfileScreen';
+export { FinancialSupportScreen } from './screens/FinancialSupportScreen';
+export { GiftScreen } from './screens/GiftScreen';
+export { GiftSubScreen } from './screens/GiftSubScreen';
 export { MyCoursesHubScreen } from './screens/MyCoursesHubScreen';
 export { NotificationsScreen } from './screens/NotificationsScreen';
 export { ProfileScreen } from './screens/ProfileScreen';
 export { SecurityScreen } from './screens/SecurityScreen';
+export { NOTIFICATION_BADGE_COUNT } from './model/notificationBadge';
 export { UserService } from './services/userService';

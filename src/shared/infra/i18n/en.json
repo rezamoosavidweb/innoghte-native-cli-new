@@ -83,6 +83,10 @@
       },
       "banner": {
         "cta": "Start your journey"
+      },
+      "comments": {
+        "title": "User testimonials",
+        "subtitle": "Real experiences from learners in our courses and content."
       }
     },
     "courses": {
@@ -92,7 +96,8 @@
     },
     "albums": {
       "loading": "Loading albums…",
-      "error": "Could not load albums."
+      "error": "Could not load albums.",
+      "empty": "No albums available yet."
     },
     "myCoursesHub": {
       "subtitle": "Browse courses, albums, and more — same hub as the legacy app.",
@@ -276,11 +281,13 @@
     },
     "liveMeetings": {
       "loading": "Loading live meetings…",
-      "error": "Could not load live meetings."
+      "error": "Could not load live meetings.",
+      "empty": "No live meetings available yet."
     },
     "events": {
       "loading": "Loading events…",
-      "error": "Could not load events."
+      "error": "Could not load events.",
+      "empty": "No events available yet."
     },
     "publicAlbums": {
       "loading": "Loading public album…",
@@ -345,6 +352,8 @@
       "mobile": "Mobile",
       "password": "Password",
       "submit": "Continue",
+      "signingIn": "Signing in…",
+      "credentialsHelper": "Use your app credentials to continue.",
       "demoTitle": "Demo",
       "demoMessage": "Auth is not wired in this build."
     }

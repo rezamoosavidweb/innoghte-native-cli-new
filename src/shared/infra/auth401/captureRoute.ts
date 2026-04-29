@@ -1,6 +1,6 @@
 import type { NavigationState, PartialState } from '@react-navigation/native';
 
-import type { PendingNavigation } from '@/domains/auth';
+import type { PendingNavigation } from '@/shared/contracts/pendingNavigation';
 import { navigationRef } from '@/shared/infra/navigation/navigationRef';
 
 const SKIP_RESUME_ROUTE_NAMES = new Set<string>(['Login', 'Startup']);

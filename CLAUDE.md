@@ -81,6 +81,8 @@ Key Zustand stores:
 - `useAuthStore` — `isAuthenticated`, `accessToken`, `pendingNavigation`; persisted to secure MMKV; only `isAuthenticated` and `accessToken` are serialized
 - `useUiThemeStore` — `preference: 'light' | 'dark' | 'system'`; persisted to default MMKV
 
+**Cross-domain auth rule:** Code outside the `auth` domain must never import `useAuthStore` directly. Use `AuthService` from `@/domains/auth` instead — it is the public surface for session reads (`getToken`, `isAuthenticated`), mutations (`login`, `logout`, `clearSessionTokensOnly`), and pending navigation (`setPendingNavigation`, `consumePendingNavigation`).
+
 React Query client (`src/app/queryClient.ts`) is configured with `retry: false` — retries are handled at the HTTP layer by Ky (1 retry for GETs on 408/429/5xx with exponential backoff).
 
 ## HTTP Client
@@ -124,6 +126,8 @@ i18next v26 + react-i18next v17. Languages: `en` (fallback) and `fa` (Farsi/Pers
 - **`src/shared/lib/infiniteList/`** — `useAppInfiniteList`: wraps `useInfiniteQuery` with memoized `flatData`, scroll-offset memory (LRU 30 keys), pagination backoff (300/600/1200 ms)
 - **`src/shared/ui/list-states/`** — `ListStateView`, `LoadingState`, `ErrorState`, `EmptyState`, `ListFooterLoader` — use these for all list screens instead of per-screen duplicates
 - **`src/shared/infra/auth401/`** — per-request policy via `withKyAuth401Context(...)`, per-screen scope via `useAuth401ScreenScope`
+- **`resolveErrorMessage(err, fallback)`** from `@/shared/infra/http` — extracts a user-visible string from `ApiError` (reads `.payload.message` first) or any `Error`; returns `fallback` when no message is available
+- **`formatTsIso(iso, locale)`** from `@/shared/utils/formatTsIso` — formats ISO date strings for display; passes `'fa-IR'` locale for Persian, default `toLocaleString` otherwise
 
 ## Path Aliases
 
@@ -132,3 +136,60 @@ i18next v26 + react-i18next v17. Languages: `en` (fallback) and `fa` (Farsi/Pers
 ## SVG Icons
 
 SVGs in `src/assets/icons/` are compiled to React components by `react-native-svg-transformer` (configured in `metro.config.js`). Import directly: `import VerifyIcon from '@/assets/icons/verify.svg'`.
+
+## Forms
+
+Forms use **react-hook-form v7** with **Zod** schemas via `zodResolver` from `@hookform/resolvers/zod`.
+
+- Schema + type defined in `model/schema.ts` inside the domain
+- `InputField` from `@/ui/components/form/InputField` — themed text input that accepts `error` prop
+- `form.register(field)` is called manually (RN doesn't use native DOM refs), then `form.setValue` on change and `form.trigger` on blur
+- `form.handleSubmit(handler)` wraps submit; pass `isSubmitting` state down to disable the button
+
+## Lists (FlashList)
+
+Performant lists use `@shopify/flash-list`. Theme helpers from `@/ui/theme` keep list chrome consistent:
+
+- `flashListEstimatedItemSize.<kind>` — pre-tuned `estimatedItemSize` per card type
+- `flashListContentGutters.standard` — standard `contentContainerStyle` padding
+- `flashListRowSeparators.h12` — `ItemSeparatorComponent` view with 12 dp gap
+- `useNavScreenShellStyles(colors)` — styles for loading/error/safe-area wrappers on full-screen list screens
+
+## Collapsible Header
+
+Three components + one hook, all from `@/shared/ui/collapsibleHeader`:
+
+1. `useCollapsibleHeader()` — returns `{ scrollY, onScroll, threshold }` (Reanimated shared value + event handler)
+2. `CollapsibleHeader` — absolutely positioned animated header; pass `scrollY`, `threshold`, `backgroundColor`, `expandedBackgroundColor`
+3. `CollapsibleHeaderFlatList` / `CollapsibleHeaderScrollView` — Reanimated list/scroll wrappers preconfigured for `scrollEventThrottle`; pass `onScroll` from the hook
+
+## Toast
+
+`showAppToast(message, kind)` from `@/shared/ui/toast` — imperative, event-bus driven. `ToastHost` is mounted once inside `AppThemeProvider` and listens for events. Call from anywhere (hooks, api layer, etc.) without a React context.
+
+```ts
+import { showAppToast } from '@/shared/ui/toast';
+showAppToast('Saved', 'success');
+showAppToast('Something went wrong', 'error');
+```
+
+## Styling Convention
+
+Style factories are functions that take `colors` (from `useTheme().colors` or `useThemeColors()`) and return a `StyleSheet.create(...)` object. Each screen/component owns a `*.styles.ts` file alongside it:
+
+```ts
+// myFeature.styles.ts
+export function useMyFeatureStyles(colors: ThemeColors) {
+  return StyleSheet.create({ root: { backgroundColor: colors.background } });
+}
+
+// MyFeatureScreen.tsx
+const { colors } = useTheme();
+const s = useMyFeatureStyles(colors);
+```
+
+Never pass raw color strings; always go through `theme.colors.*` semantic tokens.
+
+## Debug Tooling
+
+**Reactotron** is configured in `reactotron.config.ts` (MMKV plugin included). It is imported as a side-effect in `index.js` in development only. Use the Reactotron desktop app to inspect network requests, Zustand/MMKV state, and custom log events without `console.log`.

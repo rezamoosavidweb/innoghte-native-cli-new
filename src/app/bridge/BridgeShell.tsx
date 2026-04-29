@@ -3,10 +3,12 @@ import * as React from 'react';
 import { useColorScheme } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import { logout } from '@/domains/auth/api/auth.service';
-import { useCurrentUser } from '@/domains/auth/hooks/useCurrentUser';
-import { useIsAuthenticated } from '@/domains/auth';
-import { useUiThemeStore } from '@/domains/settings/model/uiTheme.store';
+import {
+  logout,
+  useCurrentUser,
+  useIsAuthenticated,
+} from '@/domains/auth';
+import { useUiThemeStore } from '@/domains/settings';
 import { UserService } from '@/domains/user';
 import { fireAndForget } from '@/shared/infra/http';
 import { navigationRef } from '@/shared/infra/navigation/navigationRef';

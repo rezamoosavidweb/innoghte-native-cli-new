@@ -1,9 +1,7 @@
 import { getAccessToken } from '@/domains/auth/api/auth.storage';
 import { login, logout } from '@/domains/auth/api/auth.service';
-import {
-  useAuthStore,
-  type PendingNavigation,
-} from '@/domains/auth/model/auth.store';
+import { useAuthStore } from '@/domains/auth/model/auth.store';
+import type { PendingNavigation } from '@/shared/contracts/pendingNavigation';
 import type { LoginBodyType, LoginResponse } from '@/domains/auth/model/apiTypes';
 import { resetAuth401LoginNavigationGuard } from '@/shared/infra/auth401/loginNavigationGuard';
 

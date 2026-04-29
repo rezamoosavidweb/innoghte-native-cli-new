@@ -18,6 +18,24 @@ import { ProfileLoadedState } from './ProfileLoadedState';
 import { ProfileLoadingState } from './ProfileLoadingState';
 import type { ProfileShortcutRoute } from './ProfileShortcutButtons';
 
+export type ProfileContentShellConfig = Readonly<{
+  shellStyles: ProfileScreenShellStyleSet;
+  scaffoldSubtitleStyle: TextStyle;
+  scaffoldSectionTitleStyle: TextStyle;
+  activityColor: string;
+  loadingMessage: string;
+}>;
+
+export type ProfileContentMenuConfig = Readonly<{
+  headerStyles: ProfileHeaderStyleSet;
+  menuStyles: ProfileScreenMenuStyleSet;
+  dividerStyles: SectionDividerStyleSet;
+  actionMenuItems: readonly ProfileMenuListItem[];
+  financialMenuItems: readonly ProfileMenuListItem[];
+  experienceMenuItems: readonly ProfileMenuListItem[];
+  supportMenuItems: readonly ProfileMenuListItem[];
+}>;
+
 export type ProfileContentProps = {
   isPending: boolean;
   isError: boolean;
@@ -26,18 +44,8 @@ export type ProfileContentProps = {
   profileUser: ProfileHeaderUser | null;
   initials: string;
   avatarUri: string | null;
-  shellStyles: ProfileScreenShellStyleSet;
-  headerStyles: ProfileHeaderStyleSet;
-  menuStyles: ProfileScreenMenuStyleSet;
-  dividerStyles: SectionDividerStyleSet;
-  scaffoldSubtitleStyle: TextStyle;
-  scaffoldSectionTitleStyle: TextStyle;
-  activityColor: string;
-  actionMenuItems: readonly ProfileMenuListItem[];
-  financialMenuItems: readonly ProfileMenuListItem[];
-  experienceMenuItems: readonly ProfileMenuListItem[];
-  supportMenuItems: readonly ProfileMenuListItem[];
-  loadingMessage: string;
+  shellConfig: ProfileContentShellConfig;
+  menuConfig: ProfileContentMenuConfig;
   onNavigate: (route: AppLeafRouteName) => void;
   onProfileShortcut: (route: ProfileShortcutRoute) => void;
   onStartVerify: (channel: VerifyChannel) => void;
@@ -52,18 +60,8 @@ export const ProfileContent = React.memo(function ProfileContent({
   profileUser,
   initials,
   avatarUri,
-  shellStyles,
-  headerStyles,
-  menuStyles,
-  dividerStyles,
-  scaffoldSubtitleStyle,
-  scaffoldSectionTitleStyle,
-  activityColor,
-  actionMenuItems,
-  financialMenuItems,
-  experienceMenuItems,
-  supportMenuItems,
-  loadingMessage,
+  shellConfig,
+  menuConfig,
   onNavigate,
   onProfileShortcut,
   onStartVerify,
@@ -72,10 +70,10 @@ export const ProfileContent = React.memo(function ProfileContent({
   if (isPending && !user) {
     return (
       <ProfileLoadingState
-        shellStyles={shellStyles}
-        subtitleStyle={scaffoldSubtitleStyle}
-        message={loadingMessage}
-        activityColor={activityColor}
+        shellStyles={shellConfig.shellStyles}
+        subtitleStyle={shellConfig.scaffoldSubtitleStyle}
+        message={shellConfig.loadingMessage}
+        activityColor={shellConfig.activityColor}
       />
     );
   }
@@ -83,9 +81,9 @@ export const ProfileContent = React.memo(function ProfileContent({
   if (isError || !user || !profileUser) {
     return (
       <ProfileErrorState
-        shellStyles={shellStyles}
-        errorTitleStyle={scaffoldSectionTitleStyle}
-        retryBaseStyle={scaffoldSubtitleStyle}
+        shellStyles={shellConfig.shellStyles}
+        errorTitleStyle={shellConfig.scaffoldSectionTitleStyle}
+        retryBaseStyle={shellConfig.scaffoldSubtitleStyle}
         onRetry={onRetry}
         isFetching={isFetching}
       />
@@ -93,21 +91,21 @@ export const ProfileContent = React.memo(function ProfileContent({
   }
 
   return (
-      <ProfileLoadedState
-        profileUser={profileUser}
-        initials={initials}
-        avatarUri={avatarUri}
-        headerStyles={headerStyles}
-        menuStyles={menuStyles}
-        dividerStyles={dividerStyles}
-        actionMenuItems={actionMenuItems}
-        financialMenuItems={financialMenuItems}
-        experienceMenuItems={experienceMenuItems}
-        supportMenuItems={supportMenuItems}
-        onNavigate={onNavigate}
-        onProfileShortcut={onProfileShortcut}
-        onStartVerify={onStartVerify}
-      />
+    <ProfileLoadedState
+      profileUser={profileUser}
+      initials={initials}
+      avatarUri={avatarUri}
+      headerStyles={menuConfig.headerStyles}
+      menuStyles={menuConfig.menuStyles}
+      dividerStyles={menuConfig.dividerStyles}
+      actionMenuItems={menuConfig.actionMenuItems}
+      financialMenuItems={menuConfig.financialMenuItems}
+      experienceMenuItems={menuConfig.experienceMenuItems}
+      supportMenuItems={menuConfig.supportMenuItems}
+      onNavigate={onNavigate}
+      onProfileShortcut={onProfileShortcut}
+      onStartVerify={onStartVerify}
+    />
   );
 });
 ProfileContent.displayName = 'ProfileContent';

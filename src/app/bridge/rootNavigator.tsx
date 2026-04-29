@@ -9,33 +9,33 @@ import { CollapsibleHeaderExampleScreen } from '@/app/examples/CollapsibleHeader
 import { LegacyMenuPlaceholderScreen } from '@/app/navigation/LegacyMenuPlaceholderScreen';
 import { StartupScreen } from '@/app/startup/StartupScreen';
 import { AuthService, LoginScreen, VerifyScreen } from '@/domains/auth';
-import { CoursesScreen } from '@/domains/courses/screens/CoursesScreen';
-import { EventsScreen } from '@/domains/events/screens/EventsScreen';
+import { CoursesScreen } from '@/domains/courses';
+import { EventsScreen } from '@/domains/events';
 import { HomeScreen } from '@/domains/home';
-import { LiveMeetingsScreen } from '@/domains/live/screens/LiveMeetingsScreen';
-import { PublicAlbumsScreen } from '@/domains/media/screens/PublicAlbumsScreen';
+import { LiveMeetingsScreen } from '@/domains/live';
+import { PublicAlbumsScreen } from '@/domains/media';
 import { SearchScreen } from '@/domains/search';
 import {
+  AboutScreen,
   CreateTicketScreen,
+  FaqsScreen,
+  HelpScreen,
   SupportLegalPlaceholderScreen,
   TicketDetailScreen,
   TicketListScreen,
 } from '@/domains/support';
-import { SettingsScreen } from '@/domains/settings/screens/SettingsScreen';
-import { AboutScreen } from '@/domains/support/about/screens/AboutScreen';
-import { FaqsScreen } from '@/domains/support/faqs/screens/FaqsScreen';
-import { HelpScreen } from '@/domains/support/help/screens/HelpScreen';
+import { SettingsScreen } from '@/domains/settings';
 import {
   AccountScreen,
   EditProfileScreen,
+  FinancialSupportScreen,
+  GiftScreen,
+  GiftSubScreen,
   MyCoursesHubScreen,
+  NOTIFICATION_BADGE_COUNT,
   ProfileScreen,
   SecurityScreen,
 } from '@/domains/user';
-import { FinancialSupportScreen } from '@/domains/user/screens/FinancialSupportScreen';
-import { GiftScreen } from '@/domains/user/screens/GiftScreen';
-import { GiftSubScreen } from '@/domains/user/screens/GiftSubScreen';
-import { NOTIFICATION_BADGE_COUNT } from '@/domains/user/model/notificationBadge';
 import i18n from '@/shared/infra/i18n';
 import { DrawerMenuButton } from '@/ui/components/DrawerMenuButton';
 import { CustomDrawerContent } from '@/ui/layout/CustomDrawerContent';

@@ -16,6 +16,9 @@ export {
 export { getApiClient, initAppHttpClient } from './appHttpClient';
 export { resolveApiBaseUrl } from './resolveBaseUrl';
 export {
+  resolveErrorMessage,
+} from './resolveErrorMessage';
+export {
   fireAndForget,
   reportApiError,
   subscribeToApiErrors,

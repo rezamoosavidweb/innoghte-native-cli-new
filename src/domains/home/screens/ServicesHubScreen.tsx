@@ -7,9 +7,12 @@ import { ScrollView, Text, View } from 'react-native';
 import type { TabParamList } from '@/shared/contracts/navigationApp';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { useServicesHubStyles } from '@/domains/home/ui/servicesHub.styles';
-import { HubMenuRow } from '@/ui/components/HubMenuRow';
+import {
+  HubMenuRow,
+  type HubMenuRowStyleSet,
+} from '@/ui/components/HubMenuRow';
 
-type Props = BottomTabScreenProps<TabParamList, 'Services'>;
+type Props = BottomTabScreenProps<TabParamList>;
 
 type HubRowConfig = {
   readonly id: string;
@@ -28,27 +31,42 @@ const HUB_ROWS: readonly HubRowConfig[] = [
   { id: 'albums', icon: '💿', titleKey: 'albums', action: 'albums' },
 ] as const;
 
-const ServicesHubScreenComponent = (_props: Props) => {
+type ServicesHubMenuRowProps = {
+  row: HubRowConfig;
+  title: string;
+  s: HubMenuRowStyleSet;
+};
+
+const ServicesHubMenuRow = React.memo(function ServicesHubMenuRow({
+  row,
+  title,
+  s,
+}: ServicesHubMenuRowProps) {
   const navigation = useAppNavigation();
+
+  const onPress = React.useCallback(() => {
+    switch (row.action) {
+      case 'courses':
+        navigation.navigate('PublicCourses');
+        return;
+      case 'albums':
+        navigation.navigate('PublicAlbums');
+        return;
+      default:
+        return;
+    }
+  }, [navigation, row.action]);
+
+  return (
+    <HubMenuRow icon={row.icon} title={title} s={s} onPress={onPress} />
+  );
+});
+ServicesHubMenuRow.displayName = 'ServicesHubMenuRow';
+
+const ServicesHubScreenComponent = (_props: Props) => {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const s = useServicesHubStyles(colors);
-
-  const onRowPress = React.useCallback(
-    (row: HubRowConfig) => {
-      switch (row.action) {
-        case 'courses':
-          navigation.navigate('PublicCourses');
-          return;
-        case 'albums':
-          navigation.navigate('PublicAlbums');
-          return;
-        default:
-          return;
-      }
-    },
-    [navigation],
-  );
 
   return (
     <ScrollView
@@ -59,14 +77,11 @@ const ServicesHubScreenComponent = (_props: Props) => {
       <Text style={s.subtitle}>{t('screens.servicesHub.subtitle')}</Text>
       <View style={s.list}>
         {HUB_ROWS.map(row => (
-          <HubMenuRow
+          <ServicesHubMenuRow
             key={row.id}
-            icon={row.icon}
+            row={row}
             title={t(`screens.servicesHub.menu.${row.titleKey}`)}
             s={s}
-            onPress={() => {
-              onRowPress(row);
-            }}
           />
         ))}
       </View>

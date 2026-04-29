@@ -4,7 +4,7 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { TabBarGlyph } from '@/app/navigation/tabBarConfig';
-import { useCurrentUser } from '@/domains/auth/hooks/useCurrentUser';
+import { useCurrentUser } from '@/domains/auth';
 import { useIsAuthenticated } from '@/domains/auth';
 import { resolveAvatarUri } from '@/shared/utils/resolveAvatarUri';
 import { initialsFromDisplayName } from '@/shared/utils/initialsFromDisplayName';
@@ -46,29 +46,28 @@ export function ProfileTabBarIcon({ color, focused, size }: IconProps) {
   const ringColor = s.tabActive;
 
   const avatarVisual = React.useMemo(
-    () =>
-      StyleSheet.create({
-        image: {
-          width: dim,
-          height: dim,
-          borderRadius: dim / 2,
-          borderWidth: StyleSheet.hairlineWidth,
-          borderColor: ringColor,
-        },
-        placeholder: {
-          width: dim,
-          height: dim,
-          borderRadius: dim / 2,
-          backgroundColor: ringColor,
-          alignItems: 'center',
-          justifyContent: 'center',
-        },
-        initials: {
-          color: colorPrimitives.white,
-          fontSize: fontSize.xs,
-          fontWeight: fontWeight.bold,
-        },
-      }),
+    () => ({
+      image: {
+        width: dim,
+        height: dim,
+        borderRadius: dim / 2,
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: ringColor,
+      },
+      placeholder: {
+        width: dim,
+        height: dim,
+        borderRadius: dim / 2,
+        backgroundColor: ringColor,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+      },
+      initials: {
+        color: colorPrimitives.white,
+        fontSize: fontSize.xs,
+        fontWeight: fontWeight.bold,
+      },
+    }),
     [dim, ringColor],
   );
 

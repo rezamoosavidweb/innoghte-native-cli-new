@@ -24,8 +24,8 @@ import {
 } from '@/ui/theme';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const DEFAULT_HEIGHT = 200;
-const DEFAULT_AUTOPLAY_INTERVAL = 3500;
+export const DEFAULT_HEIGHT = 200;
+export const DEFAULT_AUTOPLAY_INTERVAL = 3500;
 const DEFAULT_RESUME_DELAY = 4000;
 const DEFAULT_CONTENT_LINES = 5;
 const DEFAULT_SCROLL_ANIMATION_MS = 500;

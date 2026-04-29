@@ -2,12 +2,8 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { ZUSTAND_AUTH_PERSIST_KEY } from '@/domains/auth/model/authPersistKey';
+import type { PendingNavigation } from '@/shared/contracts/pendingNavigation';
 import { zustandMMKVStorage } from '@/shared/infra/storage/zustand-mmkv-storage';
-
-export type PendingNavigation = {
-  name: string;
-  params?: Record<string, unknown>;
-};
 
 type AuthStoreState = {
   isAuthenticated: boolean;

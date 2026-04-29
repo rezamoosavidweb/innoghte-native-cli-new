@@ -19,7 +19,7 @@ import { useCreateTicketMutation } from '@/domains/support/hooks/useTicketDetail
 import type { CreateTicketFields } from '@/domains/support/model/createTicket.types';
 import { useTicketScreenStyles } from '@/domains/support/ui/ticketScreen.styles';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
-import { ApiError } from '@/shared/infra/http/apiError';
+import { resolveErrorMessage } from '@/shared/infra/http/resolveErrorMessage';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { showAppToast } from '@/shared/ui/toast';
 import {
@@ -33,25 +33,6 @@ const ticketDraftSchema = z.object({
   title: z.string().min(1),
   description: z.string().min(1),
 });
-
-function resolveCreateTicketErrorMessage(
-  err: unknown,
-  fallback: string,
-): string {
-  if (err instanceof ApiError) {
-    const fromPayload = err.payload?.message?.trim();
-    if (fromPayload) {
-      return fromPayload;
-    }
-    const msg = err.message.trim();
-    return msg.length > 0 ? msg : fallback;
-  }
-  if (err instanceof Error) {
-    const msg = err.message.trim();
-    return msg.length > 0 ? msg : fallback;
-  }
-  return fallback;
-}
 
 export const CreateTicketScreen = React.memo(function CreateTicketScreen(
   _props: Props,
@@ -79,7 +60,7 @@ export const CreateTicketScreen = React.memo(function CreateTicketScreen(
         showAppToast(t('screens.support.tickets.create.successToast'), 'success');
       } catch (err) {
         showAppToast(
-          resolveCreateTicketErrorMessage(
+          resolveErrorMessage(
             err,
             t('screens.support.tickets.create.errorGeneric'),
           ),

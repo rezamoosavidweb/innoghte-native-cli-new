@@ -1,5 +1,8 @@
-import { AuthService } from '@/domains/auth';
 import { captureResumeRouteFromNavigationRef } from '@/shared/infra/auth401/captureRoute';
+import {
+  auth401ClearSessionTokensOnly,
+  auth401SetPendingNavigation,
+} from '@/shared/infra/auth401/configureBridge';
 import { getGlobalAuth401Defaults } from '@/shared/infra/auth401/globalDefaults';
 import {
   readAuth401FromKyContext,
@@ -19,7 +22,7 @@ function applyResolved401Policy(policy: ResolvedAuth401Policy): void {
     if (policy.customPostLogin) {
       queue401PostLogin(policy.customPostLogin);
     }
-    AuthService.clearSessionTokensOnly();
+    auth401ClearSessionTokensOnly();
     if (policy.redirectToLogin) {
       safeNavigateToLoginFrom401();
     }
@@ -29,19 +32,19 @@ function applyResolved401Policy(policy: ResolvedAuth401Policy): void {
   switch (policy.strategy) {
     case 'force_specific_route': {
       if (policy.forcedTarget) {
-        AuthService.setPendingNavigation(policy.forcedTarget);
+        auth401SetPendingNavigation(policy.forcedTarget);
       }
       break;
     }
     case 'back_to_previous_screen': {
       const snap = captureResumeRouteFromNavigationRef();
       if (snap) {
-        AuthService.setPendingNavigation(snap);
+        auth401SetPendingNavigation(snap);
       }
       break;
     }
     case 'login_only': {
-      AuthService.setPendingNavigation(null);
+      auth401SetPendingNavigation(null);
       break;
     }
     case 'no_redirect':
@@ -49,7 +52,7 @@ function applyResolved401Policy(policy: ResolvedAuth401Policy): void {
       break;
   }
 
-  AuthService.clearSessionTokensOnly();
+  auth401ClearSessionTokensOnly();
 
   if (policy.redirectToLogin) {
     safeNavigateToLoginFrom401();

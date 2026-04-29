@@ -4,7 +4,9 @@ import {
   StackActions,
 } from '@react-navigation/native';
 
-import { AuthService, type PendingNavigation } from '@/domains/auth';
+import type { PendingNavigation } from '@/shared/contracts/pendingNavigation';
+
+import { AuthService } from '@/domains/auth';
 import { take401PostLoginHandler } from '@/shared/infra/auth401/post401LoginQueue';
 import { navigationRef } from '@/shared/infra/navigation/navigationRef';
 import type {

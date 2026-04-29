@@ -69,6 +69,44 @@ const ProfileScreenComponent = (_props: Props) => {
     [t],
   );
 
+  const shellConfig = React.useMemo(
+    () => ({
+      shellStyles,
+      scaffoldSubtitleStyle: scaffoldStyles.subtitle,
+      scaffoldSectionTitleStyle: scaffoldStyles.sectionTitle,
+      activityColor: colors.text,
+      loadingMessage,
+    }),
+    [
+      colors.text,
+      loadingMessage,
+      scaffoldStyles.sectionTitle,
+      scaffoldStyles.subtitle,
+      shellStyles,
+    ],
+  );
+
+  const menuConfig = React.useMemo(
+    () => ({
+      headerStyles,
+      menuStyles,
+      dividerStyles,
+      actionMenuItems: actionItems,
+      financialMenuItems,
+      experienceMenuItems: experienceItems,
+      supportMenuItems,
+    }),
+    [
+      actionItems,
+      dividerStyles,
+      experienceItems,
+      financialMenuItems,
+      headerStyles,
+      menuStyles,
+      supportMenuItems,
+    ],
+  );
+
   const onNavigateMenu = React.useCallback(
     (route: AppLeafRouteName) => {
       navigateToAppLeaf(navigation, route);
@@ -112,18 +150,8 @@ const ProfileScreenComponent = (_props: Props) => {
         profileUser={profileUser}
         initials={initials}
         avatarUri={avatarUri}
-        shellStyles={shellStyles}
-        headerStyles={headerStyles}
-        menuStyles={menuStyles}
-        dividerStyles={dividerStyles}
-        scaffoldSubtitleStyle={scaffoldStyles.subtitle}
-        scaffoldSectionTitleStyle={scaffoldStyles.sectionTitle}
-        activityColor={colors.text}
-        actionMenuItems={actionItems}
-        financialMenuItems={financialMenuItems}
-        experienceMenuItems={experienceItems}
-        supportMenuItems={supportMenuItems}
-        loadingMessage={loadingMessage}
+        shellConfig={shellConfig}
+        menuConfig={menuConfig}
         onNavigate={onNavigateMenu}
         onProfileShortcut={onProfileShortcut}
         onStartVerify={onStartVerify}
