@@ -1,16 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import * as React from 'react';
-import { z } from 'zod';
 
-import { getAccessToken } from '@/domains/auth/api/auth.storage';
 import { getUser } from '@/domains/auth/api/auth.service';
+import { getAccessToken } from '@/domains/auth/api/auth.storage';
 import { useAuthStore } from '@/domains/auth/model/auth.store';
 import { AUTH_USER_QUERY_KEY } from '@/domains/auth/model/queryKeys';
-import { ApiError } from '@/shared/infra/http/apiError';
-
-const LOG_PREFIX = '[useCurrentUser]';
-
-
 
 /**
  * User profile for the signed-in session. Fetches when a bearer token exists (including cold start — see below).

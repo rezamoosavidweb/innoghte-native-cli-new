@@ -14,6 +14,7 @@ import { initialsFromDisplayName } from '@/shared/utils/initialsFromDisplayName'
 import { resolveColorScheme } from '@/shared/utils/resolveColorScheme';
 import { isDrawerPhysicalRight } from '@/app/navigation/drawerLayout';
 import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
+import { ToastHost } from '@/shared/ui/toast';
 import { ShellDrawerProvider } from '@/ui/layout/ShellDrawerContext';
 import { AppThemeProvider } from '@/ui/theme';
 import { StatusBarChromeProvider } from '@/ui/statusBar';
@@ -94,6 +95,7 @@ export function BridgeShell({ children }: BridgeShellProps) {
       <AppThemeProvider colorScheme={colorScheme}>
         <StatusBarChromeProvider>
           <ShellDrawerProvider value={shellDrawer}>{children}</ShellDrawerProvider>
+          <ToastHost />
         </StatusBarChromeProvider>
       </AppThemeProvider>
     </ErrorBoundary>

@@ -55,6 +55,10 @@ export {
   useNavScreenShellStyles,
   useScreenScaffoldStyles,
 } from '@/ui/theme/core/navScreenLayout';
+export {
+  useSectionDividerStyles,
+  type SectionDividerStyleSet,
+} from '@/ui/theme/core/sectionDivider';
 export { cardShadow } from '@/ui/theme/core/shadows';
 
 export { hexAlpha } from '@/ui/theme/utils/colorUtils';

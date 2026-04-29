@@ -18,6 +18,10 @@ export const flashListContentGutters = StyleSheet.create({
     paddingTop: spacing.base,
     paddingBottom: spacing['5xl'],
   },
+  vertical: {
+    paddingTop: spacing.xl,
+    paddingBottom: spacing['5xl'],
+  },
 });
 
 /** FlashList `ItemSeparatorComponent` heights (token-based). */
@@ -82,8 +86,8 @@ export function useScreenScaffoldStyles(colors: Theme['colors']) {
         root: {
           flex: 1,
           justifyContent: 'center',
-          alignItems: 'center',
-          padding: spacing['3xl'],
+          alignItems: 'stretch',
+          padding: spacing.xl,
           gap: spacing.md,
           backgroundColor: colors.background,
         },
@@ -91,6 +95,7 @@ export function useScreenScaffoldStyles(colors: Theme['colors']) {
           fontSize: fontSize['2xl'],
           fontWeight: fontWeight.bold,
           color: colors.text,
+          alignItems: 'center',
         },
         subtitle: {
           fontSize: fontSize.md + 1,

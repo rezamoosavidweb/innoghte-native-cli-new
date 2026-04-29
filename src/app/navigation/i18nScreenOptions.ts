@@ -35,6 +35,10 @@ export function getDrawerLeafTranslatedFields(
 }
 
 const EXTRA_DRAWER_LABELS = {
+  account: 'drawer.account',
+  security: 'drawer.security',
+  editProfile: 'drawer.editProfile',
+  verify: 'drawer.verify',
   publicAlbums: 'drawer.publicAlbums',
   myCourses: 'drawer.myCourses',
   publicCourses: 'drawer.publicCourses',
@@ -54,6 +58,18 @@ const EXTRA_DRAWER_LABELS = {
   liveMeetingOverview: 'drawer.liveMeetingOverview',
   search: 'drawer.search',
   collapsibleHeaderExample: 'drawer.collapsibleHeaderExample',
+  financialSupport: 'drawer.financialSupport',
+  giftScreen: 'drawer.giftScreen',
+  giftSend: 'drawer.giftSend',
+  giftReceived: 'drawer.giftReceived',
+  giftSent: 'drawer.giftSent',
+  ticketListScreen: 'drawer.ticketListScreen',
+  createTicketScreen: 'drawer.createTicketScreen',
+  ticketDetailScreen: 'drawer.ticketDetailScreen',
+  purchaseHistory: 'drawer.purchaseHistory',
+  supportServices: 'drawer.supportServices',
+  terms: 'drawer.terms',
+  copyright: 'drawer.copyright',
 } as const;
 
 export type ExtraDrawerLeafKey = keyof typeof EXTRA_DRAWER_LABELS;

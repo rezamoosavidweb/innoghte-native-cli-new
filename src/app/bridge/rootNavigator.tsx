@@ -8,19 +8,33 @@ import { protectedNavigate } from '@/app/bridge/auth/protectedNavigation';
 import { CollapsibleHeaderExampleScreen } from '@/app/examples/CollapsibleHeaderExampleScreen';
 import { LegacyMenuPlaceholderScreen } from '@/app/navigation/LegacyMenuPlaceholderScreen';
 import { StartupScreen } from '@/app/startup/StartupScreen';
-import { AuthService } from '@/domains/auth';
-import { LoginScreen } from '@/domains/auth/screens/LoginScreen';
+import { AuthService, LoginScreen, VerifyScreen } from '@/domains/auth';
 import { CoursesScreen } from '@/domains/courses/screens/CoursesScreen';
 import { EventsScreen } from '@/domains/events/screens/EventsScreen';
 import { HomeScreen } from '@/domains/home';
 import { LiveMeetingsScreen } from '@/domains/live/screens/LiveMeetingsScreen';
 import { PublicAlbumsScreen } from '@/domains/media/screens/PublicAlbumsScreen';
 import { SearchScreen } from '@/domains/search';
+import {
+  CreateTicketScreen,
+  SupportLegalPlaceholderScreen,
+  TicketDetailScreen,
+  TicketListScreen,
+} from '@/domains/support';
 import { SettingsScreen } from '@/domains/settings/screens/SettingsScreen';
 import { AboutScreen } from '@/domains/support/about/screens/AboutScreen';
 import { FaqsScreen } from '@/domains/support/faqs/screens/FaqsScreen';
 import { HelpScreen } from '@/domains/support/help/screens/HelpScreen';
-import { MyCoursesHubScreen, ProfileScreen } from '@/domains/user';
+import {
+  AccountScreen,
+  EditProfileScreen,
+  MyCoursesHubScreen,
+  ProfileScreen,
+  SecurityScreen,
+} from '@/domains/user';
+import { FinancialSupportScreen } from '@/domains/user/screens/FinancialSupportScreen';
+import { GiftScreen } from '@/domains/user/screens/GiftScreen';
+import { GiftSubScreen } from '@/domains/user/screens/GiftSubScreen';
 import { NOTIFICATION_BADGE_COUNT } from '@/domains/user/model/notificationBadge';
 import i18n from '@/shared/infra/i18n';
 import { DrawerMenuButton } from '@/ui/components/DrawerMenuButton';
@@ -269,6 +283,34 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
       screen: SettingsScreen,
       options: settingsDrawerOptions,
     },
+    Account: {
+      screen: AccountScreen,
+      options: () => ({
+        ...extraLeafOptions('account', '👤'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    Security: {
+      screen: SecurityScreen,
+      options: () => ({
+        ...extraLeafOptions('security', '🔒'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    EditProfile: {
+      screen: EditProfileScreen,
+      options: () => ({
+        ...extraLeafOptions('editProfile', '✏️'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    Verify: {
+      screen: VerifyScreen,
+      options: () => ({
+        ...extraLeafOptions('verify', '✉️'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
     Help: {
       screen: HelpScreen,
       options: helpDrawerOptions,
@@ -351,6 +393,90 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
     Search: {
       screen: SearchScreen,
       options: () => extraLeafOptions('search', '🔎'),
+    },
+    FinancialSupport: {
+      screen: FinancialSupportScreen,
+      options: () => ({
+        ...extraLeafOptions('financialSupport', '💳'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    GiftScreen: {
+      screen: GiftScreen,
+      options: () => ({
+        ...extraLeafOptions('giftScreen', '🎁'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    GiftSend: {
+      screen: GiftSubScreen,
+      options: () => ({
+        ...extraLeafOptions('giftSend', '📤'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    GiftReceived: {
+      screen: GiftSubScreen,
+      options: () => ({
+        ...extraLeafOptions('giftReceived', '📥'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    GiftSent: {
+      screen: GiftSubScreen,
+      options: () => ({
+        ...extraLeafOptions('giftSent', '📒'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    TicketListScreen: {
+      screen: TicketListScreen,
+      options: () => ({
+        ...extraLeafOptions('ticketListScreen', '🎫'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    CreateTicketScreen: {
+      screen: CreateTicketScreen,
+      options: () => ({
+        ...extraLeafOptions('createTicketScreen', '✏️'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    TicketDetailScreen: {
+      screen: TicketDetailScreen,
+      options: () => ({
+        ...extraLeafOptions('ticketDetailScreen', '💬'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    PurchaseHistory: {
+      screen: SupportLegalPlaceholderScreen,
+      options: () => ({
+        ...extraLeafOptions('purchaseHistory', '🧾'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    SupportServices: {
+      screen: SupportLegalPlaceholderScreen,
+      options: () => ({
+        ...extraLeafOptions('supportServices', '🛠️'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    Terms: {
+      screen: SupportLegalPlaceholderScreen,
+      options: () => ({
+        ...extraLeafOptions('terms', '📜'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    Copyright: {
+      screen: SupportLegalPlaceholderScreen,
+      options: () => ({
+        ...extraLeafOptions('copyright', '©️'),
+        drawerItemStyle: { display: 'none' },
+      }),
     },
     CollapsibleHeaderExample: {
       screen: CollapsibleHeaderExampleScreen,

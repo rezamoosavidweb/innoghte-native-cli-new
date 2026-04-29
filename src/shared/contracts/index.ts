@@ -18,3 +18,4 @@ export type {
   TabParamList,
 } from './navigationApp';
 export type { ShellDrawerUiModel, ShellDrawerUserSnapshot } from './shellUi';
+export type { VerifyChannel, VerifyStep } from './verification';

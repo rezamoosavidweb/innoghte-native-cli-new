@@ -1,5 +1,7 @@
 import type { NavigatorScreenParams } from '@react-navigation/native';
 
+import type { VerifyChannel } from './verification';
+
 /** Bottom tabs — primary app sections. */
 export type TabParamList = {
   Home: undefined;
@@ -13,6 +15,11 @@ export type TabParamList = {
 export type DrawerParamList = {
   MainTabs: NavigatorScreenParams<TabParamList> | undefined;
   Settings: undefined;
+  Account: undefined;
+  Security: undefined;
+  EditProfile: undefined;
+  /** Email / mobile verification (params required when opening). */
+  Verify: { type: VerifyChannel };
   Help: undefined;
   About: undefined;
   PublicAlbums: undefined;
@@ -36,6 +43,20 @@ export type DrawerParamList = {
   Search: { query?: string } | undefined;
   /** Demo: collapsible header on scroll. */
   CollapsibleHeaderExample: undefined;
+  /** Profile hub — financial & gifts (secondary drawer leaves). */
+  FinancialSupport: undefined;
+  GiftScreen: undefined;
+  GiftSend: undefined;
+  GiftReceived: undefined;
+  GiftSent: undefined;
+  /** Support ticketing & profile legal shortcuts. */
+  TicketListScreen: undefined;
+  CreateTicketScreen: undefined;
+  TicketDetailScreen: { id: number };
+  PurchaseHistory: undefined;
+  SupportServices: undefined;
+  Terms: undefined;
+  Copyright: undefined;
 };
 
 export type MainTabScreenName = keyof TabParamList;

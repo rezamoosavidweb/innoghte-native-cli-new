@@ -1,3 +1,4 @@
-export { AboutScreen } from './about/screens/AboutScreen';
-export { HelpScreen } from './help/screens/HelpScreen';
-export { FaqsScreen, useFaqs } from './faqs';
+export { CreateTicketScreen } from './screens/CreateTicketScreen';
+export { SupportLegalPlaceholderScreen } from './screens/SupportLegalPlaceholderScreen';
+export { TicketDetailScreen } from './screens/TicketDetailScreen';
+export { TicketListScreen } from './screens/TicketListScreen';

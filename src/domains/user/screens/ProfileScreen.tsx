@@ -1,39 +1,49 @@
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { useTheme } from '@react-navigation/native';
+import {
+  CommonActions,
+  useTheme,
+} from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  ActivityIndicator,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ScrollView } from 'react-native';
 
+import { navigateToAppLeaf } from '@/app/bridge/auth';
 import { useCurrentUser } from '@/domains/auth/hooks/useCurrentUser';
-import type { TabParamList } from '@/shared/contracts/navigationApp';
-import { ScreenScaffold } from '@/ui/components/ScreenScaffold';
-import { initialsFromDisplayName } from '@/shared/utils/initialsFromDisplayName';
-import { resolveAvatarUri } from '@/shared/utils/resolveAvatarUri';
+import { ProfileContent } from '@/domains/user/components/profile/ProfileContent';
+import type { ProfileShortcutRoute } from '@/domains/user/components/profile/ProfileShortcutButtons';
+import { useProfileDerivedState } from '@/domains/user/hooks/useProfileDerivedState';
+import { useProfileFinancialMenus } from '@/domains/user/hooks/useProfileFinancialMenus';
+import { useProfileMenus } from '@/domains/user/hooks/useProfileMenus';
+import { useProfileSupportMenus } from '@/domains/user/hooks/useProfileSupportMenus';
 import {
-  flashListContentGutters,
-  fontSize,
-  fontWeight,
-  pickSemantic,
-  spacing,
+  useProfileHeaderStyles,
+  useProfileMenuStyles,
+  useProfileShellStyles,
+} from '@/domains/user/ui/profileScreen.styles';
+import {
   useScreenScaffoldStyles,
+  useSectionDividerStyles,
 } from '@/ui/theme';
-import { colors as colorPrimitives } from '@/ui/theme/colors';
+import type { AppLeafRouteName, TabParamList } from '@/shared/contracts/navigationApp';
+import type { VerifyChannel } from '@/shared/contracts/verification';
+import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 
 type Props = BottomTabScreenProps<TabParamList, 'Profile'>;
 
 const ProfileScreenComponent = (_props: Props) => {
   const { dark, colors } = useTheme();
   const { t } = useTranslation();
-  const sSemantic = pickSemantic(dark);
+  const navigation = useAppNavigation();
+
   const scaffoldStyles = useScreenScaffoldStyles(colors);
+  const shellStyles = useProfileShellStyles(colors, dark);
+  const headerStyles = useProfileHeaderStyles(colors, dark);
+  const menuStyles = useProfileMenuStyles(colors);
+  const dividerStyles = useSectionDividerStyles(colors, dark);
+
+  const { actionItems, experienceItems } = useProfileMenus(t);
+  const financialMenuItems = useProfileFinancialMenus(t);
+  const supportMenuItems = useProfileSupportMenus(t);
 
   const {
     data: userRes,
@@ -43,208 +53,83 @@ const ProfileScreenComponent = (_props: Props) => {
     isFetching,
   } = useCurrentUser();
   const user = userRes?.data;
-  console.log({ userRes });
 
-  const displayName = (
-    user?.full_name?.trim() ||
-    [user?.name, user?.family].filter(Boolean).join(' ').trim() ||
-    t('drawer.user.fallbackName')
-  ).trim();
-  const initials = initialsFromDisplayName(displayName);
-  const avatarUri = resolveAvatarUri(user?.avatar);
-
-  const cardStyles = React.useMemo(
-    () =>
-      StyleSheet.create({
-        card: {
-          width: '100%',
-          maxWidth: 440,
-          backgroundColor: colors.card,
-          borderRadius: 12,
-          borderWidth: StyleSheet.hairlineWidth,
-          borderColor: colors.border,
-          padding: spacing['2xl'],
-          gap: spacing.lg,
-        },
-        headerRow: {
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: spacing.lg,
-        },
-        avatar: {
-          width: 72,
-          height: 72,
-          borderRadius: 36,
-          backgroundColor: sSemantic.tabActive,
-          alignItems: 'center',
-          justifyContent: 'center',
-        },
-        avatarImage: {
-          width: 72,
-          height: 72,
-          borderRadius: 36,
-          borderWidth: StyleSheet.hairlineWidth,
-          borderColor: colors.border,
-        },
-        initials: {
-          color: colorPrimitives.white,
-          fontSize: fontSize['2xl'],
-          fontWeight: fontWeight.bold,
-        },
-        name: {
-          flex: 1,
-          fontSize: fontSize.xl,
-          fontWeight: fontWeight.bold,
-          color: colors.text,
-        },
-        meta: { gap: spacing.sm },
-        row: { gap: spacing.xs },
-        label: {
-          fontSize: fontSize.sm,
-          fontWeight: fontWeight.semibold,
-          color: sSemantic.textSecondary,
-        },
-        value: {
-          fontSize: fontSize.base,
-          color: colors.text,
-          writingDirection: 'ltr',
-        },
-        footerNote: {
-          fontSize: fontSize.sm,
-          color: sSemantic.textMuted,
-          marginTop: spacing.sm,
-        },
-        centered: {
-          minHeight: 120,
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: spacing.md,
-          width: '100%',
-          maxWidth: 440,
-        },
-        errorTitleAlign: {
-          textAlign: 'center',
-          alignSelf: 'center',
-        },
-        errorRetryDisabled: {
-          opacity: 0.5,
-        },
-        scrollContent: {
-          ...flashListContentGutters.standard,
-          alignItems: 'center',
-        },
-      }),
-    [
-      colors.border,
-      colors.card,
-      colors.text,
-      sSemantic.tabActive,
-      sSemantic.textMuted,
-      sSemantic.textSecondary,
-    ],
+  const fallbackDisplayName = React.useMemo(
+    () => t('drawer.user.fallbackName'),
+    [t],
   );
 
-  let body: React.ReactNode;
-  if (isPending && !user) {
-    body = (
-      <View style={cardStyles.centered} accessibilityRole="progressbar">
-        <ActivityIndicator size="large" color={colors.text} />
-        <Text style={scaffoldStyles.subtitle}>
-          {t('screens.profile.loading')}
-        </Text>
-      </View>
-    );
-  } else if (isError || !user) {
-    body = (
-      <View style={cardStyles.centered}>
-        <Text style={[scaffoldStyles.sectionTitle, cardStyles.errorTitleAlign]}>
-          {t('screens.profile.error')}
-        </Text>
-        <TouchableOpacity
-          accessibilityRole="button"
-          onPress={() => {
-            refetch();
-          }}
-          disabled={isFetching}
-        >
-          <Text
-            style={[
-              scaffoldStyles.subtitle,
-              isFetching ? cardStyles.errorRetryDisabled : null,
-            ]}
-          >
-            {isFetching
-              ? t('screens.profile.loading')
-              : t('screens.profile.retry')}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    );
-  } else {
-    body = (
-      <View style={cardStyles.card}>
-        <View style={cardStyles.headerRow}>
-          {avatarUri ? (
-            <Image
-              accessibilityIgnoresInvertColors
-              source={{ uri: avatarUri }}
-              style={cardStyles.avatarImage}
-              resizeMode="cover"
-            />
-          ) : (
-            <View style={cardStyles.avatar}>
-              <Text style={cardStyles.initials} numberOfLines={1}>
-                {initials}
-              </Text>
-            </View>
-          )}
-          <Text style={cardStyles.name} numberOfLines={2}>
-            {displayName}
-          </Text>
-        </View>
-        <View style={cardStyles.meta}>
-          <View style={cardStyles.row}>
-            <Text style={cardStyles.label}>{t('screens.profile.email')}</Text>
-            <Text style={cardStyles.value} selectable>
-              {user.email}
-            </Text>
-          </View>
-          <View style={cardStyles.row}>
-            <Text style={cardStyles.label}>{t('screens.profile.mobile')}</Text>
-            <Text style={cardStyles.value} selectable>
-              {user.mobile}
-            </Text>
-          </View>
-          <View style={cardStyles.row}>
-            <Text style={cardStyles.label}>
-              {t('screens.profile.lastLogin')}
-            </Text>
-            <Text style={cardStyles.value} selectable>
-              {user.last_login}
-            </Text>
-          </View>
-        </View>
-        <Text style={cardStyles.footerNote}>
-          {user.is_active
-            ? t('screens.profile.accountActive')
-            : t('screens.profile.accountInactive')}
-        </Text>
-      </View>
-    );
-  }
+  const { profileUser, initials, avatarUri } = useProfileDerivedState(
+    user,
+    fallbackDisplayName,
+  );
+
+  const loadingMessage = React.useMemo(
+    () => t('screens.profile.loading'),
+    [t],
+  );
+
+  const onNavigateMenu = React.useCallback(
+    (route: AppLeafRouteName) => {
+      navigateToAppLeaf(navigation, route);
+    },
+    [navigation],
+  );
+
+  const onProfileShortcut = React.useCallback(
+    (route: ProfileShortcutRoute) => {
+      navigateToAppLeaf(navigation, route);
+    },
+    [navigation],
+  );
+
+  const onStartVerify = React.useCallback(
+    (channel: VerifyChannel) => {
+      navigation.dispatch(
+        CommonActions.navigate({
+          name: 'Verify',
+          params: { type: channel },
+        }),
+      );
+    },
+    [navigation],
+  );
+
+  const onRetry = React.useCallback(() => {
+    refetch();
+  }, [refetch]);
 
   return (
-    <ScreenScaffold
-      title={t('screens.profile.title')}
-      subtitle={t('screens.profile.subtitle')}
+    <ScrollView
+      contentContainerStyle={menuStyles.scrollContent}
+      keyboardShouldPersistTaps="handled"
     >
-      <ScrollView
-        contentContainerStyle={cardStyles.scrollContent}
-        keyboardShouldPersistTaps="handled"
-      >
-        {body}
-      </ScrollView>
-    </ScreenScaffold>
+      <ProfileContent
+        isPending={isPending}
+        isError={isError}
+        isFetching={isFetching}
+        user={user}
+        profileUser={profileUser}
+        initials={initials}
+        avatarUri={avatarUri}
+        shellStyles={shellStyles}
+        headerStyles={headerStyles}
+        menuStyles={menuStyles}
+        dividerStyles={dividerStyles}
+        scaffoldSubtitleStyle={scaffoldStyles.subtitle}
+        scaffoldSectionTitleStyle={scaffoldStyles.sectionTitle}
+        activityColor={colors.text}
+        actionMenuItems={actionItems}
+        financialMenuItems={financialMenuItems}
+        experienceMenuItems={experienceItems}
+        supportMenuItems={supportMenuItems}
+        loadingMessage={loadingMessage}
+        onNavigate={onNavigateMenu}
+        onProfileShortcut={onProfileShortcut}
+        onStartVerify={onStartVerify}
+        onRetry={onRetry}
+      />
+    </ScrollView>
   );
 };
 

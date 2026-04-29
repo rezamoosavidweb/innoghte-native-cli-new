@@ -13,6 +13,10 @@
   "drawer": {
     "home": "Home",
     "settings": "Settings",
+    "account": "Account",
+    "security": "Security",
+    "editProfile": "Edit profile",
+    "verify": "Verify",
     "help": "Help",
     "about": "About",
     "publicAlbums": "Public album tracks",
@@ -34,6 +38,18 @@
     "liveMeetingOverview": "Live meeting (overview)",
     "search": "Search",
     "collapsibleHeaderExample": "Collapsible header (demo)",
+    "financialSupport": "Financial support",
+    "giftScreen": "Gift",
+    "giftSend": "Send a gift",
+    "giftReceived": "Received gifts",
+    "giftSent": "Sent gifts",
+    "ticketListScreen": "Tickets",
+    "createTicketScreen": "New ticket",
+    "ticketDetailScreen": "Ticket",
+    "purchaseHistory": "Purchase history",
+    "supportServices": "Support services",
+    "terms": "Terms",
+    "copyright": "Copyright",
     "user": {
       "signedOut": "Signed out",
       "signInHint": "Sign in from the Profile tab",
@@ -118,7 +134,120 @@
       "mobile": "Mobile",
       "lastLogin": "Last sign-in",
       "accountActive": "Your account is active.",
-      "accountInactive": "Your account is inactive."
+      "accountInactive": "Your account is inactive.",
+      "sectionExperiences": "Experiences",
+      "sectionFinancial": "Financial & gifts",
+      "sectionSupportLegal": "Support & legal",
+      "financialMenu": {
+        "financialSupport": "Financial support",
+        "gift": "Gift"
+      },
+      "supportMenu": {
+        "support": "Support",
+        "purchaseHistory": "Purchase history",
+        "supportServices": "Support services",
+        "terms": "Terms & conditions",
+        "copyright": "Copyright"
+      },
+      "menu": {
+        "myCourses": "My Courses",
+        "myAlbums": "My Albums",
+        "meditations": "Meditations",
+        "readings": "Readings",
+        "writings": "Writings",
+        "listenings": "Listenings"
+      },
+      "actions": {
+        "account": "Account",
+        "security": "Security",
+        "editProfile": "Edit profile"
+      },
+      "needsVerification": "Needs verification"
+    },
+    "gift": {
+      "title": "Gift",
+      "hub": {
+        "sendGift": "Send a gift",
+        "receivedGifts": "Received gifts",
+        "sentGifts": "Sent gifts"
+      },
+      "leaf": {
+        "send": {
+          "title": "Send a gift",
+          "body": "Gift flows will hook into the commerce layer soon."
+        },
+        "received": {
+          "title": "Received gifts",
+          "body": "Gift history you've received appears here."
+        },
+        "sent": {
+          "title": "Sent gifts",
+          "body": "Gift history you've sent appears here."
+        }
+      }
+    },
+    "financialSupport": {
+      "title": "Financial support",
+      "body": "Donation rails will connect here as the commerce stack lands."
+    },
+    "support": {
+      "states": {
+        "loading": "Loading tickets…",
+        "error": "Could not load tickets."
+      },
+      "placeholders": {
+        "purchaseHistory": {
+          "title": "Purchase history",
+          "body": "Your paid orders surface here."
+        },
+        "supportServices": {
+          "title": "Support services",
+          "body": "Information about ancillary support programmes."
+        },
+        "terms": {
+          "title": "Terms",
+          "body": "Terms & conditions placeholder until legal copy ships."
+        },
+        "copyright": {
+          "title": "Copyright",
+          "body": "Copyright acknowledgement placeholder."
+        }
+      },
+      "tickets": {
+        "list": {
+          "title": "Tickets",
+          "notice": "* Support replies on weekdays between 08:00–16:00 Iran time.",
+          "create": "New ticket",
+          "empty": "You have no tickets yet."
+        },
+        "card": {
+          "ticketId": "Ticket ID",
+          "category": "Category",
+          "submittedAt": "Submitted",
+          "view": "View",
+          "categoryEmpty": "—"
+        },
+        "create": {
+          "title": "Create ticket",
+          "subtitle": "Describe the topic and details.",
+          "fieldTitle": "Subject",
+          "fieldDescription": "Description",
+          "titlePlaceholder": "Short summary",
+          "descriptionPlaceholder": "Explain the situation…",
+          "submit": "Submit ticket",
+          "successToast": "Ticket submitted successfully. Please wait for support to respond.",
+          "errorGeneric": "Could not submit your ticket."
+        },
+        "detail": {
+          "missing": "Ticket not found.",
+          "createdAt": "Created {{date}}",
+          "replyLabel": "Reply",
+          "replyPlaceholder": "Write your message…",
+          "sendReply": "Send reply",
+          "authorYou": "You",
+          "authorStaff": "Support"
+        }
+      }
     },
     "settings": {
       "title": "Settings",
@@ -169,6 +298,43 @@
       "body": "Legacy stack entry screen — use the buttons below to explore.",
       "goExample": "Open Example (drawer)",
       "goMain": "Open main tabs"
+    },
+    "account": {
+      "title": "Account",
+      "subtitle": "Account details and preferences (placeholder)."
+    },
+    "security": {
+      "title": "Security",
+      "subtitle": "Password and sign-in security (placeholder)."
+    },
+    "editProfile": {
+      "title": "Edit profile",
+      "subtitle": "Update your profile information (placeholder)."
+    },
+    "verify": {
+      "inputTitleEmail": "Verify email",
+      "inputTitleMobile": "Verify mobile",
+      "inputSubtitleEmail": "Enter your email address. We will send you a code.",
+      "inputSubtitleMobile": "Enter your mobile number. We will send you a code.",
+      "codeTitle": "Enter verification code",
+      "codeSubtitle": "Type the code we sent you.",
+      "emailLabel": "Email",
+      "mobileLabel": "Mobile",
+      "emailPlaceholder": "you@example.com",
+      "mobilePlaceholder": "+1 234 567 8900",
+      "sendCode": "Send code",
+      "codeLabel": "Verification code",
+      "codePlaceholder": "Enter code",
+      "verifyCode": "Verify",
+      "demoCodeHint": "Demo: enter 123456 to verify.",
+      "errors": {
+        "emptyDestination": "Enter your email or mobile first.",
+        "invalidEmail": "Enter a valid email address.",
+        "invalidMobile": "Enter a valid mobile number.",
+        "emptyCode": "Enter the verification code.",
+        "invalidCode": "Invalid code. Try again.",
+        "generic": "Something went wrong. Try again."
+      }
     },
     "login": {
       "title": "Sign in",

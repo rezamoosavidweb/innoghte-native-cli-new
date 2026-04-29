@@ -83,7 +83,6 @@ const HomeScreenComponent = () => {
             <QuickAccess />
           </View>
           <Comments />
-          {/* Future home sections plug in here. */}
         </ScrollView>
       </ErrorBoundary>
     </SafeAreaView>

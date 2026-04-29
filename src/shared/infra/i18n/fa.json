@@ -14,6 +14,10 @@
   "drawer": {
     "home": "خانه",
     "settings": "تنظیمات",
+    "account": "حساب کاربری",
+    "security": "امنیت",
+    "editProfile": "ویرایش پروفایل",
+    "verify": "تأیید",
     "help": "راهنما",
     "about": "درباره ما",
     "publicAlbums": "قطعات آلبوم عمومی",
@@ -35,6 +39,18 @@
     "liveMeetingOverview": "جلسه زنده (معرفی)",
     "search": "جستجو",
     "collapsibleHeaderExample": "هدر جمع‌شونده (نمونه)",
+    "financialSupport": "حمایت مالی",
+    "giftScreen": "هدیه",
+    "giftSend": "هدیه دادن",
+    "giftReceived": "هدیه‌های دریافت شده",
+    "giftSent": "هدیه‌های داده شده",
+    "ticketListScreen": "تیکت‌ها",
+    "createTicketScreen": "تیکت جدید",
+    "ticketDetailScreen": "جزئیات تیکت",
+    "purchaseHistory": "سوابق خرید",
+    "supportServices": "خدمات حمایتی",
+    "terms": "قوانین و مقررات",
+    "copyright": "حق نشر",
     "user": {
       "signedOut": "وارد نشده‌اید",
       "signInHint": "ورود از منوی تب «پروفایل»",
@@ -119,7 +135,120 @@
       "mobile": "موبایل",
       "lastLogin": "آخرین ورود",
       "accountActive": "حساب شما فعال است.",
-      "accountInactive": "حساب شما غیرفعال است."
+      "accountInactive": "حساب شما غیرفعال است.",
+      "sectionExperiences": "تجربه‌ها",
+      "sectionFinancial": "مالی و هدایا",
+      "sectionSupportLegal": "پشتیبانی و حقوقی",
+      "financialMenu": {
+        "financialSupport": "حمایت مالی",
+        "gift": "هدیه"
+      },
+      "supportMenu": {
+        "support": "پشتیبانی",
+        "purchaseHistory": "سوابق خرید",
+        "supportServices": "خدمات حمایتی",
+        "terms": "قوانین و مقررات",
+        "copyright": "حق نشر"
+      },
+      "menu": {
+        "myCourses": "دوره‌های من",
+        "myAlbums": "آلبوم‌های من",
+        "meditations": "مدیتیشن‌ها",
+        "readings": "مطالعه‌ها",
+        "writings": "نوشتن‌ها",
+        "listenings": "شنیدن‌ها"
+      },
+      "actions": {
+        "account": "حساب",
+        "security": "امنیت",
+        "editProfile": "ویرایش پروفایل"
+      },
+      "needsVerification": "نیاز به تأیید"
+    },
+    "gift": {
+      "title": "هدیه",
+      "hub": {
+        "sendGift": "هدیه دادن",
+        "receivedGifts": "هدیه‌های دریافت شده",
+        "sentGifts": "هدیه‌های داده شده"
+      },
+      "leaf": {
+        "send": {
+          "title": "هدیه دادن",
+          "body": "مسیر هدیه دادن به‌زودی به اپ وصل می‌شود."
+        },
+        "received": {
+          "title": "هدیه‌های دریافت شده",
+          "body": "فهرست هدایای دریافتی اینجا نمایش داده می‌شود."
+        },
+        "sent": {
+          "title": "هدیه‌های داده شده",
+          "body": "فهرست هدایای ارسالی اینجا نمایش داده می‌شود."
+        }
+      }
+    },
+    "financialSupport": {
+      "title": "حمایت مالی",
+      "body": "برای پشتیبانی مالی و مسیرهای پرداخت به‌زودی به سکوی اصلی وصل می‌شود."
+    },
+    "support": {
+      "states": {
+        "loading": "در حال بارگذاری تیکت‌ها…",
+        "error": "بارگذاری تیکت‌ها انجام نشد."
+      },
+      "placeholders": {
+        "purchaseHistory": {
+          "title": "سوابق خرید",
+          "body": "تاریخچه خریدهای شما در این‌جا نمایش داده می‌شود."
+        },
+        "supportServices": {
+          "title": "خدمات حمایتی",
+          "body": "اطلاعات خدمات حمایتی به‌زودی در دسترس است."
+        },
+        "terms": {
+          "title": "قوانین و مقررات",
+          "body": "متن قوانین و مقررات این‌جا نمایش داده می‌شود."
+        },
+        "copyright": {
+          "title": "حق نشر",
+          "body": "اطلاعات حق گردآوری محتوای این‌مجموعه متعاقباً به‌روز می‌شود."
+        }
+      },
+      "tickets": {
+        "list": {
+          "title": "تیکت‌ها",
+          "notice": "* پشتیبانی وب‌سایت در روزهای شنبه تا چهارشنبه ساعت ۸ تا ۱۶ به وقت ایران فعال است.",
+          "create": "تیکت جدید",
+          "empty": "هنوز تیکتی ثبت نکرده‌اید."
+        },
+        "card": {
+          "ticketId": "شناسه تیکت",
+          "category": "دسته‌بندی",
+          "submittedAt": "تاریخ ارسال",
+          "view": "مشاهده",
+          "categoryEmpty": "—"
+        },
+        "create": {
+          "title": "تیکت جدید",
+          "subtitle": "موضوع و توضیحات را تکمیل کنید.",
+          "fieldTitle": "موضوع",
+          "fieldDescription": "توضیحات",
+          "titlePlaceholder": "خلاصه درخواست",
+          "descriptionPlaceholder": "شرح جزئیات…",
+          "submit": "ارسال تیکت",
+          "successToast": "تیکت با موفقیت ثبت شد؛ منتظر پاسخ پشتیبانی باشید.",
+          "errorGeneric": "ثبت تیکت ناموفق بود."
+        },
+        "detail": {
+          "missing": "تیکت یافت نشد.",
+          "createdAt": "تاریخ ایجاد: {{date}}",
+          "replyLabel": "پاسخ شما",
+          "replyPlaceholder": "پیام را بنویسید…",
+          "sendReply": "ارسال پیام",
+          "authorYou": "شما",
+          "authorStaff": "تیم پشتیبانی"
+        }
+      }
     },
     "settings": {
       "title": "تنظیمات",
@@ -170,6 +299,43 @@
       "body": "صفحهٔ ورودی پشتهٔ قدیمی — با دکمه‌ها ادامه دهید.",
       "goExample": "باز کردن نمونه (کشو)",
       "goMain": "باز کردن تب‌های اصلی"
+    },
+    "account": {
+      "title": "حساب کاربری",
+      "subtitle": "جزئیات و ترجیحات حساب (جای‌نگه‌دار)."
+    },
+    "security": {
+      "title": "امنیت",
+      "subtitle": "رمز عبور و امنیت ورود (جای‌نگه‌دار)."
+    },
+    "editProfile": {
+      "title": "ویرایش پروفایل",
+      "subtitle": "به‌روزرسانی اطلاعات پروفایل (جای‌نگه‌دار)."
+    },
+    "verify": {
+      "inputTitleEmail": "تأیید ایمیل",
+      "inputTitleMobile": "تأیید موبایل",
+      "inputSubtitleEmail": "ایمیل خود را وارد کنید. کد برایتان ارسال می‌شود.",
+      "inputSubtitleMobile": "شماره موبایل را وارد کنید. کد برایتان ارسال می‌شود.",
+      "codeTitle": "کد تأیید",
+      "codeSubtitle": "کد ارسال‌شده را وارد کنید.",
+      "emailLabel": "ایمیل",
+      "mobileLabel": "موبایل",
+      "emailPlaceholder": "you@example.com",
+      "mobilePlaceholder": "+۹۸ …",
+      "sendCode": "ارسال کد",
+      "codeLabel": "کد تأیید",
+      "codePlaceholder": "کد را وارد کنید",
+      "verifyCode": "تأیید",
+      "demoCodeHint": "نمونه: برای تأیید، 123456 را وارد کنید.",
+      "errors": {
+        "emptyDestination": "ابتدا ایمیل یا موبایل را وارد کنید.",
+        "invalidEmail": "ایمیل معتبر وارد کنید.",
+        "invalidMobile": "شماره موبایل معتبر وارد کنید.",
+        "emptyCode": "کد تأیید را وارد کنید.",
+        "invalidCode": "کد نامعتبر است. دوباره امتحان کنید.",
+        "generic": "مشکلی رخ داد. دوباره تلاش کنید."
+      }
     },
     "login": {
       "title": "ورود",

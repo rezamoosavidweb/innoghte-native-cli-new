@@ -6,7 +6,7 @@ import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
 import { useScreenScaffoldStyles } from '@/ui/theme';
 
 type Props = {
-  title: string;
+  title?: string;
   subtitle?: string;
   children?: React.ReactNode;
 };
@@ -21,7 +21,7 @@ export const ScreenScaffold = React.memo(function ScreenScaffold({
 
   return (
     <View style={s.root}>
-      <Text style={s.title}>{title}</Text>
+      {title ? <Text style={s.title}>{title}</Text> : null}
       {subtitle ? <Text style={s.subtitle}>{subtitle}</Text> : null}
       <ErrorBoundary>{children}</ErrorBoundary>
     </View>

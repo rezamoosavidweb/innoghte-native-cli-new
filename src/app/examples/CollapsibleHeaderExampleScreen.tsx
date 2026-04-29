@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import * as React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -17,7 +17,7 @@ const ROWS = Array.from({ length: 48 }, (_, i) => `Row ${i + 1}`);
  * Add to a stack and disable the stack header for this route, or use `setOptions` below.
  */
 export const CollapsibleHeaderExampleScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useAppNavigation();
   const ch = useCollapsibleHeader({
     backgroundColor: '#1B2838',
     threshold: 80,
