@@ -2,7 +2,47 @@ import * as React from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import { designTokens } from '@/ui/theme/core/designTokens';
+import { darkTheme } from '@/ui/theme/dark';
+import { fontSize, fontWeight } from '@/ui/theme/core/typography';
+import { spacing } from '@/ui/theme/core/spacing';
+
+const fallbackColors = darkTheme.colors;
+
+const s = StyleSheet.create({
+  prodWrap: {
+    flex: 1,
+    padding: spacing['2xl'],
+    justifyContent: 'center',
+    backgroundColor: fallbackColors.background,
+  },
+  prodTitle: {
+    color: fallbackColors.text,
+    fontSize: fontSize.lg,
+    fontWeight: fontWeight.semibold,
+    marginBottom: spacing.md,
+  },
+  prodBody: {
+    color: fallbackColors.textSecondary,
+    fontSize: fontSize.md,
+  },
+  devWrap: {
+    flex: 1,
+    padding: spacing['3xl'],
+    justifyContent: 'center',
+    backgroundColor: fallbackColors.background,
+  },
+  devTitle: {
+    marginBottom: spacing.md,
+    fontSize: fontSize.base,
+    fontWeight: fontWeight.semibold,
+    color: fallbackColors.text,
+  },
+  devError: {
+    marginBottom: spacing.base,
+    color: fallbackColors.errorText,
+    fontSize: fontSize.md,
+  },
+});
 
 const ProductionFallback = React.memo(function ProductionFallback() {
   const { t } = useTranslation();
@@ -19,33 +59,6 @@ const ProductionFallback = React.memo(function ProductionFallback() {
 });
 ProductionFallback.displayName = 'ProductionFallback';
 
-const s = StyleSheet.create({
-  prodWrap: {
-    flex: 1,
-    padding: designTokens.spacing['2xl'],
-    justifyContent: 'center',
-    backgroundColor: designTokens.colors.white,
-  },
-  prodTitle: {
-    color: designTokens.colors.charcoal[900],
-    fontSize: designTokens.fontSize.lg,
-    fontWeight: designTokens.fontWeight.semibold,
-    marginBottom: designTokens.spacing.md,
-  },
-  prodBody: {
-    color: designTokens.colors.charcoal[600],
-    fontSize: designTokens.fontSize.md,
-  },
-  devTitle: { marginBottom: 12, fontSize: 16, fontWeight: '600' },
-  devError: { marginBottom: 16, color: '#b00020' },
-});
-
-const devErrorText = { marginBottom: 16, color: '#b00020' } as const;
-
-const devBox = StyleSheet.create({
-  wrap: { flex: 1, padding: 24, justifyContent: 'center' },
-});
-
 const DevErrorFallback = React.memo(function DevErrorFallback({
   error,
   reset,
@@ -54,9 +67,9 @@ const DevErrorFallback = React.memo(function DevErrorFallback({
   reset: () => void;
 }) {
   return (
-    <View style={devBox.wrap}>
+    <View style={s.devWrap}>
       <Text style={s.devTitle}>Render error</Text>
-      <Text style={devErrorText}>{error.message}</Text>
+      <Text style={s.devError}>{error.message}</Text>
       <Button title="Try again" onPress={reset} />
     </View>
   );

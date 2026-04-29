@@ -76,7 +76,7 @@ export function useQuickAccessStyles(themeColors: Theme['colors']) {
           height: '100%',
         },
         imageLoadingOverlay: {
-          ...StyleSheet.absoluteFillObject,
+          ...StyleSheet.absoluteFill,
           alignItems: 'center',
           justifyContent: 'center',
         },

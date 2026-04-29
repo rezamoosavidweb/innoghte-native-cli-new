@@ -1,5 +1,4 @@
 import type { DrawerScreenProps } from '@react-navigation/drawer';
-import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { KeyboardAvoidingView, Platform, Text, View } from 'react-native';
@@ -10,11 +9,12 @@ import { ApiError } from '@/shared/infra/http/apiError';
 import { useLogin } from '@/domains/auth/hooks/useAuth';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { useLoginScreenStyles } from '@/domains/auth/ui/styles';
+import { useThemeColors } from '@/ui/theme';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Login'>;
 
 const LoginScreenComponent = (_props: Props) => {
-  const { colors } = useTheme();
+  const colors = useThemeColors();
   const { t } = useTranslation();
   const s = useLoginScreenStyles(colors);
   const mutation = useLogin();

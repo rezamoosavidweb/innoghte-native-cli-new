@@ -1,15 +1,19 @@
-import type { Theme } from '@react-navigation/native';
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import { radius } from '@/ui/theme/core/radius';
 import { spacing } from '@/ui/theme/core/spacing';
 import { fontSize, lineHeight } from '@/ui/theme/core/typography';
+import type { ThemeColors } from '@/ui/theme/types';
 
 /**
  * Reusable form control styles (shared by {@link @/ui/components/form/InputField} and domain login screens).
+ *
+ * Accepts the semantic {@link ThemeColors} so the input field background can
+ * resolve to the right token (`inputBackground` — diverges between schemes
+ * per the theme spec).
  */
-export function useFormFieldStyles(themeColors: Theme['colors']) {
+export function useFormFieldStyles(themeColors: ThemeColors) {
   return React.useMemo(
     () =>
       StyleSheet.create({
@@ -21,14 +25,19 @@ export function useFormFieldStyles(themeColors: Theme['colors']) {
           fontSize: fontSize.base,
           borderColor: themeColors.border,
           color: themeColors.text,
-          backgroundColor: themeColors.card,
+          backgroundColor: themeColors.inputBackground,
         },
         errorText: {
-          color: '#d9534f',
+          color: themeColors.errorText,
           fontSize: fontSize.sm,
           lineHeight: lineHeight.normal,
         },
       }),
-    [themeColors.border, themeColors.card, themeColors.text],
+    [
+      themeColors.border,
+      themeColors.errorText,
+      themeColors.inputBackground,
+      themeColors.text,
+    ],
   );
 }

@@ -1,5 +1,4 @@
 import { Button } from '@react-navigation/elements';
-import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { Text } from 'react-native';
 import { useForm } from 'react-hook-form';
@@ -13,6 +12,7 @@ import { SelectField } from '@/domains/auth/ui/forms/SelectField';
 import { loginSchema, type LoginFormType } from '@/domains/auth/model/schema';
 import type { LoginBodyType } from '@/domains/auth/model/apiTypes';
 import { useLoginScreenStyles } from '@/domains/auth/ui/styles';
+import { useThemeColors } from '@/ui/theme';
 
 type Props = {
   isSubmitting: boolean;
@@ -22,7 +22,7 @@ type Props = {
 
 export function LoginForm({ isSubmitting, apiError, onSubmit }: Props) {
   const { t } = useTranslation();
-  const { colors } = useTheme();
+  const colors = useThemeColors();
   const s = useLoginScreenStyles(colors);
   const form = useForm<LoginFormType>({
     resolver: zodResolver(loginSchema),

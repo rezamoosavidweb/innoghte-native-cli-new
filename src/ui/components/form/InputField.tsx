@@ -1,8 +1,7 @@
-import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { Text, TextInput } from 'react-native';
 
-import { pickSemantic } from '@/ui/theme';
+import { useThemeColors } from '@/ui/theme';
 import { useFormFieldStyles } from '@/ui/theme/formField.styles';
 
 type Props = {
@@ -28,9 +27,8 @@ export function InputField({
   keyboardType = 'default',
   autoCapitalize = 'none',
 }: Props) {
-  const { colors, dark } = useTheme();
+  const colors = useThemeColors();
   const s = useFormFieldStyles(colors);
-  const semantic = pickSemantic(dark);
 
   return (
     <>
@@ -39,7 +37,7 @@ export function InputField({
         autoCapitalize={autoCapitalize}
         keyboardType={keyboardType}
         placeholder={placeholder}
-        placeholderTextColor={semantic.textMuted}
+        placeholderTextColor={colors.textMuted}
         value={value}
         onChangeText={onChangeText}
         onBlur={onBlur}

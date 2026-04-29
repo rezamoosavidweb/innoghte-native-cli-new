@@ -158,6 +158,7 @@ function CommentCarouselBase({
         loop={canLoop}
         autoPlay={canAutoPlay}
         autoPlayInterval={autoPlayInterval}
+        autoPlayReverse={isRTL}
         width={containerWidth}
         height={height}
         pagingEnabled
@@ -167,7 +168,6 @@ function CommentCarouselBase({
         onScrollStart={pauseAutoPlay}
         onSnapToItem={onIndexChange}
         renderItem={renderItem}
-        modeConfig={{ snapDirection: isRTL ? 'left' : 'right' }}
       />
     </View>
   );

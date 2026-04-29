@@ -1,10 +1,16 @@
-import type { Theme } from '@react-navigation/native';
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
-import { fontSize, fontWeight, lineHeight, radius, spacing } from '@/ui/theme';
+import {
+  fontSize,
+  fontWeight,
+  lineHeight,
+  radius,
+  spacing,
+} from '@/ui/theme';
+import type { ThemeColors } from '@/ui/theme/types';
 
-export function useLoginScreenStyles(themeColors: Theme['colors']) {
+export function useLoginScreenStyles(themeColors: ThemeColors) {
   return React.useMemo(
     () =>
       StyleSheet.create({
@@ -40,7 +46,7 @@ export function useLoginScreenStyles(themeColors: Theme['colors']) {
           fontSize: fontSize.base,
           borderColor: themeColors.border,
           color: themeColors.text,
-          backgroundColor: themeColors.card,
+          backgroundColor: themeColors.inputBackground,
         },
         row: {
           flexDirection: 'row',
@@ -70,7 +76,7 @@ export function useLoginScreenStyles(themeColors: Theme['colors']) {
           fontSize: fontSize.sm,
         },
         errorText: {
-          color: '#d9534f',
+          color: themeColors.errorText,
           fontSize: fontSize.sm,
           lineHeight: lineHeight.normal,
         },
@@ -79,6 +85,8 @@ export function useLoginScreenStyles(themeColors: Theme['colors']) {
       themeColors.background,
       themeColors.border,
       themeColors.card,
+      themeColors.errorText,
+      themeColors.inputBackground,
       themeColors.primary,
       themeColors.text,
     ],

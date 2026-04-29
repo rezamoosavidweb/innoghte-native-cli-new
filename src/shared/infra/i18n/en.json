@@ -59,6 +59,9 @@
         "subtitle": "Tap a card to jump straight in.",
         "empty": "Nothing to show right now.",
         "error": "Could not load quick access."
+      },
+      "banner": {
+        "cta": "Start your journey"
       }
     },
     "courses": {

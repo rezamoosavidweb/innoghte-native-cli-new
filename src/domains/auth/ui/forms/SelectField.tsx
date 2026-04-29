@@ -1,8 +1,8 @@
-import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 import { useLoginScreenStyles } from '@/domains/auth/ui/styles';
+import { useThemeColors } from '@/ui/theme';
 
 type Option = { label: string; value: string };
 
@@ -14,7 +14,7 @@ type Props = {
 };
 
 export function SelectField({ options, value, onChange, error }: Props) {
-  const { colors } = useTheme();
+  const colors = useThemeColors();
   const s = useLoginScreenStyles(colors);
 
   return (
