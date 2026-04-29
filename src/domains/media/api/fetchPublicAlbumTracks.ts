@@ -1,15 +1,15 @@
-import { parseJsonResponse } from '@/shared/infra/http/parseJson';
-import { getApiClient } from '@/shared/infra/http';
+import {
+  buildPublicCoursesQuerySuffix,
+  getApiClient,
+  parseJsonResponse,
+} from '@/shared/infra/http';
 import { endpoints } from '@/shared/infra/http/endpoints';
 
 import type { PublicAlbumTrack } from '@/domains/media/model/publicAlbum.entities';
 import { publicAlbumTracksResponseSchema } from '@/domains/media/model/schemas';
 
-/**
- * Intentional duplicate of the public-courses list fetch (no import from
- * `domains/courses` — domains do not refer to each other).
- */
-type PublicCourseListItem = {
+/** Normalized subset of public-course payloads used for album-track cards (single API source). */
+export type PublicCourseListItemLike = {
   id: number;
   title_fa: string;
   medias: Array<{ id: number; type: 'audio' | 'image' | 'video'; src: string }>;
@@ -17,7 +17,9 @@ type PublicCourseListItem = {
   duration: string | null;
 };
 
-function mapPublicCourseToAlbumTrack(item: PublicCourseListItem): PublicAlbumTrack {
+export function mapPublicCourseListItemToAlbumTrack(
+  item: PublicCourseListItemLike,
+): PublicAlbumTrack {
   const isPublicAlbumMedia = (
     media: { id: number; type: 'audio' | 'image' | 'video'; src: string },
   ): media is { id: number; type: 'audio' | 'image'; src: string } =>
@@ -38,11 +40,21 @@ function mapPublicCourseToAlbumTrack(item: PublicCourseListItem): PublicAlbumTra
   };
 }
 
-export async function fetchPublicAlbumTracks(): Promise<readonly PublicAlbumTrack[]> {
+/** Same signature as client-web `getPublicCourses` (category filters list type). */
+export async function fetchPublicAlbumTracks(
+  category_id?: number,
+  page?: number,
+  per_page?: number,
+): Promise<readonly PublicAlbumTrack[]> {
+  const path = `${endpoints.public.courses}${buildPublicCoursesQuerySuffix({
+    category_id,
+    page,
+    per_page,
+  })}`;
   const response = await parseJsonResponse(
-    getApiClient().get(endpoints.public.courses),
+    getApiClient().get(path),
     publicAlbumTracksResponseSchema,
   );
-  const data = (response.data ?? []) as PublicCourseListItem[];
-  return data.map(mapPublicCourseToAlbumTrack);
+  const data = (response.data ?? []) as PublicCourseListItemLike[];
+  return data.map(mapPublicCourseListItemToAlbumTrack);
 }

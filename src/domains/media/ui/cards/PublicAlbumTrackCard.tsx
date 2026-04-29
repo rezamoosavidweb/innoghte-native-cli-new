@@ -14,10 +14,10 @@ import {
 } from '@/ui/theme';
 import type { PublicAlbumMedia, PublicAlbumTrack } from '@/domains/media/model';
 
-/** Dark “hero card” surface: primitive `colors` scales only. */
+/** Legacy drawer card surface (**`PublicCourseDto`** list) — aligns with `#122320` album tiles. */
 const album = {
-  cardBg: colors.dark[3],
-  cardBorder: colors.dark[1],
+  cardBg: '#122320',
+  cardBorder: '#122320',
   heroBg: colors.dark[4],
   heroPlaceholder: colors.dark[5],
   title: colors.white,

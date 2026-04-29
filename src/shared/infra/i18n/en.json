@@ -7,7 +7,8 @@
     "albums": "Albums",
     "faqs": "FAQs",
     "notifications": "Notifications",
-    "profile": "Profile"
+    "profile": "Profile",
+    "signinup": "Sign in / Sign up"
   },
   "drawer": {
     "home": "Home",
@@ -46,6 +47,9 @@
       "hint": "If this keeps happening, close and restart the app."
     }
   },
+  "listStates": {
+    "retry": "Try again"
+  },
   "screens": {
     "home": {
       "title": "Home",
@@ -67,7 +71,8 @@
     },
     "courses": {
       "loading": "Loading courses…",
-      "error": "Could not load courses."
+      "error": "Could not load courses.",
+      "empty": "No courses available yet."
     },
     "albums": {
       "loading": "Loading albums…",
@@ -105,8 +110,15 @@
     },
     "profile": {
       "title": "Profile",
-      "subtitleWithUser": "Optional userId param: {{userId}}",
-      "subtitleDefault": "Navigate with { userId } to see it here."
+      "subtitle": "Your Innoghte account details.",
+      "loading": "Loading profile…",
+      "error": "Could not load your profile.",
+      "retry": "Try again",
+      "email": "Email",
+      "mobile": "Mobile",
+      "lastLogin": "Last sign-in",
+      "accountActive": "Your account is active.",
+      "accountInactive": "Your account is inactive."
     },
     "settings": {
       "title": "Settings",
@@ -143,7 +155,8 @@
     },
     "publicAlbums": {
       "loading": "Loading public album…",
-      "error": "Could not load public album."
+      "error": "Could not load public album.",
+      "empty": "No albums available yet."
     },
     "example": {
       "title": "Example",
@@ -160,6 +173,8 @@
     "login": {
       "title": "Sign in",
       "subtitle": "Demo form migrated from the legacy app (no backend yet).",
+      "enterWithEmail": "Sign in with email",
+      "enterWithMobile": "Sign in with mobile",
       "email": "Email",
       "mobile": "Mobile",
       "password": "Password",

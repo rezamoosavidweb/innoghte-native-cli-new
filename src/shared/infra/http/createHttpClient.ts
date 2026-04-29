@@ -3,9 +3,14 @@ import ky, { HTTPError, type Options } from 'ky';
 import { ApiError, type ApiErrorPayload } from '@/shared/infra/http/apiError';
 import { resolveApiBaseUrl } from '@/shared/infra/http/resolveBaseUrl';
 
+export type UnauthorizedHookDetail = {
+  /** Ky normalized `context` (includes per-request `auth401` policy when set). */
+  kyContext: Record<string, unknown>;
+};
+
 export type HttpAuthHooks = {
   getAccessToken: () => string | null;
-  onUnauthorized: () => void;
+  onUnauthorized: (detail: UnauthorizedHookDetail) => void;
   /**
    * Single funnel for every API error normalized below. Wired in
    * `app/bridge/wireAppHttpClient.ts` to `reportApiError`.
@@ -54,7 +59,9 @@ export function createApiTransport(prefix: string, auth: HttpAuthHooks) {
           }
 
           if (state.error.response.status === 401) {
-            auth.onUnauthorized();
+            auth.onUnauthorized({
+              kyContext: state.options.context ?? {},
+            });
           }
 
           const message =

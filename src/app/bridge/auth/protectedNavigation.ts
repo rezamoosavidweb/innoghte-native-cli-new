@@ -5,6 +5,7 @@ import {
 } from '@react-navigation/native';
 
 import { AuthService, type PendingNavigation } from '@/domains/auth';
+import { take401PostLoginHandler } from '@/shared/infra/auth401/post401LoginQueue';
 import { navigationRef } from '@/shared/infra/navigation/navigationRef';
 import type {
   AppLeafRouteName,
@@ -175,6 +176,12 @@ export function completePendingAuthNavigation(): void {
   }
 
   const run = () => {
+    const custom = take401PostLoginHandler();
+    if (custom) {
+      custom();
+      return;
+    }
+
     const pending = AuthService.consumePendingNavigation();
     if (pending) {
       navigateToAppLeaf(

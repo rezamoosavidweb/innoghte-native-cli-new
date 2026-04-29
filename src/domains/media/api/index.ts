@@ -1,2 +1,10 @@
 export { fetchAlbums } from './fetchAlbums';
-export { fetchPublicAlbumTracks } from './fetchPublicAlbumTracks';
+export {
+  fetchPublicAlbumsPage,
+  type FetchPublicAlbumsPageResult,
+} from './fetchPublicAlbumsPage';
+export {
+  fetchPublicAlbumTracks,
+  mapPublicCourseListItemToAlbumTrack,
+  type PublicCourseListItemLike,
+} from './fetchPublicAlbumTracks';

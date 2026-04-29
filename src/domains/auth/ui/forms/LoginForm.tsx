@@ -51,13 +51,15 @@ export function LoginForm({ isSubmitting, apiError, onSubmit }: Props) {
 
   const modeOptions = React.useMemo(
     () => [
-      { label: 'Email', value: 'email' },
-      { label: 'Mobile', value: 'mobile' },
+      { label: t('screens.login.enterWithEmail'), value: 'email' },
+      { label: t('screens.login.enterWithMobile'), value: 'mobile' },
     ],
-    [],
+    [t],
   );
 
   const submit = form.handleSubmit(async values => {
+    console.log('[loginScreen]', { values });
+
     await onSubmit({
       type: values.mode,
       password: values.password.trim(),
@@ -70,6 +72,7 @@ export function LoginForm({ isSubmitting, apiError, onSubmit }: Props) {
       remember: 1,
     });
   });
+  console.log('[loginScreen]', { apiError });
 
   return (
     <>

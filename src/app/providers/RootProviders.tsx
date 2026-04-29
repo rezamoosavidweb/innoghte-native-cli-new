@@ -1,17 +1,13 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { I18nextProvider } from 'react-i18next';
 import * as React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { queryClient } from '@/app/queryClient';
 import { BridgeShell } from '@/app/bridge/BridgeShell';
 import i18n from '@/shared/infra/i18n';
 
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    mutations: { retry: false },
-    queries: { retry: false },
-  },
-});
+export { queryClient };
 
 type RootProvidersProps = {
   children: React.ReactNode;

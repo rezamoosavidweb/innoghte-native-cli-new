@@ -1,76 +1,193 @@
-import { useTheme } from '@react-navigation/native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
+
 import * as React from 'react';
+
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { RefreshControl, View } from 'react-native';
 
 import { CourseListCard } from '@/domains/courses/ui/cards/CourseListCard';
+
 import type { Course } from '@/domains/courses/model/entities';
-import { useCourses } from '@/domains/courses/hooks/useCourses';
+
+import { useInfiniteCourses } from '@/domains/courses/hooks/useInfiniteCourses';
+
+import { useListPerformanceProfile } from '@/shared/infra/device/listPerformanceProfile';
+
+import { ListFooterLoader } from '@/shared/ui/list-states/ListFooterLoader';
+
+import { ListStateView } from '@/shared/ui/list-states/ListStateView';
+
 import {
   flashListContentGutters,
   flashListEstimatedItemSize,
   flashListRowSeparators,
-  useNavScreenShellStyles,
 } from '@/ui/theme';
 
 const Separator = React.memo(function CoursesListSeparator() {
   return <View style={flashListRowSeparators.h12} />;
 });
-Separator.displayName = 'CoursesListSeparator';
 
-const renderCourseItem: ListRenderItem<Course> = ({ item }) => (
-  <CourseListCard course={item} />
-);
+Separator.displayName = 'CoursesListSeparator';
 
 function keyExtractor(item: Course): string {
   return String(item.id);
 }
 
 const CoursesScreenComponent = () => {
-  const { data, isPending, isError, error } = useCourses();
-  const { t, i18n } = useTranslation();
-  const { colors } = useTheme();
-  const shell = useNavScreenShellStyles(colors);
+  const perf = useListPerformanceProfile();
 
-  if (isPending) {
+  const renderCourseItem = React.useCallback<ListRenderItem<Course>>(
+    ({ item }) => <CourseListCard course={item} />,
+    [],
+  );
+
+  const {
+    flatData,
+
+    isPending,
+
+    isError,
+
+    isSuccess,
+
+    error,
+
+    refetch,
+
+    fetchNextPage,
+
+    isFetchingNextPage,
+
+    isRefetching,
+
+    flashListScrollMemory,
+  } = useInfiniteCourses({ categoryId: 1 });
+
+  const { t } = useTranslation();
+
+  const estimatedItemSize = React.useMemo(
+    () =>
+      Math.max(
+        80,
+
+        Math.round(
+          flashListEstimatedItemSize.course * perf.estimatedItemSizeFactor,
+        ),
+      ),
+
+    [perf.estimatedItemSizeFactor],
+  );
+
+  /**
+
+   * Full-screen loader only when there is no usable cached result yet (`isPending`).
+
+   * Pagination, PTR, ErrorState stay on footer / spinner / Retry — not centered overlay.
+
+   */
+
+  const showFullBleedLoading = isPending;
+
+  const isEmpty = isSuccess && flatData.length === 0;
+
+  const refreshing = Boolean(isSuccess && flatData.length > 0 && isRefetching);
+
+  const refresh = React.useCallback(() => {
+    refetch().catch(() => {});
+  }, [refetch]);
+
+  const {
+    captureRef,
+    scrollPropsForFlashList,
+    shouldSuppressEndReached,
+  } = flashListScrollMemory;
+
+  const handleEndReached = React.useCallback(() => {
+    if (shouldSuppressEndReached()) {
+      return;
+    }
+
+    fetchNextPage().catch(() => {});
+  }, [fetchNextPage, shouldSuppressEndReached]);
+
+  const refreshControl = React.useMemo(
+    () => <RefreshControl refreshing={refreshing} onRefresh={refresh} />,
+
+    [refreshing, refresh],
+  );
+
+  const listFooter = React.useMemo(
+    () => <ListFooterLoader visible={isFetchingNextPage} />,
+
+    [isFetchingNextPage],
+  );
+
+  const renderList = React.useCallback(() => {
     return (
-      <View style={shell.centered}>
-        <ActivityIndicator size="large" color={colors.primary} />
-        <Text style={shell.loadingText}>{t('screens.courses.loading')}</Text>
-      </View>
-    );
-  }
-
-  if (isError) {
-    return (
-      <View style={shell.centered}>
-        <Text style={shell.errorText}>{t('screens.courses.error')}</Text>
-        <Text style={shell.errorDetail}>
-          {error instanceof Error ? error.message : String(error)}
-        </Text>
-      </View>
-    );
-  }
-
-  const listData = data ?? [];
-
-  return (
-    <SafeAreaView style={shell.safe} edges={['left', 'right', 'bottom']}>
       <FlashList<Course>
-        data={listData}
-        renderItem={renderCourseItem}
+        ref={captureRef}
         keyExtractor={keyExtractor}
-        estimatedItemSize={flashListEstimatedItemSize.course}
+        renderItem={renderCourseItem}
+        data={flatData}
+        estimatedItemSize={estimatedItemSize}
         ItemSeparatorComponent={Separator}
         contentContainerStyle={flashListContentGutters.standard}
         showsVerticalScrollIndicator={false}
-        extraData={i18n.language}
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={perf.onEndReachedThreshold}
+        {...scrollPropsForFlashList}
+        scrollEventThrottle={perf.scrollEventThrottle}
+        decelerationRate={perf.decelerationRate}
+        ListFooterComponent={listFooter}
+        refreshControl={refreshControl}
       />
-    </SafeAreaView>
+    );
+  }, [
+    captureRef,
+
+    estimatedItemSize,
+
+    flatData,
+
+    handleEndReached,
+
+    listFooter,
+
+    scrollPropsForFlashList,
+
+    perf.onEndReachedThreshold,
+
+    perf.scrollEventThrottle,
+
+    perf.decelerationRate,
+
+    refreshControl,
+
+    renderCourseItem,
+  ]);
+
+  const retryOrRefetch = React.useCallback(() => {
+    refetch().catch(() => {});
+  }, [refetch]);
+
+  return (
+    <ListStateView
+      isLoading={showFullBleedLoading}
+      isError={Boolean(isError)}
+      error={error}
+      isEmpty={isEmpty}
+      onRetry={retryOrRefetch}
+      renderList={renderList}
+      loadingMessage={t('screens.courses.loading')}
+      errorTitle={t('screens.courses.error')}
+      emptyTitle={t('screens.courses.empty')}
+      retryLabel={t('listStates.retry')}
+      safeAreaEdges={['left', 'right', 'bottom']}
+    />
   );
 };
 
 export const CoursesScreen = React.memo(CoursesScreenComponent);
+
 CoursesScreen.displayName = 'CoursesScreen';

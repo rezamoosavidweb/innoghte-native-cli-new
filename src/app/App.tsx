@@ -10,7 +10,7 @@ import { navigationRef } from '@/shared/infra/navigation/navigationRef';
 import { RootProviders } from '@/app/providers/RootProviders';
 import { useAppTheme } from '@/ui/theme';
 
-export { queryClient } from '@/app/providers/RootProviders';
+export { queryClient } from '@/app/queryClient';
 
 const Navigation = createStaticNavigation(rootNavigator);
 

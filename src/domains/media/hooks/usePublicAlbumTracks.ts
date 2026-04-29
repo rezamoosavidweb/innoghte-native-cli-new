@@ -1,14 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { PUBLIC_ALBUM_TRACKS_QUERY_KEY } from '@/domains/media/model/queryKeys';
+import {
+  publicAlbumTracksKeys,
+  type PublicAlbumTracksListFilters,
+} from '@/domains/media/model/queryKeys';
 import { fetchPublicAlbumTracks } from '@/domains/media/api';
 
 const STALE_TIME_MS = 5 * 60 * 1000;
 
-export function usePublicAlbumTracks() {
+export function usePublicAlbumTracks(filters?: PublicAlbumTracksListFilters) {
+  const { categoryId, page, perPage } = filters ?? {};
   return useQuery({
-    queryKey: PUBLIC_ALBUM_TRACKS_QUERY_KEY,
-    queryFn: fetchPublicAlbumTracks,
+    queryKey: publicAlbumTracksKeys.list(filters),
+    queryFn: () => fetchPublicAlbumTracks(categoryId, page, perPage),
     staleTime: STALE_TIME_MS,
   });
 }

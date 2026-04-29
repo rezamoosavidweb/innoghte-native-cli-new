@@ -15,6 +15,8 @@ type AuthStoreState = {
   pendingNavigation: PendingNavigation | null;
   setAuth: (payload: { accessToken: string }) => void;
   logout: () => void;
+  /** Clear token/session only (401 path). Does not clear `pendingNavigation`. */
+  clearSessionTokensOnly: () => void;
   /** Replace any queued post-login target (last intent wins). */
   setPendingNavigation: (target: PendingNavigation | null) => void;
   /** Read and clear pending navigation (call after successful login). */
@@ -40,6 +42,13 @@ export const useAuthStore = create<AuthStoreState>()(
           accessToken: null,
           isAuthenticated: false,
           pendingNavigation: null,
+        });
+      },
+
+      clearSessionTokensOnly: () => {
+        set({
+          accessToken: null,
+          isAuthenticated: false,
         });
       },
 

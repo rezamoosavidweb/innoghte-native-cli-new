@@ -1,9 +1,6 @@
 export const endpoints = {
   public: {
     courses: 'api/v1/public/courses',
-    albums: 'api/website/album_list',
-    liveMeeting: 'api/website/live_list',
-    events: 'api/website/event_list',
     faq: 'api/v1/faq',
     quickAccess: 'api/v1/public/quick-access',
   },

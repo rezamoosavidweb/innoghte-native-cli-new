@@ -42,6 +42,10 @@ import {
   getTranslatedTabFields,
   type ExtraDrawerLeafKey,
 } from '@/app/navigation/i18nScreenOptions';
+import {
+  ProfileTabBarIcon,
+  ProfileTabBarLabel,
+} from '@/app/bridge/ProfileTabBar';
 import { TabBarGlyph } from '@/app/navigation/tabBarConfig';
 import type {
   DrawerParamList,
@@ -91,7 +95,7 @@ function mainTabsScreenOptions({
   const { tabBarLabel, title } = getTranslatedTabFields(t, String(route.name));
   const s = pickSemantic(theme.dark);
 
-  return {
+  const base = {
     lazy: true,
     unmountOnBlur: false,
     headerLeft: () => <DrawerMenuButton />,
@@ -104,6 +108,30 @@ function mainTabsScreenOptions({
     tabBarInactiveTintColor: s.tabInactive,
     tabBarStyle: tabBarSurfaceStyle(theme),
     tabBarLabelStyle: mainTabBarLabelStyle,
+  } as const;
+
+  if (route.name === 'Profile') {
+    return {
+      ...base,
+      tabBarLabel: ({ color }: { color: string }) => (
+        <ProfileTabBarLabel color={color} />
+      ),
+      tabBarIcon: ({
+        color,
+        focused,
+        size,
+      }: {
+        color: string;
+        focused: boolean;
+        size: number;
+      }) => (
+        <ProfileTabBarIcon color={color} focused={focused} size={size} />
+      ),
+    };
+  }
+
+  return {
+    ...base,
     tabBarLabel,
     tabBarIcon: ({
       color,

@@ -1,81 +1,173 @@
-import * as React from 'react';
-import {
-  ActivityIndicator,
-  Text,
-  View,
-} from 'react-native';
-import type { DrawerScreenProps } from '@react-navigation/drawer';
-import { useTheme } from '@react-navigation/native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
+
+import * as React from 'react';
+
 import { useTranslation } from 'react-i18next';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { RefreshControl, View } from 'react-native';
+
+import { PUBLIC_ALBUM_CATEGORY_ID } from '@/domains/media/model/publicCatalog';
+
+import type { PublicAlbumTrack } from '@/domains/media/model';
+
+import { useInfinitePublicAlbumTracks } from '@/domains/media/hooks/useInfinitePublicAlbumTracks';
 
 import { PublicAlbumTrackCard } from '@/domains/media/ui/cards/PublicAlbumTrackCard';
-import type { PublicAlbumTrack } from '@/domains/media/model';
-import { usePublicAlbumTracks } from '@/domains/media/hooks/usePublicAlbumTracks';
-import type { DrawerParamList } from '@/shared/contracts/navigationApp';
+
+import { useListPerformanceProfile } from '@/shared/infra/device/listPerformanceProfile';
+
+import { ListFooterLoader } from '@/shared/ui/list-states/ListFooterLoader';
+
+import { ListStateView } from '@/shared/ui/list-states/ListStateView';
+
 import {
   flashListContentGutters,
   flashListEstimatedItemSize,
   flashListRowSeparators,
-  useNavScreenShellStyles,
 } from '@/ui/theme';
 
-type Props = DrawerScreenProps<DrawerParamList, 'PublicAlbums'>;
-
-const Sep = React.memo(function Sep() {
-  return <View style={flashListRowSeparators.h14} />;
+const Separator = React.memo(function PublicAlbumsListSeparator() {
+  return <View style={flashListRowSeparators.h12} />;
 });
 
-const renderItem: ListRenderItem<PublicAlbumTrack> = ({ item }) => (
-  <PublicAlbumTrackCard item={item} />
-);
+Separator.displayName = 'PublicAlbumsListSeparator';
 
 function keyExtractor(item: PublicAlbumTrack): string {
   return String(item.id);
 }
 
-const PublicAlbumsScreenComponent = (_props: Props) => {
-  const { data, isPending, isError, error } = usePublicAlbumTracks();
-  const { t, i18n } = useTranslation();
-  const { colors } = useTheme();
-  const shell = useNavScreenShellStyles(colors);
+const PublicAlbumsScreenComponent = () => {
+  const perf = useListPerformanceProfile();
 
-  if (isPending) {
-    return (
-      <View style={shell.centered}>
-        <ActivityIndicator size="large" color={colors.primary} />
-        <Text style={shell.loadingText}>{t('screens.publicAlbums.loading')}</Text>
-      </View>
-    );
-  }
+  const renderAlbumItem = React.useCallback<ListRenderItem<PublicAlbumTrack>>(
+    ({ item }) => <PublicAlbumTrackCard item={item} />,
+    [],
+  );
 
-  if (isError) {
+  const {
+    flatData,
+
+    isPending,
+
+    isError,
+
+    isSuccess,
+
+    error,
+
+    refetch,
+
+    fetchNextPage,
+
+    isFetchingNextPage,
+
+    isRefetching,
+
+    flashListScrollMemory,
+  } = useInfinitePublicAlbumTracks({ categoryId: PUBLIC_ALBUM_CATEGORY_ID });
+
+  const { t } = useTranslation();
+
+  const estimatedItemSize = React.useMemo(
+    () =>
+      Math.max(
+        80,
+
+        Math.round(
+          flashListEstimatedItemSize.publicAlbumTrack *
+            perf.estimatedItemSizeFactor,
+        ),
+      ),
+
+    [perf.estimatedItemSizeFactor],
+  );
+
+  const showFullBleedLoading = isPending;
+
+  const isEmpty = isSuccess && flatData.length === 0;
+
+  const refreshing = Boolean(isSuccess && flatData.length > 0 && isRefetching);
+
+  const refresh = React.useCallback(() => {
+    refetch().catch(() => {});
+  }, [refetch]);
+
+  const { captureRef, scrollPropsForFlashList, shouldSuppressEndReached } =
+    flashListScrollMemory;
+
+  const handleEndReached = React.useCallback(() => {
+    if (shouldSuppressEndReached()) {
+      return;
+    }
+
+    fetchNextPage().catch(() => {});
+  }, [fetchNextPage, shouldSuppressEndReached]);
+
+  const refreshControl = React.useMemo(
+    () => <RefreshControl refreshing={refreshing} onRefresh={refresh} />,
+    [refreshing, refresh],
+  );
+
+  const listFooter = React.useMemo(
+    () => <ListFooterLoader visible={isFetchingNextPage} />,
+    [isFetchingNextPage],
+  );
+
+  const renderList = React.useCallback(() => {
     return (
-      <View style={shell.centered}>
-        <Text style={shell.errorText}>{t('screens.publicAlbums.error')}</Text>
-        <Text style={shell.errorDetail}>
-          {error instanceof Error ? error.message : String(error)}
-        </Text>
-      </View>
+      <FlashList<PublicAlbumTrack>
+        ref={captureRef}
+        keyExtractor={keyExtractor}
+        renderItem={renderAlbumItem}
+        data={flatData}
+        estimatedItemSize={estimatedItemSize}
+        ItemSeparatorComponent={Separator}
+        contentContainerStyle={flashListContentGutters.standard}
+        showsVerticalScrollIndicator={false}
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={perf.onEndReachedThreshold}
+        {...scrollPropsForFlashList}
+        scrollEventThrottle={perf.scrollEventThrottle}
+        decelerationRate={perf.decelerationRate}
+        ListFooterComponent={listFooter}
+        refreshControl={refreshControl}
+      />
     );
-  }
+  }, [
+    captureRef,
+    estimatedItemSize,
+    flatData,
+    handleEndReached,
+    listFooter,
+    perf.decelerationRate,
+    perf.onEndReachedThreshold,
+    perf.scrollEventThrottle,
+    refreshControl,
+    renderAlbumItem,
+    scrollPropsForFlashList,
+  ]);
+
+  const retryOrRefetch = React.useCallback(() => {
+    refetch().catch(() => {});
+  }, [refetch]);
 
   return (
-    <SafeAreaView style={shell.safe} edges={['left', 'right', 'bottom']}>
-      <FlashList<PublicAlbumTrack>
-        data={data ?? []}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        estimatedItemSize={flashListEstimatedItemSize.publicAlbumTrack}
-        ItemSeparatorComponent={Sep}
-        contentContainerStyle={flashListContentGutters.drawerWide}
-        showsVerticalScrollIndicator={false}
-        extraData={i18n.language}
-      />
-    </SafeAreaView>
+    <ListStateView
+      isLoading={showFullBleedLoading}
+      isError={Boolean(isError)}
+      error={error}
+      isEmpty={isEmpty}
+      onRetry={retryOrRefetch}
+      renderList={renderList}
+      loadingMessage={t('screens.publicAlbums.loading')}
+      errorTitle={t('screens.publicAlbums.error')}
+      emptyTitle={t('screens.publicAlbums.empty')}
+      retryLabel={t('listStates.retry')}
+      safeAreaEdges={['left', 'right', 'bottom']}
+    />
   );
 };
 
 export const PublicAlbumsScreen = React.memo(PublicAlbumsScreenComponent);
+
 PublicAlbumsScreen.displayName = 'PublicAlbumsScreen';

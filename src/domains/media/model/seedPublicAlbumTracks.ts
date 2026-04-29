@@ -1,6 +1,6 @@
 import type { PublicAlbumTrack } from '@/domains/media/model';
 
-/** Static sample — legacy drawer `Albums` used `getPublicCourses(1)`; replace with API when wired. */
+/** Static sample — live data uses `fetchPublicAlbumTracks` with albums category id (see `publicCatalog.ts`). */
 export const SEED_PUBLIC_ALBUM_TRACKS: readonly PublicAlbumTrack[] = [
   {
     id: 101,

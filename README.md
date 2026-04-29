@@ -8,7 +8,7 @@ A production-oriented React Native app built with **strict layering**, **domain-
 
 - **Modular layout**: Work lives in `src/domains/<domain>`; the shell (navigation, providers, cross-domain wiring) lives in `src/app`.
 - **Domain boundaries**: Each domain ships `api/`, `model/`, `hooks/`, `screens/`, and often `ui/`, with small public surfaces through `index.ts` where it helps.
-- **Shared vs UI**: `src/shared` holds infrastructure and contracts; `src/ui` is the design system and global layout. **`ui` does not import from `domains`**—shell data for chrome (e.g. drawer user) is passed via **`ShellDrawerContext`** from **`app/bridge/BridgeShell`**.
+- **Shared vs UI**: `src/shared` holds infrastructure, contracts, and **reusable cross-cutting UI** (e.g. `shared/ui/list-states`); `src/ui` is the design system and global layout. **`ui` does not import from `domains`**—shell data for chrome (e.g. drawer user) is passed via **`ShellDrawerContext`** from **`app/bridge/BridgeShell`**.
 
 ---
 
@@ -64,9 +64,41 @@ Screen → hook (React Query / Zustand) → api/ → HTTP → backend
 
 ---
 
+## 🔐 Authentication & 401 Handling
+
+The app treats **session + navigation after auth failures** as **infrastructure**: the Ky client funnels **401 Unauthorized** into a single handler so behavior stays consistent, but **not every 401 sends the user to Login**.
+
+**In short:**
+
+- **Centralized flow** — `wireAppHttpClient` wires auth and 401 handling; domains stay focused on APIs and UI.
+- **Automatic 401 handling** — Failed requests still surface errors as today; session clearing and optional Login navigation follow **merged policies**.
+- **Flexible behavior** — Public flows can **stay on screen**; protected areas can **redirect and resume** where the user left off.
+- **Layered control** — App defaults, **per-screen** focus scope, and **per-request** Ky options combine; a call can opt out or override without rewriting the HTTP stack.
+
+**Concepts to know:**
+
+- **Policy-based** — Each 401 resolves a strategy (`no_redirect`, `back_to_previous_screen`, `login_only`, `force_specific_route`, `custom_route_function`).
+- **Per-request** — Use Ky `context` via `withKyAuth401Context(...)` on specific `getApiClient()` calls.
+- **Per-screen** — `useAuth401ScreenScope` applies defaults while that screen is focused.
+- **Resume after login** — `pendingNavigation` (and optional custom post-login hooks) integrate with `completePendingAuthNavigation` after a successful sign-in.
+- **Navigation guard** — Parallel 401s **coalesce** into a single Login navigation when redirect is enabled.
+
+**Tiny example** (opt a call out of Login redirect):
+
+```ts
+import { withKyAuth401Context } from '@/shared/infra/auth401';
+
+getApiClient().get(path, withKyAuth401Context({ strategy: 'no_redirect' }));
+```
+
+**Full internal spec** (architecture, strategies, file map, debugging, examples):  
+→ [`src/shared/infra/auth401/AUTH401.md`](src/shared/infra/auth401/AUTH401.md)
+
+---
+
 ## HTTP & API contracts
 
-- **Client:** `ky` via `createApiTransport` / `createAppHttpClient` in `shared/infra/http` (retries for GETs on 408/429/5xx, 401 → logout hook).
+- **Client:** `ky` via `createApiTransport` / `createAppHttpClient` in `shared/infra/http` (retries for GETs on 408/429/5xx; **401** responses go through the **Auth401** policy pipeline — see **Authentication & 401 Handling** above).
 - **Base URL:** `resolveApiBaseUrl()` — override with `API_BASE_URL` or `REACT_NATIVE_API_URL` (default staging API is documented in project tooling; check `resolveBaseUrl.ts`).
 - **Paths:** `endpoints` use **no leading slash**; the client normalizes the base URL with a single trailing `/` so paths join consistently—avoid manual `.replace(/^\//, …)` at call sites.
 - **JSON:** `parseJsonResponse(request)` optionally takes a **Zod schema**; prefer schemas for **auth and other sensitive boundaries**, and expand coverage for public list endpoints over time. Legacy call sites may still use an unchecked cast when `schema` is omitted.
@@ -101,6 +133,67 @@ Screen → hook (React Query / Zustand) → api/ → HTTP → backend
 | **`contracts`** | Navigation types, `ShellDrawerUiModel`, pagination, theme/locale, purchase port types. |
 | **`purchases`** | In-process `isProductPurchased` indirection. |
 | **`utils`** | e.g. `initialsFromDisplayName`, `resolveColorScheme`. |
+| **`lib/infiniteList`** | `useAppInfiniteList`, pagination backoff + FlashList scroll helpers — see **Infinite lists architecture**. |
+| **`ui/list-states`** | Reusable loading / error / empty / list shell for **FlashList** screens — see **List screen states** below. |
+
+---
+
+## List screen states (`src/shared/ui/list-states`)
+
+Screens that load a **list** from TanStack Query should use a single pattern so UX stays consistent and **FlashList is not mounted** during loading, errors, or empty states (better performance and simpler lifecycles).
+
+| Export | Role |
+|--------|------|
+| **`ListStateView`** | Orchestrates: centered loading → error + retry → empty → `SafeAreaView` + `renderList()`. |
+| **`LoadingState`** | Spinner + message (used by `ListStateView` and available standalone). |
+| **`ErrorState`** | Title, optional detail, primary **Retry** using theme `onPrimary`. |
+| **`EmptyState`** | Title + optional subtitle. |
+| **`ListFooterLoader`** | Footer `ActivityIndicator` for **infinite scroll** (`isFetchingNextPage`); wire as `ListFooterComponent`; full-screen loading must **not** use this loader. |
+
+**Contract**
+
+- **`renderList`** — A **stable** callback (e.g. `useCallback`) that returns a **`FlashList`** (or other list). It runs **only** in the success branch, so the list does not mount until data is ready.
+- **Query wiring (typical)**  
+  - **`isLoading`** (full-screen): usually **`isPending || (isError && isFetching && !isFetchingNextPage)`** — omit **`isFetchingNextPage`** so paging does not steal the overlay. For maximal scroll perf, some screens only use **`isPending`** so PTR / retries stay out of full-screen (**`Courses`**); keep inline feedback on **`ErrorState`** when you choose that shortcut.  
+  - **Pull-to-refresh**: use **`isRefetching`** on infinite queries — it excludes `isFetchingNextPage`, so PTR does not confuse with paging.  
+  - **Infinite scroll**: **`useInfiniteQuery`** in hooks; **`flatData`** from memoized **`pages.flatMap`**; **`onEndReached`** calls **`fetchNextPage({ cancelRefetch: false })`** when **`hasNextPage && !isFetchingNextPage`** to avoid stacking requests. Pagination logic stays in **`api/`** (`fetchCoursesPage` + **`getNextPageParam`**), not UI.  
+  - **Empty**: `isSuccess && data.length === 0` — do not treat “empty” during loading.  
+  - **Retry**: `refetch()` for infinite queries refreshes **all fetched pages**.  
+- **i18n** — Shared label `listStates.retry`; screen-specific strings under `screens.<feature>.*` (`loading`, `error`, `empty`, …).
+
+**Reference implementation:** [`src/domains/courses/screens/CoursesScreen.tsx`](src/domains/courses/screens/CoursesScreen.tsx) — `useInfiniteCourses` (**`useAppInfiniteList`**), `ListStateView`, memoized **`renderList`** with **`RefreshControl`**, **`ref`**, **`scrollMemoryKey`**, **`handleEndReached`**, **`ListFooterLoader`**, device-aware **`estimatedItemSize`** / thresholds.
+
+---
+
+## Infinite lists architecture (`src/shared/lib/infiniteList`)
+
+**Goals:** Single TanStack **`InfiniteData`** source of truth; minimal FlashList churn; guarded pagination (no burst **`fetchNextPage`**); optional in-memory scroll restore on tab switches; no domain logic in shared code.
+
+| Piece | Role |
+|--------|------|
+| **`useAppInfiniteList`** | Wraps **`useInfiniteQuery`**: memo **`flatData`** keyed on **`pages`**, **`fetchNextPage`** → mutex + **exponential backoff** (pagination only; skips **`ErrorState`** / manual **`refetch`**), **`resetInfiniteList`**, optional **`scrollMemoryKey`**. |
+| **`fetchNextPageWithBackoff`** | Up to 3 attempts, 300 / 600 / 1200 ms between failures; **cancel-safe** via mounted check. |
+| **`useFlashListScrollMemory`** | Blur → save offset, focus → **`scrollToOffset`**; **`restorePagingLockRef`** blocks **`onEndReached`** for **600 ms** after restore (separate from TanStack `inFlight`). |
+| **`scrollMemoryStore`** | In-memory LRU (**30** keys max — evicts oldest) instead of unbounded growth. |
+| **`listPerformanceProfile`** | Android API ≤29 → lower **`onEndReachedThreshold`**, coarser **`scrollEventThrottle`**, slightly reduced **`estimatedItemSize`** factor. |
+
+**FlashList practices used**
+
+- **`extraData`** omitted when row components subscribe to i18n/theme via hooks (avoids list-wide invalidation on language toggles).
+- **`RefreshControl`** **`useMemo`**’d; **`estimatedItemSize`** / **`onEndReachedThreshold`** / **`scrollEventThrottle`** / **`decelerationRate`** from **`useListPerformanceProfile`** (low vs normal).
+- **Footer only** for next-page loading — no fake list rows, so **keys stay unique** and the query cache is untouched.
+
+**Courses example**
+
+1. Domain **`api/`** returns **`{ items, pagination }`** per page (`fetchCoursesPage`).
+2. **`useInfiniteCourses`** calls **`useAppInfiniteList`** with **`coursesKeys.infiniteList`**, **`scrollMemoryKey`** derived from the same key JSON.
+3. Screen wires **`fetchNextPage().catch(...)`** from the hook (already mutex + backoff internally), **`captureRef` / `onScroll`**, **`shouldSuppressEndReached`**, **`ListStateView`** unchanged.
+
+```ts
+import { useAppInfiniteList } from '@/shared/lib/infiniteList';
+
+// In a domain hook — provide queryKey, page fetcher, getNextPageParam, optional scrollMemoryKey.
+```
 
 ---
 
@@ -164,6 +257,7 @@ Screen → hook (React Query / Zustand) → api/ → HTTP → backend
 - **`api/`** stays async and side-effect free except HTTP (map/normalize in `model/` when possible).
 - **Boundaries** — respect `eslint-plugin-boundaries`; do not make `ui` or `shared` depend on `domains`.
 - **Imports** — Prefer `@/` paths (`tsconfig`).
+- **List screens** — Prefer **`ListStateView`** + memoized `renderList` (see **List screen states**) instead of duplicating loading/error/empty branches per screen.
 
 ---
 

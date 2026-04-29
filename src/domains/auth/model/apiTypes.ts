@@ -23,7 +23,7 @@ export type RegisterBodyType = {
 };
 export type RegisterDto = {
   access_token: string;
-  expiration: number;
+  expiration: string;
   token_type: 'Bearer';
 };
 export type UserDto = {
@@ -36,8 +36,10 @@ export type UserDto = {
   avatar: string;
   is_active: boolean;
   last_login: string;
-  email_verified_at: string;
-  mobile_verified_at: string;
+  /** May be omitted or null when email is not verified. */
+  email_verified_at?: string | null;
+  /** May be omitted or null when mobile is not verified. */
+  mobile_verified_at?: string | null;
   created_at: string;
   updated_at: string;
 };
