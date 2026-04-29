@@ -1,17 +1,22 @@
 import { Badge } from '@react-navigation/elements';
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import type { SvgProps } from 'react-native-svg';
 
-import { fontWeight, spacing } from '@/ui/theme';
-
+import FaqIcon from '@/assets/icons/faq.svg';
+import HeadphoneIcon from '@/assets/icons/headphone.svg';
+import HomeIcon from '@/assets/icons/home.svg';
+import LoginIcon from '@/assets/icons/login.svg';
+import SchoolIcon from '@/assets/icons/school.svg';
 import type { MainTabScreenName } from '@/shared/contracts/navigationApp';
+import { spacing } from '@/ui/theme';
 
-const TAB_GLYPH: Record<MainTabScreenName, string> = {
-  Home: '🏠',
-  Services: '🛠️',
-  Experiences: '✨',
-  Faqs: '❓',
-  Profile: '👤',
+const TAB_ICON: Record<MainTabScreenName, React.ComponentType<SvgProps>> = {
+  Home: HomeIcon,
+  PublicCourses: SchoolIcon,
+  PublicAlbums: HeadphoneIcon,
+  Faqs: FaqIcon,
+  Profile: LoginIcon,
 };
 
 type IconProps = {
@@ -29,13 +34,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  glyph: {
-    fontWeight: fontWeight.bold,
-  },
-  glyphFocused: {
+  focused: {
     opacity: 1,
   },
-  glyphBlurred: {
+  blurred: {
     opacity: 0.55,
   },
   badgeAnchor: {
@@ -45,34 +47,19 @@ const styles = StyleSheet.create({
   },
 });
 
-/** Tab icons without extra native deps; swap for vector icons when you add them. */
+/** Tab icons from `@/assets/icons` (SVGR). */
 export function TabBarGlyph({
   routeName,
   focused,
-  color: _color,
+  color,
   size,
   badgeCount = 0,
 }: IconProps) {
-  const glyph = TAB_GLYPH[routeName];
-  const sized = React.useMemo(
-    () =>
-      StyleSheet.create({
-        glyphSized: { fontSize: size - 2 },
-      }).glyphSized,
-    [size],
-  );
+  const Icon = TAB_ICON[routeName];
 
   return (
-    <View style={styles.wrap}>
-      <Text
-        style={[
-          styles.glyph,
-          sized,
-          focused ? styles.glyphFocused : styles.glyphBlurred,
-        ]}
-      >
-        {glyph}
-      </Text>
+    <View style={[styles.wrap, focused ? styles.focused : styles.blurred]}>
+      <Icon width={size} height={size} color={color} />
       {badgeCount > 0 ? (
         <View style={styles.badgeAnchor} accessibilityElementsHidden>
           <Badge visible size={spacing.base}>

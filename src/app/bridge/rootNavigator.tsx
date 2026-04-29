@@ -4,26 +4,27 @@ import type { Theme } from '@react-navigation/native';
 import * as React from 'react';
 import { StyleSheet, Text } from 'react-native';
 
-import { AuthService } from '@/domains/auth';
 import { protectedNavigate } from '@/app/bridge/auth/protectedNavigation';
-import { AboutScreen } from '@/domains/support/about/screens/AboutScreen';
+import { CollapsibleHeaderExampleScreen } from '@/app/examples/CollapsibleHeaderExampleScreen';
+import { LegacyMenuPlaceholderScreen } from '@/app/navigation/LegacyMenuPlaceholderScreen';
+import { StartupScreen } from '@/app/startup/StartupScreen';
+import { AuthService } from '@/domains/auth';
 import { LoginScreen } from '@/domains/auth/screens/LoginScreen';
+import { CoursesScreen } from '@/domains/courses/screens/CoursesScreen';
 import { EventsScreen } from '@/domains/events/screens/EventsScreen';
+import { HomeScreen } from '@/domains/home';
+import { LiveMeetingsScreen } from '@/domains/live/screens/LiveMeetingsScreen';
+import { PublicAlbumsScreen } from '@/domains/media/screens/PublicAlbumsScreen';
+import { SearchScreen } from '@/domains/search';
+import { SettingsScreen } from '@/domains/settings/screens/SettingsScreen';
+import { AboutScreen } from '@/domains/support/about/screens/AboutScreen';
 import { FaqsScreen } from '@/domains/support/faqs/screens/FaqsScreen';
 import { HelpScreen } from '@/domains/support/help/screens/HelpScreen';
-import { HomeScreen, ServicesHubScreen } from '@/domains/home';
-import { LegacyMenuPlaceholderScreen } from '@/app/navigation/LegacyMenuPlaceholderScreen';
-import { LiveMeetingsScreen } from '@/domains/live/screens/LiveMeetingsScreen';
 import { MyCoursesHubScreen, ProfileScreen } from '@/domains/user';
-import { PublicAlbumsScreen } from '@/domains/media/screens/PublicAlbumsScreen';
-import { SettingsScreen } from '@/domains/settings/screens/SettingsScreen';
-import { StartupScreen } from '@/app/startup/StartupScreen';
-import { CoursesScreen } from '@/domains/courses/screens/CoursesScreen';
-import { CollapsibleHeaderExampleScreen } from '@/app/examples/CollapsibleHeaderExampleScreen';
-import { SearchScreen } from '@/domains/search';
-import { CustomDrawerContent } from '@/ui/layout/CustomDrawerContent';
-import { DrawerMenuButton } from '@/ui/components/DrawerMenuButton';
 import { NOTIFICATION_BADGE_COUNT } from '@/domains/user/model/notificationBadge';
+import i18n from '@/shared/infra/i18n';
+import { DrawerMenuButton } from '@/ui/components/DrawerMenuButton';
+import { CustomDrawerContent } from '@/ui/layout/CustomDrawerContent';
 import {
   drawerChrome,
   fontWeight,
@@ -32,9 +33,7 @@ import {
   pickSemantic,
   tabBarSurfaceStyle,
 } from '@/ui/theme';
-import i18n from '@/shared/infra/i18n';
 
-import { ExperiencesHubScreen } from '@/domains/experiences';
 import { isDrawerPhysicalRight } from '@/app/navigation/drawerLayout';
 import {
   getDrawerLeafTranslatedFields,
@@ -131,9 +130,9 @@ function mainTabsScreenOptions({
 const mainTabs = createBottomTabNavigator<TabParamList>({
   screenOptions: mainTabsScreenOptions,
   screens: {
-    Services: ServicesHubScreen,
-    Experiences: ExperiencesHubScreen,
     Home: HomeScreen,
+    PublicCourses: CoursesScreen,
+    PublicAlbums: PublicAlbumsScreen,
     Faqs: FaqsScreen,
     Profile: {
       screen: ProfileScreen,

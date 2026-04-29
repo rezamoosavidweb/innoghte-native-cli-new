@@ -15,7 +15,7 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 
 /** Card width — leaves a peek of the next card on either side. */
 export const QUICK_ACCESS_CARD_WIDTH = Math.round(SCREEN_WIDTH * 0.82);
-const IMAGE_HEIGHT = Math.round(QUICK_ACCESS_CARD_WIDTH * 0.62);
+const IMAGE_HEIGHT = Math.round(QUICK_ACCESS_CARD_WIDTH * 1.45);
 const STATE_HEIGHT = IMAGE_HEIGHT + 120;
 
 export function useQuickAccessStyles(themeColors: Theme['colors']) {

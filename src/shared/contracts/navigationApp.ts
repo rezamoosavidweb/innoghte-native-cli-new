@@ -3,8 +3,8 @@ import type { NavigatorScreenParams } from '@react-navigation/native';
 /** Bottom tabs — primary app sections. */
 export type TabParamList = {
   Home: undefined;
-  Services: undefined;
-  Experiences: undefined;
+  PublicCourses: undefined;
+  PublicAlbums: undefined;
   Faqs: undefined;
   Profile: { userId?: string } | undefined;
 };

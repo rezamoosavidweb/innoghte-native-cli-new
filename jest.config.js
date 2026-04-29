@@ -7,6 +7,7 @@ module.exports = {
   ],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
+    '\\.svg$': '<rootDir>/__mocks__/svgMock.js',
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   // Preset only transpiles react-native / @react-native*; @react-navigation ships ESM.
