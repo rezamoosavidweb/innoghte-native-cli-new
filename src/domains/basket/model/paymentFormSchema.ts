@@ -1,4 +1,4 @@
-import isCreditCard from '@/domains/donation/utils/paymentFormatting';
+import isCreditCard from '@/shared/utils/paymentFormatting';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { FieldErrors } from 'react-hook-form';
 import { z } from 'zod';

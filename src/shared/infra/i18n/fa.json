@@ -404,6 +404,12 @@
     "normal": "عادی",
     "currency": "تومان"
   },
+  "cart": {
+    "showOwned": "بخش نمایش دوره",
+    "capacityFull": "اتمام ظرفیت",
+    "inBasket": "در سبد خرید شما",
+    "addToBasket": "افزودن به سبد خرید"
+  },
   "drawerFooter": {
     "logout": "خروج",
     "version": "نسخه {{version}}"

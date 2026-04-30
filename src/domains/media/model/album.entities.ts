@@ -3,6 +3,10 @@ export type Album = {
   title_fa: string;
   package: number;
   price: number;
+  /** Mirrors public course listing when album items expose `is_accessible`. */
+  isAccessible: boolean;
+  /** Mirrors `remain_capacity` when provided; default avoids false “full” state. */
+  remainCapacity: number;
   image_media: Array<{
     course_id: number;
     id: number;
@@ -12,11 +16,19 @@ export type Album = {
 };
 
 export function mapAlbumItem(item: Record<string, unknown>): Album {
+  const rawRemain = item.remain_capacity;
+  const remainCapacity =
+    typeof rawRemain === 'number' && Number.isFinite(rawRemain)
+      ? rawRemain
+      : 1;
+
   return {
     id: Number(item.id ?? 0),
     title_fa: String(item.title_fa ?? ''),
     package: Number(item.package ?? 0),
     price: Number(item.price ?? 0),
+    isAccessible: Boolean(item.is_accessible),
+    remainCapacity,
     image_media: Array.isArray(item.image_media)
       ? item.image_media.map((media, index) => {
           const m = media as Record<string, unknown>;

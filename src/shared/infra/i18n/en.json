@@ -403,6 +403,12 @@
     "normal": "Course",
     "currency": "Toman"
   },
+  "cart": {
+    "showOwned": "View course",
+    "capacityFull": "Capacity full",
+    "inBasket": "In your basket",
+    "addToBasket": "Add to basket"
+  },
   "drawerFooter": {
     "logout": "Log out",
     "version": "Version {{version}}"

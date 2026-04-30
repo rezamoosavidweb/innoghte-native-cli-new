@@ -84,8 +84,6 @@ export const DiscountForm = React.memo(function DiscountForm({
       if (e instanceof ApiError) {
         if (e.status === 401) {
           redirectToLoginForDiscount(trimmed);
-        } else if (e.status === 422) {
-          showAppToast(e.message, 'error');
         } else {
           showAppToast(e.message, 'error');
         }

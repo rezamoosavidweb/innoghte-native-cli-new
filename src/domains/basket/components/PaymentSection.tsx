@@ -13,7 +13,7 @@ import {
   type BasketCreditCartErrors,
 } from '@/domains/basket/model/paymentFormSchema';
 import { SelectPaymentType } from '@/domains/basket/components/SelectPaymentType';
-import { formatCardNumber } from '@/domains/donation/utils/paymentFormatting';
+import { formatCardNumber } from '@/shared/utils/paymentFormatting';
 import { fontSize, fontWeight, pickSemantic, radius, spacing } from '@/ui/theme';
 
 export type PaymentSectionProps = {

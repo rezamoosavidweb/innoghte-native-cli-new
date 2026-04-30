@@ -8,9 +8,13 @@ import {
 } from '@/domains/basket/api/basketApi';
 import { useBasketDiscountStore } from '@/domains/basket/model/basketDiscount.store';
 import { basketKeys } from '@/domains/basket/model/queryKeys';
+import type { CartDto } from '@/domains/basket/model/schemas';
+import { postAnonymousCartCreate } from '@/domains/user/api/giveGiftApi';
 import { readOrCreateCartToken } from '@/domains/user/model/giveGiftCartToken';
 
 const STALE_MS = 60 * 1000;
+
+const EMPTY_CART_LIST: readonly CartDto[] = [];
 
 /** Stable cart token for query key — created once per screen tree mount. */
 function useCartToken(): string {
@@ -35,6 +39,14 @@ export function useBasketCart() {
     },
   });
 
+  const addToCartMutation = useMutation({
+    mutationFn: (courseId: number) =>
+      postAnonymousCartCreate({ cartToken, courseId }),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: basketKeys.cart(cartToken) });
+    },
+  });
+
   const discountMutation = useMutation({
     mutationFn: validateDiscountCode,
     onSuccess: data => {
@@ -42,13 +54,34 @@ export function useBasketCart() {
     },
   });
 
+  const cartList = listQuery.data ?? EMPTY_CART_LIST;
+
+  const cartCourseIds = React.useMemo(
+    () => new Set(cartList.map(line => line.course_id)),
+    [cartList],
+  );
+
+  const addToCart = React.useCallback(
+    (courseId: number) => {
+      addToCartMutation.mutate(courseId);
+    },
+    [addToCartMutation],
+  );
+
   return {
     cartToken,
-    cartList: listQuery.data ?? [],
+    cartList,
+    cartCourseIds,
     isPendingList: listQuery.isPending,
     refetchCart: listQuery.refetch,
     removeCartLine: removeMutation.mutateAsync,
     isRemoving: removeMutation.isPending,
+    addToCart,
+    isPendingCreate: addToCartMutation.isPending,
+    pendingCreateCourseId:
+      typeof addToCartMutation.variables === 'number'
+        ? addToCartMutation.variables
+        : null,
     mutateValidateDiscount: discountMutation.mutateAsync,
     isPendingValidateDiscount: discountMutation.isPending,
   };

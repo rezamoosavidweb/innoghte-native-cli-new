@@ -32,10 +32,6 @@ export function useGiftPresentFromStorage(): GiftPresentState {
     readGiftPresentFromStorage(),
   );
 
-  React.useEffect(() => {
-    setState(readGiftPresentFromStorage());
-  }, []);
-
   useFocusEffect(
     React.useCallback(() => {
       setState(readGiftPresentFromStorage());

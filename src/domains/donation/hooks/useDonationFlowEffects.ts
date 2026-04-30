@@ -118,12 +118,10 @@ export function useDonationFlowEffects(args: {
   }, [
     canVerifyIranian,
     flow.status,
-    iranQuery,
     iranQuery.isError,
     iranQuery.isSuccess,
     onGatewayVerifyPaymentError,
     onGatewayVerifySuccess,
-    paypalQuery,
     paypalQuery.isError,
     paypalQuery.isSuccess,
     send,

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { resolveIsDotIr } from '@/shared/config/resolveIsDotIr';
+import { scopeHeader } from '@/shared/config/resolveIsDotIr';
 import { ApiError, parseJsonResponse } from '@/shared/infra/http';
 import { getApiClient } from '@/shared/infra/http/appHttpClient';
 
@@ -32,9 +32,6 @@ const cartCreateEnvelopeSchema = z
   })
   .passthrough();
 
-function scopeHeader(): { Scope: 'ir' | 'com' } {
-  return { Scope: resolveIsDotIr() ? 'ir' : 'com' };
-}
 
 export async function postCreateGivePresent(
   body: {

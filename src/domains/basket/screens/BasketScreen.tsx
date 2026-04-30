@@ -86,9 +86,8 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
 
   const paymentType = form.watch('paymentType');
 
-  const onPaymentTypeChange = React.useCallback(
+  const resetPaymentForm = React.useCallback(
     (next: 'paypal' | 'credit_card') => {
-      useBasketCheckoutStore.getState().setPaymentMethod(next);
       if (next === 'credit_card') {
         form.reset({
           paymentType: 'credit_card',
@@ -109,6 +108,14 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
     [form],
   );
 
+  const onPaymentTypeChange = React.useCallback(
+    (next: 'paypal' | 'credit_card') => {
+      useBasketCheckoutStore.getState().setPaymentMethod(next);
+      resetPaymentForm(next);
+    },
+    [resetPaymentForm],
+  );
+
   const didRestorePaymentMethodRef = React.useRef(false);
   const didAutoResumeRef = React.useRef(false);
   React.useEffect(() => {
@@ -124,23 +131,8 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
     }
     didRestorePaymentMethodRef.current = true;
     const pm = useBasketCheckoutStore.getState().paymentMethod;
-    if (pm === 'credit_card') {
-      form.reset({
-        paymentType: 'credit_card',
-        cart: {
-          fistName: '',
-          lastName: '',
-          cardType: '1',
-          cardNumber: '',
-          expireMonth: '',
-          expireYear: '',
-          cvv: '',
-        },
-      });
-    } else {
-      form.reset({ paymentType: 'paypal' });
-    }
-  }, [route.params?.resumeCheckout, form]);
+    resetPaymentForm(pm ?? 'paypal');
+  }, [route.params?.resumeCheckout, resetPaymentForm]);
 
   useFocusEffect(
     React.useCallback(() => {

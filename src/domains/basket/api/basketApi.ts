@@ -1,4 +1,4 @@
-import { resolveIsDotIr } from '@/shared/config/resolveIsDotIr';
+import { scopeHeader } from '@/shared/config/resolveIsDotIr';
 import { endpoints, parseJsonResponse } from '@/shared/infra/http';
 import { getApiClient } from '@/shared/infra/http/appHttpClient';
 
@@ -11,9 +11,6 @@ import {
   type CreatePaymentResult,
 } from '@/domains/basket/model/schemas';
 
-function scopeHeader(): { Scope: 'ir' | 'com' } {
-  return { Scope: resolveIsDotIr() ? 'ir' : 'com' };
-}
 
 export async function fetchPublicCartList(cartToken: string): Promise<readonly CartDto[]> {
   const res = await parseJsonResponse(

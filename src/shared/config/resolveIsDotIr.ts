@@ -9,3 +9,7 @@ const env =
 export function resolveIsDotIr(): boolean {
   return env.REACT_NATIVE_IS_DOT_IR === 'ir' || env.IS_DOT_IR === 'ir';
 }
+
+export function scopeHeader(): { Scope: 'ir' | 'com' } {
+  return { Scope: resolveIsDotIr() ? 'ir' : 'com' };
+}

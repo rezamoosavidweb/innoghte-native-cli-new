@@ -7,6 +7,10 @@ export type Course = {
   price: number;
   package: number;
   count_chapters: number;
+  /** User already owns / can access — matches API `is_accessible`. */
+  isAccessible: boolean;
+  /** When `0`, capacity is full (matches API `remain_capacity`). */
+  remainCapacity: number;
   image_media: Array<{
     course_id: number;
     id: number;
@@ -23,6 +27,9 @@ export function mapPublicCourseToCourseItem(item: PublicCourseDto): Course {
     price: item.price,
     package: item.is_package ? 1 : 0,
     count_chapters: item.chapters?.length ?? 0,
+    isAccessible: Boolean(item.is_accessible),
+    remainCapacity:
+      typeof item.remain_capacity === 'number' ? item.remain_capacity : 1,
     image_media: firstImage
       ? [{ course_id: item.id, id: firstImage.id, src: firstImage.src }]
       : [],

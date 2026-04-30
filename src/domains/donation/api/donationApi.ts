@@ -2,6 +2,7 @@
  * Public donation payment API — paths relative to HTTP client prefix
  * ({@link resolveApiBaseUrl}: `API_BASE_URL` / `REACT_NATIVE_API_URL`).
  */
+import { scopeHeader } from '@/shared/config/resolveIsDotIr';
 import { parseJsonResponse } from '@/shared/infra/http';
 import { getApiClient } from '@/shared/infra/http/appHttpClient';
 
@@ -9,7 +10,6 @@ import {
   donationActionResponseSchema,
   publicDonationResponseSchema,
 } from '@/domains/donation/model/donationHttp.schemas';
-import { resolveIsDotIr } from '@/domains/donation/model/env';
 import type {
   CreateDonationComBodyTypes,
   CreateDonationIrBodyTypes,
@@ -22,10 +22,6 @@ const paths = {
   createCom: 'api/v1/donate/payment/paypal/create',
   executeCom: 'api/v1/donate/payment/paypal/execute-payment',
 } as const;
-
-function scopeHeader(): { Scope: 'ir' | 'com' } {
-  return { Scope: resolveIsDotIr() ? 'ir' : 'com' };
-}
 
 export async function postCreateDonationIr(
   body: CreateDonationIrBodyTypes,

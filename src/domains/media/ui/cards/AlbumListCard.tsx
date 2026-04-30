@@ -4,14 +4,12 @@ import { useTheme } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { formatPriceForApp } from '@/shared/infra/i18n/formatLocaleNumbers';
-import { isProductPurchased } from '@/shared/purchases';
+import { CartMainButtons } from '@/components/cart/CartMainButtons';
 import type { ProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
 import { useProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
 import type { Album } from '@/domains/media/model';
 
 const PRICE_DISPLAY_DIVISOR = 10;
-
-function noop(): void {}
 
 type AlbumListCardProps = {
   album: Album;
@@ -96,11 +94,12 @@ const AlbumCardHeader = React.memo(function AlbumCardHeader({
 });
 AlbumCardHeader.displayName = 'AlbumCardHeader';
 
+function noop(): void {}
+
 const AlbumListCardComponent = ({ album }: AlbumListCardProps) => {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const s = useProductListCardStyles(colors);
-  const purchased = isProductPurchased(album.id);
   const imageUri = album.image_media[0]?.src;
   const displayPrice = formatPriceForApp(
     (album.price ?? 0) / PRICE_DISPLAY_DIVISOR,
@@ -121,40 +120,24 @@ const AlbumListCardComponent = ({ album }: AlbumListCardProps) => {
       </View>
 
       <View style={s.actionsRow}>
-        {purchased ? (
-          <Pressable
-            accessibilityRole="button"
-            onPress={noop}
-            style={({ pressed }) =>
-              pressed ? [s.buttonPrimary, s.pressed] : s.buttonPrimary
-            }
-          >
-            <Text style={s.buttonPrimaryText}>{t('courses.show')}</Text>
-          </Pressable>
-        ) : (
-          <>
-            <Pressable
-              accessibilityRole="button"
-              onPress={noop}
-              style={({ pressed }) =>
-                pressed ? [s.buttonOutlined, s.pressed] : s.buttonOutlined
-              }
-            >
-              <Text style={s.buttonOutlinedText}>
-                {t('courses.moreInformation')}
-              </Text>
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              onPress={noop}
-              style={({ pressed }) =>
-                pressed ? [s.buttonSuccess, s.pressed] : s.buttonSuccess
-              }
-            >
-              <Text style={s.buttonSuccessText}>{t('courses.buy')}</Text>
-            </Pressable>
-          </>
-        )}
+        <CartMainButtons
+          courseId={album.id}
+          isFull={album.remainCapacity === 0}
+          isAccessible={album.isAccessible}
+          iconLeftAddToBasket={null}
+          iconRightAddToBasket={null}
+          iconLeftInBasket={null}
+          iconRightInBasket={null}
+        />
+        <Pressable
+          accessibilityRole="button"
+          onPress={noop}
+          style={({ pressed }) =>
+            pressed ? [s.buttonOutlined, s.pressed] : s.buttonOutlined
+          }
+        >
+          <Text style={s.buttonOutlinedText}>{t('courses.moreInformation')}</Text>
+        </Pressable>
       </View>
     </View>
   );

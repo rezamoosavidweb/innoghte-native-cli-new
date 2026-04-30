@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { asCourseLike } from '@/domains/basket/model/courseGuards';
 import type { CartDto, CheckDiscountCodeDto } from '@/domains/basket/model/schemas';
 
 export type BasketTotals = {
@@ -24,10 +25,8 @@ export function useBasketTotals(
       return !disabledPurchased || isGift;
     });
     for (const { course } of payable) {
-      if (!course || typeof course !== 'object') {
-        continue;
-      }
-      const c = course as { price?: number; discount_price?: number | null };
+      const c = asCourseLike(course);
+      if (!c) continue;
       fullPrice += c.price ?? 0;
       fullPriceWithDiscount += c.discount_price ?? 0;
     }
