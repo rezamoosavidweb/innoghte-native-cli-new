@@ -7,7 +7,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import type { DrawerScreenProps } from '@react-navigation/drawer';
 import { useTheme } from '@react-navigation/native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { useShallow } from 'zustand/react/shallow';
@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 import { FaqExpandableRow } from '@/domains/support/faqs/ui/list/FaqExpandableRow';
 import { useFaqs } from '@/domains/support/faqs/hooks/useFaqs';
-import type { TabParamList } from '@/shared/contracts/navigationApp';
+import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import {
   flashListEstimatedItemSize,
   flashListRowSeparators,
@@ -29,7 +29,7 @@ import {
 } from '@/domains/support/faqs/ui';
 import { useFaqHubStore } from '@/domains/support/faqs/model/faqHub.store';
 
-type Props = BottomTabScreenProps<TabParamList, 'Faqs'>;
+type Props = DrawerScreenProps<DrawerParamList, 'Faqs'>;
 
 type FaqRow = {
   id: number;

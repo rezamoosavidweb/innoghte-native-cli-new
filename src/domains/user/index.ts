@@ -1,6 +1,7 @@
 export { AccountScreen } from './screens/AccountScreen';
 export { EditProfileScreen } from './screens/EditProfileScreen';
 export { FinancialSupportScreen } from './screens/FinancialSupportScreen';
+export { GiveGiftScreen } from './screens/GiveGiftScreen';
 export { GiftScreen } from './screens/GiftScreen';
 export { GiftSubScreen } from './screens/GiftSubScreen';
 export { MyCoursesHubScreen } from './screens/MyCoursesHubScreen';

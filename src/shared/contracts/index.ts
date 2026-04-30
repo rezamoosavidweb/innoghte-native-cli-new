@@ -20,5 +20,6 @@ export type {
   MainTabScreenName,
   TabParamList,
 } from './navigationApp';
+export type { DonationScreenParams } from './navigationDonation';
 export type { ShellDrawerUiModel, ShellDrawerUserSnapshot } from './shellUi';
 export type { VerifyChannel, VerifyStep } from './verification';

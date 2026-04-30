@@ -25,11 +25,14 @@ import {
   TicketListScreen,
 } from '@/domains/support';
 import { SettingsScreen } from '@/domains/settings';
+import { BasketScreen } from '@/domains/basket';
+import { DonationScreen } from '@/domains/donation';
 import {
   AccountScreen,
   EditProfileScreen,
   FinancialSupportScreen,
   GiftScreen,
+  GiveGiftScreen,
   GiftSubScreen,
   MyCoursesHubScreen,
   NOTIFICATION_BADGE_COUNT,
@@ -60,6 +63,7 @@ import {
   ProfileTabBarIcon,
   ProfileTabBarLabel,
 } from '@/app/bridge/ProfileTabBar';
+import { cartTabBarIcon } from '@/app/bridge/BasketTabBarIcon';
 import { TabBarGlyph } from '@/app/navigation/tabBarConfig';
 import type {
   DrawerParamList,
@@ -144,6 +148,14 @@ function mainTabsScreenOptions({
     };
   }
 
+  if (route.name === 'Cart') {
+    return {
+      ...base,
+      tabBarLabel,
+      tabBarIcon: cartTabBarIcon,
+    };
+  }
+
   return {
     ...base,
     tabBarLabel,
@@ -175,7 +187,7 @@ const mainTabs = createBottomTabNavigator<TabParamList>({
     Home: HomeScreen,
     PublicCourses: CoursesScreen,
     PublicAlbums: PublicAlbumsScreen,
-    Faqs: FaqsScreen,
+    Cart: BasketScreen,
     Profile: {
       screen: ProfileScreen,
       listeners: ({ navigation }) => ({
@@ -315,6 +327,19 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
       screen: HelpScreen,
       options: helpDrawerOptions,
     },
+    Faqs: {
+      screen: FaqsScreen,
+      options: () => {
+        const t = i18n.t.bind(i18n);
+        return {
+          headerShown: true as const,
+          title: t('tabs.faqs'),
+          drawerLabel: t('tabs.faqs'),
+          drawerItemStyle: { display: 'none' },
+          drawerIcon: drawerIcon('❔'),
+        };
+      },
+    },
     About: {
       screen: AboutScreen,
       options: aboutDrawerOptions,
@@ -374,8 +399,12 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
       screen: LegacyMenuPlaceholderScreen,
       options: () => extraLeafOptions('privateConsultation', '💬'),
     },
+    Basket: {
+      screen: BasketScreen,
+      options: () => extraLeafOptions('basket', '🛒'),
+    },
     Donation: {
-      screen: LegacyMenuPlaceholderScreen,
+      screen: DonationScreen,
       options: () => extraLeafOptions('donation', '❤️'),
     },
     AboutUs: {
@@ -409,7 +438,7 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
       }),
     },
     GiftSend: {
-      screen: GiftSubScreen,
+      screen: GiveGiftScreen,
       options: () => ({
         ...extraLeafOptions('giftSend', '📤'),
         drawerItemStyle: { display: 'none' },

@@ -1,5 +1,6 @@
 import type { NavigatorScreenParams } from '@react-navigation/native';
 
+import type { DonationScreenParams } from '@/shared/contracts/navigationDonation';
 import type { VerifyChannel } from './verification';
 
 /** Bottom tabs — primary app sections. */
@@ -7,7 +8,7 @@ export type TabParamList = {
   Home: undefined;
   PublicCourses: undefined;
   PublicAlbums: undefined;
-  Faqs: undefined;
+  Cart: undefined;
   Profile: { userId?: string } | undefined;
 };
 
@@ -21,6 +22,8 @@ export type DrawerParamList = {
   /** Email / mobile verification (params required when opening). */
   Verify: { type: VerifyChannel };
   Help: undefined;
+  /** FAQs content — drawer-only (hidden item); former bottom-tab route. */
+  Faqs: undefined;
   About: undefined;
   PublicAlbums: undefined;
   PublicCourses: undefined;
@@ -28,14 +31,15 @@ export type DrawerParamList = {
   LiveMeetings: undefined;
   Events: undefined;
   Startup: undefined;
-  Login: undefined;
+  Login: { redirectTo?: string; preserveState?: boolean } | undefined;
+  Basket: { resumeCheckout?: boolean } | undefined;
   Podcast: undefined;
   Meditation: undefined;
   Reading: undefined;
   Listening: undefined;
   Writing: undefined;
   PrivateConsultation: undefined;
-  Donation: undefined;
+  Donation: DonationScreenParams | undefined;
   AboutUs: undefined;
   Collaboration: undefined;
   LiveMeetingOverview: undefined;

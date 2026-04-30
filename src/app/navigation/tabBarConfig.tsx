@@ -3,11 +3,11 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import type { SvgProps } from 'react-native-svg';
 
-import FaqIcon from '@/assets/icons/faq.svg';
 import HeadphoneIcon from '@/assets/icons/headphone.svg';
 import HomeIcon from '@/assets/icons/home.svg';
 import LoginIcon from '@/assets/icons/login.svg';
 import SchoolIcon from '@/assets/icons/school.svg';
+import ShoppingTrollyIcon from '@/assets/icons/shopping-trolly.svg';
 import type { MainTabScreenName } from '@/shared/contracts/navigationApp';
 import { spacing } from '@/ui/theme';
 
@@ -15,7 +15,7 @@ const TAB_ICON: Record<MainTabScreenName, React.ComponentType<SvgProps>> = {
   Home: HomeIcon,
   PublicCourses: SchoolIcon,
   PublicAlbums: HeadphoneIcon,
-  Faqs: FaqIcon,
+  Cart: ShoppingTrollyIcon,
   Profile: LoginIcon,
 };
 
@@ -61,8 +61,12 @@ export function TabBarGlyph({
     <View style={[styles.wrap, focused ? styles.focused : styles.blurred]}>
       <Icon width={size} height={size} color={color} />
       {badgeCount > 0 ? (
-        <View style={styles.badgeAnchor} accessibilityElementsHidden>
-          <Badge visible size={spacing.base}>
+        <View
+          style={styles.badgeAnchor}
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+        >
+          <Badge visible size={spacing.sm}>
             {badgeCount > 99 ? '99+' : badgeCount}
           </Badge>
         </View>

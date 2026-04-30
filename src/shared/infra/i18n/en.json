@@ -5,6 +5,7 @@
     "search": "Search",
     "courses": "Courses",
     "albums": "Albums",
+    "cart": "Cart",
     "faqs": "FAQs",
     "notifications": "Notifications",
     "profile": "Profile",
@@ -33,6 +34,7 @@
     "writing": "Writing",
     "privateConsultation": "Private consultation",
     "donation": "Donation",
+    "basket": "Basket",
     "aboutUs": "About us",
     "collaboration": "Collaboration",
     "liveMeetingOverview": "Live meeting (overview)",
@@ -179,7 +181,7 @@
       "leaf": {
         "send": {
           "title": "Send a gift",
-          "body": "Gift flows will hook into the commerce layer soon."
+          "body": "Complete the gift form on this screen."
         },
         "received": {
           "title": "Received gifts",
@@ -190,6 +192,9 @@
           "body": "Gift history you've sent appears here."
         }
       }
+    },
+    "giveGift": {
+      "successToast": "Items were added to your cart."
     },
     "financialSupport": {
       "title": "Financial support",

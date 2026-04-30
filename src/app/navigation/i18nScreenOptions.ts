@@ -53,6 +53,7 @@ const EXTRA_DRAWER_LABELS = {
   writing: 'drawer.writing',
   privateConsultation: 'drawer.privateConsultation',
   donation: 'drawer.donation',
+  basket: 'drawer.basket',
   aboutUs: 'drawer.aboutUs',
   collaboration: 'drawer.collaboration',
   liveMeetingOverview: 'drawer.liveMeetingOverview',

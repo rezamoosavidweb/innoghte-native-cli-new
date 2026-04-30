@@ -19,7 +19,7 @@ const TAB_ROUTE_NAMES = new Set<keyof TabParamList>([
   'Home',
   'PublicCourses',
   'PublicAlbums',
-  'Faqs',
+  'Cart',
   'Profile',
 ]);
 
@@ -54,8 +54,24 @@ export function navigateToAppLeaf(
   navigation.dispatch(CommonActions.navigate({ name, params }));
 }
 
-function dispatchLogin(navigation: NavigateDispatchable): void {
-  navigation.dispatch(CommonActions.navigate({ name: 'Login' }));
+function dispatchLogin(
+  navigation: NavigateDispatchable,
+  params?: Record<string, unknown>,
+): void {
+  navigation.dispatch(
+    CommonActions.navigate({
+      name: 'Login',
+      params: params as object | undefined,
+    }),
+  );
+}
+
+/** Imperative login route — use for explicit redirects (e.g. basket guest checkout). */
+export function navigateToLogin(
+  navigation: NavigateDispatchable,
+  params?: Record<string, unknown>,
+): void {
+  dispatchLogin(navigation, params);
 }
 
 function queuePendingIfNeeded(name: AppLeafRouteName, params?: unknown): void {

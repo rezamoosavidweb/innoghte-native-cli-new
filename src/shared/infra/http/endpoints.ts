@@ -6,6 +6,13 @@ export const endpoints = {
     faq: 'api/v1/faq',
     liveMeeting: 'api/v1/public/live-meetings',
     quickAccess: 'api/v1/public/quick-access',
+    /** Anonymous cart — `X-Cart-Token` header (see client-web). */
+    cartList: 'api/v1/public/carts',
+    cartCreate: 'api/v1/public/carts/create',
+    /** DELETE `.../destroy/:cartLineId` — matches client-web `cartDelete`. */
+    cartDestroy: 'api/v1/public/carts/destroy',
+    cartDeleteByToken: 'api/v1/public/carts/delete/cart-token',
+    checkDiscountCode: 'api/v1/orders/validate-discount',
   },
   auth: {
     login: 'api/v1/login',
@@ -19,5 +26,9 @@ export const endpoints = {
   /** Authenticated user — see {@link fetchAndApplyPurchasedProductIds}. */
   user: {
     purchasedProductIds: 'api/v1/user/purchased-product-ids',
+  },
+  /** Authenticated checkout (Bearer). */
+  payment: {
+    create: 'api/v1/payment/create',
   },
 } as const;

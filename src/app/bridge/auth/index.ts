@@ -2,6 +2,7 @@ export {
   completePendingAuthNavigation,
   navigateProtected,
   navigateToAppLeaf,
+  navigateToLogin,
   protectedDispatch,
   protectedNavigate,
   protectedPush,

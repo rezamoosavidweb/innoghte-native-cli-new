@@ -42,7 +42,7 @@ app →                    ui → (shared/contracts only)
 | Layer | Location | Purpose |
 |-------|----------|---------|
 | **app** | `src/app/` | Shell composition, navigation bootstrap, providers. No business logic. |
-| **domains** | `src/domains/` | Feature modules: `auth`, `courses`, `events`, `experiences`, `home`, `live`, `media`, `search`, `settings`, `support`, `user` |
+| **domains** | `src/domains/` | Feature modules: `auth`, `basket`, `courses`, `donation`, `events`, `experiences`, `home`, `live`, `media`, `search`, `settings`, `support`, `user` |
 | **shared** | `src/shared/` | HTTP client, storage, auth401, i18n, contracts, pagination utilities |
 | **ui** | `src/ui/` | Design tokens, theme provider, global components |
 
@@ -64,11 +64,11 @@ src/domains/<name>/
 Built with React Navigation 7 using a static configuration in [src/app/bridge/rootNavigator.tsx](src/app/bridge/rootNavigator.tsx):
 
 - **Root:** Drawer navigator (RTL-aware — opens on right for Persian)
-- **Main content:** Bottom tab navigator with 5 tabs (`Home`, `PublicCourses`, `PublicAlbums`, `Faqs`, `Profile`)
+- **Main content:** Bottom tab navigator with 6 tabs (`Home`, `PublicCourses`, `PublicAlbums`, `Cart`, `Faqs`, `Profile`)
 - **Drawer routes:** Secondary screens (Settings, Account, MyCourses, LiveMeetings, Events, etc.)
-- **Placeholder routes:** Podcast, Meditation, Reading, Listening, Writing, PrivateConsultation, Donation, AboutUs, Collaboration, LiveMeetingOverview render `LegacyMenuPlaceholderScreen` — stubs for planned features; replace when implementing.
+- **Placeholder routes:** Podcast, Meditation, Reading, Listening, Writing, PrivateConsultation, AboutUs, Collaboration, LiveMeetingOverview render `LegacyMenuPlaceholderScreen` — stubs for planned features; replace when implementing.
 
-Navigation types (`TabParamList`, `DrawerParamList`) are in [src/shared/contracts/navigationApp.ts](src/shared/contracts/navigationApp.ts).
+Navigation types (`TabParamList`, `DrawerParamList`) are in [src/shared/contracts/navigationApp.ts](src/shared/contracts/navigationApp.ts). Donation-specific route params are in [src/shared/contracts/navigationDonation.ts](src/shared/contracts/navigationDonation.ts).
 
 **Typed navigation hook:** Always use `useAppNavigation()` from `@/shared/lib/navigation/useAppNavigation` in screens — it returns a composite type covering both tab and drawer surfaces. Do not call `useNavigation()` directly.
 
@@ -148,11 +148,20 @@ i18next v26 + react-i18next v17. Languages: `en` (fallback) and `fa` (Farsi/Pers
 
 SVGs in `src/assets/icons/` are compiled to React components by `react-native-svg-transformer` (configured in `metro.config.js`). Import directly: `import VerifyIcon from '@/assets/icons/verify.svg'`.
 
+## Multi-Region (IR vs COM)
+
+The app targets two regions: Iran (`.ir`) and international (`.com`). Region is resolved once at startup:
+
+- **Config:** `resolveIsDotIr()` from `@/shared/config` — returns `true` when `REACT_NATIVE_IS_DOT_IR === 'ir'`
+- **Scope header:** API calls that differ by region inject `{ Scope: 'ir' | 'com' }` via a `scopeHeader()` helper
+- **Feature flags:** Gateway visibility (Zarinpal, Vandar) is controlled by env vars checked in `src/domains/donation/model/env.ts`
+
 ## Forms
 
 Forms use **react-hook-form v7** with **Zod** schemas via `zodResolver` from `@hookform/resolvers/zod`.
 
-- Schema + type defined in `model/schema.ts` inside the domain
+- Schema + type defined in `model/schema.ts` (or `model/*FormSchema.ts`) inside the domain
+- Payment flows use `z.discriminatedUnion('paymentType', [...])` to conditionally require credit card fields vs. PayPal — see `basket` or `donation` domains for the pattern
 - `InputField` from `@/ui/components/form/InputField` — themed text input that accepts `error` prop
 - `form.register(field)` is called manually (RN doesn't use native DOM refs), then `form.setValue` on change and `form.trigger` on blur
 - `form.handleSubmit(handler)` wraps submit; pass `isSubmitting` state down to disable the button
@@ -211,11 +220,38 @@ Product ownership uses a port/adapter pattern to decouple the `user` domain from
 
 ## Storage Keys
 
-All MMKV persistence keys are defined in `src/shared/infra/persistence/appStorageKeys.ts`. Add new keys there — do not hard-code key strings in stores or domain files.
+Shared MMKV persistence keys are defined in `src/shared/infra/persistence/appStorageKeys.ts`. The newer `basket`, `donation`, and `user/giveGift` features define their own domain-scoped key files (`model/storageKeys.ts` or `model/*.storageKeys.ts`) instead of centralizing them — follow the same pattern for those domains rather than adding to `appStorageKeys.ts`.
+
+**Storage adapter:** `createStorageServiceAdapter()` from `@/shared/infra/storage` returns a Zustand `StateStorage` backed by MMKV — use it when a Zustand store needs `createJSONStorage()` with the app's MMKV instance.
 
 ## Startup Screen
 
 `StartupScreen` is shown exactly once on first launch via `useStartupOnFirstLaunch()` (called inside the navigation container). After the user taps any CTA, `markStartupSeen()` persists the `STARTUP_SEEN_KEY` flag to MMKV so the screen is never auto-navigated to again. Subsequent launches skip it entirely.
+
+## Basket Domain
+
+The `basket` domain manages the shopping cart. Key patterns:
+
+- **`useBasketCheckoutStore`** — persisted Zustand store tracking `termsAccepted`, `paymentMethod` (`'paypal' | 'credit_card'`), `gatewayName` (`'zarinpal' | 'vandar'`), `pendingDiscountCode`, and `autoResumeCheckout`
+- **`useBasketDiscountStore`** — in-memory (non-persisted) store for current discount state
+- **Cart tab icon:** `BasketTabBarIcon` in `src/app/bridge/` reads `useBasketCart()` to show a badge count — it is wired in `mainTabsScreenOptions()` via a callback wrapper
+- Query keys are domain-scoped in `src/domains/basket/model/queryKeys.ts`
+
+## Donation Domain
+
+The `donation` domain handles a multi-step payment flow with gateway selection and callback verification:
+
+- **State machine:** `useDonationFlow()` drives a pure (non-library) state machine in `model/donationFlowMachine.ts`. States: `idle → creating_checkout → checkout_ready → redirecting → verifying → success|error`. Dispatch transitions via the hook, not by mutating store directly.
+- **Callback parsing:** Payment gateways redirect back with query params. `mergeDonationCallbackSources()` and `parsePaymentParamsFromUrl()` in `model/donationCallbackParams.ts` merge params from three sources (discrete nav params, `returnUrl` query string, URL capture) with defined precedence. `donationVerificationFingerprint()` produces a dedup key to coalesce parallel verify calls.
+- **Route params:** `DonationScreenParams` in [src/shared/contracts/navigationDonation.ts](src/shared/contracts/navigationDonation.ts) captures all possible gateway callback fields (`Authority`, `Status`, `paymentId`, `PayerID`, `token`, `payment_status`, `returnUrl`, `gatewayName`).
+
+## GiveGift Feature (user domain)
+
+The `giveGift` feature inside the `user` domain creates an anonymous cart and presents products as gifts:
+
+- **Anonymous cart token:** `readOrCreateCartToken()` in `model/giveGiftCartToken.ts` generates and persists a UUID via MMKV — this token is shared with the web app (key `'cart_token'`), so do not rename it
+- **Form schema:** `model/giveGiftFormSchema.ts` uses `.superRefine()` to require ≥1 product selection within the chosen `selectionGroup` (`courses | albums | rooyeKhats | audioBooks`)
+- **Orchestration:** `services/completeGiveGiftFlow.ts` sequences: create present → persist mapping → clear anonymous cart → re-add selected products
 
 ## Debug Tooling
 
