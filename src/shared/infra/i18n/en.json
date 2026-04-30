@@ -263,7 +263,12 @@
       "themeSection": "Appearance",
       "themeSystem": "System",
       "themeLight": "Light",
-      "themeDark": "Dark"
+      "themeDark": "Dark",
+      "themeEditorialGray": "Editorial",
+      "themeStudioDark": "Studio",
+      "themeNighttime": "Nighttime",
+      "themeSteady": "Steady",
+      "themeStoneCalm": "Stone calm"
     },
     "help": {
       "title": "Help",

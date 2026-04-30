@@ -15,7 +15,7 @@ export const DrawerMenuButton = React.memo(function DrawerMenuButton({
 } = {}) {
   const navigation = useAppNavigation();
   const theme = useTheme();
-  const s = pickSemantic(theme.dark);
+  const s = pickSemantic(theme);
 
   const styles = React.useMemo(
     () =>

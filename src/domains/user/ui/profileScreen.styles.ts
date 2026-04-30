@@ -244,16 +244,16 @@ function createMenuStyles(
   };
 }
 
-export function useProfileShellStyles(colors: Theme['colors'], dark: boolean) {
-  const sSemantic = pickSemantic(dark);
+export function useProfileShellStyles(colors: Theme['colors'], theme: Theme) {
+  const sSemantic = pickSemantic(theme);
   return React.useMemo(
     () => createProfileShellStyles(colors, sSemantic),
     [colors, sSemantic],
   );
 }
 
-export function useProfileHeaderStyles(colors: Theme['colors'], dark: boolean) {
-  const sSemantic = pickSemantic(dark);
+export function useProfileHeaderStyles(colors: Theme['colors'], theme: Theme) {
+  const sSemantic = pickSemantic(theme);
   return React.useMemo(
     () => createProfileHeaderStyles(colors, sSemantic),
     [colors, sSemantic],

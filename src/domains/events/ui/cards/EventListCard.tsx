@@ -128,8 +128,8 @@ function createEventListCardStyles(
 }
 
 function useEventListCardStyles(themeColors: Theme['colors']) {
-  const { dark } = useTheme();
-  const sem = pickSemantic(dark);
+  const theme = useTheme();
+  const sem = pickSemantic(theme);
   return React.useMemo(
     () => createEventListCardStyles(themeColors, sem),
     [themeColors, sem],

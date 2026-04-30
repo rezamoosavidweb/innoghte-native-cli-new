@@ -69,8 +69,9 @@ ListSep.displayName = 'ListSep';
 const FaqsScreenComponent = (_props: Props) => {
   const { data, isPending, isError, error } = useFaqs();
   const { t, i18n } = useTranslation();
-  const { colors, dark } = useTheme();
-  const semantic = pickSemantic(dark);
+  const theme = useTheme();
+  const { colors } = theme;
+  const semantic = pickSemantic(theme);
   const shell = useNavScreenShellStyles(colors);
   const inputS = useFaqsSearchInputStyles(colors);
   const layout = useFaqsScreenLayoutStyles();

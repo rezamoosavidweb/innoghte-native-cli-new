@@ -8,13 +8,25 @@
  * can rely on `themes[scheme] === themes[scheme]` for memoisation.
  */
 
+import {
+  editorialGrayTheme,
+  nighttimeTheme,
+  steadyTheme,
+  stoneCalmTheme,
+  studioDarkTheme,
+} from '@/ui/theme/accentThemes';
 import { darkTheme } from '@/ui/theme/dark';
 import { lightTheme } from '@/ui/theme/light';
 import type { AppTheme, ColorSchemeName } from '@/ui/theme/types';
 
 export const themes: Readonly<Record<ColorSchemeName, AppTheme>> = Object.freeze({
   dark: darkTheme,
+  editorialGray: editorialGrayTheme,
   light: lightTheme,
+  nighttime: nighttimeTheme,
+  steady: steadyTheme,
+  stoneCalm: stoneCalmTheme,
+  studioDark: studioDarkTheme,
 });
 
 /** Resolve a registered theme by name. Defaults to dark when called blank. */

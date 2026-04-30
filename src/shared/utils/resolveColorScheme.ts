@@ -1,14 +1,17 @@
-import type { ThemePreference } from '@/shared/contracts/theme';
+import type {
+  ThemeMode,
+  ThemePreference,
+} from '@/shared/contracts/theme';
 
 /**
- * Resolves a concrete light/dark scheme from persisted preference and the OS
- * (when preference is "system").
+ * Resolves the active palette key from persisted preference and the OS
+ * (when preference is "system" → follows OS light/dark only).
  */
 export function resolveColorScheme(
   preference: ThemePreference,
   systemScheme: 'light' | 'dark' | null | undefined,
-): 'light' | 'dark' {
-  if (preference === 'light' || preference === 'dark') {
+): ThemeMode {
+  if (preference !== 'system') {
     return preference;
   }
   return systemScheme === 'dark' ? 'dark' : 'light';

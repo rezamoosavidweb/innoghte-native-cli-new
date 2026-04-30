@@ -31,15 +31,16 @@ import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 type Props = BottomTabScreenProps<TabParamList, 'Profile'>;
 
 const ProfileScreenComponent = (_props: Props) => {
-  const { dark, colors } = useTheme();
+  const theme = useTheme();
+  const { colors } = theme;
   const { t } = useTranslation();
   const navigation = useAppNavigation();
 
   const scaffoldStyles = useScreenScaffoldStyles(colors);
-  const shellStyles = useProfileShellStyles(colors, dark);
-  const headerStyles = useProfileHeaderStyles(colors, dark);
+  const shellStyles = useProfileShellStyles(colors, theme);
+  const headerStyles = useProfileHeaderStyles(colors, theme);
   const menuStyles = useProfileMenuStyles(colors);
-  const dividerStyles = useSectionDividerStyles(colors, dark);
+  const dividerStyles = useSectionDividerStyles(colors, theme);
 
   const { actionItems, experienceItems } = useProfileMenus(t);
   const financialMenuItems = useProfileFinancialMenus(t);

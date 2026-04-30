@@ -19,8 +19,8 @@ const IMAGE_HEIGHT = Math.round(QUICK_ACCESS_CARD_WIDTH * 1.45);
 const STATE_HEIGHT = IMAGE_HEIGHT + 120;
 
 export function useQuickAccessStyles(themeColors: Theme['colors']) {
-  const { dark } = useTheme();
-  const s = pickSemantic(dark);
+  const theme = useTheme();
+  const s = pickSemantic(theme);
 
   return React.useMemo(
     () =>

@@ -28,8 +28,8 @@ export function useBannerStyles(
   themeColors: Theme['colors'],
   variant: BannerVariant = 'card',
 ) {
-  const { dark } = useTheme();
-  const s = pickSemantic(dark);
+  const theme = useTheme();
+  const s = pickSemantic(theme);
   const insets = useSafeAreaInsets();
 
   const heroBodyPaddingBottom = React.useMemo(

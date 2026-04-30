@@ -19,10 +19,11 @@ type Props = DrawerScreenProps<DrawerParamList, 'GiftScreen'>;
 
 export const GiftScreen = React.memo(function GiftScreen(_props: Props) {
   const { t } = useTranslation();
-  const { colors, dark } = useTheme();
+  const theme = useTheme();
+  const { colors } = theme;
   const navigation = useAppNavigation();
   const menuStyles = useProfileMenuStyles(colors);
-  const dividerStyles = useSectionDividerStyles(colors, dark);
+  const dividerStyles = useSectionDividerStyles(colors, theme);
 
   const items = useGiftHubMenus(t);
 

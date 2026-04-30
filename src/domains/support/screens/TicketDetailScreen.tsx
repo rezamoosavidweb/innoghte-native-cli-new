@@ -34,8 +34,9 @@ export const TicketDetailScreen = React.memo(function TicketDetailScreen({
 }: Props) {
   const { id } = route.params;
   const { t, i18n } = useTranslation();
-  const { colors, dark } = useTheme();
-  const semantic = pickSemantic(dark);
+  const theme = useTheme();
+  const { colors } = theme;
+  const semantic = pickSemantic(theme);
   const shell = useNavScreenShellStyles(colors);
   const ticketStyles = useTicketScreenStyles(colors);
 

@@ -11,8 +11,8 @@ import {
 } from '@/ui/theme';
 
 export function useCommentsSectionStyles(themeColors: Theme['colors']) {
-  const { dark } = useTheme();
-  const s = pickSemantic(dark);
+  const theme = useTheme();
+  const s = pickSemantic(theme);
 
   return React.useMemo(
     () =>

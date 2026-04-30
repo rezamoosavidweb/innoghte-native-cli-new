@@ -124,8 +124,8 @@ function createPublicAlbumTrackStyles(
 }
 
 function usePublicAlbumTrackStyles(themeColors: Theme['colors']) {
-  const { dark } = useTheme();
-  const sem = pickSemantic(dark);
+  const theme = useTheme();
+  const sem = pickSemantic(theme);
   return React.useMemo(
     () => createPublicAlbumTrackStyles(themeColors, sem),
     [themeColors, sem],

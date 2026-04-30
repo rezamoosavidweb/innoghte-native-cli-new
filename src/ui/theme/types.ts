@@ -5,7 +5,10 @@
  * in `light.ts` only when the role intentionally diverges).
  */
 
-export type ColorSchemeName = 'light' | 'dark';
+import type { ThemeMode } from '@/shared/contracts/theme';
+
+/** Concrete selectable palette — aliases {@link ThemeMode}. */
+export type ColorSchemeName = ThemeMode;
 
 /**
  * Semantic palette consumed by every UI surface. Roles are described by the
@@ -21,8 +24,14 @@ export type ThemeColors = {
   drawer: string;
   /** Card / elevated surface (also used by the navigation `card` role). */
   card: string;
+  /** Elevated surface above `background` — bottom sheets, modals, input fills. */
+  surface: string;
+  /** Recessed / muted surface layer — section bands, sidebar panels. */
+  surfaceSecondary: string;
   /** Border / divider line. */
   border: string;
+  /** Soft separator — lighter than `border`; for list section dividers. */
+  divider: string;
 
   /** Primary foreground text. */
   text: string;
@@ -35,6 +44,10 @@ export type ThemeColors = {
   primary: string;
   /** Foreground used on top of `primary`. */
   onPrimary: string;
+  /** Very translucent primary tint — selected states, highlight fills. */
+  primarySoft: string;
+  /** Secondary accent (sand in light mode, primary-adjacent in dark). */
+  accent: string;
 
   /** Error base (use for both bg + text when no contrast needed, e.g. tinted toast). */
   error: string;

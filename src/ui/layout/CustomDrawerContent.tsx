@@ -87,8 +87,9 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
   const { t } = useTranslation();
   const { onRequestLogout, isDrawerOnPhysicalRight: isDrawerOnRight, user: drawerUser } =
     useShellDrawerModel();
-  const { colors, dark } = useTheme();
-  const s = pickSemantic(dark);
+  const theme = useTheme();
+  const { colors } = theme;
+  const s = pickSemantic(theme);
   const displayName = drawerUser.displayName;
   const emailLine = drawerUser.emailLine;
   const avatarInitials = drawerUser.avatarInitials;

@@ -35,8 +35,8 @@ type IconProps = {
 };
 
 export function ProfileTabBarIcon({ color, focused, size }: IconProps) {
-  const { dark } = useTheme();
-  const s = pickSemantic(dark);
+  const theme = useTheme();
+  const s = pickSemantic(theme);
   const isAuthenticated = useIsAuthenticated();
   const { t } = useTranslation();
   const { data: userRes } = useCurrentUser();

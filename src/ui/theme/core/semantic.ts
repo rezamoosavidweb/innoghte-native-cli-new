@@ -1,22 +1,20 @@
 /**
- * Legacy `semantic.{light, dark}` shape. Kept as a thin adapter over the
- * single source of truth in `@/ui/theme/dark` + `@/ui/theme/light` so older
- * call sites (`pickSemantic(dark)` → `s.danger`, `s.headerBg`, ...) keep
- * compiling while we finish migrating screens to `theme.colors.*`.
- *
- * Do **not** add new keys here — extend {@link ThemeColors} and the dark
- * theme file instead.
+ * Role → color map per registered palette. Thin view over {@link themes} so
+ * `pickSemantic(useTheme())` can resolve any scheme via `theme.appScheme`.
  */
 
-import { darkColors } from '@/ui/theme/dark';
-import { lightColors } from '@/ui/theme/light';
+import { themes } from '@/ui/theme/registry';
 import type { ColorSchemeName, ThemeColors } from '@/ui/theme/types';
 
 export type { ColorSchemeName } from '@/ui/theme/types';
 
-export const semantic: Readonly<Record<ColorSchemeName, ThemeColors>> = Object.freeze({
-  light: lightColors,
-  dark: darkColors,
-});
+const semanticEntries = (Object.keys(themes) as ColorSchemeName[]).map(
+  (key): [ColorSchemeName, ThemeColors] => [key, themes[key].colors],
+);
+
+export const semantic: Readonly<Record<ColorSchemeName, ThemeColors>> =
+  Object.freeze(
+    Object.fromEntries(semanticEntries),
+  ) as Readonly<Record<ColorSchemeName, ThemeColors>>;
 
 export type SemanticColors = ThemeColors;

@@ -19,8 +19,9 @@ export const FinancialSupportScreen = React.memo(function FinancialSupportScreen
   _props: Props,
 ) {
   const { t } = useTranslation();
-  const { colors, dark } = useTheme();
-  const semantic = pickSemantic(dark);
+  const theme = useTheme();
+  const { colors } = theme;
+  const semantic = pickSemantic(theme);
   const shell = useNavScreenShellStyles(colors);
 
   const s = React.useMemo(

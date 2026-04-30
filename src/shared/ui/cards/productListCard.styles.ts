@@ -168,8 +168,8 @@ export type ProductListCardStyles = ReturnType<
 >;
 
 export function useProductListCardStyles(themeColors: Theme['colors']) {
-  const { dark } = useTheme();
-  const s = pickSemantic(dark);
+  const theme = useTheme();
+  const s = pickSemantic(theme);
   return React.useMemo(
     () => createProductListCardStyles(themeColors, s),
     [themeColors, s],

@@ -42,8 +42,9 @@ const LEAF_I18N: Record<
 export const SupportLegalPlaceholderScreen = React.memo(
   function SupportLegalPlaceholderScreen({ route }: Props) {
     const { t } = useTranslation();
-    const { colors, dark } = useTheme();
-    const semantic = pickSemantic(dark);
+    const theme = useTheme();
+    const { colors } = theme;
+    const semantic = pickSemantic(theme);
     const shell = useNavScreenShellStyles(colors);
 
     const keys = LEAF_I18N[route.name];

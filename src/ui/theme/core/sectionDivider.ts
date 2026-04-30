@@ -43,9 +43,9 @@ function createSectionDividerStyles(
 /** Token-based styles for {@link SectionDivider} — safe for profile, drawer, and other surfaces. */
 export function useSectionDividerStyles(
   colors: Theme['colors'],
-  dark: boolean,
+  navigationTheme: Theme,
 ) {
-  const sSemantic = pickSemantic(dark);
+  const sSemantic = pickSemantic(navigationTheme);
   return React.useMemo(
     () => createSectionDividerStyles(colors, sSemantic),
     [colors, sSemantic],

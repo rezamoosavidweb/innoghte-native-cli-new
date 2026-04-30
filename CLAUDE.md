@@ -66,10 +66,17 @@ Built with React Navigation 7 using a static configuration in [src/app/bridge/ro
 - **Root:** Drawer navigator (RTL-aware — opens on right for Persian)
 - **Main content:** Bottom tab navigator with 5 tabs (`Home`, `PublicCourses`, `PublicAlbums`, `Faqs`, `Profile`)
 - **Drawer routes:** Secondary screens (Settings, Account, MyCourses, LiveMeetings, Events, etc.)
+- **Placeholder routes:** Podcast, Meditation, Reading, Listening, Writing, PrivateConsultation, Donation, AboutUs, Collaboration, LiveMeetingOverview render `LegacyMenuPlaceholderScreen` — stubs for planned features; replace when implementing.
 
 Navigation types (`TabParamList`, `DrawerParamList`) are in [src/shared/contracts/navigationApp.ts](src/shared/contracts/navigationApp.ts).
 
+**Typed navigation hook:** Always use `useAppNavigation()` from `@/shared/lib/navigation/useAppNavigation` in screens — it returns a composite type covering both tab and drawer surfaces. Do not call `useNavigation()` directly.
+
+**Cross-navigator navigation:** `navigateToAppLeaf(navigation, routeName, params?)` from `@/app/bridge/auth` navigates to any tab or drawer leaf, handling the `MainTabs` nesting automatically.
+
 **Auth-gated routes** use `protectedNavigate()` / `protectedPush()` — these queue an intent in the auth store. After login, `completePendingAuthNavigation()` replays the queued destination. Parallel 401 responses coalesce into a single Login navigation via the centralized 401 handler in `src/shared/infra/auth401/`.
+
+**Deep linking:** Scheme `innoghte://` (from `APP_LINKING_PREFIXES`). Unauthenticated deep links are intercepted by `createAuthAwareGetStateFromPath` — it saves the target as `pendingNavigation` and redirects to Login; after login the destination is replayed automatically.
 
 Global imperative navigation uses `navigationRef` from `src/shared/infra/navigation/navigationRef.ts`.
 
@@ -82,6 +89,8 @@ Key Zustand stores:
 - `useUiThemeStore` — `preference: 'light' | 'dark' | 'system'`; persisted to default MMKV
 
 **Cross-domain auth rule:** Code outside the `auth` domain must never import `useAuthStore` directly. Use `AuthService` from `@/domains/auth` instead — it is the public surface for session reads (`getToken`, `isAuthenticated`), mutations (`login`, `logout`, `clearSessionTokensOnly`), and pending navigation (`setPendingNavigation`, `consumePendingNavigation`).
+
+**Cross-domain user rule:** Code outside the `user` domain must never read `usePurchasedProductIdsStore` directly. Use `UserService` from `@/domains/user` for purchase checks and mutations (`registerPurchaseLookup`, `refreshPurchasedProductIds`, `clearPurchasedProductIds`).
 
 React Query client (`src/app/queryClient.ts`) is configured with `retry: false` — retries are handled at the HTTP layer by Ky (1 retry for GETs on 408/429/5xx with exponential backoff).
 
@@ -127,7 +136,9 @@ i18next v26 + react-i18next v17. Languages: `en` (fallback) and `fa` (Farsi/Pers
 - **`src/shared/ui/list-states/`** — `ListStateView`, `LoadingState`, `ErrorState`, `EmptyState`, `ListFooterLoader` — use these for all list screens instead of per-screen duplicates
 - **`src/shared/infra/auth401/`** — per-request policy via `withKyAuth401Context(...)`, per-screen scope via `useAuth401ScreenScope`
 - **`resolveErrorMessage(err, fallback)`** from `@/shared/infra/http` — extracts a user-visible string from `ApiError` (reads `.payload.message` first) or any `Error`; returns `fallback` when no message is available
+- **`fireAndForget(promise)`** from `@/shared/infra/http` — wraps fire-and-forget API calls; errors propagate through the global `onApiError` pipeline so callers never silently swallow failures
 - **`formatTsIso(iso, locale)`** from `@/shared/utils/formatTsIso` — formats ISO date strings for display; passes `'fa-IR'` locale for Persian, default `toLocaleString` otherwise
+- **`ScreenScaffold`** from `@/ui/components/ScreenScaffold` — thin wrapper with optional `title`/`subtitle` text + `ErrorBoundary`; use for simple non-list screens that don't need a custom shell
 
 ## Path Aliases
 
@@ -189,6 +200,22 @@ const s = useMyFeatureStyles(colors);
 ```
 
 Never pass raw color strings; always go through `theme.colors.*` semantic tokens.
+
+## Purchases
+
+Product ownership uses a port/adapter pattern to decouple the `user` domain from consumers:
+
+- **Port** (`@/shared/purchases`) — defines `IsProductPurchased` type; consumers call `isProductPurchased(productId)` from this package, never from the user domain store directly
+- **Adapter** (`src/shared/purchases/adapter.ts`) — holds the registered lookup function; defaults to `() => false` until wired
+- **Wiring** — `UserService.registerPurchaseLookup()` is called once as a module side-effect in `BridgeShell.tsx`; it connects the `user` domain's Zustand store snapshot to the port
+
+## Storage Keys
+
+All MMKV persistence keys are defined in `src/shared/infra/persistence/appStorageKeys.ts`. Add new keys there — do not hard-code key strings in stores or domain files.
+
+## Startup Screen
+
+`StartupScreen` is shown exactly once on first launch via `useStartupOnFirstLaunch()` (called inside the navigation container). After the user taps any CTA, `markStartupSeen()` persists the `STARTUP_SEEN_KEY` flag to MMKV so the screen is never auto-navigated to again. Subsequent launches skip it entirely.
 
 ## Debug Tooling
 

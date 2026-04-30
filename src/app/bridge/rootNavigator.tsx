@@ -107,7 +107,7 @@ function mainTabsScreenOptions({
 }) {
   const t = i18n.t.bind(i18n);
   const { tabBarLabel, title } = getTranslatedTabFields(t, String(route.name));
-  const s = pickSemantic(theme.dark);
+  const s = pickSemantic(theme);
 
   const base = {
     lazy: true,
@@ -253,7 +253,7 @@ function protectedAuthDrawerScreen(
 export const rootNavigator = createDrawerNavigator<DrawerParamList>({
   drawerContent: props => <CustomDrawerContent {...props} />,
   screenOptions: ({ theme }) => {
-    const s = pickSemantic(theme.dark);
+    const s = pickSemantic(theme);
     return {
       headerStyle: { backgroundColor: s.headerBg },
       headerTintColor: s.headerForeground,

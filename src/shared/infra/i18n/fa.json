@@ -264,7 +264,12 @@
       "themeSection": "ظاهر",
       "themeSystem": "هماهنگ با سیستم",
       "themeLight": "روشن",
-      "themeDark": "تاریک"
+      "themeDark": "تاریک",
+      "themeEditorialGray": "سرمقاله‌ای",
+      "themeStudioDark": "استودیویی",
+      "themeNighttime": "شبانه",
+      "themeSteady": "آرام",
+      "themeStoneCalm": "سنگ‌وار آرام"
     },
     "help": {
       "title": "راهنما",

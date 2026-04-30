@@ -7,6 +7,57 @@
 
 import { hexAlpha } from '@/ui/theme/utils/colorUtils';
 
+/**
+ * Wellness sage ramp — muted green; 500 is the light-mode brand primary.
+ * Given anchors: 300 = #B9C7B1 (soft sage), 500 = #7A8F78 (muted green).
+ */
+const sagePalette = {
+  50: '#F3F6F2',
+  100: '#E6EBE5',
+  200: '#CFD9CB',
+  300: '#B9C7B1',
+  400: '#9AAB95',
+  500: '#7A8F78',
+  600: '#6A7F68',
+  700: '#5A6E58',
+  800: '#4A5D47',
+  900: '#3A4C37',
+} as const;
+
+/**
+ * Wellness sand ramp — warm neutral; 200 = background, 500 = accent.
+ * Given anchors: 200 = #EEE6DA (warm neutral bg), 500 = #C9B59A (sand accent).
+ */
+const sandPalette = {
+  50: '#FDFAF7',
+  100: '#F5EEE4',
+  200: '#EEE6DA',
+  300: '#E2D6C5',
+  400: '#D5C5AF',
+  500: '#C9B59A',
+  600: '#B8A07E',
+  700: '#A08A60',
+  800: '#886A43',
+  900: '#6B4E2E',
+} as const;
+
+/**
+ * Wellness forest ramp — deep muted teal-green for text contrast.
+ * Given anchor: 500 = #3E4A45 (deep text / contrast).
+ */
+const forestPalette = {
+  50: '#EBF0EF',
+  100: '#CBD8D5',
+  200: '#A0B4B0',
+  300: '#7A9290',
+  400: '#5A6E69',
+  500: '#3E4A45',
+  600: '#2E3835',
+  700: '#1E2625',
+  800: '#0E1615',
+  900: '#060A09',
+} as const;
+
 /** Spec-driven dark surface ramp (see design tokens). */
 const surfaceDark = {
   /** Card background. */
@@ -166,6 +217,11 @@ export const palette = {
     teal: '#EDF7F6',
     yellow: '#FFFCEB',
   },
+
+  /** Wellness light-mode primitives (do NOT use directly in components). */
+  sage: sagePalette,
+  sand: sandPalette,
+  forest: forestPalette,
 } as const;
 
 export type Palette = typeof palette;

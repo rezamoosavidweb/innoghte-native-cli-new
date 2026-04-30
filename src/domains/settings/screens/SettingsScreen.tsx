@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 
+import type { ThemePreference } from '@/shared/contracts/theme';
 import type { AppLanguage } from '@/shared/contracts/locale';
 import { ScreenScaffold } from '@/ui/components/ScreenScaffold';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { useLanguageStore } from '@/domains/settings/model/language.store';
-import type { ThemePreference } from '@/domains/settings/model/uiTheme.store';
 import { useUiThemeStore } from '@/domains/settings/model/uiTheme.store';
 import { useScreenScaffoldStyles } from '@/ui/theme';
 import { useSettingsScreenStyles } from '@/domains/settings/ui/settingsScreen.styles';
@@ -20,32 +20,25 @@ const SettingsScreenComponent = (_props: Props) => {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const scaffold = useScreenScaffoldStyles(colors);
-  const settingsStyles = useSettingsScreenStyles();
+  const s = useSettingsScreenStyles();
+
   const { currentLanguage, setLanguage } = useLanguageStore(
-    useShallow(s => ({
-      currentLanguage: s.currentLanguage,
-      setLanguage: s.setLanguage,
+    useShallow(state => ({
+      currentLanguage: state.currentLanguage,
+      setLanguage: state.setLanguage,
     })),
   );
+
   const { preference, setPreference } = useUiThemeStore(
-    useShallow(s => ({
-      preference: s.preference,
-      setPreference: s.setPreference,
+    useShallow(state => ({
+      preference: state.preference,
+      setPreference: state.setPreference,
     })),
   );
 
-  const select = React.useCallback(
-    (lang: AppLanguage) => {
-      setLanguage(lang).catch(() => {});
-    },
+  const selectLanguage = React.useCallback(
+    (lang: AppLanguage) => { setLanguage(lang).catch(() => {}); },
     [setLanguage],
-  );
-
-  const selectTheme = React.useCallback(
-    (p: ThemePreference) => {
-      setPreference(p);
-    },
-    [setPreference],
   );
 
   return (
@@ -53,63 +46,58 @@ const SettingsScreenComponent = (_props: Props) => {
       title={t('screens.settings.title')}
       subtitle={t('screens.settings.subtitle')}
     >
-      <View style={settingsStyles.section}>
+      {/* Language */}
+      <View style={s.section}>
         <Text style={scaffold.sectionTitle}>
           {t('screens.settings.languageSection')}
         </Text>
-        <View style={settingsStyles.row}>
-          <TouchableOpacity
-            style={[
-              settingsStyles.chip,
-              currentLanguage === 'fa' ? settingsStyles.chipActive : null,
-            ]}
-            onPress={() => select('fa')}
-            accessibilityRole="button"
-            accessibilityState={{ selected: currentLanguage === 'fa' }}
-          >
-            <Text style={settingsStyles.chipText}>
-              {t('screens.settings.languagePersian')}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              settingsStyles.chip,
-              currentLanguage === 'en' ? settingsStyles.chipActive : null,
-            ]}
-            onPress={() => select('en')}
-            accessibilityRole="button"
-            accessibilityState={{ selected: currentLanguage === 'en' }}
-          >
-            <Text style={settingsStyles.chipText}>
-              {t('screens.settings.languageEnglish')}
-            </Text>
-          </TouchableOpacity>
+        <View style={s.row}>
+          {(['fa', 'en'] as const).map(lang => (
+            <TouchableOpacity
+              key={lang}
+              style={[s.chip, currentLanguage === lang ? s.chipActive : null]}
+              onPress={() => selectLanguage(lang)}
+              accessibilityRole="button"
+              accessibilityState={{ selected: currentLanguage === lang }}
+            >
+              <Text style={s.chipText}>
+                {t(lang === 'fa'
+                  ? 'screens.settings.languagePersian'
+                  : 'screens.settings.languageEnglish')}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
       </View>
 
-      <View style={settingsStyles.section}>
+      {/* Appearance */}
+      <View style={s.section}>
         <Text style={scaffold.sectionTitle}>
           {t('screens.settings.themeSection')}
         </Text>
-        <View style={settingsStyles.row}>
+        <View style={s.row}>
           {(
             [
               ['system', 'themeSystem'],
               ['light', 'themeLight'],
               ['dark', 'themeDark'],
-            ] as const
+              ['editorialGray', 'themeEditorialGray'],
+              ['studioDark', 'themeStudioDark'],
+              ['nighttime', 'themeNighttime'],
+              ['steady', 'themeSteady'],
+              ['stoneCalm', 'themeStoneCalm'],
+            ] as const satisfies ReadonlyArray<
+              readonly [ThemePreference, string]
+            >
           ).map(([value, labelKey]) => (
             <TouchableOpacity
               key={value}
-              style={[
-                settingsStyles.chip,
-                preference === value ? settingsStyles.chipActive : null,
-              ]}
-              onPress={() => selectTheme(value)}
+              style={[s.chip, preference === value ? s.chipActive : null]}
+              onPress={() => setPreference(value)}
               accessibilityRole="button"
               accessibilityState={{ selected: preference === value }}
             >
-              <Text style={settingsStyles.chipText}>
+              <Text style={s.chipText}>
                 {t(`screens.settings.${labelKey}`)}
               </Text>
             </TouchableOpacity>

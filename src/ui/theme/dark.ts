@@ -22,7 +22,10 @@ export const darkColors: ThemeColors = Object.freeze({
   tabBar: surfaceDark.page,
   drawer: surfaceDark.drawer,
   card: surfaceDark.card,
+  surface: surfaceDark.card,
+  surfaceSecondary: surfaceDark.raised,
   border: surfaceDark.border,
+  divider: surfaceDark.border,
 
   text: palette.white,
   textSecondary: palette.charcoal[200],
@@ -30,6 +33,8 @@ export const darkColors: ThemeColors = Object.freeze({
 
   primary: palette.primary[300],
   onPrimary: surfaceDark.page,
+  primarySoft: hexAlpha(palette.primary[300], 0.15),
+  accent: palette.primary[300],
 
   error: feedback.errorBase,
   errorBg: feedback.errorBase,

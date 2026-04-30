@@ -25,8 +25,9 @@ const TITLE_SUFFIX: Record<GiftLeafName, 'send' | 'received' | 'sent'> = {
 
 export const GiftSubScreen = React.memo(function GiftSubScreen({ route }: Props) {
   const { t } = useTranslation();
-  const { colors, dark } = useTheme();
-  const semantic = pickSemantic(dark);
+  const theme = useTheme();
+  const { colors } = theme;
+  const semantic = pickSemantic(theme);
   const shell = useNavScreenShellStyles(colors);
 
   const suffix = TITLE_SUFFIX[route.name];

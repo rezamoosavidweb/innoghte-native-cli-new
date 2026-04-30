@@ -1,7 +1,10 @@
-import { DarkTheme, DefaultTheme, type Theme } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme } from '@react-navigation/native';
 
+import type { NavigationThemeWithScheme } from '@/ui/theme/navigationThemeContract';
 import { themes } from '@/ui/theme/registry';
 import type { ColorSchemeName } from '@/ui/theme/types';
+
+const NAVIGATION_DARK_BASE = new Set<ColorSchemeName>(['dark', 'studioDark']);
 
 /**
  * Build the `@react-navigation/native` Theme from our semantic palette so
@@ -10,13 +13,15 @@ import type { ColorSchemeName } from '@/ui/theme/types';
  * (header / drawer / chip roles) lives on the AppTheme — this only fills
  * the navigation slots.
  */
-function buildNavigationTheme(scheme: ColorSchemeName): Theme {
+function buildNavigationTheme(scheme: ColorSchemeName): NavigationThemeWithScheme {
   const c = themes[scheme].colors;
-  const base = scheme === 'dark' ? DarkTheme : DefaultTheme;
+  const useDarkBase = NAVIGATION_DARK_BASE.has(scheme);
+  const base = useDarkBase ? DarkTheme : DefaultTheme;
 
   return {
     ...base,
-    dark: scheme === 'dark',
+    dark: useDarkBase,
+    appScheme: scheme,
     colors: {
       ...base.colors,
       primary: c.primary,
@@ -29,10 +34,14 @@ function buildNavigationTheme(scheme: ColorSchemeName): Theme {
   };
 }
 
-export const navigationThemes = {
-  light: buildNavigationTheme('light'),
-  dark: buildNavigationTheme('dark'),
-} as const;
+export const navigationThemes = Object.freeze(
+  Object.fromEntries(
+    (Object.keys(themes) as ColorSchemeName[]).map(scheme => [
+      scheme,
+      buildNavigationTheme(scheme),
+    ]),
+  ),
+) as Readonly<Record<ColorSchemeName, NavigationThemeWithScheme>>;
 
 /** Navigation theme + brand values for the active color scheme (header / drawer options). */
 export function getChromeForScheme(scheme: ColorSchemeName) {

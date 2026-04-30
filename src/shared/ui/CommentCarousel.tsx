@@ -1,4 +1,4 @@
-import { useTheme } from '@react-navigation/native';
+import { useTheme, type Theme } from '@react-navigation/native';
 import * as React from 'react';
 import {
   Dimensions,
@@ -81,8 +81,9 @@ function CommentCarouselBase({
   style,
   testID,
 }: CommentCarouselProps) {
-  const { colors, dark } = useTheme();
-  const styles = useCommentCarouselStyles(colors, dark);
+  const theme = useTheme();
+  const { colors } = theme;
+  const styles = useCommentCarouselStyles(colors, theme);
 
   const carouselRef = React.useRef<ICarouselInstance>(null);
   const resumeTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(
@@ -254,10 +255,10 @@ const CommentCard = React.memo(function CommentCard({
 CommentCard.displayName = 'CommentCard';
 
 function useCommentCarouselStyles(
-  themeColors: ReturnType<typeof useTheme>['colors'],
-  dark: boolean,
+  themeColors: Theme['colors'],
+  navigationTheme: Theme,
 ) {
-  const s = pickSemantic(dark);
+  const s = pickSemantic(navigationTheme);
 
   return React.useMemo(
     () =>

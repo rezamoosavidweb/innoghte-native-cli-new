@@ -1,19 +1,16 @@
-import { useTheme, type Theme } from '@react-navigation/native';
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import {
   fontSize,
   fontWeight,
-  pickSemantic,
   radius,
   spacing,
+  useThemeColors,
 } from '@/ui/theme';
+import type { ThemeColors } from '@/ui/theme/types';
 
-function createSettingsScreenStyles(
-  themeColors: Theme['colors'],
-  s: ReturnType<typeof pickSemantic>,
-) {
+function createSettingsScreenStyles(colors: ThemeColors) {
   return StyleSheet.create({
     section: {
       marginTop: spacing.xl,
@@ -32,26 +29,22 @@ function createSettingsScreenStyles(
       paddingHorizontal: spacing.base,
       borderRadius: radius.lg - 2,
       borderWidth: StyleSheet.hairlineWidth,
-      borderColor: s.chipBorder,
-      backgroundColor: s.chipBackground,
+      borderColor: colors.chipBorder,
+      backgroundColor: colors.chipBackground,
     },
     chipActive: {
-      borderColor: s.chipActiveBorder,
-      backgroundColor: s.chipActiveBackground,
+      borderColor: colors.chipActiveBorder,
+      backgroundColor: colors.chipActiveBackground,
     },
     chipText: {
       fontSize: fontSize.md + 1,
       fontWeight: fontWeight.semibold,
-      color: themeColors.text,
+      color: colors.text,
     },
   });
 }
 
 export function useSettingsScreenStyles() {
-  const { colors, dark } = useTheme();
-  const s = pickSemantic(dark);
-  return React.useMemo(
-    () => createSettingsScreenStyles(colors, s),
-    [colors, s],
-  );
+  const colors = useThemeColors();
+  return React.useMemo(() => createSettingsScreenStyles(colors), [colors]);
 }
