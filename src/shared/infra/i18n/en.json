@@ -304,7 +304,12 @@
       "title": "Startup",
       "body": "Legacy stack entry screen — use the buttons below to explore.",
       "goExample": "Open Example (drawer)",
-      "goMain": "Open main tabs"
+      "goMain": "Open main tabs",
+      "badge": "Mindfulness & Meditation",
+      "tagline": "Guided meditation and mindfulness\nfor a peaceful, present mind.",
+      "begin": "Begin Your Journey",
+      "signIn": "I already have an account",
+      "footer": "Breathe in. Breathe out. You are here."
     },
     "account": {
       "title": "Account",
