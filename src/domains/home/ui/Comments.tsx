@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import { HOME_COMMENTS_MOCK } from '@/domains/home/model/comments.mock';
+import { usePublicComments } from '@/domains/home/hooks/usePublicComments';
 import { useCommentsSectionStyles } from '@/domains/home/ui/comments.styles';
 import { CommentCarousel, DEFAULT_AUTOPLAY_INTERVAL } from '@/shared/ui/CommentCarousel';
 
@@ -13,6 +13,7 @@ const CommentsComponent = () => {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const styles = useCommentsSectionStyles(colors);
+  const { data } = usePublicComments(1, 20);
 
   return (
     <View style={styles.section}>
@@ -24,7 +25,7 @@ const CommentsComponent = () => {
       </View>
 
       <CommentCarousel
-        data={HOME_COMMENTS_MOCK}
+        data={data ?? []}
         autoPlay
         autoPlayInterval={DEFAULT_AUTOPLAY_INTERVAL}
         loop

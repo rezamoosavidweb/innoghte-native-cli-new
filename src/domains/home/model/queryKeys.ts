@@ -5,4 +5,6 @@
 export const homeKeys = {
   all: ['home'] as const,
   quickAccess: () => [...homeKeys.all, 'quickAccess'] as const,
+  comments: (page?: number, perPage?: number) =>
+    [...homeKeys.all, 'comments', { page, perPage }] as const,
 } as const;

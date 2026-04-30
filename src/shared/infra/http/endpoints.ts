@@ -2,6 +2,8 @@ export const endpoints = {
   public: {
     albums: 'api/v1/public/albums',
     courses: 'api/v1/public/courses',
+    /** Course reviews / comments list — matches client-web `getPublicComments`. */
+    comments: 'api/v1/public/courses/comments',
     events: 'api/v1/public/events',
     faq: 'api/v1/faq',
     liveMeeting: 'api/v1/public/live-meetings',
