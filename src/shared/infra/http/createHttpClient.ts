@@ -1,5 +1,6 @@
 import ky, { HTTPError, type Options } from 'ky';
 
+import { scopeHeader } from '@/shared/config/resolveIsDotIr';
 import { ApiError, type ApiErrorPayload } from '@/shared/infra/http/apiError';
 import { resolveApiBaseUrl } from '@/shared/infra/http/resolveBaseUrl';
 
@@ -38,6 +39,7 @@ export function createApiTransport(prefix: string, auth: HttpAuthHooks) {
         ({ request }) => {
           request.headers.set('Accept', 'application/json');
           request.headers.set('Content-Type', 'application/json');
+          request.headers.set('Scope', scopeHeader().Scope);
           const token = auth.getAccessToken();
           if (token) {
             request.headers.set('Authorization', `Bearer ${token}`);
@@ -53,7 +55,9 @@ export function createApiTransport(prefix: string, auth: HttpAuthHooks) {
 
           let payload: ApiErrorPayload | undefined;
           try {
-            payload = (await state.error.response.clone().json()) as ApiErrorPayload;
+            payload = (await state.error.response
+              .clone()
+              .json()) as ApiErrorPayload;
           } catch {
             payload = undefined;
           }
@@ -65,8 +69,13 @@ export function createApiTransport(prefix: string, auth: HttpAuthHooks) {
           }
 
           const message =
-            payload?.message ?? `Request failed with status ${state.error.response.status}`;
-          const apiError = new ApiError(message, state.error.response.status, payload);
+            payload?.message ??
+            `Request failed with status ${state.error.response.status}`;
+          const apiError = new ApiError(
+            message,
+            state.error.response.status,
+            payload,
+          );
           auth.onApiError(apiError);
           return apiError;
         },

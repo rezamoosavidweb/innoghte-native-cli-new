@@ -97,11 +97,8 @@ const CoursesScreenComponent = () => {
     refetch().catch(() => {});
   }, [refetch]);
 
-  const {
-    captureRef,
-    scrollPropsForFlashList,
-    shouldSuppressEndReached,
-  } = flashListScrollMemory;
+  const { captureRef, scrollPropsForFlashList, shouldSuppressEndReached } =
+    flashListScrollMemory;
 
   const handleEndReached = React.useCallback(() => {
     if (shouldSuppressEndReached()) {

@@ -19,12 +19,12 @@ export const createDonationScreenStyles = (args: {
     topTitle: {
       fontSize: fontSize.xl,
       fontWeight: fontWeight.bold,
-      color: '#212121',
+      color: colors.text,
       marginBottom: spacing.sm,
     },
     topSubtitle: {
       fontSize: fontSize.base,
-      color: '#212121',
+      color: colors.textSecondary,
       lineHeight: fontSize.base * 1.45,
     },
     darkSection: {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import {
   deleteCartLine,
@@ -11,8 +11,12 @@ import { basketKeys } from '@/domains/basket/model/queryKeys';
 import type { CartDto } from '@/domains/basket/model/schemas';
 import { postAnonymousCartCreate } from '@/domains/user/api/giveGiftApi';
 import { readOrCreateCartToken } from '@/domains/user/model/giveGiftCartToken';
+import { ApiError } from '@/shared/infra/http';
+import { useQueryCache } from '@/shared/lib/react-query/useQueryCache';
 
 const STALE_MS = 60 * 1000;
+
+const LOG = '[BasketCart:add]';
 
 const EMPTY_CART_LIST: readonly CartDto[] = [];
 
@@ -23,27 +27,56 @@ function useCartToken(): string {
 
 export function useBasketCart() {
   const cartToken = useCartToken();
-  const queryClient = useQueryClient();
   const setDiscount = useBasketDiscountStore(s => s.setDiscount);
+  const cartQueryKey = React.useMemo(
+    () => basketKeys.cart(cartToken),
+    [cartToken],
+  );
+  const { addItem, removeItem } = useQueryCache<CartDto>(cartQueryKey);
 
   const listQuery = useQuery({
-    queryKey: basketKeys.cart(cartToken),
+    queryKey: cartQueryKey,
     queryFn: () => fetchPublicCartList(cartToken),
     staleTime: STALE_MS,
   });
 
   const removeMutation = useMutation({
     mutationFn: (cartLineId: number) => deleteCartLine(cartToken, cartLineId),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: basketKeys.cart(cartToken) });
+    onSuccess: (_data, cartLineId) => {
+      removeItem(cartLineId);
     },
   });
 
   const addToCartMutation = useMutation({
     mutationFn: (courseId: number) =>
       postAnonymousCartCreate({ cartToken, courseId }),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: basketKeys.cart(cartToken) });
+    onMutate: courseId => {
+      console.log(LOG, 'onMutate', { courseId });
+    },
+    onSuccess: created => {
+      if (created) {
+        addItem(created);
+      }
+    },
+    onError: (error, courseId) => {
+      const api = error instanceof ApiError ? error : null;
+      console.error(LOG, 'onError', {
+        courseId,
+        message: error instanceof Error ? error.message : String(error),
+        ...(api && {
+          apiStatus: api.status,
+          apiPayloadSnippet:
+            typeof api.payload === 'object' && api.payload != null
+              ? JSON.stringify(api.payload).slice(0, 500)
+              : api.payload,
+        }),
+      });
+    },
+    onSettled: (_data, error, courseId) => {
+      console.log(LOG, 'onSettled', {
+        courseId,
+        status: error ? 'error' : 'success',
+      });
     },
   });
 
@@ -63,9 +96,15 @@ export function useBasketCart() {
 
   const addToCart = React.useCallback(
     (courseId: number) => {
+      console.log(LOG, 'addToCart invoked', {
+        courseId,
+        cartTokenPreview: `${cartToken.slice(0, 8)}…`,
+        mutationPending: addToCartMutation.isPending,
+        mutationStatus: addToCartMutation.status,
+      });
       addToCartMutation.mutate(courseId);
     },
-    [addToCartMutation],
+    [addToCartMutation, cartToken],
   );
 
   return {

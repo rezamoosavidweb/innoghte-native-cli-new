@@ -20,6 +20,7 @@ export type Course = {
 
 export function mapPublicCourseToCourseItem(item: PublicCourseDto): Course {
   const firstImage = item.medias.find(media => media.type === 'image');
+
   return {
     id: item.id,
     title_fa: item.title_fa,

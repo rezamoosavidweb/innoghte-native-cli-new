@@ -264,7 +264,7 @@ export const DonationScreen = React.memo(function DonationScreen({
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={[
-          flashListContentGutters.standard,
+          flashListContentGutters.vertical,
           s.scrollBottomPad,
         ]}
       >

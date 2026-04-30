@@ -1,7 +1,12 @@
 import i18n from './index';
 
+/** BCP 47 locale for Intl; `fa` alone is unreliable for Eastern Arabic digits on some runtimes. */
+function resolveIntlNumberLocale(language: string): string {
+  return language === 'fa' ? 'fa-IR' : language;
+}
+
 export function formatNumberForLocale(value: number, language: string): string {
-  return value.toLocaleString(language);
+  return value.toLocaleString(resolveIntlNumberLocale(language));
 }
 
 export function formatPriceForLocale(
@@ -9,7 +14,7 @@ export function formatPriceForLocale(
   language: string,
   currencyLabel: string,
 ): string {
-  const formatted = price.toLocaleString(language);
+  const formatted = price.toLocaleString(resolveIntlNumberLocale(language));
   return language === 'fa'
     ? `${formatted} ${currencyLabel}`
     : `${currencyLabel} ${formatted}`;

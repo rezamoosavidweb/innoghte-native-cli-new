@@ -20,7 +20,9 @@ export function usePayableCourseIds(
 }
 
 /** Course IDs eligible for discount API — matches web `DiscountForm` filter. */
-export function useDiscountEligibleCourseIds(cartList: readonly CartDto[]): number[] {
+export function useDiscountEligibleCourseIds(
+  cartList: readonly CartDto[],
+): number[] {
   return React.useMemo(
     () =>
       cartList

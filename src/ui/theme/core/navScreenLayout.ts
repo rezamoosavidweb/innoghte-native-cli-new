@@ -20,7 +20,7 @@ export const flashListContentGutters = StyleSheet.create({
   },
   vertical: {
     paddingTop: spacing.xl,
-    paddingBottom: spacing['5xl'],
+    paddingBottom: spacing['3xl'],
   },
 });
 

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { cartDtoSchema, type CartDto } from '@/domains/basket/model/schemas';
 import { scopeHeader } from '@/shared/config/resolveIsDotIr';
 import { ApiError, parseJsonResponse } from '@/shared/infra/http';
 import { getApiClient } from '@/shared/infra/http/appHttpClient';
@@ -8,8 +9,7 @@ const CREATE_PRESENT_PATH = 'api/presents/create';
 
 const PUBLIC_CART_CREATE_PATH = 'api/v1/public/carts/create';
 
-const PUBLIC_CART_DELETE_TOKEN_PATH =
-  'api/v1/public/carts/delete/cart-token';
+const PUBLIC_CART_DELETE_TOKEN_PATH = 'api/v1/public/carts/delete/cart-token';
 
 export const givePresentCreatedSchema = z
   .object({
@@ -28,21 +28,18 @@ export type GivePresentCreated = z.infer<typeof givePresentCreatedSchema>;
 const cartCreateEnvelopeSchema = z
   .object({
     message: z.string(),
-    data: z.unknown().optional(),
+    data: cartDtoSchema.optional().nullable(),
   })
   .passthrough();
 
-
-export async function postCreateGivePresent(
-  body: {
-    receiver_first_name: string;
-    receiver_last_name: string;
-    receiver_email: string;
-    receiver_mobile: string;
-    message?: string;
-    course_ids: number[];
-  },
-): Promise<GivePresentCreated> {
+export async function postCreateGivePresent(body: {
+  receiver_first_name: string;
+  receiver_last_name: string;
+  receiver_email: string;
+  receiver_mobile: string;
+  message?: string;
+  course_ids: number[];
+}): Promise<GivePresentCreated> {
   return parseJsonResponse(
     getApiClient().post(CREATE_PRESENT_PATH, {
       json: body,
@@ -53,7 +50,9 @@ export async function postCreateGivePresent(
 }
 
 /** Clears anonymous cart tied to {@link X-Cart-Token} (same semantics as web). */
-export async function deleteAllAnonymousCartItems(cartToken: string): Promise<void> {
+export async function deleteAllAnonymousCartItems(
+  cartToken: string,
+): Promise<void> {
   const response = await getApiClient().delete(PUBLIC_CART_DELETE_TOKEN_PATH, {
     headers: {
       ...scopeHeader(),
@@ -63,12 +62,15 @@ export async function deleteAllAnonymousCartItems(cartToken: string): Promise<vo
   await response.text().catch(() => '');
 }
 
-/** Adds one line item to anonymous cart — matches web `postPublicCartCreate`. */
+/**
+ * Adds one line item to anonymous cart — matches web `postPublicCartCreate`.
+ * Returns the created cart line when the API includes `data` (same as web).
+ */
 export async function postAnonymousCartCreate(params: {
   cartToken: string;
   courseId: number;
-}): Promise<void> {
-  await parseJsonResponse(
+}): Promise<CartDto | undefined> {
+  const res = await parseJsonResponse(
     getApiClient().post(PUBLIC_CART_CREATE_PATH, {
       headers: {
         ...scopeHeader(),
@@ -78,6 +80,7 @@ export async function postAnonymousCartCreate(params: {
     }),
     cartCreateEnvelopeSchema,
   );
+  return res.data ?? undefined;
 }
 
 type PresentErrorEnvelope = {
