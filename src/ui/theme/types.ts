@@ -114,6 +114,18 @@ export type ThemeColors = {
    * `s.danger` / `colors.notification` consumers don't break during migration.
    */
   danger: string;
+
+  // ── Ambient atmosphere tokens (startup / splash / premium surfaces) ────
+  /** Base background for atmosphere-heavy screens (startup, premium onboarding). */
+  gradientStart: string;
+  /** Mid atmosphere layer — large centered orb / depth circle background. */
+  gradientMid: string;
+  /** Cool-tone decorative orb / breathing ring accent color. */
+  ambientOrb1: string;
+  /** Warm-tone decorative orb / secondary breathing ring accent color. */
+  ambientOrb2: string;
+  /** Translucent tint for inner glows, shimmer highlights, and soft halos. */
+  shimmer: string;
 };
 
 /**

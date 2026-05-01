@@ -3,6 +3,7 @@ import { Dimensions, StyleSheet } from 'react-native';
 
 import type { ThemeColors } from '@/ui/theme/types';
 import { fontSize, fontWeight, radius, spacing } from '@/ui/theme';
+import { hexAlpha } from '@/ui/theme/utils/colorUtils';
 
 const { height: SCREEN_H } = Dimensions.get('window');
 
@@ -12,9 +13,10 @@ export function useStartupScreenStyles(colors: ThemeColors) {
       StyleSheet.create({
         root: {
           flex: 1,
-          backgroundColor: '#0B1120',
+          backgroundColor: colors.gradientStart,
         },
-        /* Decorative background orbs */
+
+        // ── Decorative background orbs ───────────────────────────────────
         orbTopLeft: {
           position: 'absolute',
           width: 260,
@@ -22,8 +24,8 @@ export function useStartupScreenStyles(colors: ThemeColors) {
           borderRadius: 130,
           top: -80,
           left: -80,
-          backgroundColor: '#0ABBB5',
-          opacity: 0.06,
+          backgroundColor: colors.ambientOrb1,
+          opacity: 0.07,
         },
         orbBottomRight: {
           position: 'absolute',
@@ -32,8 +34,8 @@ export function useStartupScreenStyles(colors: ThemeColors) {
           borderRadius: 150,
           bottom: -100,
           right: -100,
-          backgroundColor: '#FF984C',
-          opacity: 0.07,
+          backgroundColor: colors.ambientOrb2,
+          opacity: 0.09,
         },
         orbCenter: {
           position: 'absolute',
@@ -42,18 +44,47 @@ export function useStartupScreenStyles(colors: ThemeColors) {
           borderRadius: 190,
           top: SCREEN_H * 0.18,
           alignSelf: 'center',
-          backgroundColor: '#1E2D4A',
-          opacity: 0.45,
+          backgroundColor: colors.gradientMid,
+          // opacity controlled by ambientStyle animation (starts at 0.45)
         },
 
-        /* Breathing ring wrapper (animated externally) */
+        // ── Floating particles (absolute, animated externally) ───────────
+        particleA: {
+          position: 'absolute',
+          bottom: SCREEN_H * 0.30,
+          left: '18%',
+          width: 5,
+          height: 5,
+          borderRadius: 2.5,
+          backgroundColor: colors.ambientOrb1,
+        },
+        particleB: {
+          position: 'absolute',
+          bottom: SCREEN_H * 0.22,
+          right: '20%',
+          width: 4,
+          height: 4,
+          borderRadius: 2,
+          backgroundColor: colors.ambientOrb2,
+        },
+        particleC: {
+          position: 'absolute',
+          bottom: SCREEN_H * 0.38,
+          left: '50%',
+          width: 3,
+          height: 3,
+          borderRadius: 1.5,
+          backgroundColor: colors.ambientOrb1,
+        },
+
+        // ── Illustration zone (animated externally) ──────────────────────
         breathingRing: {
           position: 'absolute',
           width: 300,
           height: 300,
           borderRadius: 150,
           borderWidth: 1.5,
-          borderColor: '#0ABBB5',
+          borderColor: colors.ambientOrb1,
           opacity: 0.18,
           alignSelf: 'center',
         },
@@ -63,12 +94,21 @@ export function useStartupScreenStyles(colors: ThemeColors) {
           height: 340,
           borderRadius: 170,
           borderWidth: 1,
-          borderColor: '#FF984C',
-          opacity: 0.10,
+          borderColor: colors.ambientOrb2,
+          opacity: 0.11,
           alignSelf: 'center',
         },
+        innerGlow: {
+          position: 'absolute',
+          width: 270,
+          height: 270,
+          borderRadius: 135,
+          backgroundColor: colors.ambientOrb1,
+          alignSelf: 'center',
+          // opacity controlled by innerGlowStyle animation (0.03 → 0.09)
+        },
 
-        /* Layout */
+        // ── Layout ───────────────────────────────────────────────────────
         scroll: {
           flexGrow: 1,
           paddingTop: spacing['3xl'],
@@ -76,7 +116,7 @@ export function useStartupScreenStyles(colors: ThemeColors) {
           alignItems: 'center',
         },
 
-        /* Brand badge at top */
+        // ── Brand badge ──────────────────────────────────────────────────
         badge: {
           flexDirection: 'row',
           alignItems: 'center',
@@ -85,25 +125,25 @@ export function useStartupScreenStyles(colors: ThemeColors) {
           paddingVertical: spacing.sm,
           borderRadius: radius.full,
           borderWidth: 1,
-          borderColor: 'rgba(10,187,181,0.25)',
-          backgroundColor: 'rgba(10,187,181,0.07)',
+          borderColor: hexAlpha(colors.info, 0.25),
+          backgroundColor: hexAlpha(colors.info, 0.07),
           marginBottom: spacing['3xl'],
         },
         badgeDot: {
           width: 6,
           height: 6,
           borderRadius: 3,
-          backgroundColor: '#0ABBB5',
+          backgroundColor: colors.info,
         },
         badgeText: {
           fontSize: fontSize.sm,
           fontWeight: fontWeight.medium,
-          color: '#0ABBB5',
+          color: colors.info,
           letterSpacing: 1.2,
           textTransform: 'uppercase',
         },
 
-        /* Illustration zone */
+        // ── Illustration zone ─────────────────────────────────────────────
         illustrationZone: {
           width: 300,
           height: 300,
@@ -112,7 +152,7 @@ export function useStartupScreenStyles(colors: ThemeColors) {
           marginBottom: spacing['3xl'],
         },
 
-        /* Text content */
+        // ── Text content ─────────────────────────────────────────────────
         textBlock: {
           alignItems: 'center',
           paddingHorizontal: spacing['5xl'],
@@ -122,14 +162,14 @@ export function useStartupScreenStyles(colors: ThemeColors) {
         appName: {
           fontSize: fontSize['4xl'],
           fontWeight: fontWeight.heavy,
-          color: '#FFFFFF',
+          color: colors.text,
           letterSpacing: 6,
           textTransform: 'uppercase',
         },
         tagline: {
           fontSize: fontSize.base,
           fontWeight: fontWeight.light,
-          color: 'rgba(255,255,255,0.60)',
+          color: hexAlpha(colors.text, 0.60),
           textAlign: 'center',
           lineHeight: 24,
         },
@@ -137,12 +177,12 @@ export function useStartupScreenStyles(colors: ThemeColors) {
           width: 40,
           height: 2,
           borderRadius: 1,
-          backgroundColor: '#FF984C',
+          backgroundColor: colors.ambientOrb2,
           opacity: 0.7,
           marginVertical: spacing.sm,
         },
 
-        /* Buttons */
+        // ── Buttons ──────────────────────────────────────────────────────
         actions: {
           width: '100%',
           paddingHorizontal: spacing['3xl'],
@@ -151,10 +191,10 @@ export function useStartupScreenStyles(colors: ThemeColors) {
         btnPrimary: {
           height: 54,
           borderRadius: radius.lg,
-          backgroundColor: '#FF984C',
+          backgroundColor: colors.primary,
           alignItems: 'center',
           justifyContent: 'center',
-          shadowColor: '#FF984C',
+          shadowColor: colors.primary,
           shadowOffset: { width: 0, height: 8 },
           shadowOpacity: 0.38,
           shadowRadius: 16,
@@ -163,38 +203,36 @@ export function useStartupScreenStyles(colors: ThemeColors) {
         btnPrimaryText: {
           fontSize: fontSize.base,
           fontWeight: fontWeight.bold,
-          color: '#FFFFFF',
+          color: colors.onPrimary,
           letterSpacing: 0.5,
         },
         btnSecondary: {
           height: 54,
           borderRadius: radius.lg,
           borderWidth: 1.5,
-          borderColor: 'rgba(255,255,255,0.18)',
-          backgroundColor: 'rgba(255,255,255,0.05)',
+          borderColor: hexAlpha(colors.text, 0.18),
+          backgroundColor: hexAlpha(colors.text, 0.05),
           alignItems: 'center',
           justifyContent: 'center',
         },
         btnSecondaryText: {
           fontSize: fontSize.base,
           fontWeight: fontWeight.medium,
-          color: 'rgba(255,255,255,0.75)',
+          color: hexAlpha(colors.text, 0.75),
           letterSpacing: 0.3,
         },
 
-        /* Footer hint */
+        // ── Footer hint ──────────────────────────────────────────────────
         footer: {
           marginTop: spacing['3xl'],
           alignItems: 'center',
         },
         footerText: {
           fontSize: fontSize.xs,
-          color: 'rgba(255,255,255,0.28)',
+          color: colors.textMuted,
           letterSpacing: 0.5,
         },
       }),
-    // colors is intentionally kept as a dep so the hook signature stays stable
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [colors],
   );
 }

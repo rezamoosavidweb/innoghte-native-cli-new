@@ -98,6 +98,13 @@ const lightOverrides: Partial<ThemeColors> = {
 
   // ── Legacy ─────────────────────────────────────────────────────────────
   danger: '#C0453A',
+
+  // ── Ambient atmosphere ─────────────────────────────────────────────────
+  gradientStart: sand[200],                    // #EEE6DA warm sand base
+  gradientMid: sage[100],                      // #E6EBE5 light sage depth layer
+  ambientOrb1: sage[400],                      // #9AAB95 muted sage green
+  ambientOrb2: sand[400],                      // #D5C5AF warm sand gold
+  shimmer: hexAlpha(sage[300], 0.09),          // soft sage inner glow
 };
 
 export const lightColors: ThemeColors = Object.freeze({

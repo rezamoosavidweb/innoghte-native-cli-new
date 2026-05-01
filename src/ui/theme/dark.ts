@@ -71,6 +71,13 @@ export const darkColors: ThemeColors = Object.freeze({
   chipActiveBackground: surfaceDark.raised,
 
   danger: feedback.errorBase,
+
+  // ── Ambient atmosphere ─────────────────────────────────────────────────
+  gradientStart: '#07101F',
+  gradientMid: '#1E2D4A',
+  ambientOrb1: feedback.infoBase,              // #0ABBB5 teal
+  ambientOrb2: palette.primary[300],           // #FF984C orange
+  shimmer: hexAlpha('#8B9FFF', 0.08),          // soft periwinkle inner glow
 });
 
 export const darkTheme: AppTheme = Object.freeze({

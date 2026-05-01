@@ -66,6 +66,12 @@ export const editorialGrayColors: ThemeColors = Object.freeze({
   chipActiveBackground: hexAlpha(egSlate, 0.14),
 
   danger: '#B54747',
+
+  gradientStart: egSnow,
+  gradientMid: egCloud,
+  ambientOrb1: egSlate,
+  ambientOrb2: egMist,
+  shimmer: hexAlpha(egSlate, 0.06),
 });
 
 export const editorialGrayTheme: AppTheme = Object.freeze({
@@ -133,6 +139,12 @@ export const studioDarkColors: ThemeColors = Object.freeze({
   chipActiveBackground: hexAlpha(sdSilver, 0.12),
 
   danger: '#E07872',
+
+  gradientStart: sdVoid,
+  gradientMid: sdPanel,
+  ambientOrb1: '#8BAFC4',
+  ambientOrb2: sdSilver,
+  shimmer: hexAlpha(sdMist, 0.06),
 });
 
 export const studioDarkTheme: AppTheme = Object.freeze({
@@ -200,6 +212,12 @@ export const nighttimeColors: ThemeColors = Object.freeze({
   chipActiveBackground: hexAlpha(ntGraphite, 0.11),
 
   danger: '#A85E56',
+
+  gradientStart: ntCream,
+  gradientMid: ntTaupe,
+  ambientOrb1: ntLavender,
+  ambientOrb2: ntGraphite,
+  shimmer: hexAlpha(ntGraphite, 0.05),
 });
 
 export const nighttimeTheme: AppTheme = Object.freeze({
@@ -267,6 +285,12 @@ export const steadyColors: ThemeColors = Object.freeze({
   chipActiveBackground: hexAlpha(stSage, 0.13),
 
   danger: '#B35248',
+
+  gradientStart: stMist,
+  gradientMid: stHaze,
+  ambientOrb1: stSage,
+  ambientOrb2: stDust,
+  shimmer: hexAlpha(stSage, 0.07),
 });
 
 export const steadyTheme: AppTheme = Object.freeze({
@@ -334,6 +358,12 @@ export const stoneCalmColors: ThemeColors = Object.freeze({
   chipActiveBackground: hexAlpha(scPine, 0.12),
 
   danger: '#AD554E',
+
+  gradientStart: scBone,
+  gradientMid: scAsh,
+  ambientOrb1: scPine,
+  ambientOrb2: scLichen,
+  shimmer: hexAlpha(scPine, 0.07),
 });
 
 export const stoneCalmTheme: AppTheme = Object.freeze({
