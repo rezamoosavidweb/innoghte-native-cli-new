@@ -1,13 +1,13 @@
 import * as React from 'react';
 import {
   Pressable,
-  Text,
   TextInput,
   View,
   type KeyboardTypeOptions,
   type TextStyle,
-  type ViewStyle,
+  type ViewStyle
 } from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 export type VerifyInputStepProps = {
   label: string;

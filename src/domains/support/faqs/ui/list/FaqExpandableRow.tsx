@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { LayoutAnimation, Pressable, Text, View } from 'react-native';
+import {LayoutAnimation, Pressable, View} from 'react-native';
 import { useTheme } from '@react-navigation/native';
+import { Text } from '@/shared/ui/Text';
 
 import { useFaqExpandableRowStyles } from '@/domains/support/faqs/ui';
 

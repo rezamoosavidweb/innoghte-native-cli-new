@@ -1,6 +1,7 @@
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import { radius } from '@/ui/theme/core/radius';
 import { spacing } from '@/ui/theme/core/spacing';

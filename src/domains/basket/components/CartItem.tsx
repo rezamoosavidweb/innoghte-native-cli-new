@@ -3,16 +3,26 @@ import {
   Image,
   Pressable,
   StyleSheet,
-  Text,
   View,
   type StyleProp,
-  type ViewStyle,
+  type ViewStyle
 } from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import type { CartDto } from '@/domains/basket/model/schemas';
-import { asCourseLike, coursePrimaryImageSrc } from '@/domains/basket/model/courseGuards';
+import {
+  asCourseLike,
+  coursePrimaryImageSrc,
+} from '@/domains/basket/model/courseGuards';
 import { formatTomanFa } from '@/domains/basket/utils/formatTomanFa';
-import { useThemeColors, fontSize, fontWeight, radius, spacing } from '@/ui/theme';
+import {
+  useThemeColors,
+  fontSize,
+  fontWeight,
+  radius,
+  spacing,
+} from '@/ui/theme';
+import { isDotIr, scopeHeader } from '@/shared/config/resolveIsDotIr';
 
 export type CartItemProps = {
   item: CartDto;
@@ -35,6 +45,7 @@ export const CartItem = React.memo(function CartItem({
   const isGift = giftsCourseIds.includes(item.course_id);
   const isDisabled = !isGift && Boolean(course?.is_accessible);
   const title = course?.title_fa ?? '—';
+  console.log({ isDisabled: course, isDotIr, scopeHeader });
 
   const s = React.useMemo(
     () =>
@@ -67,9 +78,17 @@ export const CartItem = React.memo(function CartItem({
         },
         removeHit: { padding: spacing.sm },
         remove: { fontSize: fontSize.lg, color: colors.textSecondary },
-        qty: { fontSize: fontSize.sm, color: colors.textSecondary, marginTop: 4 },
+        qty: {
+          fontSize: fontSize.sm,
+          color: colors.textSecondary,
+          marginTop: 4,
+        },
         priceCol: { alignItems: 'flex-end' },
-        price: { fontSize: fontSize.base, fontWeight: fontWeight.semibold, color: colors.text },
+        price: {
+          fontSize: fontSize.base,
+          fontWeight: fontWeight.semibold,
+          color: colors.text,
+        },
         strike: {
           fontSize: fontSize.sm,
           textDecorationLine: 'line-through',
@@ -82,7 +101,11 @@ export const CartItem = React.memo(function CartItem({
           borderRadius: radius.full,
           backgroundColor: colors.primarySoft,
         },
-        pillText: { color: colors.primary, fontWeight: fontWeight.medium, fontSize: fontSize.sm },
+        pillText: {
+          color: colors.primary,
+          fontWeight: fontWeight.medium,
+          fontSize: fontSize.sm,
+        },
       }),
     [colors],
   );
@@ -110,9 +133,15 @@ export const CartItem = React.memo(function CartItem({
       <View style={s.grow}>
         <View style={[s.thumbWrap, isDisabled && s.muted]}>
           {imageSrc ? (
-            <Image source={{ uri: imageSrc }} style={s.thumb} resizeMode="cover" />
+            <Image
+              source={{ uri: imageSrc }}
+              style={s.thumb}
+              resizeMode="cover"
+            />
           ) : (
-            <View style={[s.thumb, { backgroundColor: colors.surfaceSecondary }]} />
+            <View
+              style={[s.thumb, { backgroundColor: colors.surfaceSecondary }]}
+            />
           )}
         </View>
         <View style={[s.grow, isDisabled && s.muted]}>
@@ -134,10 +163,13 @@ export const CartItem = React.memo(function CartItem({
         </Pressable>
       ) : (
         <View style={s.priceCol}>
-          {course?.discount_price != null && course.discount_price !== course.price ? (
+          {course?.discount_price != null &&
+          course.discount_price !== course.price ? (
             <>
               <Text style={s.strike}>{formatTomanFa(course.price ?? 0)}</Text>
-              <Text style={s.price}>{formatTomanFa(course.discount_price)}</Text>
+              <Text style={s.price}>
+                {formatTomanFa(course.discount_price)}
+              </Text>
             </>
           ) : (
             <Text style={s.price}>{formatTomanFa(course?.price ?? 0)}</Text>

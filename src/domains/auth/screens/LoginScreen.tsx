@@ -1,7 +1,8 @@
 import type { DrawerScreenProps } from '@react-navigation/drawer';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { KeyboardAvoidingView, Platform, Text, View } from 'react-native';
+import {KeyboardAvoidingView, Platform, View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import { completePendingAuthNavigation } from '@/app/bridge/auth/protectedNavigation';
 import { LoginForm } from '@/domains/auth/ui/forms/LoginForm';

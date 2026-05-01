@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import {Image, Pressable, StyleSheet, View} from 'react-native';
 import { useTheme, type Theme } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { Text } from '@/shared/ui/Text';
 
 import {
   formatNumberForApp,

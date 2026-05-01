@@ -2,7 +2,8 @@ import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import type { Control } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
-import { Pressable, Text, TextInput, View } from 'react-native';
+import {Pressable, TextInput, View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import { createDonationCreditCardFieldsStyles } from '@/domains/donation/styles/donationCreditCardFields.styles';
 import type { DonationFormType } from '@/domains/donation/schema/donationForm';

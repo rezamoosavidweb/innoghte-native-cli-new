@@ -3,11 +3,11 @@ import { Controller, type Control, type FieldErrors } from 'react-hook-form';
 import * as React from 'react';
 import {
   Pressable,
-  Text,
   TextInput,
   View,
-  type LayoutChangeEvent,
+  type LayoutChangeEvent
 } from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import { GiveGiftDescription } from '@/domains/user/components/giveGift/GiveGiftDescription';
 import { GiveGiftLabeledField } from '@/domains/user/components/giveGift/GiveGiftLabeledField';

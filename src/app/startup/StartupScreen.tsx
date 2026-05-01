@@ -1,7 +1,8 @@
 import type { DrawerScreenProps } from '@react-navigation/drawer';
 import * as React from 'react';
 import { useEffect } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import {ScrollView, TouchableOpacity, View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, {
   Easing,

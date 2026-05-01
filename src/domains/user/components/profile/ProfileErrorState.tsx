@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Text, TouchableOpacity, View, type TextStyle } from 'react-native';
+import {TouchableOpacity, View, type TextStyle} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import { getRetryLabelKey } from '@/domains/user/model/profileScreenLabels';
 import type { ProfileScreenShellStyleSet } from '@/domains/user/ui/profileScreen.styles';

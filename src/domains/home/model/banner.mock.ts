@@ -14,10 +14,11 @@ export const HOME_BANNER_MOCK: ReadonlyArray<
     parImage: require('@/assets/images/new-banner/Par.png'),
     titleLine1Accent: {
       before: 'ره ',
-      highlight: 'آسمان',
-      after: ' درون است',
+      highlight: 'آسـمان',
+      after: ' درون اسـت',
     },
-    titleRest: 'پر عشق را بجنبان',
-    subtitle: 'پر عشق چون قوی شد\nغم نردبان نماند…',
+    titleRest: 'پـر عـشـق را بـجـنـبـان',
+    subtitle1: 'پر عشق چون قوی شد',
+    subtitle2: 'غـم نـردبان نـمـانــد...',
   },
 ];

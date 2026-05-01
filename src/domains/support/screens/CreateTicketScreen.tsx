@@ -9,9 +9,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
-  ScrollView,
-  Text,
+  ScrollView
 } from 'react-native';
+import { Text } from '@/shared/ui/Text';
 import { z } from 'zod';
 
 import { TicketForm } from '@/domains/support/components/TicketForm';

@@ -2,8 +2,9 @@ import type { DrawerScreenProps } from '@react-navigation/drawer';
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Text, TouchableOpacity, View } from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
+import { Text } from '@/shared/ui/Text';
 
 import type { ThemePreference } from '@/shared/contracts/theme';
 import type { AppLanguage } from '@/shared/contracts/locale';

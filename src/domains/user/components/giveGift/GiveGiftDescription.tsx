@@ -1,4 +1,5 @@
-import { Text, View } from 'react-native';
+import {View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import type { GiveGiftStyles } from '@/domains/user/ui/giveGiftScreen.styles';
 

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
+import {View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import type { UserDto } from '@/domains/auth/model/apiTypes';
 import { getAccountStatusMessageKey } from '@/domains/user/model/profileScreenLabels';

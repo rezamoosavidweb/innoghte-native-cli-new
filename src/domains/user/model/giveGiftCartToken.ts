@@ -1,7 +1,7 @@
 import { GIVE_GIFT_CART_TOKEN_KEY } from '@/domains/user/model/giveGift.storageKeys';
 import { StorageService } from '@/shared/infra/storage/storage.service';
 
-const LOG = '[BasketCart:token]';
+const LOG = '[GiveGift:cartToken]';
 
 /** Backend `cart_token` is a UUID column; values like `timestamp-hex` are rejected. */
 const UUID_V4_RE =
@@ -18,15 +18,11 @@ function randomUUIDPolyfill(): string {
 export function nextRandomGiftCartSegment(): string {
   const g = globalThis as { crypto?: { randomUUID?: () => string } };
   if (g.crypto && typeof g.crypto.randomUUID === 'function') {
-    console.log(LOG, 'nextRandomGiftCartSegment', 'crypto.randomUUID');
     return g.crypto.randomUUID();
   }
-  console.warn(
-    LOG,
-    'nextRandomGiftCartSegment',
-    'crypto.randomUUID missing, UUID v4 polyfill',
-    { hasCrypto: Boolean(g.crypto) },
-  );
+  if (__DEV__) {
+    console.warn(LOG, 'crypto.randomUUID unavailable — using polyfill');
+  }
   return randomUUIDPolyfill();
 }
 
@@ -34,26 +30,12 @@ export function readOrCreateCartToken(): string {
   const raw = StorageService.getString(GIVE_GIFT_CART_TOKEN_KEY);
   const existing = typeof raw === 'string' ? raw.trim() : '';
   if (existing && UUID_V4_RE.test(existing)) {
-    console.log(LOG, 'readOrCreateCartToken', 'reuse from storage', {
-      length: existing.length,
-      preview: `${existing.slice(0, 8)}…`,
-    });
     return existing;
   }
   if (existing) {
-    console.warn(
-      LOG,
-      'readOrCreateCartToken',
-      'stored token invalid for API (not UUID v4); replacing',
-      { length: existing.length, preview: `${existing.slice(0, 12)}…` },
-    );
+    console.warn(LOG, 'stored token is not UUID v4 — replacing', { preview: `${existing.slice(0, 12)}…` });
   }
   const next = nextRandomGiftCartSegment();
-  console.log(LOG, 'readOrCreateCartToken', 'created new token', {
-    length: next.length,
-    preview: `${next.slice(0, 8)}…`,
-  });
   StorageService.setString(GIVE_GIFT_CART_TOKEN_KEY, next);
-  console.log(LOG, 'readOrCreateCartToken', 'persisted to storage');
   return next;
 }

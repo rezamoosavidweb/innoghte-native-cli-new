@@ -1,7 +1,8 @@
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, Text, View } from 'react-native';
+import {Pressable, View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import { TicketLabelValue } from '@/domains/support/components/TicketLabelValue';
 import { TicketStatusBadge } from '@/domains/support/components/TicketStatusBadge';

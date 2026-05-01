@@ -4,13 +4,15 @@ import type { RouteProp } from '@react-navigation/native';
 import { useFocusEffect } from '@react-navigation/native';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
-import { ActivityIndicator, Alert, ScrollView, Text, View } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-
+import {ActivityIndicator, Alert, ScrollView, View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 import {
-  navigateToAppLeaf,
-  navigateToLogin,
-} from '@/app/bridge/auth';
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
+
+import { navigateToAppLeaf, navigateToLogin } from '@/app/bridge/auth';
+import { AuthService, useIsAuthenticated } from '@/domains/auth';
 import { deleteCartByToken } from '@/domains/basket/api/basketApi';
 import { CartHeader } from '@/domains/basket/components/CartHeader';
 import { CartList } from '@/domains/basket/components/CartList';
@@ -35,23 +37,33 @@ import {
 } from '@/domains/basket/model/paymentFormSchema';
 import { buildBasketPaymentPayload } from '@/domains/basket/services/buildBasketPaymentPayload';
 import { openExternalPaymentUrl } from '@/domains/basket/services/openExternalPaymentUrl';
-import { useBasketScreenStyles } from './basketScreen.styles';
 import { formatTomanFa } from '@/domains/basket/utils/formatTomanFa';
-import { AuthService, useIsAuthenticated } from '@/domains/auth';
-import { resolveIsDotIr } from '@/shared/config/resolveIsDotIr';
-import type { DrawerParamList, TabParamList } from '@/shared/contracts/navigationApp';
+import { isDotIr } from '@/shared/config/resolveIsDotIr';
+import type {
+  DrawerParamList,
+  TabParamList,
+} from '@/shared/contracts/navigationApp';
 import { ApiError } from '@/shared/infra/http/apiError';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { useThemeColors } from '@/ui/theme';
+import { useBasketScreenStyles } from './basketScreen.styles';
 
 export type BasketScreenRouteProp =
   | RouteProp<DrawerParamList, 'Basket'>
   | RouteProp<TabParamList, 'Cart'>;
 
-function redirectToLoginForCheckout(navigation: ReturnType<typeof useAppNavigation>): void {
-  AuthService.setPendingNavigation({ name: 'Basket', params: { resumeCheckout: true } });
+function redirectToLoginForCheckout(
+  navigation: ReturnType<typeof useAppNavigation>,
+): void {
+  AuthService.setPendingNavigation({
+    name: 'Basket',
+    params: { resumeCheckout: true },
+  });
   useBasketCheckoutStore.getState().prepareLoginRedirect();
-  navigateToLogin(navigation, { redirectTo: 'BasketScreen', preserveState: true });
+  navigateToLogin(navigation, {
+    redirectTo: 'BasketScreen',
+    preserveState: true,
+  });
 }
 
 function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
@@ -76,7 +88,9 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
   const totals = useBasketTotals(cartList, gift.giftsCourseIds, discount);
   const gateway = useBasketCheckoutStore(s => s.gatewayName);
   const termsAccepted = useBasketCheckoutStore(s => s.termsAccepted);
-  const pendingDiscountCode = useBasketCheckoutStore(s => s.pendingDiscountCode);
+  const pendingDiscountCode = useBasketCheckoutStore(
+    s => s.pendingDiscountCode,
+  );
   const paymentMutation = useBasketPaymentMutation();
 
   const form = useForm<BasketPaymentFormType>({
@@ -318,7 +332,9 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
                 <Text style={s.muted}>قیمت نهایی</Text>
                 <View style={s.priceRow}>
                   {showStrike ? (
-                    <Text style={s.strike}>{formatTomanFa(totals.displayPrice)}</Text>
+                    <Text style={s.strike}>
+                      {formatTomanFa(totals.displayPrice)}
+                    </Text>
                   ) : null}
                   <Text style={s.total}>
                     {formatTomanFa(totals.displayDiscountPrice)}
@@ -339,7 +355,7 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
                 اشتراک آنلاین ارائه می‌شود.
               </Text>
             </View>
-            {resolveIsDotIr() ? (
+            {isDotIr ? (
               <View style={[s.banner, s.bannerWarn]}>
                 <Text style={s.bannerTxtWarn}>
                   بعد از خرید، اشتراک شما تنها در جهت استفاده در کشور ایران فعال

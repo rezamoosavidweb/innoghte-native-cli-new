@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useTheme } from '@react-navigation/native';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Text } from '@/shared/ui/Text';
 
 import { TabBarGlyph } from '@/app/navigation/tabBarConfig';
 import { useCurrentUser } from '@/domains/auth';

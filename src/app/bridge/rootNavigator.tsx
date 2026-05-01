@@ -2,7 +2,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import type { Theme } from '@react-navigation/native';
 import * as React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import {StyleSheet} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import { protectedNavigate } from '@/app/bridge/auth/protectedNavigation';
 import { CollapsibleHeaderExampleScreen } from '@/app/examples/CollapsibleHeaderExampleScreen';
@@ -184,7 +185,10 @@ function mainTabsScreenOptions({
 const mainTabs = createBottomTabNavigator<TabParamList>({
   screenOptions: mainTabsScreenOptions,
   screens: {
-    Home: HomeScreen,
+    Home: {
+      screen: HomeScreen,
+      options: { headerShown: false },
+    },
     PublicCourses: CoursesScreen,
     PublicAlbums: PublicAlbumsScreen,
     Cart: BasketScreen,
@@ -369,7 +373,10 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
     },
     Startup: {
       screen: StartupScreen,
-      options: () => extraLeafOptions('startup', '🚀'),
+      options: () => ({
+        ...extraLeafOptions('startup', '🚀'),
+        headerShown: false,
+      }),
     },
     Login: {
       screen: LoginScreen,

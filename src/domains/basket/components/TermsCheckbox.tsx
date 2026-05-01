@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import { navigateToAppLeaf } from '@/app/bridge/auth/protectedNavigation';
 import { useBasketCheckoutStore } from '@/domains/basket/model/basketCheckout.store';

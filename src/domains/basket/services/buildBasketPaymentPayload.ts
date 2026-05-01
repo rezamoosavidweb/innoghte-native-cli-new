@@ -1,10 +1,13 @@
-import { resolveIsDotIr } from '@/shared/config/resolveIsDotIr';
+import { isDotIr } from '@/shared/config/resolveIsDotIr';
 
-import type { BasketIrGateway, BasketPaymentMethod } from '@/domains/basket/model/basketCheckout.store';
-import type { BasketPaymentFormType } from '@/domains/basket/model/paymentFormSchema';
-import type { CheckDiscountCodeDto } from '@/domains/basket/model/schemas';
-import { basketCartTypeOptions } from '@/domains/basket/model/paymentFormSchema';
 import type { CreateBasketPaymentBody } from '@/domains/basket/api/basketApi';
+import type {
+  BasketIrGateway,
+  BasketPaymentMethod,
+} from '@/domains/basket/model/basketCheckout.store';
+import type { BasketPaymentFormType } from '@/domains/basket/model/paymentFormSchema';
+import { basketCartTypeOptions } from '@/domains/basket/model/paymentFormSchema';
+import type { CheckDiscountCodeDto } from '@/domains/basket/model/schemas';
 
 export type BuildPaymentInput = {
   payableCourseIds: number[];
@@ -16,8 +19,9 @@ export type BuildPaymentInput = {
   form: BasketPaymentFormType;
 };
 
-export function buildBasketPaymentPayload(input: BuildPaymentInput): CreateBasketPaymentBody {
-  const isDotIr = resolveIsDotIr();
+export function buildBasketPaymentPayload(
+  input: BuildPaymentInput,
+): CreateBasketPaymentBody {
   const body: Record<string, unknown> = {
     course_ids: input.payableCourseIds,
     order_type: 'normal',

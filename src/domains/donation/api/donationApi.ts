@@ -29,7 +29,7 @@ export async function postCreateDonationIr(
   return parseJsonResponse(
     getApiClient().post(paths.createIr, {
       json: body,
-      headers: scopeHeader(),
+      headers: { Scope: scopeHeader },
     }),
     publicDonationResponseSchema,
   );
@@ -41,7 +41,7 @@ export async function postCreateDonationCom(
   return parseJsonResponse(
     getApiClient().post(paths.createCom, {
       json: body,
-      headers: scopeHeader(),
+      headers: { Scope: scopeHeader },
     }),
     publicDonationResponseSchema,
   );

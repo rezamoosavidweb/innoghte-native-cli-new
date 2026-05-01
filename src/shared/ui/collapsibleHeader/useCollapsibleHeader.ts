@@ -36,7 +36,7 @@ export function useCollapsibleHeader(
   const {
     scrollY: externalScrollY,
     backgroundColor,
-    threshold = COLLAPSIBLE_HEADER_DEFAULT_THRESHOLD,
+    threshold: thresholdOption = COLLAPSIBLE_HEADER_DEFAULT_THRESHOLD,
     expandedBackgroundColor: expandedBg,
     barHeight = COLLAPSIBLE_HEADER_DEFAULT_BAR_HEIGHT,
   } = options;
@@ -59,6 +59,11 @@ export function useCollapsibleHeader(
   );
 
   const contentPaddingTop = insets.top + barHeight;
+
+  const threshold =
+    thresholdOption === 'headerHeight'
+      ? contentPaddingTop
+      : thresholdOption;
 
   return {
     scrollY,

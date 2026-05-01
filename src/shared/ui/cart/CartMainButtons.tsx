@@ -2,10 +2,10 @@ import * as React from 'react';
 import {
   ActivityIndicator,
   Pressable,
-  Text,
   View,
-  type ViewStyle,
+  type ViewStyle
 } from 'react-native';
+import { Text } from '@/shared/ui/Text';
 import { useTheme } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
@@ -61,11 +61,11 @@ const LabelWithIcons = React.memo(function LabelWithIcons({
   }
   return (
     <View style={s.labelRow}>
-      {left ? <>{left}</> : null}
+      {left ?? null}
       <Text style={textStyle} numberOfLines={2}>
         {text}
       </Text>
-      {right ? <>{right}</> : null}
+      {right ?? null}
     </View>
   );
 });

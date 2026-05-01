@@ -122,6 +122,7 @@ i18next v26 + react-i18next v17. Languages: `en` (fallback) and `fa` (Farsi/Pers
 - RTL applied at startup via `applyRtlForLanguage(lng)`
 - Language preference persisted via MMKV; read at startup with `readAppLanguageFromStorage()`
 - Use `useTranslation()` hook for reactive text; add `key={i18n.language}` to screens/lists that need full remount on language change
+- **Language change** triggers a full app reload via `react-native-restart` (in `settings` domain) — RTL direction cannot be changed at runtime without a reload
 
 ## Bootstrap Order
 
@@ -139,6 +140,8 @@ i18next v26 + react-i18next v17. Languages: `en` (fallback) and `fa` (Farsi/Pers
 - **`fireAndForget(promise)`** from `@/shared/infra/http` — wraps fire-and-forget API calls; errors propagate through the global `onApiError` pipeline so callers never silently swallow failures
 - **`formatTsIso(iso, locale)`** from `@/shared/utils/formatTsIso` — formats ISO date strings for display; passes `'fa-IR'` locale for Persian, default `toLocaleString` otherwise
 - **`ScreenScaffold`** from `@/ui/components/ScreenScaffold` — thin wrapper with optional `title`/`subtitle` text + `ErrorBoundary`; use for simple non-list screens that don't need a custom shell
+- **`useQueryCache<T>(queryKey)`** from `@/shared/lib/react-query/useQueryCache` — optimistic cache mutations (`addItem`, `removeItem`) for items with numeric `id`; use for immediate UI feedback on cart/basket operations
+- **`Swiper`** from `@/shared/ui/Swiper` — generic horizontal carousel built on `FlatList`; accepts `renderItem`, `itemWidth`, `gap`, optional `contentInsetStart` for peek effect, and pagination dots
 
 ## Path Aliases
 
@@ -152,9 +155,11 @@ SVGs in `src/assets/icons/` are compiled to React components by `react-native-sv
 
 The app targets two regions: Iran (`.ir`) and international (`.com`). Region is resolved once at startup:
 
-- **Config:** `resolveIsDotIr()` from `@/shared/config` — returns `true` when `REACT_NATIVE_IS_DOT_IR === 'ir'`
+- **Config:** `isDotIr` from `@/shared/config` — returns `true` when `REACT_NATIVE_IS_DOT_IR === 'ir'`
 - **Scope header:** API calls that differ by region inject `{ Scope: 'ir' | 'com' }` via a `scopeHeader()` helper
 - **Feature flags:** Gateway visibility (Zarinpal, Vandar) is controlled by env vars checked in `src/domains/donation/model/env.ts`
+
+**Env var inlining:** `REACT_NATIVE_IS_DOT_IR`, `REACT_NATIVE_API_URL`, and other `REACT_NATIVE_*` vars are **inlined at compile time** by `babel-plugin-transform-inline-environment-variables` — set them before bundling, not at runtime.
 
 ## Forms
 
@@ -174,6 +179,8 @@ Performant lists use `@shopify/flash-list`. Theme helpers from `@/ui/theme` keep
 - `flashListContentGutters.standard` — standard `contentContainerStyle` padding
 - `flashListRowSeparators.h12` — `ItemSeparatorComponent` view with 12 dp gap
 - `useNavScreenShellStyles(colors)` — styles for loading/error/safe-area wrappers on full-screen list screens
+
+**Device-aware tuning:** `useListPerformanceProfile()` from `@/shared/infra/device/listPerformanceProfile` auto-detects Android ≤ API 29 ("low" tier) and adjusts `estimatedItemSizeFactor`, `onEndReachedThreshold`, `scrollEventThrottle`, and `decelerationRate`. Use it in list screens instead of hardcoding those props.
 
 ## Collapsible Header
 
@@ -252,6 +259,16 @@ The `giveGift` feature inside the `user` domain creates an anonymous cart and pr
 - **Anonymous cart token:** `readOrCreateCartToken()` in `model/giveGiftCartToken.ts` generates and persists a UUID via MMKV — this token is shared with the web app (key `'cart_token'`), so do not rename it
 - **Form schema:** `model/giveGiftFormSchema.ts` uses `.superRefine()` to require ≥1 product selection within the chosen `selectionGroup` (`courses | albums | rooyeKhats | audioBooks`)
 - **Orchestration:** `services/completeGiveGiftFlow.ts` sequences: create present → persist mapping → clear anonymous cart → re-add selected products
+
+## Status Bar
+
+`useScreenStatusBar(backgroundColor?)` from `@/ui/statusBar` — call inside a screen to declare its status bar style. Auto-infers `barStyle` from background color brightness. Uses `useFocusEffect` so it restores the global baseline on blur. For simple use, render `<ScreenStatusBar backgroundColor={colors.background} />` instead of calling the hook directly.
+
+## Build Notes
+
+- **Reanimated plugin** must be the **last entry** in `plugins` in `babel.config.js` — moving it earlier breaks worklet compilation.
+- **SVGs** are tree-shakeable modules at bundle time via `react-native-svg-transformer` (configured in `metro.config.js`).
+- **Android layout animation** is enabled once in `index.js` via `UIManager.setLayoutAnimationEnabledExperimental(true)` — required for animated expand/collapse UI on Android.
 
 ## Debug Tooling
 

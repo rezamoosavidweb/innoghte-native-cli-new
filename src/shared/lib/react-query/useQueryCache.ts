@@ -170,10 +170,7 @@ export function useQueryCache<T extends { id: number }>(queryKey: QueryKey) {
         ) {
           const wrapped = oldData as ResponseWrapper<T>;
           if (wrapped.data.id === id) {
-            const updated = { ...wrapped.data, ...patch } as T;
-            if (JSON.stringify(updated) !== JSON.stringify(wrapped.data)) {
-              return { ...wrapped, data: updated };
-            }
+            return { ...wrapped, data: { ...wrapped.data, ...patch } as T };
           }
           return oldData;
         }
@@ -185,10 +182,7 @@ export function useQueryCache<T extends { id: number }>(queryKey: QueryKey) {
           'id' in single &&
           single.id === id
         ) {
-          const updated = { ...single, ...patch } as T;
-          if (JSON.stringify(updated) !== JSON.stringify(single)) {
-            return updated;
-          }
+          return { ...single, ...patch } as T;
         }
 
         return oldData;

@@ -5,7 +5,8 @@ import {
   type DrawerContentComponentProps,
 } from '@react-navigation/drawer';
 import { useTheme } from '@react-navigation/native';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { ActivityIndicator, Text, View, type TextStyle } from 'react-native';
+import {ActivityIndicator, View, type TextStyle} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import type { ProfileScreenShellStyleSet } from '@/domains/user/ui/profileScreen.styles';
 

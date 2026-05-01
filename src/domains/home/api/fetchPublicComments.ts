@@ -4,7 +4,7 @@ import {
 } from '@/domains/home/model/comments.schema';
 import { getApiClient, parseJsonResponse } from '@/shared/infra/http';
 import { endpoints } from '@/shared/infra/http/endpoints';
-import type { CommentItem } from '@/shared/ui/CommentCarousel';
+import type { CommentItem } from '@/domains/home/ui/CommentCarousel';
 import type { z } from 'zod';
 
 type CommentDto = z.infer<typeof commentSchema>;

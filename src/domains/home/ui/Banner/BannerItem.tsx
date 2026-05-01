@@ -3,11 +3,11 @@ import {
   Image,
   ImageBackground,
   Pressable,
-  Text,
   View,
   useWindowDimensions,
   type ImageSourcePropType,
 } from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import type { BannerStyles } from '@/domains/home/ui/Banner/banner.styles';
 
@@ -32,7 +32,8 @@ export type BannerItemData = {
   titleLine1Accent?: BannerTitleAccent;
   /** Second bold line below line 1 (web typography split). */
   titleRest?: string;
-  subtitle?: string;
+  subtitle1?: string;
+  subtitle2?: string;
   cta?: string;
   onPress?: () => void;
   overlay?: boolean;
@@ -54,7 +55,8 @@ function BannerItemComponent({ item, styles }: BannerItemProps) {
     title,
     titleLine1Accent,
     titleRest,
-    subtitle,
+    subtitle1,
+    subtitle2,
     cta,
     onPress,
     overlay,
@@ -120,7 +122,8 @@ function BannerItemComponent({ item, styles }: BannerItemProps) {
     Boolean(titleLine1Accent) ||
     Boolean(title) ||
     Boolean(titleRest) ||
-    Boolean(subtitle) ||
+    Boolean(subtitle1) ||
+    Boolean(subtitle2) ||
     Boolean(cta);
 
   const showOverlay = overlay ?? hasCopy;
@@ -169,9 +172,14 @@ function BannerItemComponent({ item, styles }: BannerItemProps) {
         </Text>
       ) : null}
 
-      {subtitle ? (
+      {subtitle1 ? (
         <Text style={styles.subtitle} numberOfLines={6}>
-          {subtitle}
+          {subtitle1}
+        </Text>
+      ) : null}
+      {subtitle2 ? (
+        <Text style={styles.subtitle} numberOfLines={6}>
+          {subtitle2}
         </Text>
       ) : null}
 

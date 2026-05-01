@@ -45,7 +45,7 @@ domains/<domain>/
 └── index.ts       # Public exports (optional)
 ```
 
-**Examples in this repo:** `auth`, `courses`, `events`, `media`, `live`, `settings`, `support` (e.g. `faqs/`), `user`, `home`, `experiences`, `search`.
+**Examples in this repo:** `auth`, `basket`, `courses`, `donation`, `events`, `experiences`, `home`, `live`, `media`, `search`, `settings`, `support` (e.g. `faqs/`), `user`.
 
 Subdomains (e.g. `support/faqs/`) mirror the same internal layout when a feature is large enough.
 
@@ -120,6 +120,14 @@ getApiClient().get(path, withKyAuth401Context({ strategy: 'no_redirect' }));
 
 - Android **layout animation** for expandable UI is enabled once at startup (`UIManager.setLayoutAnimationEnabledExperimental`), not inside leaf components.
 
+### Multi-region (IR vs COM)
+
+The app builds for two regions: Iran (`.ir`) and international (`.com`).
+
+- **`isDotIr`** from `@/shared/config` — reads `REACT_NATIVE_IS_DOT_IR` env var, **inlined at compile time** by `babel-plugin-transform-inline-environment-variables`. Set before bundling.
+- **`scopeHeader()`** — injects `{ Scope: 'ir' | 'com' }` on API calls that differ by region.
+- Payment gateway visibility (Zarinpal, Vandar) is controlled by env vars in `src/domains/donation/model/env.ts`.
+
 ---
 
 ## Shared layer highlights (`src/shared`)
@@ -134,7 +142,10 @@ getApiClient().get(path, withKyAuth401Context({ strategy: 'no_redirect' }));
 | **`purchases`** | In-process `isProductPurchased` indirection. |
 | **`utils`** | e.g. `initialsFromDisplayName`, `resolveColorScheme`. |
 | **`lib/infiniteList`** | `useAppInfiniteList`, pagination backoff + FlashList scroll helpers — see **Infinite lists architecture**. |
+| **`lib/react-query`** | `useQueryCache<T>(queryKey)` — optimistic `addItem` / `removeItem` on items with numeric `id`. |
+| **`infra/device`** | `useListPerformanceProfile()` — low/normal tier tuning for Android ≤ API 29 (estimatedItemSize, threshold, throttle). |
 | **`ui/list-states`** | Reusable loading / error / empty / list shell for **FlashList** screens — see **List screen states** below. |
+| **`ui/Swiper`** | Generic horizontal carousel on `FlatList` — `renderItem`, `itemWidth`, `gap`, `contentInsetStart` for peek, pagination dots. |
 
 ---
 
@@ -228,9 +239,11 @@ import { useAppInfiniteList } from '@/shared/lib/infiniteList';
 | **Zustand** | Client state (auth, theme, FAQ hub, …) with MMKV persist where used |
 | **react-native-mmkv** | Fast storage (default + secure instances) |
 | **ky** | HTTP on `fetch` |
+| **@shopify/flash-list** | Performant lists (replaces `FlatList` for domain list screens) |
+| **react-hook-form** `7.x` + **Zod** | Forms with `zodResolver`; schemas live in domain `model/` |
+| **react-native-reanimated** `4.x` | Animations (collapsible headers, startup screen); plugin must be last in `babel.config.js` |
 | **Reactotron** | Dev-only debugger — network, MMKV, logs (`reactotron.config.ts`) |
-| **Zod** | Runtime validation at JSON boundaries (expand over time) |
-| **i18next** / **react-i18next** | i18n + RTL |
+| **i18next** / **react-i18next** | i18n + RTL; language change triggers app reload via `react-native-restart` |
 | **ESLint** + **eslint-plugin-boundaries** | Layer rules |
 
 **Node:** `>= 22.11.0` (see `package.json` `engines`).

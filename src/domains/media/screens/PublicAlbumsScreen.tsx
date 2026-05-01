@@ -1,4 +1,5 @@
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
+import { useQueryClient } from '@tanstack/react-query';
 
 import * as React from 'react';
 
@@ -11,6 +12,7 @@ import { PUBLIC_ALBUM_CATEGORY_ID } from '@/domains/media/model/publicCatalog';
 import type { PublicAlbumTrack } from '@/domains/media/model';
 
 import { useInfinitePublicAlbumTracks } from '@/domains/media/hooks/useInfinitePublicAlbumTracks';
+import { publicAlbumInfiniteKeys } from '@/domains/media/model/queryKeys';
 
 import { PublicAlbumTrackCard } from '@/domains/media/ui/cards/PublicAlbumTrackCard';
 
@@ -38,6 +40,7 @@ function keyExtractor(item: PublicAlbumTrack): string {
 
 const PublicAlbumsScreenComponent = () => {
   const perf = useListPerformanceProfile();
+  const queryClient = useQueryClient();
 
   const renderAlbumItem = React.useCallback<ListRenderItem<PublicAlbumTrack>>(
     ({ item }) => <PublicAlbumTrackCard item={item} />,
@@ -89,8 +92,10 @@ const PublicAlbumsScreenComponent = () => {
   const refreshing = Boolean(isSuccess && flatData.length > 0 && isRefetching);
 
   const refresh = React.useCallback(() => {
-    refetch().catch(() => {});
-  }, [refetch]);
+    queryClient
+      .invalidateQueries({ queryKey: publicAlbumInfiniteKeys.all })
+      .catch(() => {});
+  }, [queryClient]);
 
   const { captureRef, scrollPropsForFlashList, shouldSuppressEndReached } =
     flashListScrollMemory;

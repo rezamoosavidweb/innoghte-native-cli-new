@@ -20,9 +20,9 @@ const LOG = '[BasketCart:add]';
 
 const EMPTY_CART_LIST: readonly CartDto[] = [];
 
-/** Stable cart token for query key — created once per screen tree mount. */
 function useCartToken(): string {
-  return React.useMemo(() => readOrCreateCartToken(), []);
+  const [token] = React.useState(readOrCreateCartToken);
+  return token;
 }
 
 export function useBasketCart() {
@@ -50,9 +50,6 @@ export function useBasketCart() {
   const addToCartMutation = useMutation({
     mutationFn: (courseId: number) =>
       postAnonymousCartCreate({ cartToken, courseId }),
-    onMutate: courseId => {
-      console.log(LOG, 'onMutate', { courseId });
-    },
     onSuccess: created => {
       if (created) {
         addItem(created);
@@ -70,12 +67,6 @@ export function useBasketCart() {
               ? JSON.stringify(api.payload).slice(0, 500)
               : api.payload,
         }),
-      });
-    },
-    onSettled: (_data, error, courseId) => {
-      console.log(LOG, 'onSettled', {
-        courseId,
-        status: error ? 'error' : 'success',
       });
     },
   });
@@ -96,15 +87,9 @@ export function useBasketCart() {
 
   const addToCart = React.useCallback(
     (courseId: number) => {
-      console.log(LOG, 'addToCart invoked', {
-        courseId,
-        cartTokenPreview: `${cartToken.slice(0, 8)}…`,
-        mutationPending: addToCartMutation.isPending,
-        mutationStatus: addToCartMutation.status,
-      });
       addToCartMutation.mutate(courseId);
     },
-    [addToCartMutation, cartToken],
+    [addToCartMutation],
   );
 
   return {

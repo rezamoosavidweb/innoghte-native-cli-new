@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import {Button, StyleSheet, View} from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Text } from '@/shared/ui/Text';
 
 import { darkTheme } from '@/ui/theme/dark';
 import { fontSize, fontWeight } from '@/ui/theme/core/typography';

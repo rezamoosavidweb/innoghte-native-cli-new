@@ -30,6 +30,12 @@ theme/
     pickSemantic.ts        # theme.dark → semantic slice
   provider/
     AppThemeProvider.tsx
+
+src/ui/statusBar/          # per-screen status bar (adjacent to theme, not inside it)
+  useScreenStatusBar.ts    # hook — call inside a screen; infers barStyle from bg brightness
+  ScreenStatusBar.tsx      # component wrapper (renders nothing; calls the hook)
+  inferStatusBarContentStyle.ts
+  StatusBarChromeContext.tsx
 ```
 
 ## Usage
@@ -66,6 +72,24 @@ const s = useFaqsScreenStyles(colors);
 
 ```tsx
 import { AppThemeProvider, useAppTheme, useThemeColors } from '@/ui/theme';
+```
+
+### Status bar
+
+Use `ScreenStatusBar` (or `useScreenStatusBar`) inside a screen to declare its preferred status bar style. The hook auto-infers `barStyle` from background color brightness and restores the global baseline on blur:
+
+```tsx
+import { ScreenStatusBar } from '@/ui/statusBar';
+
+export function MyScreen() {
+  const { colors } = useTheme();
+  return (
+    <>
+      <ScreenStatusBar backgroundColor={colors.background} />
+      {/* screen content */}
+    </>
+  );
+}
 ```
 
 ## Rules

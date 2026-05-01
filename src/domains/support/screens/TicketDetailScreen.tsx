@@ -8,10 +8,10 @@ import {
   Platform,
   Pressable,
   ScrollView,
-  Text,
   TextInput,
-  View,
+  View
 } from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import {
   useReplyToTicketMutation,

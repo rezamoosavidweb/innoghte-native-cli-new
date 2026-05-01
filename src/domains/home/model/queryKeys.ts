@@ -5,6 +5,8 @@
 export const homeKeys = {
   all: ['home'] as const,
   quickAccess: () => [...homeKeys.all, 'quickAccess'] as const,
+  /** Prefix for all comment list variants — use with scoped invalidation (PTR). */
+  commentsRoot: () => [...homeKeys.all, 'comments'] as const,
   comments: (page?: number, perPage?: number) =>
-    [...homeKeys.all, 'comments', { page, perPage }] as const,
+    [...homeKeys.commentsRoot(), { page, perPage }] as const,
 } as const;

@@ -1,12 +1,21 @@
 import type { ReactNode } from 'react';
 import type { SharedValue } from 'react-native-reanimated';
 
+/**
+ * Aligns scroll fade range with {@link CollapsibleHeaderScrollConfig.contentPaddingTop}
+ * (`insets.top + barHeight`).
+ */
+export type CollapsibleHeaderThresholdMode = 'headerHeight';
+
 /** Configuration shared by the scroll hook and header. */
 export type CollapsibleHeaderTheme = {
   /** Opaque color when fully “solid” at `threshold` scroll offset. */
   backgroundColor: string;
-  /** Scroll distance (px) over which background fades in. */
-  threshold?: number;
+  /**
+   * Scroll distance (px) over which background fades in, or `'headerHeight'` to derive from
+   * safe-area top + `barHeight` (layout-stable, no scroll JS).
+   */
+  threshold?: number | CollapsibleHeaderThresholdMode;
   /** Color at scroll offset 0 (transparent by default, derived from `backgroundColor`). */
   expandedBackgroundColor?: string;
   /** Content row height below the status bar inset. */
@@ -31,6 +40,11 @@ export type CollapsibleHeaderProps = {
   leading?: ReactNode;
   title?: string;
   children?: ReactNode;
+  /**
+   * When true, title gains a subtle text shadow while the header is expanded (transparent),
+   * fading out as the header solidifies — improves contrast over bright hero imagery.
+   */
+  contrastShadowWhileExpanded?: boolean;
   /**
    * When true, title color interpolates between `expandedTitleColor` and a contrast
    * color derived from `backgroundColor` (collapsed).

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 import Animated, {
   Extrapolation,
   interpolate,
@@ -45,6 +46,7 @@ export const CollapsibleHeader = React.memo(function CollapsibleHeader({
   leading,
   title,
   children,
+  contrastShadowWhileExpanded = false,
   adaptiveTitleColor,
   expandedTitleColor,
   collapsedTitleColor,
@@ -80,10 +82,22 @@ export const CollapsibleHeader = React.memo(function CollapsibleHeader({
       [0, 1],
       Extrapolation.CLAMP,
     );
+    if (!contrastShadowWhileExpanded) {
+      return {
+        color: interpolateColor(p, [0, 1], [expanded, collapsed]),
+      };
+    }
     return {
       color: interpolateColor(p, [0, 1], [expanded, collapsed]),
+      textShadowColor: interpolateColor(
+        p,
+        [0, 1],
+        ['rgba(0,0,0,0.52)', 'rgba(0,0,0,0)'],
+      ),
+      textShadowOffset: { width: 0, height: 1 },
+      textShadowRadius: interpolate(p, [0, 1], [6, 0], Extrapolation.CLAMP),
     };
-  }, [threshold, expanded, collapsed]);
+  }, [threshold, expanded, collapsed, contrastShadowWhileExpanded]);
 
   const titleNode = !title ? null : animate ? (
     <Animated.Text

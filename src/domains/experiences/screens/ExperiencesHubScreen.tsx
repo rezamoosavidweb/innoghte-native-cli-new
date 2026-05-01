@@ -2,7 +2,8 @@ import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ScrollView, Text, View } from 'react-native';
+import {ScrollView, View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import type { TabParamList } from '@/shared/contracts/navigationApp';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';

@@ -131,6 +131,7 @@ export function useBannerStyles(
           alignItems: 'center',
           gap: spacing.sm,
           pointerEvents: 'box-none',
+          paddingTop: spacing.lg,
         },
         titleAccent: {
           color: s.info,
@@ -138,7 +139,7 @@ export function useBannerStyles(
         body: {
           gap: spacing.sm,
           paddingHorizontal: spacing.xl,
-          paddingTop: spacing.xl,
+          paddingTop: spacing['3xl'],
           paddingBottom:
             variant === 'hero' ? heroBodyPaddingBottom : spacing.xl,
         },

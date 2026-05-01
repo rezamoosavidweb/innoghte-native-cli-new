@@ -6,9 +6,9 @@ import {
   Image,
   Linking,
   Pressable,
-  Text,
-  View,
+  View
 } from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import { useQuickAccess } from '@/domains/home/hooks/useQuickAccess';
 import type { QuickAccessItem } from '@/domains/home/model/quickAccess.dto';

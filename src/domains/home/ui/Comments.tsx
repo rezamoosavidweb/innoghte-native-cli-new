@@ -1,11 +1,15 @@
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
-import { Text, View } from 'react-native';
+import {View} from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Text } from '@/shared/ui/Text';
 
 import { usePublicComments } from '@/domains/home/hooks/usePublicComments';
 import { useCommentsSectionStyles } from '@/domains/home/ui/comments.styles';
-import { CommentCarousel, DEFAULT_AUTOPLAY_INTERVAL } from '@/shared/ui/CommentCarousel';
+import {
+  CommentCarousel,
+  DEFAULT_AUTOPLAY_INTERVAL,
+} from './CommentCarousel';
 
 const COMMENTS_CAROUSEL_HEIGHT = 210;
 
@@ -30,7 +34,7 @@ const CommentsComponent = () => {
         autoPlayInterval={DEFAULT_AUTOPLAY_INTERVAL}
         loop
         height={COMMENTS_CAROUSEL_HEIGHT}
-        numberOfLines={4}
+        numberOfLines={5}
       />
     </View>
   );

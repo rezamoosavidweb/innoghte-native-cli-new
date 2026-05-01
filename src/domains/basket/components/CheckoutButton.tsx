@@ -3,10 +3,10 @@ import {
   ActivityIndicator,
   Pressable,
   StyleSheet,
-  Text,
   View,
-  type ViewStyle,
+  type ViewStyle
 } from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import { useThemeColors, fontSize, fontWeight, radius, spacing } from '@/ui/theme';
 

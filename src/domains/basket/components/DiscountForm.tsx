@@ -3,10 +3,10 @@ import {
   ActivityIndicator,
   Pressable,
   StyleSheet,
-  Text,
   TextInput,
-  View,
+  View
 } from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import { navigateToLogin } from '@/app/bridge/auth/protectedNavigation';
 import { AuthService } from '@/domains/auth';

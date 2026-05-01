@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Text } from '@/shared/ui/Text';
 
 import {
   fontSize,

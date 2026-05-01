@@ -2,7 +2,8 @@ import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import type { Control } from 'react-hook-form';
 import { useController } from 'react-hook-form';
-import { Text, TextInput, View } from 'react-native';
+import {TextInput, View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import type { CreateTicketFields } from '@/domains/support/model/createTicket.types';
 import { useTicketScreenStyles } from '@/domains/support/ui/ticketScreen.styles';

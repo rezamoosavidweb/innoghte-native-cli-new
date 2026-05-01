@@ -8,10 +8,10 @@ import {
   Platform,
   Pressable,
   ScrollView,
-  Text,
   TextInput,
-  View,
+  View
 } from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import { useCurrentUser } from '@/domains/auth';
 import { DonationCreditCardFields } from '@/domains/donation/components/DonationCreditCardFields';
@@ -27,14 +27,13 @@ import { useDonationFormPrefill } from '@/domains/donation/hooks/useDonationForm
 import { useDonationGatewayPicker } from '@/domains/donation/hooks/useDonationGatewayPicker';
 import { useDonationSubmit } from '@/domains/donation/hooks/useDonationSubmit';
 import { useDonationVerificationQueries } from '@/domains/donation/hooks/useDonationVerificationQueries';
-import { clearDonationRouteParams } from '@/domains/donation/model/donationScreenNavigation';
+import type { DonationFlowState } from '@/domains/donation/model/donationFlowMachine';
 import {
   donationSuccessBodyLines,
   donationSuccessTitle,
   donationVerifyErrorBodyLines,
 } from '@/domains/donation/model/donationResultCopy';
-import { resolveIsDotIr } from '@/domains/donation/model/env';
-import type { DonationFlowState } from '@/domains/donation/model/donationFlowMachine';
+import { clearDonationRouteParams } from '@/domains/donation/model/donationScreenNavigation';
 import { DONATION_LAST_CHECKOUT_GATEWAY_KEY } from '@/domains/donation/model/storageKeys';
 import {
   donationFormResolver,
@@ -43,12 +42,10 @@ import {
 } from '@/domains/donation/schema/donationForm';
 import { createDonationScreenStyles } from '@/domains/donation/styles/donationScreen.styles';
 import { toPersianNumber } from '@/domains/donation/utils/paymentFormatting';
+import { isDotIr } from '@/shared/config/resolveIsDotIr';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { StorageService } from '@/shared/infra/storage/storage.service';
-import {
-  flashListContentGutters,
-  pickSemantic,
-} from '@/ui/theme';
+import { flashListContentGutters, pickSemantic } from '@/ui/theme';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Donation'>;
 
@@ -59,7 +56,9 @@ type ResultModalState = {
   bodyLines: string[];
 };
 
-function isCheckoutProgressLocked(status: DonationFlowState['status']): boolean {
+function isCheckoutProgressLocked(
+  status: DonationFlowState['status'],
+): boolean {
   return status !== 'idle';
 }
 
@@ -70,7 +69,6 @@ export const DonationScreen = React.memo(function DonationScreen({
   const theme = useTheme();
   const { colors } = theme;
   const semantic = pickSemantic(theme);
-  const isDotIr = resolveIsDotIr();
 
   const { paymentParams, resetSupplementaryInput } =
     useDonationCallbackParams(route);
@@ -127,8 +125,7 @@ export const DonationScreen = React.memo(function DonationScreen({
 
   useDonationFormPrefill(authUserResponse?.data, getValues, setValue);
 
-  const paymentType =
-    useWatch({ control, name: 'paymentType' }) ?? 'paypal';
+  const paymentType = useWatch({ control, name: 'paymentType' }) ?? 'paypal';
   const cartErrors = errors as DonationCreditCartErrors;
 
   const handlePaymentTypeChange = React.useCallback(
@@ -452,9 +449,7 @@ export const DonationScreen = React.memo(function DonationScreen({
                   <Text style={s.label}>انتخاب درگاه</Text>
                   <View style={s.gatewayPanel}>
                     <DonationSelectGateway
-                      gateway={
-                        gateway === 'zarinpal' ? 'zarinpal' : 'vandar'
-                      }
+                      gateway={gateway === 'zarinpal' ? 'zarinpal' : 'vandar'}
                       onChange={setGateway}
                     />
                   </View>

@@ -43,7 +43,7 @@ export async function postCreateGivePresent(body: {
   return parseJsonResponse(
     getApiClient().post(CREATE_PRESENT_PATH, {
       json: body,
-      headers: scopeHeader(),
+      headers: { Scope: scopeHeader },
     }),
     givePresentCreatedSchema,
   );
@@ -55,7 +55,7 @@ export async function deleteAllAnonymousCartItems(
 ): Promise<void> {
   const response = await getApiClient().delete(PUBLIC_CART_DELETE_TOKEN_PATH, {
     headers: {
-      ...scopeHeader(),
+      Scope: scopeHeader,
       'X-Cart-Token': cartToken,
     },
   });
@@ -73,7 +73,7 @@ export async function postAnonymousCartCreate(params: {
   const res = await parseJsonResponse(
     getApiClient().post(PUBLIC_CART_CREATE_PATH, {
       headers: {
-        ...scopeHeader(),
+        Scope: scopeHeader,
         'X-Cart-Token': params.cartToken,
       },
       json: { course_id: params.courseId },

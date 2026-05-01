@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Pressable, Text, View, type ViewStyle, type TextStyle } from 'react-native';
+import {Pressable, View, type ViewStyle, type TextStyle} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 export type HubMenuRowStyleSet = {
   menuRow: ViewStyle;

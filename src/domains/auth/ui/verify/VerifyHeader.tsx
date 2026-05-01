@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Text, View, type TextStyle } from 'react-native';
+import {View, type TextStyle} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 export type VerifyHeaderProps = {
   title: string;

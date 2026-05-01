@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { Text, View, type TextStyle, type ViewStyle } from 'react-native';
+import {View, type TextStyle, type ViewStyle} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 export type GiveGiftLabeledFieldProps = {
   label: ReactNode;

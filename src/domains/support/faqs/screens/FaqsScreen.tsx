@@ -3,10 +3,10 @@ import {
   ActivityIndicator,
   Pressable,
   ScrollView,
-  Text,
   TextInput,
-  View,
+  View
 } from 'react-native';
+import { Text } from '@/shared/ui/Text';
 import type { DrawerScreenProps } from '@react-navigation/drawer';
 import { useTheme } from '@react-navigation/native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';

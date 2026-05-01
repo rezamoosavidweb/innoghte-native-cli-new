@@ -1,7 +1,10 @@
 import * as React from 'react';
 
 import { asCourseLike } from '@/domains/basket/model/courseGuards';
-import type { CartDto, CheckDiscountCodeDto } from '@/domains/basket/model/schemas';
+import type {
+  CartDto,
+  CheckDiscountCodeDto,
+} from '@/domains/basket/model/schemas';
 
 export type BasketTotals = {
   fullPrice: number;
@@ -19,7 +22,7 @@ export function useBasketTotals(
     let fullPrice = 0;
     let fullPriceWithDiscount = 0;
     const payable = cartList.filter(item => {
-      const course = item.course as { is_accessible?: boolean } | null;
+      const course = item.course;
       const isGift = giftsCourseIds.includes(item.course_id);
       const disabledPurchased = Boolean(course?.is_accessible);
       return !disabledPurchased || isGift;

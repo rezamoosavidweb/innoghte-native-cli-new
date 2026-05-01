@@ -1,15 +1,18 @@
 import type { DrawerScreenProps } from '@react-navigation/drawer';
 import { useTheme } from '@react-navigation/native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
+import { useQueryClient } from '@tanstack/react-query';
+import { Text } from '@/shared/ui/Text';
 
 import * as React from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { Pressable, RefreshControl, Text, View } from 'react-native';
+import {Pressable, RefreshControl, View} from 'react-native';
 
 import { TicketCard } from '@/domains/support/components/TicketCard';
 import { useInfiniteTickets } from '@/domains/support/hooks/useInfiniteTickets';
+import { ticketsKeys } from '@/domains/support/model/queryKeys';
 import type { Ticket } from '@/domains/support/model/ticket.types';
 import { useTicketScreenStyles } from '@/domains/support/ui/ticketScreen.styles';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
@@ -36,6 +39,7 @@ Separator.displayName = 'TicketListSeparator';
 
 const TicketListScreenComponent = (_props: Props) => {
   const perf = useListPerformanceProfile();
+  const queryClient = useQueryClient();
   const { t } = useTranslation();
   const { colors } = useTheme();
   const navigation = useAppNavigation();
@@ -126,8 +130,10 @@ const TicketListScreenComponent = (_props: Props) => {
   const refreshing = Boolean(isSuccess && flatData.length > 0 && isRefetching);
 
   const refresh = React.useCallback(() => {
-    refetch().catch(() => {});
-  }, [refetch]);
+    queryClient
+      .invalidateQueries({ queryKey: ticketsKeys.all })
+      .catch(() => {});
+  }, [queryClient]);
 
   const {
     captureRef,

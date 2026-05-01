@@ -1,6 +1,7 @@
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import {Pressable, View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import {
   resolveShowVandar,

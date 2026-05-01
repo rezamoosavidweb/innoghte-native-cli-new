@@ -1,3 +1,4 @@
+import { courseSchema } from '@/domains/courses/model/schemas';
 import { z } from 'zod';
 
 const paginationFlexible = z.union([
@@ -9,7 +10,7 @@ export const cartDtoSchema = z
   .object({
     id: z.number(),
     course_id: z.number(),
-    course: z.record(z.string(), z.unknown()).nullable(),
+    course: courseSchema.nullable(),
   })
   .passthrough();
 

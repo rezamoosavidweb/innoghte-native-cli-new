@@ -2,7 +2,8 @@ import type { DrawerScreenProps } from '@react-navigation/drawer';
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
+import {View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { useLegacyMenuPlaceholderStyles } from '@/app/navigation/legacyMenuPlaceholder.styles';

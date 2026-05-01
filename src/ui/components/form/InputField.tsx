@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Text, TextInput } from 'react-native';
+import {TextInput} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import { useThemeColors } from '@/ui/theme';
 import { useFormFieldStyles } from '@/ui/theme/formField.styles';

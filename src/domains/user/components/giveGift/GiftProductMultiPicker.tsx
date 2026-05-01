@@ -2,11 +2,11 @@ import * as React from 'react';
 import {
   ActivityIndicator,
   Pressable,
-  Text,
   View,
   type StyleProp,
-  type ViewStyle,
+  type ViewStyle
 } from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import type { Course } from '@/domains/courses';
 import type { GiveGiftPickerStyles } from '@/domains/user/ui/giveGiftScreen.styles';

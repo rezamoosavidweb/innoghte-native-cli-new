@@ -1,7 +1,10 @@
 import * as React from 'react';
 import { FlatList, type ListRenderItem, StyleSheet, View } from 'react-native';
 
-import { CartItem, type CartItemProps } from '@/domains/basket/components/CartItem';
+import {
+  CartItem,
+  type CartItemProps,
+} from '@/domains/basket/components/CartItem';
 import type { CartDto } from '@/domains/basket/model/schemas';
 import { spacing } from '@/ui/theme';
 
@@ -30,12 +33,15 @@ export const CartList = React.memo(function CartList({
     [giftsCourseIds, onRemove, onViewCourse],
   );
 
-  const keyExtractor = React.useCallback((item: CartDto) => String(item.id), []);
+  const keyExtractor = React.useCallback(
+    (item: CartDto) => String(item.id),
+    [],
+  );
 
   return (
     <View style={styles.wrap}>
       <FlatList
-        data={cartList as CartDto[]}
+        data={cartList}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         scrollEnabled={false}

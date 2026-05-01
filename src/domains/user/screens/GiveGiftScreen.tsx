@@ -8,8 +8,8 @@ import { useGiveGiftCourses } from '@/domains/user/hooks/useGiveGiftCourses';
 import { useGiveGiftForm } from '@/domains/user/hooks/useGiveGiftForm';
 import { useGiveGiftScroll } from '@/domains/user/hooks/useGiveGiftScroll';
 import { useGiveGiftSubmit } from '@/domains/user/hooks/useGiveGiftSubmit';
+import { isDotIr } from '@/shared/config/resolveIsDotIr';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
-import { resolveIsDotIr } from '@/shared/config/resolveIsDotIr';
 import {
   flashListContentGutters,
   useNavScreenShellStyles,
@@ -19,21 +19,17 @@ import { useFormFieldStyles } from '@/ui/theme/formField.styles';
 
 type Props = DrawerScreenProps<DrawerParamList, 'GiftSend'>;
 
-export const GiveGiftScreen = React.memo(function GiveGiftScreen(_props: Props) {
+export const GiveGiftScreen = React.memo(function GiveGiftScreen(
+  _props: Props,
+) {
   const theme = useTheme();
   const { colors } = theme;
   const uiColors = useThemeColors();
   const shell = useNavScreenShellStyles(colors);
   const formField = useFormFieldStyles(uiColors);
-  const isDotIr = resolveIsDotIr();
 
-  const {
-    control,
-    handleSubmit,
-    getValues,
-    formState,
-    mobileDefaults,
-  } = useGiveGiftForm();
+  const { control, handleSubmit, getValues, formState, mobileDefaults } =
+    useGiveGiftForm();
   const { errors } = formState;
 
   const courses = useGiveGiftCourses();

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image, Text, View } from 'react-native';
+import {Image, View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import { UserInfoRow } from '@/domains/user/components/UserInfoRow';
 import type { ProfileHeaderUser } from '@/domains/user/model/profileHeaderUser';

@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Image, Pressable, Text, View } from 'react-native';
+import {Image, Pressable, View} from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { Text } from '@/shared/ui/Text';
 
 import { formatPriceForApp } from '@/shared/infra/i18n/formatLocaleNumbers';
-import { CartMainButtons } from '@/components/cart/CartMainButtons';
+import { CartMainButtons } from '@/shared/ui/cart/CartMainButtons';
 import type { ProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
 import { useProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
 import type { Album } from '@/domains/media/model';

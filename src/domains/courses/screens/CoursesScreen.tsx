@@ -1,4 +1,5 @@
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
+import { useQueryClient } from '@tanstack/react-query';
 
 import * as React from 'react';
 
@@ -11,6 +12,7 @@ import { CourseListCard } from '@/domains/courses/ui/cards/CourseListCard';
 import type { Course } from '@/domains/courses/model/entities';
 
 import { useInfiniteCourses } from '@/domains/courses/hooks/useInfiniteCourses';
+import { coursesKeys } from '@/domains/courses/model/queryKeys';
 
 import { useListPerformanceProfile } from '@/shared/infra/device/listPerformanceProfile';
 
@@ -36,6 +38,7 @@ function keyExtractor(item: Course): string {
 
 const CoursesScreenComponent = () => {
   const perf = useListPerformanceProfile();
+  const queryClient = useQueryClient();
 
   const renderCourseItem = React.useCallback<ListRenderItem<Course>>(
     ({ item }) => <CourseListCard course={item} />,
@@ -44,23 +47,14 @@ const CoursesScreenComponent = () => {
 
   const {
     flatData,
-
     isPending,
-
     isError,
-
     isSuccess,
-
     error,
-
     refetch,
-
     fetchNextPage,
-
     isFetchingNextPage,
-
     isRefetching,
-
     flashListScrollMemory,
   } = useInfiniteCourses({ categoryId: 1 });
 
@@ -70,22 +64,10 @@ const CoursesScreenComponent = () => {
     () =>
       Math.max(
         80,
-
-        Math.round(
-          flashListEstimatedItemSize.course * perf.estimatedItemSizeFactor,
-        ),
+        Math.round(flashListEstimatedItemSize.course * perf.estimatedItemSizeFactor),
       ),
-
     [perf.estimatedItemSizeFactor],
   );
-
-  /**
-
-   * Full-screen loader only when there is no usable cached result yet (`isPending`).
-
-   * Pagination, PTR, ErrorState stay on footer / spinner / Retry — not centered overlay.
-
-   */
 
   const showFullBleedLoading = isPending;
 
@@ -94,8 +76,10 @@ const CoursesScreenComponent = () => {
   const refreshing = Boolean(isSuccess && flatData.length > 0 && isRefetching);
 
   const refresh = React.useCallback(() => {
-    refetch().catch(() => {});
-  }, [refetch]);
+    queryClient
+      .invalidateQueries({ queryKey: coursesKeys.all })
+      .catch(() => {});
+  }, [queryClient]);
 
   const { captureRef, scrollPropsForFlashList, shouldSuppressEndReached } =
     flashListScrollMemory;
@@ -110,13 +94,11 @@ const CoursesScreenComponent = () => {
 
   const refreshControl = React.useMemo(
     () => <RefreshControl refreshing={refreshing} onRefresh={refresh} />,
-
     [refreshing, refresh],
   );
 
   const listFooter = React.useMemo(
     () => <ListFooterLoader visible={isFetchingNextPage} />,
-
     [isFetchingNextPage],
   );
 
@@ -142,25 +124,15 @@ const CoursesScreenComponent = () => {
     );
   }, [
     captureRef,
-
     estimatedItemSize,
-
     flatData,
-
     handleEndReached,
-
     listFooter,
-
     scrollPropsForFlashList,
-
     perf.onEndReachedThreshold,
-
     perf.scrollEventThrottle,
-
     perf.decelerationRate,
-
     refreshControl,
-
     renderCourseItem,
   ]);
 

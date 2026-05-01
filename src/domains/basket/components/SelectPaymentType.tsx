@@ -1,8 +1,15 @@
 import * as React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
-import { resolveIsDotIr } from '@/shared/config/resolveIsDotIr';
-import { useThemeColors, fontSize, fontWeight, radius, spacing } from '@/ui/theme';
+import { isDotIr } from '@/shared/config/resolveIsDotIr';
+import {
+  fontSize,
+  fontWeight,
+  radius,
+  spacing,
+  useThemeColors,
+} from '@/ui/theme';
 
 type Props = {
   value: 'paypal' | 'credit_card';
@@ -14,12 +21,15 @@ export const SelectPaymentType = React.memo(function SelectPaymentType({
   onChange,
 }: Props) {
   const colors = useThemeColors();
-  const isDotIr = resolveIsDotIr();
 
   const s = React.useMemo(
     () =>
       StyleSheet.create({
-        row: { flexDirection: 'row', gap: spacing.md, marginBottom: spacing.md },
+        row: {
+          flexDirection: 'row',
+          gap: spacing.md,
+          marginBottom: spacing.md,
+        },
         chip: {
           flex: 1,
           paddingVertical: spacing.lg,
@@ -32,7 +42,11 @@ export const SelectPaymentType = React.memo(function SelectPaymentType({
         },
         chipOn: { borderColor: colors.textSecondary },
         chipMuted: { opacity: 0.45 },
-        lbl: { fontSize: fontSize.sm, fontWeight: fontWeight.medium, color: colors.text },
+        lbl: {
+          fontSize: fontSize.sm,
+          fontWeight: fontWeight.medium,
+          color: colors.text,
+        },
       }),
     [colors],
   );

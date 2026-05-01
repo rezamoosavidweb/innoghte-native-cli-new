@@ -2,7 +2,8 @@ import type { DrawerScreenProps } from '@react-navigation/drawer';
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ScrollView, Text, View, StyleSheet } from 'react-native';
+import {ScrollView, View, StyleSheet} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import {

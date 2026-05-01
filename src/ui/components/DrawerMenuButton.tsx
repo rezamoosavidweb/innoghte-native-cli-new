@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { DrawerActions, useTheme } from '@react-navigation/native';
-import { StyleSheet, Text } from 'react-native';
+import {StyleSheet} from 'react-native';
 import { HeaderButton } from '@react-navigation/elements';
+import { Text } from '@/shared/ui/Text';
 
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { pickSemantic } from '@/ui/theme';

@@ -61,7 +61,7 @@ export async function logout(): Promise<void> {
   try {
     await getApiClient().get(endpoints.auth.logout);
   } finally {
-    queryClient.removeQueries({ queryKey: AUTH_USER_QUERY_KEY });
+    queryClient.clear();
     useAuthStore.getState().logout();
     resetAuth401LoginNavigationGuard();
   }

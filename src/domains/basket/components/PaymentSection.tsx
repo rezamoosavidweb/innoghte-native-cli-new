@@ -2,19 +2,26 @@ import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import type { Control } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import {Pressable, StyleSheet, TextInput, View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
-import { resolveIsDotIr } from '@/shared/config/resolveIsDotIr';
-import { useBasketCheckoutStore } from '@/domains/basket/model/basketCheckout.store';
+import { SelectPaymentType } from '@/domains/basket/components/SelectPaymentType';
 import type { BasketIrGateway } from '@/domains/basket/model/basketCheckout.store';
+import { useBasketCheckoutStore } from '@/domains/basket/model/basketCheckout.store';
 import type { BasketPaymentFormType } from '@/domains/basket/model/paymentFormSchema';
 import {
   basketCartTypeOptions,
   type BasketCreditCartErrors,
 } from '@/domains/basket/model/paymentFormSchema';
-import { SelectPaymentType } from '@/domains/basket/components/SelectPaymentType';
+import { isDotIr } from '@/shared/config/resolveIsDotIr';
 import { formatCardNumber } from '@/shared/utils/paymentFormatting';
-import { fontSize, fontWeight, pickSemantic, radius, spacing } from '@/ui/theme';
+import {
+  fontSize,
+  fontWeight,
+  pickSemantic,
+  radius,
+  spacing,
+} from '@/ui/theme';
 
 export type PaymentSectionProps = {
   control: Control<BasketPaymentFormType>;
@@ -31,7 +38,6 @@ export const PaymentSection = React.memo(function PaymentSection({
 }: PaymentSectionProps) {
   const theme = useTheme();
   const semantic = pickSemantic(theme);
-  const isDotIr = resolveIsDotIr();
   const gateway = useBasketCheckoutStore(s => s.gatewayName);
   const setGateway = useBasketCheckoutStore(s => s.setGatewayName);
 
@@ -44,7 +50,11 @@ export const PaymentSection = React.memo(function PaymentSection({
           color: semantic.text,
           marginBottom: spacing.md,
         },
-        gatewayRow: { flexDirection: 'row', gap: spacing.md, marginBottom: spacing.md },
+        gatewayRow: {
+          flexDirection: 'row',
+          gap: spacing.md,
+          marginBottom: spacing.md,
+        },
         gw: {
           flex: 1,
           paddingVertical: spacing.md,
@@ -54,12 +64,20 @@ export const PaymentSection = React.memo(function PaymentSection({
           alignItems: 'center',
         },
         gwOn: { borderColor: semantic.textSecondary },
-        gwLbl: { fontSize: fontSize.sm, fontWeight: fontWeight.medium, color: semantic.text },
+        gwLbl: {
+          fontSize: fontSize.sm,
+          fontWeight: fontWeight.medium,
+          color: semantic.text,
+        },
         grid: { gap: spacing.md },
         row2: { flexDirection: 'row', gap: spacing.md },
         flex1: { flex: 1 },
         field: { gap: spacing.xs },
-        label: { fontSize: fontSize.sm, fontWeight: fontWeight.medium, color: semantic.text },
+        label: {
+          fontSize: fontSize.sm,
+          fontWeight: fontWeight.medium,
+          color: semantic.text,
+        },
         input: {
           borderWidth: StyleSheet.hairlineWidth,
           borderColor: semantic.border,
@@ -80,7 +98,10 @@ export const PaymentSection = React.memo(function PaymentSection({
           borderColor: semantic.border,
           backgroundColor: semantic.surface,
         },
-        chipOn: { borderColor: semantic.primary, backgroundColor: semantic.primarySoft },
+        chipOn: {
+          borderColor: semantic.primary,
+          backgroundColor: semantic.primarySoft,
+        },
         chipTxt: { fontSize: fontSize.sm, color: semantic.text },
       }),
     [semantic],
@@ -130,7 +151,9 @@ export const PaymentSection = React.memo(function PaymentSection({
                           placeholderTextColor={semantic.textMuted}
                         />
                         {errors.cart?.fistName?.message ? (
-                          <Text style={s.error}>{errors.cart.fistName.message}</Text>
+                          <Text style={s.error}>
+                            {errors.cart.fistName.message}
+                          </Text>
                         ) : null}
                       </View>
                     )}
@@ -151,7 +174,9 @@ export const PaymentSection = React.memo(function PaymentSection({
                           placeholderTextColor={semantic.textMuted}
                         />
                         {errors.cart?.lastName?.message ? (
-                          <Text style={s.error}>{errors.cart.lastName.message}</Text>
+                          <Text style={s.error}>
+                            {errors.cart.lastName.message}
+                          </Text>
                         ) : null}
                       </View>
                     )}
@@ -169,16 +194,23 @@ export const PaymentSection = React.memo(function PaymentSection({
                         <Pressable
                           key={opt.value}
                           onPress={() => field.onChange(opt.value)}
-                          style={[s.chip, field.value === opt.value && s.chipOn]}
+                          style={[
+                            s.chip,
+                            field.value === opt.value && s.chipOn,
+                          ]}
                           accessibilityRole="button"
-                          accessibilityState={{ selected: field.value === opt.value }}
+                          accessibilityState={{
+                            selected: field.value === opt.value,
+                          }}
                         >
                           <Text style={s.chipTxt}>{opt.label}</Text>
                         </Pressable>
                       ))}
                     </View>
                     {errors.cart?.cardType?.message ? (
-                      <Text style={s.error}>{errors.cart.cardType.message}</Text>
+                      <Text style={s.error}>
+                        {errors.cart.cardType.message}
+                      </Text>
                     ) : null}
                   </View>
                 )}
@@ -198,7 +230,9 @@ export const PaymentSection = React.memo(function PaymentSection({
                       placeholderTextColor={semantic.textMuted}
                     />
                     {errors.cart?.cardNumber?.message ? (
-                      <Text style={s.error}>{errors.cart.cardNumber.message}</Text>
+                      <Text style={s.error}>
+                        {errors.cart.cardNumber.message}
+                      </Text>
                     ) : null}
                   </View>
                 )}
@@ -221,7 +255,9 @@ export const PaymentSection = React.memo(function PaymentSection({
                           placeholderTextColor={semantic.textMuted}
                         />
                         {errors.cart?.expireMonth?.message ? (
-                          <Text style={s.error}>{errors.cart.expireMonth.message}</Text>
+                          <Text style={s.error}>
+                            {errors.cart.expireMonth.message}
+                          </Text>
                         ) : null}
                       </View>
                     )}
@@ -244,7 +280,9 @@ export const PaymentSection = React.memo(function PaymentSection({
                           placeholderTextColor={semantic.textMuted}
                         />
                         {errors.cart?.expireYear?.message ? (
-                          <Text style={s.error}>{errors.cart.expireYear.message}</Text>
+                          <Text style={s.error}>
+                            {errors.cart.expireYear.message}
+                          </Text>
                         ) : null}
                       </View>
                     )}

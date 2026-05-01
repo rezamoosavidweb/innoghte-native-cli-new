@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import {Pressable, View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import { useLoginScreenStyles } from '@/domains/auth/ui/styles';
 import { useThemeColors } from '@/ui/theme';

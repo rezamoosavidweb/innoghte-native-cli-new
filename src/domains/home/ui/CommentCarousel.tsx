@@ -5,11 +5,11 @@ import {
   I18nManager,
   Pressable,
   StyleSheet,
-  Text,
   View,
   type StyleProp,
-  type ViewStyle,
+  type ViewStyle
 } from 'react-native';
+import { Text } from '@/shared/ui/Text';
 import Carousel, {
   type ICarouselInstance,
 } from 'react-native-reanimated-carousel';
@@ -22,12 +22,13 @@ import {
   radius,
   spacing,
 } from '@/ui/theme';
+import StartIcon from '@/assets/icons/star.svg';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 export const DEFAULT_HEIGHT = 200;
 export const DEFAULT_AUTOPLAY_INTERVAL = 3500;
 const DEFAULT_RESUME_DELAY = 4000;
-const DEFAULT_CONTENT_LINES = 5;
+const DEFAULT_CONTENT_LINES = 17;
 const DEFAULT_SCROLL_ANIMATION_MS = 500;
 
 export type CommentItem = {
@@ -132,12 +133,13 @@ function CommentCarouselBase({
         item={item}
         index={index}
         styles={styles}
+        starColor={colors.primary}
         anonymousLabel={anonymousLabel}
         numberOfLines={numberOfLines}
         onPress={cardOnPress}
       />
     ),
-    [anonymousLabel, cardOnPress, numberOfLines, styles],
+    [anonymousLabel, cardOnPress, colors.primary, numberOfLines, styles],
   );
 
   if (itemCount === 0) {
@@ -183,6 +185,7 @@ type CommentCardProps = {
   item: CommentItem;
   index: number;
   styles: CommentCarouselStyles;
+  starColor: string;
   anonymousLabel: string;
   numberOfLines: number;
   onPress?: (item: CommentItem, index: number) => void;
@@ -192,6 +195,7 @@ const CommentCard = React.memo(function CommentCard({
   item,
   index,
   styles,
+  starColor,
   anonymousLabel,
   numberOfLines,
   onPress,
@@ -205,10 +209,10 @@ const CommentCard = React.memo(function CommentCard({
       ? item.user
       : anonymousLabel;
 
-  const dateLabel =
-    typeof item.createdAt === 'string' && item.createdAt.trim().length > 0
-      ? item.createdAt
-      : null;
+  // const dateLabel =
+  //   typeof item.createdAt === 'string' && item.createdAt.trim().length > 0
+  //     ? item.createdAt
+  //     : null;
 
   const courseLabel =
     typeof item.courseTitle === 'string' && item.courseTitle.trim().length > 0
@@ -233,11 +237,11 @@ const CommentCard = React.memo(function CommentCard({
         <Text style={styles.userText} numberOfLines={1}>
           {userLabel}
         </Text>
-        {dateLabel ? (
-          <Text style={styles.dateText} numberOfLines={1}>
-            {dateLabel}
-          </Text>
-        ) : null}
+        <View style={styles.starContainer}>
+          {[...Array(5)].map((_, i) => (
+            <StartIcon key={i} width={14} color={starColor} />
+          ))}
+        </View>
       </View>
 
       {courseLabel ? (
@@ -285,10 +289,10 @@ function useCommentCarouselStyles(
           borderWidth: StyleSheet.hairlineWidth,
           borderColor: themeColors.border,
           backgroundColor: themeColors.card,
-          gap: spacing.xs + 2,
+          gap: spacing.xs + 12,
         },
         cardPressed: {
-          opacity: 0.92,
+          opacity: 0.82,
         },
         headerRow: {
           flexDirection: 'row',
@@ -316,6 +320,11 @@ function useCommentCarouselStyles(
           fontSize: fontSize.md,
           lineHeight: lineHeight.relaxed,
           color: s.textSecondary,
+        },
+        starContainer: {
+          display: 'flex',
+          gap: spacing.xs,
+          flexDirection: 'row',
         },
       }),
     [

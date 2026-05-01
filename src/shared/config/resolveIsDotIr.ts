@@ -1,15 +1,7 @@
 /**
- * Mirrors web `NEXT_PUBLIC_IS_DOT_IR` for IR vs COM API scope.
- * Set via Metro/babel env, e.g. `REACT_NATIVE_IS_DOT_IR=ir`.
+ * Use direct `process.env.KEY` so `babel-plugin-transform-inline-environment-variables`
+ * can replace it at bundle time (assigning `process.env` to a variable breaks inlining).
  */
-const env =
-  (globalThis as { process?: { env?: Record<string, string | undefined> } })
-    .process?.env ?? {};
+export const isDotIr = process.env.REACT_NATIVE_IS_DOT_IR === 'ir';
 
-export function resolveIsDotIr(): boolean {
-  return env.REACT_NATIVE_IS_DOT_IR === 'ir' || env.IS_DOT_IR === 'ir';
-}
-
-export function scopeHeader(): { Scope: 'ir' | 'com' } {
-  return { Scope: resolveIsDotIr() ? 'ir' : 'com' };
-}
+export const scopeHeader = isDotIr ? 'ir' : 'com';

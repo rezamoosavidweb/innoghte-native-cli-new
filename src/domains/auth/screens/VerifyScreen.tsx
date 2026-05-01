@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next';
 import {
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
-  Text,
+  ScrollView
 } from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import {
   sendVerificationCode,

@@ -1,6 +1,7 @@
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
-import { Modal, Pressable, Text, View } from 'react-native';
+import {Modal, Pressable, View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import { createDonationResultModalStyles } from '@/domains/donation/styles/donationResultModal.styles';
 import { pickSemantic } from '@/ui/theme';

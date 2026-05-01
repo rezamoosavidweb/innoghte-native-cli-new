@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
+import {View} from 'react-native';
 import { useTheme } from '@react-navigation/native';
+import { Text } from '@/shared/ui/Text';
 
 import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
 import { useScreenScaffoldStyles } from '@/ui/theme';

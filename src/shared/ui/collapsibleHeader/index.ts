@@ -6,6 +6,7 @@ export type { CollapsibleHeaderScrollConfig } from '@/shared/ui/collapsibleHeade
 export type {
   CollapsibleHeaderProps,
   CollapsibleHeaderTheme,
+  CollapsibleHeaderThresholdMode,
   UseCollapsibleHeaderOptions,
 } from '@/shared/ui/collapsibleHeader/types';
 export {

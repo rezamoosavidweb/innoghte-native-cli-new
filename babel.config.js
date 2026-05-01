@@ -1,6 +1,12 @@
+require('dotenv').config();
+
 module.exports = {
   presets: ['module:@react-native/babel-preset'],
   plugins: [
+    [
+      'babel-plugin-transform-inline-environment-variables',
+      { include: ['REACT_NATIVE_IS_DOT_IR', 'IS_DOT_IR'] },
+    ],
     '@babel/plugin-transform-export-namespace-from',
     [
       'module-resolver',

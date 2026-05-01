@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
+import {View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import type { TicketScreenStyles } from '@/domains/support/ui/ticketScreen.styles';
 

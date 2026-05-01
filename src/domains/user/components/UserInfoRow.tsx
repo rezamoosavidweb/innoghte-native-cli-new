@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import {Pressable, View} from 'react-native';
+import { Text } from '@/shared/ui/Text';
 
 import type { VerifyChannel } from '@/shared/contracts/verification';
 import { VerifiedIcon } from '@/domains/user/components/VerifiedIcon';

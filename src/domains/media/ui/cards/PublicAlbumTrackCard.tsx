@@ -1,14 +1,16 @@
 import * as React from 'react';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { useTheme, type Theme } from '@react-navigation/native';
+import {Image, Pressable, StyleSheet, View} from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { Text } from '@/shared/ui/Text';
 
 import { isProductPurchased } from '@/shared/purchases';
+import { useProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
+import { CartMainButtons } from '@/shared/ui/cart/CartMainButtons';
 import {
   colors,
   fontSize,
   fontWeight,
-  pickSemantic,
   radius,
   spacing,
 } from '@/ui/theme';
@@ -26,12 +28,7 @@ const album = {
   heroGlyph: colors.charcoal[400],
 } as const;
 
-const HERO_HEIGHT = 180;
-
-function createPublicAlbumTrackStyles(
-  themeColors: Theme['colors'],
-  s: ReturnType<typeof pickSemantic>,
-) {
+function createPublicAlbumTrackStyles() {
   return StyleSheet.create({
     card: {
       borderRadius: radius.lg,
@@ -43,8 +40,9 @@ function createPublicAlbumTrackStyles(
     },
     hero: {
       width: '100%',
-      height: HERO_HEIGHT,
+      aspectRatio: 1,
       borderRadius: radius.full,
+      overflow: 'hidden',
       marginBottom: spacing.md,
       backgroundColor: album.heroBg,
     },
@@ -77,59 +75,11 @@ function createPublicAlbumTrackStyles(
       flex: 1,
       textAlign: 'right',
     },
-    actions: {
-      flexDirection: 'row',
-      gap: spacing.md - 2,
-      marginTop: 14,
-    },
-    primaryBtn: {
-      flex: 1,
-      borderRadius: radius.lg - 2,
-      paddingVertical: spacing.md,
-      alignItems: 'center',
-      backgroundColor: themeColors.primary,
-    },
-    outline: {
-      flex: 1,
-      borderRadius: radius.lg - 2,
-      paddingVertical: spacing.md,
-      alignItems: 'center',
-      borderWidth: StyleSheet.hairlineWidth,
-      borderColor: themeColors.primary,
-    },
-    outlineTxt: {
-      fontWeight: fontWeight.bold,
-      fontSize: fontSize.md,
-      color: themeColors.primary,
-    },
-    success: {
-      flex: 1,
-      borderRadius: radius.lg - 2,
-      paddingVertical: spacing.md,
-      alignItems: 'center',
-      backgroundColor: s.success,
-    },
-    primaryBtnText: {
-      color: s.onPrimary,
-      fontSize: fontSize.md,
-      fontWeight: fontWeight.bold,
-    },
-    successBtnText: {
-      color: colors.white,
-      fontSize: fontSize.md,
-      fontWeight: fontWeight.bold,
-    },
-    pressed: { opacity: 0.88 },
   });
 }
 
-function usePublicAlbumTrackStyles(themeColors: Theme['colors']) {
-  const theme = useTheme();
-  const sem = pickSemantic(theme);
-  return React.useMemo(
-    () => createPublicAlbumTrackStyles(themeColors, sem),
-    [themeColors, sem],
-  );
+function usePublicAlbumTrackStyles() {
+  return React.useMemo(() => createPublicAlbumTrackStyles(), []);
 }
 
 type Props = { item: PublicAlbumTrack };
@@ -139,7 +89,8 @@ function noop(): void {}
 const PublicAlbumTrackCardComponent = ({ item }: Props) => {
   const { t } = useTranslation();
   const { colors: themeColors } = useTheme();
-  const s = usePublicAlbumTrackStyles(themeColors);
+  const s = usePublicAlbumTrackStyles();
+  const productS = useProductListCardStyles(themeColors);
   const images = item.medias.filter((m: PublicAlbumMedia) => m.type === 'image');
   const uri = images[0]?.src;
   const [failed, setFailed] = React.useState(false);
@@ -174,39 +125,29 @@ const PublicAlbumTrackCardComponent = ({ item }: Props) => {
           <Text style={s.value}>{item.duration}</Text>
         </View>
       </View>
-      <View style={s.actions}>
-        {purchased ? (
-          <Pressable
-            accessibilityRole="button"
-            onPress={noop}
-            style={({ pressed }) =>
-              pressed ? [s.primaryBtn, s.pressed] : s.primaryBtn
-            }
-          >
-            <Text style={s.primaryBtnText}>{t('courses.show')}</Text>
-          </Pressable>
-        ) : (
-          <>
-            <Pressable
-              accessibilityRole="button"
-              onPress={noop}
-              style={({ pressed }) =>
-                pressed ? [s.outline, s.pressed] : s.outline
-              }
-            >
-              <Text style={s.outlineTxt}>{t('courses.moreInformation')}</Text>
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              onPress={noop}
-              style={({ pressed }) =>
-                pressed ? [s.success, s.pressed] : s.success
-              }
-            >
-              <Text style={s.successBtnText}>{t('courses.buy')}</Text>
-            </Pressable>
-          </>
-        )}
+      <View style={productS.actionsRow}>
+        <CartMainButtons
+          courseId={item.id}
+          isFull={false}
+          isAccessible={purchased}
+          iconLeftAddToBasket={null}
+          iconRightAddToBasket={null}
+          iconLeftInBasket={null}
+          iconRightInBasket={null}
+        />
+        <Pressable
+          accessibilityRole="button"
+          onPress={noop}
+          style={({ pressed }) =>
+            pressed
+              ? [productS.buttonOutlined, productS.pressed]
+              : productS.buttonOutlined
+          }
+        >
+          <Text style={productS.buttonOutlinedText}>
+            {t('courses.moreInformation')}
+          </Text>
+        </Pressable>
       </View>
     </View>
   );

@@ -1,3 +1,4 @@
+import { queryClient } from '@/app/queryClient';
 import { captureResumeRouteFromNavigationRef } from '@/shared/infra/auth401/captureRoute';
 import {
   auth401ClearSessionTokensOnly,
@@ -18,11 +19,16 @@ export type Ky401UnauthorizedDetail = {
 };
 
 function applyResolved401Policy(policy: ResolvedAuth401Policy): void {
+  const clearSessionAndQueries = (): void => {
+    auth401ClearSessionTokensOnly();
+    queryClient.clear();
+  };
+
   if (policy.strategy === 'custom_route_function') {
     if (policy.customPostLogin) {
       queue401PostLogin(policy.customPostLogin);
     }
-    auth401ClearSessionTokensOnly();
+    clearSessionAndQueries();
     if (policy.redirectToLogin) {
       safeNavigateToLoginFrom401();
     }
@@ -52,7 +58,7 @@ function applyResolved401Policy(policy: ResolvedAuth401Policy): void {
       break;
   }
 
-  auth401ClearSessionTokensOnly();
+  clearSessionAndQueries();
 
   if (policy.redirectToLogin) {
     safeNavigateToLoginFrom401();

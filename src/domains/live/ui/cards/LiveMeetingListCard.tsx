@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { Image, Pressable, Text, View } from 'react-native';
+import {Image, Pressable, View} from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { Text } from '@/shared/ui/Text';
 
 import { formatPriceForApp } from '@/shared/infra/i18n/formatLocaleNumbers';
 import { isProductPurchased } from '@/shared/purchases';

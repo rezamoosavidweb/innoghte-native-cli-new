@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/font/Dana-Medium.ttf",
+      "sha1": "3d0bee1e7b226ee6429701a56fd34b7d94104eb8"
+    },
+    {
+      "path": "src/assets/font/Poppins-Bold.ttf",
+      "sha1": "45e4d582cbb4dab2bbad3f624fad9ae567c66547"
+    },
+    {
+      "path": "src/assets/font/Poppins-Medium.ttf",
+      "sha1": "e837165aedb031ea74872c5983a3217d1c190a1a"
+    },
+    {
+      "path": "src/assets/font/Poppins-Regular.ttf",
+      "sha1": "86a425be5a919d86729b85b2bc1d07da5ce413d4"
+    }
+  ]
+}

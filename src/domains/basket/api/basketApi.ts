@@ -11,12 +11,13 @@ import {
   type CreatePaymentResult,
 } from '@/domains/basket/model/schemas';
 
-
-export async function fetchPublicCartList(cartToken: string): Promise<readonly CartDto[]> {
+export async function fetchPublicCartList(
+  cartToken: string,
+): Promise<readonly CartDto[]> {
   const res = await parseJsonResponse(
     getApiClient().get(endpoints.public.cartList, {
       headers: {
-        ...scopeHeader(),
+        Scope: scopeHeader,
         'X-Cart-Token': cartToken,
       },
     }),
@@ -32,7 +33,7 @@ export async function deleteCartLine(
   const path = `${endpoints.public.cartDestroy}/${cartLineId}`;
   const response = await getApiClient().delete(path, {
     headers: {
-      ...scopeHeader(),
+      Scope: scopeHeader,
       'X-Cart-Token': cartToken,
     },
   });
@@ -40,12 +41,15 @@ export async function deleteCartLine(
 }
 
 export async function deleteCartByToken(cartToken: string): Promise<void> {
-  const response = await getApiClient().delete(endpoints.public.cartDeleteByToken, {
-    headers: {
-      ...scopeHeader(),
-      'X-Cart-Token': cartToken,
+  const response = await getApiClient().delete(
+    endpoints.public.cartDeleteByToken,
+    {
+      headers: {
+        Scope: scopeHeader,
+        'X-Cart-Token': cartToken,
+      },
     },
-  });
+  );
   await response.text().catch(() => '');
 }
 
@@ -59,7 +63,7 @@ export async function validateDiscountCode(params: {
         course_ids: params.courseIds,
         discount_code: params.discountCode,
       },
-      headers: scopeHeader(),
+      headers: { Scope: scopeHeader },
     }),
     publicCheckDiscountResponseSchema,
   );
@@ -88,7 +92,7 @@ export async function createBasketPayment(
   return parseJsonResponse(
     getApiClient().post(endpoints.payment.create, {
       json: body,
-      headers: scopeHeader(),
+      headers: { Scope: scopeHeader },
     }),
     createPaymentResponseSchema,
   );
