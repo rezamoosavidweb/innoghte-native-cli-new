@@ -342,6 +342,24 @@
       "signIn": "I already have an account",
       "footer": "Breathe in. Breathe out. You are here."
     },
+    "breathwork": {
+      "phase": {
+        "inhale": "Breathe in",
+        "hold": "Hold",
+        "exhale": "Breathe out",
+        "holdOut": "Rest"
+      },
+      "hint": "Follow the orb. There is nothing else to do.",
+      "heartLabel": "Heart rate",
+      "bpm": "BPM",
+      "device": {
+        "live": "Watch connected — live heart rate",
+        "simulated": "Demo rhythm — connect a watch for live BPM",
+        "connecting": "Connecting to wearable…",
+        "error": "Could not read heart rate",
+        "disconnected": "No wearable connected"
+      }
+    },
     "account": {
       "title": "Account",
       "subtitle": "Account details and verification",

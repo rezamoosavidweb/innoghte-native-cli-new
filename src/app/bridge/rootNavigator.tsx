@@ -10,16 +10,20 @@ import { CollapsibleHeaderExampleScreen } from '@/app/examples/CollapsibleHeader
 import { LegacyMenuPlaceholderScreen } from '@/app/navigation/LegacyMenuPlaceholderScreen';
 import { StartupScreen } from '@/app/startup/StartupScreen';
 import { AuthService, LoginScreen, VerifyScreen } from '@/domains/auth';
+import { BasketScreen } from '@/domains/basket';
+import { BreathworkScreen } from '@/domains/breathwork';
 import {
   CourseDetailScreen,
   CoursePlayerScreen,
   CoursesScreen,
 } from '@/domains/courses';
+import { DonationScreen } from '@/domains/donation';
 import { EventsScreen } from '@/domains/events';
 import { HomeScreen } from '@/domains/home';
 import { LiveMeetingsScreen } from '@/domains/live';
 import { PublicAlbumsScreen } from '@/domains/media';
 import { SearchScreen } from '@/domains/search';
+import { SettingsScreen } from '@/domains/settings';
 import {
   AboutScreen,
   CreateTicketScreen,
@@ -29,9 +33,6 @@ import {
   TicketDetailScreen,
   TicketListScreen,
 } from '@/domains/support';
-import { SettingsScreen } from '@/domains/settings';
-import { BasketScreen } from '@/domains/basket';
-import { DonationScreen } from '@/domains/donation';
 import {
   AccountScreen,
   EditProfileScreen,
@@ -380,7 +381,7 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
       options: () => extraLeafOptions('podcast', '🎙️'),
     },
     Meditation: {
-      screen: LegacyMenuPlaceholderScreen,
+      screen: BreathworkScreen,
       options: () => extraLeafOptions('meditation', '🧘'),
     },
     Reading: {
