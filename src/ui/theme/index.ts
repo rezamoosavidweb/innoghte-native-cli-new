@@ -52,11 +52,11 @@ export {
   flashListContentGutters,
   flashListEstimatedItemSize,
   flashListRowSeparators,
-  useNavScreenShellStyles,
-  useScreenScaffoldStyles,
+  createNavScreenShellStyles,
+  createScreenScaffoldStyles,
 } from '@/ui/theme/core/navScreenLayout';
 export {
-  useSectionDividerStyles,
+  createSectionDividerStyles,
   type SectionDividerStyleSet,
 } from '@/ui/theme/core/sectionDivider';
 export { cardShadow } from '@/ui/theme/core/shadows';

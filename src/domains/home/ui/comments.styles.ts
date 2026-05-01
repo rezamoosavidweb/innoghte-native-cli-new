@@ -1,5 +1,4 @@
-import { useTheme, type Theme } from '@react-navigation/native';
-import * as React from 'react';
+import type { Theme } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 
 import {
@@ -10,35 +9,35 @@ import {
   spacing,
 } from '@/ui/theme';
 
-export function useCommentsSectionStyles(themeColors: Theme['colors']) {
-  const theme = useTheme();
-  const s = pickSemantic(theme);
+export function createCommentsSectionStyles(
+  themeColors: Theme['colors'],
+  navigationTheme: Theme,
+) {
+  const s = pickSemantic(navigationTheme);
 
-  return React.useMemo(
-    () =>
-      StyleSheet.create({
-        section: {
-          width: '100%',
-          paddingVertical: spacing.xl,
-          gap: spacing.base,
-        },
-        header: {
-          paddingHorizontal: spacing.xl,
-          gap: spacing.xs,
-        },
-        title: {
-          fontSize: fontSize['2xl'],
-          fontWeight: fontWeight.bold,
-          color: themeColors.text,
-        },
-        subtitle: {
-          fontSize: fontSize.md,
-          lineHeight: lineHeight.normal,
-          color: s.textSecondary,
-        },
-      }),
-    [themeColors.text, s],
-  );
+  return StyleSheet.create({
+    section: {
+      width: '100%',
+      paddingVertical: spacing.xl,
+      gap: spacing.base,
+    },
+    header: {
+      paddingHorizontal: spacing.xl,
+      gap: spacing.xs,
+    },
+    title: {
+      fontSize: fontSize['2xl'],
+      fontWeight: fontWeight.bold,
+      color: themeColors.text,
+    },
+    subtitle: {
+      fontSize: fontSize.md,
+      lineHeight: lineHeight.normal,
+      color: s.textSecondary,
+    },
+  });
 }
 
-export type CommentsSectionStyles = ReturnType<typeof useCommentsSectionStyles>;
+export type CommentsSectionStyles = ReturnType<
+  typeof createCommentsSectionStyles
+>;

@@ -2,17 +2,17 @@ import type { DrawerScreenProps } from '@react-navigation/drawer';
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import {ScrollView, View, StyleSheet} from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import {
   flashListContentGutters,
-  fontSize,
-  fontWeight,
   pickSemantic,
-  useNavScreenShellStyles,
+  createNavScreenShellStyles,
 } from '@/ui/theme';
+
+import { useFinancialSupportScreenStyles } from '@/domains/user/screens/financialSupportScreen.styles';
 
 type Props = DrawerScreenProps<DrawerParamList, 'FinancialSupport'>;
 
@@ -23,25 +23,9 @@ export const FinancialSupportScreen = React.memo(function FinancialSupportScreen
   const theme = useTheme();
   const { colors } = theme;
   const semantic = pickSemantic(theme);
-  const shell = useNavScreenShellStyles(colors);
+  const shell = createNavScreenShellStyles(colors);
 
-  const s = React.useMemo(
-    () =>
-      StyleSheet.create({
-        title: {
-          color: colors.text,
-          fontSize: fontSize.lg,
-          fontWeight: fontWeight.semibold,
-          marginBottom: 8,
-        },
-        body: {
-          color: semantic.textMuted,
-          lineHeight: fontSize.base * 1.45,
-          fontSize: fontSize.base,
-        },
-      }),
-    [colors.text, semantic.textMuted],
-  );
+  const s = useFinancialSupportScreenStyles(colors, semantic);
 
   return (
     <ScrollView

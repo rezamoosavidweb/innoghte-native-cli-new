@@ -6,7 +6,7 @@ import {TextInput, View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import type { CreateTicketFields } from '@/domains/support/model/createTicket.types';
-import { useTicketScreenStyles } from '@/domains/support/ui/ticketScreen.styles';
+import { createTicketScreenStyles } from '@/domains/support/ui/ticketScreen.styles';
 import { pickSemantic } from '@/ui/theme';
 
 export type TicketFormProps = {
@@ -27,7 +27,7 @@ export const TicketForm = React.memo(function TicketForm({
   const theme = useTheme();
   const { colors } = theme;
   const semantic = pickSemantic(theme);
-  const styles = useTicketScreenStyles(colors);
+  const styles = createTicketScreenStyles(colors);
   const placeholderColor = semantic.textMuted;
 
   const titleCtrl = useController({ control, name: 'title' });

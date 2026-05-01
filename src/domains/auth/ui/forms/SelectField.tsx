@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Pressable, View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
-import { useLoginScreenStyles } from '@/domains/auth/ui/styles';
+import { createLoginScreenStyles } from '@/domains/auth/ui/styles';
 import { useThemeColors } from '@/ui/theme';
 
 type Option = { label: string; value: string };
@@ -16,7 +16,7 @@ type Props = {
 
 export function SelectField({ options, value, onChange, error }: Props) {
   const colors = useThemeColors();
-  const s = useLoginScreenStyles(colors);
+  const s = createLoginScreenStyles(colors);
 
   return (
     <View>

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Text } from '@/shared/ui/Text';
 
 import { isProductPurchased } from '@/shared/purchases';
-import { useProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
+import { createProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
 import { CartMainButtons } from '@/shared/ui/cart/CartMainButtons';
 import {
   colors,
@@ -78,19 +78,16 @@ function createPublicAlbumTrackStyles() {
   });
 }
 
-function usePublicAlbumTrackStyles() {
-  return React.useMemo(() => createPublicAlbumTrackStyles(), []);
-}
-
 type Props = { item: PublicAlbumTrack };
 
 function noop(): void {}
 
 const PublicAlbumTrackCardComponent = ({ item }: Props) => {
   const { t } = useTranslation();
-  const { colors: themeColors } = useTheme();
-  const s = usePublicAlbumTrackStyles();
-  const productS = useProductListCardStyles(themeColors);
+  const theme = useTheme();
+  const { colors: themeColors } = theme;
+  const s = createPublicAlbumTrackStyles();
+  const productS = createProductListCardStyles(themeColors, theme);
   const images = item.medias.filter((m: PublicAlbumMedia) => m.type === 'image');
   const uri = images[0]?.src;
   const [failed, setFailed] = React.useState(false);

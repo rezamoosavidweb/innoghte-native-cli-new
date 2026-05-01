@@ -14,7 +14,7 @@ import { useQuickAccess } from '@/domains/home/hooks/useQuickAccess';
 import type { QuickAccessItem } from '@/domains/home/model/quickAccess.dto';
 import {
   QUICK_ACCESS_CARD_WIDTH,
-  useQuickAccessStyles,
+  createQuickAccessStyles,
   type QuickAccessStyles,
 } from '@/domains/home/ui/quickAccess.styles';
 import { Swiper } from '@/shared/ui/Swiper';
@@ -29,8 +29,9 @@ type Props = {
 
 const QuickAccessComponent = ({ onItemPress }: Props) => {
   const { t } = useTranslation();
-  const { colors } = useTheme();
-  const s = useQuickAccessStyles(colors);
+  const theme = useTheme();
+  const { colors } = theme;
+  const s = createQuickAccessStyles(colors, theme);
   const { data, isPending, isError } = useQuickAccess();
 
   const handleItemPress = React.useCallback(

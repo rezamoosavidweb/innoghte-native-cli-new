@@ -46,7 +46,7 @@ src/ui/statusBar/          # per-screen status bar (adjacent to theme, not insid
 import {
   spacing,
   pickSemantic,
-  useNavScreenShellStyles,
+  createNavScreenShellStyles,
   navigationThemes,
 } from '@/ui/theme';
 ```

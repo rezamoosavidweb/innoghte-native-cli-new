@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import {
@@ -6,11 +5,10 @@ import {
   fontWeight,
   radius,
   spacing,
-  useThemeColors,
 } from '@/ui/theme';
 import type { ThemeColors } from '@/ui/theme/types';
 
-function createSettingsScreenStyles(colors: ThemeColors) {
+export function createSettingsScreenStyles(colors: ThemeColors) {
   return StyleSheet.create({
     section: {
       marginTop: spacing.xl,
@@ -42,9 +40,4 @@ function createSettingsScreenStyles(colors: ThemeColors) {
       color: colors.text,
     },
   });
-}
-
-export function useSettingsScreenStyles() {
-  const colors = useThemeColors();
-  return React.useMemo(() => createSettingsScreenStyles(colors), [colors]);
 }

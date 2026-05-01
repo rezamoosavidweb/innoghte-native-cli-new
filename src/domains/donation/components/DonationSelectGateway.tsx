@@ -7,7 +7,7 @@ import {
   resolveShowVandar,
   resolveShowZarinpal,
 } from '@/domains/donation/model/env';
-import { createDonationSelectGatewayStyles } from '@/domains/donation/styles/donationSelectGateway.styles';
+import { useDonationSelectGatewayStyles } from '@/domains/donation/styles/donationSelectGateway.styles';
 import { pickSemantic } from '@/ui/theme';
 
 export type DonationSelectGatewayProps = {
@@ -25,14 +25,7 @@ export const DonationSelectGateway = React.memo(function DonationSelectGateway({
   const showZarinpal = resolveShowZarinpal();
   const showVandar = resolveShowVandar();
 
-  const s = React.useMemo(
-    () =>
-      createDonationSelectGatewayStyles({
-        colors: { ...semantic, card: colors.card, text: colors.text },
-        semantic,
-      }),
-    [colors.card, colors.text, semantic],
-  );
+  const s = useDonationSelectGatewayStyles(colors.card, colors.text, semantic);
 
   return (
     <View style={s.row}>

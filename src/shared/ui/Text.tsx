@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text as RNText,
   type TextProps as RNTextProps,
-  type StyleProp,
   type TextStyle,
 } from 'react-native';
 
@@ -26,6 +25,6 @@ export const Text = React.forwardRef<RNText, TextProps>(
       return flat?.fontWeight != null ? [baseFace, style, { fontWeight: 'normal' }] : [baseFace, style];
     }, [locale, style]);
 
-    return <RNText ref={ref} style={resolvedStyle} {...rest} />;
+    return <RNText ref={ref} style={resolvedStyle as RNTextProps['style']} {...rest} />;
   },
 );

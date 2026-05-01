@@ -69,6 +69,13 @@ export type ResetPasswordBodyType = {
   new_password: string;
   new_password_confirm: string;
 };
+
+/** Authenticated change-password (`users/user/change-password`) — client-web dashboard. */
+export type ChangePasswordBodyType = {
+  password: string;
+  new_password: string;
+  new_password_confirmation: string;
+};
 export type ResetPasswordResponse = {
   data: [];
   message: string;

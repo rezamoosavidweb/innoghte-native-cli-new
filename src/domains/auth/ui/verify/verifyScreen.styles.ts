@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import {
@@ -10,10 +9,8 @@ import {
 } from '@/ui/theme';
 import type { ThemeColors } from '@/ui/theme/types';
 
-export function useVerifyScreenStyles(themeColors: ThemeColors) {
-  return React.useMemo(
-    () =>
-      StyleSheet.create({
+export function createVerifyScreenStyles(themeColors: ThemeColors) {
+  return StyleSheet.create({
         flex: { flex: 1, backgroundColor: themeColors.background },
         scrollContent: {
           padding: spacing.xl,
@@ -73,15 +70,5 @@ export function useVerifyScreenStyles(themeColors: ThemeColors) {
           color: themeColors.text,
           opacity: 0.65,
         },
-      }),
-    [
-      themeColors.background,
-      themeColors.border,
-      themeColors.errorText,
-      themeColors.inputBackground,
-      themeColors.onPrimary,
-      themeColors.primary,
-      themeColors.text,
-    ],
-  );
+      });
 }

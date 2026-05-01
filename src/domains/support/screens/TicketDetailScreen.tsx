@@ -18,13 +18,13 @@ import {
   useTicketDetail,
 } from '@/domains/support/hooks/useTicketDetail';
 import type { TicketThreadAuthorRole } from '@/domains/support/model/ticket.types';
-import { useTicketScreenStyles } from '@/domains/support/ui/ticketScreen.styles';
+import { createTicketScreenStyles } from '@/domains/support/ui/ticketScreen.styles';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { formatTsIso } from '@/shared/utils/formatTsIso';
 import {
   flashListContentGutters,
   pickSemantic,
-  useNavScreenShellStyles,
+  createNavScreenShellStyles,
 } from '@/ui/theme';
 
 type Props = DrawerScreenProps<DrawerParamList, 'TicketDetailScreen'>;
@@ -37,8 +37,8 @@ export const TicketDetailScreen = React.memo(function TicketDetailScreen({
   const theme = useTheme();
   const { colors } = theme;
   const semantic = pickSemantic(theme);
-  const shell = useNavScreenShellStyles(colors);
-  const ticketStyles = useTicketScreenStyles(colors);
+  const shell = createNavScreenShellStyles(colors);
+  const ticketStyles = createTicketScreenStyles(colors);
 
   const {
     data: detail,

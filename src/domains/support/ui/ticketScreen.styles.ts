@@ -1,5 +1,4 @@
 import type { Theme } from '@react-navigation/native';
-import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import {
@@ -10,10 +9,8 @@ import {
 } from '@/ui/theme';
 import { hexAlpha } from '@/ui/theme/utils/colorUtils';
 
-export function useTicketScreenStyles(colors: Theme['colors']) {
-  return React.useMemo(
-    () =>
-      StyleSheet.create({
+export function createTicketScreenStyles(colors: Theme['colors']) {
+  return StyleSheet.create({
         scrollContent: {
           paddingHorizontal: spacing.xl,
           paddingBottom: spacing['4xl'],
@@ -228,15 +225,7 @@ export function useTicketScreenStyles(colors: Theme['colors']) {
           fontWeight: fontWeight.semibold,
           color: colors.primary,
         },
-      }),
-    [
-      colors.background,
-      colors.border,
-      colors.card,
-      colors.primary,
-      colors.text,
-    ],
-  );
+      });
 }
 
-export type TicketScreenStyles = ReturnType<typeof useTicketScreenStyles>;
+export type TicketScreenStyles = ReturnType<typeof createTicketScreenStyles>;

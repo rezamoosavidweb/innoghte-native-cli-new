@@ -52,6 +52,8 @@
     "supportServices": "Support services",
     "terms": "Terms",
     "copyright": "Copyright",
+    "courseDetail": "Course details",
+    "coursePlayer": "Course player",
     "user": {
       "signedOut": "Signed out",
       "signInHint": "Sign in from the Profile tab",
@@ -95,6 +97,25 @@
       "loading": "Loading courses…",
       "error": "Could not load courses.",
       "empty": "No courses available yet."
+    },
+    "courseDetail": {
+      "title": "Course details",
+      "loading": "Loading…",
+      "error": "Could not load course details.",
+      "empty": "Course not found.",
+      "commentsTitle": "Comments"
+    },
+    "coursePlayer": {
+      "title": "My course",
+      "loading": "Loading course…",
+      "error": "Could not load course.",
+      "empty": "Course not found.",
+      "chaptersHeading": "Course content \"{{title}}\"",
+      "nextVideo": "Next video: {{title}}",
+      "notAccessible": "This course is not enabled for your account.",
+      "openMedia": "Open video",
+      "externalPlaybackHint": "This media opens in your browser or the web app.",
+      "htmlMediaHint": "This lesson uses embedded content; use the web version if needed."
     },
     "albums": {
       "loading": "Loading albums…",
@@ -323,15 +344,60 @@
     },
     "account": {
       "title": "Account",
-      "subtitle": "Account details and preferences (placeholder)."
+      "subtitle": "Account details and verification",
+      "navTitle": "Account",
+      "screenTitle": "Account details",
+      "edit": "Edit",
+      "fullName": "Full name",
+      "email": "Email",
+      "mobile": "Mobile",
+      "verified": "Verified",
+      "unverified": "Not verified",
+      "verify": "Verify",
+      "loadError": "Could not load profile."
     },
     "security": {
       "title": "Security",
-      "subtitle": "Password and sign-in security (placeholder)."
+      "subtitle": "Sessions and password",
+      "navTitle": "Security",
+      "sessionsTitle": "Signed-in sessions",
+      "devicesLoading": "Loading sessions…",
+      "devicesError": "Could not load sessions.",
+      "devicesEmpty": "No sessions to show.",
+      "active": "Active",
+      "inactive": "Inactive",
+      "deactivate": "Sign out session",
+      "ipLabel": "IP address",
+      "timeLabel": "Last login",
+      "statusLabel": "Status",
+      "passwordCardTitle": "Password",
+      "passwordMasked": "************",
+      "changePassword": "Change password",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm new password",
+      "passwordHint": "Password must be at least 6 characters.",
+      "forgetPasswordLead": "Forgot your password?",
+      "forgetPassword": "Reset password",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "passwordChanged": "Password updated successfully."
     },
     "editProfile": {
       "title": "Edit profile",
-      "subtitle": "Update your profile information (placeholder)."
+      "subtitle": "Name, photo, and contact info",
+      "navTitle": "Edit profile",
+      "sectionTitle": "Profile details",
+      "avatar": "Avatar",
+      "pickImageA11y": "Choose profile photo",
+      "pickImageHint": "JPEG, PNG, or GIF up to 3 MB.",
+      "fullName": "Full name",
+      "email": "Email",
+      "mobile": "Mobile number",
+      "save": "Save",
+      "saving": "Please wait…",
+      "success": "Profile updated successfully.",
+      "errorGeneric": "Something went wrong. Please try again later."
     },
     "verify": {
       "inputTitleEmail": "Verify email",
@@ -392,7 +458,19 @@
     "title": "Legacy section",
     "body": "This drawer entry matches the old Innoghte menu. Hook APIs or dedicated flows here when you are ready."
   },
+  "comments": {
+    "entityCourse": "Course",
+    "submitLabel": "Leave a comment",
+    "placeholderSuffix": " — what did you think?",
+    "yourRating": "Your rating",
+    "send": "Send",
+    "ratingRequired": "Please choose a rating",
+    "commentRequired": "Please enter your comment.",
+    "submitSuccess": "Your comment was submitted and will appear after approval.",
+    "submitError": "Something went wrong. Please try again later."
+  },
   "courses": {
+    "viewCourse": "View course",
     "productType": "Product type",
     "chaptersCount": "Chapters",
     "price": "Price",

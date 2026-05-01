@@ -12,7 +12,7 @@ import { InputField } from '@/ui/components/form/InputField';
 import { SelectField } from '@/domains/auth/ui/forms/SelectField';
 import { loginSchema, type LoginFormType } from '@/domains/auth/model/schema';
 import type { LoginBodyType } from '@/domains/auth/model/apiTypes';
-import { useLoginScreenStyles } from '@/domains/auth/ui/styles';
+import { createLoginScreenStyles } from '@/domains/auth/ui/styles';
 import { useThemeColors } from '@/ui/theme';
 
 type Props = {
@@ -24,7 +24,7 @@ type Props = {
 export function LoginForm({ isSubmitting, apiError, onSubmit }: Props) {
   const { t } = useTranslation();
   const colors = useThemeColors();
-  const s = useLoginScreenStyles(colors);
+  const s = createLoginScreenStyles(colors);
   const form = useForm<LoginFormType>({
     resolver: zodResolver(loginSchema),
     defaultValues: {

@@ -7,7 +7,7 @@ import { Text } from '@/shared/ui/Text';
 import { formatPriceForApp } from '@/shared/infra/i18n/formatLocaleNumbers';
 import { isProductPurchased } from '@/shared/purchases';
 import type { ProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
-import { useProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
+import { createProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
 import type { LiveMeetingType } from '@/domains/live/model/liveMeeting.entities';
 
 const PRICE_DISPLAY_DIVISOR = 10;
@@ -35,8 +35,9 @@ function noop(): void {}
 
 const LiveMeetingListCardComponent = ({ item }: Props) => {
   const { t } = useTranslation();
-  const { colors } = useTheme();
-  const s = useProductListCardStyles(colors);
+  const theme = useTheme();
+  const { colors } = theme;
+  const s = createProductListCardStyles(colors, theme);
   const purchased = isProductPurchased(item.id);
   const uri = item.image_media[0]?.src;
   const [failed, setFailed] = React.useState(false);

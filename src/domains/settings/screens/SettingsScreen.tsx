@@ -12,16 +12,17 @@ import { ScreenScaffold } from '@/ui/components/ScreenScaffold';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { useLanguageStore } from '@/domains/settings/model/language.store';
 import { useUiThemeStore } from '@/domains/settings/model/uiTheme.store';
-import { useScreenScaffoldStyles } from '@/ui/theme';
-import { useSettingsScreenStyles } from '@/domains/settings/ui/settingsScreen.styles';
+import { createScreenScaffoldStyles, useThemeColors } from '@/ui/theme';
+import { createSettingsScreenStyles } from '@/domains/settings/ui/settingsScreen.styles';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Settings'>;
 
 const SettingsScreenComponent = (_props: Props) => {
   const { t } = useTranslation();
+  const uiColors = useThemeColors();
   const { colors } = useTheme();
-  const scaffold = useScreenScaffoldStyles(colors);
-  const s = useSettingsScreenStyles();
+  const scaffold = createScreenScaffoldStyles(colors);
+  const s = createSettingsScreenStyles(uiColors);
 
   const { currentLanguage, setLanguage } = useLanguageStore(
     useShallow(state => ({

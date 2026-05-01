@@ -6,14 +6,14 @@ import {View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
-import { useLegacyMenuPlaceholderStyles } from '@/app/navigation/legacyMenuPlaceholder.styles';
+import { createLegacyMenuPlaceholderStyles } from '@/app/navigation/legacyMenuPlaceholder.styles';
 
 type Props = DrawerScreenProps<DrawerParamList>;
 
 const LegacyMenuPlaceholderScreenComponent = (_props: Props) => {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const s = useLegacyMenuPlaceholderStyles(colors);
+  const s = createLegacyMenuPlaceholderStyles(colors);
 
   return (
     <View style={s.root}>

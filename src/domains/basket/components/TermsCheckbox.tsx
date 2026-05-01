@@ -1,11 +1,12 @@
 import * as React from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import { Pressable, View } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import { navigateToAppLeaf } from '@/app/bridge/auth/protectedNavigation';
 import { useBasketCheckoutStore } from '@/domains/basket/model/basketCheckout.store';
+import { useTermsCheckboxStyles } from '@/domains/basket/components/termsCheckbox.styles';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
-import { useThemeColors, fontSize, fontWeight, spacing } from '@/ui/theme';
+import { useThemeColors } from '@/ui/theme';
 
 export const TermsCheckbox = React.memo(function TermsCheckbox() {
   const colors = useThemeColors();
@@ -21,28 +22,7 @@ export const TermsCheckbox = React.memo(function TermsCheckbox() {
     navigateToAppLeaf(navigation, 'Terms');
   }, [navigation]);
 
-  const s = React.useMemo(
-    () =>
-      StyleSheet.create({
-        row: { flexDirection: 'row', alignItems: 'flex-start' },
-        box: {
-          width: 22,
-          height: 22,
-          borderRadius: 11,
-          borderWidth: 2,
-          borderColor: colors.primary,
-          marginTop: 2,
-          marginRight: spacing.sm,
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: accepted ? colors.primary : 'transparent',
-        },
-        check: { color: colors.onPrimary, fontSize: 14, fontWeight: fontWeight.bold },
-        copy: { flex: 1, fontSize: fontSize.sm + 1, fontWeight: fontWeight.medium, color: colors.text },
-        link: { color: colors.primary, textDecorationLine: 'underline' },
-      }),
-    [accepted, colors],
-  );
+  const s = useTermsCheckboxStyles(colors, accepted);
 
   return (
     <View style={s.row}>

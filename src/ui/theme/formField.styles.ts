@@ -13,31 +13,22 @@ import type { ThemeColors } from '@/ui/theme/types';
  * resolve to the right token (`inputBackground` — diverges between schemes
  * per the theme spec).
  */
-export function useFormFieldStyles(themeColors: ThemeColors) {
-  return React.useMemo(
-    () =>
-      StyleSheet.create({
-        input: {
-          borderWidth: StyleSheet.hairlineWidth,
-          borderRadius: radius.lg - 2,
-          paddingHorizontal: 14,
-          paddingVertical: spacing.md,
-          fontSize: fontSize.base,
-          borderColor: themeColors.border,
-          color: themeColors.text,
-          backgroundColor: themeColors.inputBackground,
-        },
-        errorText: {
-          color: themeColors.errorText,
-          fontSize: fontSize.sm,
-          lineHeight: lineHeight.normal,
-        },
-      }),
-    [
-      themeColors.border,
-      themeColors.errorText,
-      themeColors.inputBackground,
-      themeColors.text,
-    ],
-  );
+export function createFormFieldStyles(themeColors: ThemeColors) {
+  return StyleSheet.create({
+    input: {
+      borderWidth: StyleSheet.hairlineWidth,
+      borderRadius: radius.lg - 2,
+      paddingHorizontal: 14,
+      paddingVertical: spacing.md,
+      fontSize: fontSize.base,
+      borderColor: themeColors.border,
+      color: themeColors.text,
+      backgroundColor: themeColors.inputBackground,
+    },
+    errorText: {
+      color: themeColors.errorText,
+      fontSize: fontSize.sm,
+      lineHeight: lineHeight.normal,
+    },
+  });
 }

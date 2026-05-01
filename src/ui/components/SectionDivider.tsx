@@ -7,7 +7,7 @@ import type { SectionDividerStyleSet } from '@/ui/theme/core/sectionDivider';
 export type SectionDividerProps = {
   /** Section label shown inline with the rule. */
   title: string;
-  /** From {@link useSectionDividerStyles} (or compatible StyleSheet). */
+  /** From {@link createSectionDividerStyles} (or compatible StyleSheet). */
   styles: SectionDividerStyleSet;
   testID?: string;
   /** Defaults to `title` when omitted. */

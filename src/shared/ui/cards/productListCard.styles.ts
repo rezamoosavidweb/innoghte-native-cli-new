@@ -1,5 +1,4 @@
-import { useTheme, type Theme } from '@react-navigation/native';
-import * as React from 'react';
+import type { Theme } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 
 import {
@@ -14,7 +13,7 @@ import {
 const IMAGE_SIZE = 64;
 const CARD_RADIUS = radius.lg - 2;
 
-export function createProductListCardStyles(
+export function buildProductListCardStyles(
   themeColors: Theme['colors'],
   s: ReturnType<typeof pickSemantic>,
 ) {
@@ -164,14 +163,13 @@ export function createProductListCardStyles(
 }
 
 export type ProductListCardStyles = ReturnType<
-  typeof createProductListCardStyles
+  typeof buildProductListCardStyles
 >;
 
-export function useProductListCardStyles(themeColors: Theme['colors']) {
-  const theme = useTheme();
+export function createProductListCardStyles(
+  themeColors: Theme['colors'],
+  theme: Theme,
+) {
   const s = pickSemantic(theme);
-  return React.useMemo(
-    () => createProductListCardStyles(themeColors, s),
-    [themeColors, s],
-  );
+  return buildProductListCardStyles(themeColors, s);
 }

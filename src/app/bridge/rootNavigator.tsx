@@ -2,15 +2,19 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import type { Theme } from '@react-navigation/native';
 import * as React from 'react';
-import {StyleSheet} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import { protectedNavigate } from '@/app/bridge/auth/protectedNavigation';
+import { useDrawerGlyphStyles } from '@/app/bridge/drawerGlyph.styles';
 import { CollapsibleHeaderExampleScreen } from '@/app/examples/CollapsibleHeaderExampleScreen';
 import { LegacyMenuPlaceholderScreen } from '@/app/navigation/LegacyMenuPlaceholderScreen';
 import { StartupScreen } from '@/app/startup/StartupScreen';
 import { AuthService, LoginScreen, VerifyScreen } from '@/domains/auth';
-import { CoursesScreen } from '@/domains/courses';
+import {
+  CourseDetailScreen,
+  CoursePlayerScreen,
+  CoursesScreen,
+} from '@/domains/courses';
 import { EventsScreen } from '@/domains/events';
 import { HomeScreen } from '@/domains/home';
 import { LiveMeetingsScreen } from '@/domains/live';
@@ -45,7 +49,6 @@ import { DrawerMenuButton } from '@/ui/components/DrawerMenuButton';
 import { CustomDrawerContent } from '@/ui/layout/CustomDrawerContent';
 import {
   drawerChrome,
-  fontWeight,
   mainTabBarLabelStyle,
   mainTabHeaderTitleStyle,
   pickSemantic,
@@ -83,17 +86,7 @@ const DrawerGlyph = React.memo(function DrawerGlyph({
   color: string;
   size: number;
 }) {
-  const s = React.useMemo(
-    () =>
-      StyleSheet.create({
-        glyph: {
-          fontWeight: fontWeight.semibold,
-          color,
-          fontSize: size - 2,
-        },
-      }),
-    [color, size],
-  );
+  const s = useDrawerGlyphStyles(color, size);
   return <Text style={s.glyph}>{symbol}</Text>;
 });
 DrawerGlyph.displayName = 'DrawerGlyph';
@@ -425,6 +418,20 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
     LiveMeetingOverview: {
       screen: LegacyMenuPlaceholderScreen,
       options: () => extraLeafOptions('liveMeetingOverview', '📡'),
+    },
+    CourseDetail: {
+      screen: CourseDetailScreen,
+      options: () => ({
+        ...extraLeafOptions('courseDetail', '📘'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    CoursePlayer: {
+      screen: CoursePlayerScreen,
+      options: () => ({
+        ...extraLeafOptions('coursePlayer', '▶️'),
+        drawerItemStyle: { display: 'none' },
+      }),
     },
     Search: {
       screen: SearchScreen,

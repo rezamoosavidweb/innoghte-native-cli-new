@@ -36,13 +36,21 @@ export function createApiTransport(prefix: string, auth: HttpAuthHooks) {
     prefix: base,
     hooks: {
       beforeRequest: [
-        ({ request }) => {
+        ({ request, options }) => {
           request.headers.set('Accept', 'application/json');
-          request.headers.set('Content-Type', 'application/json');
           request.headers.set('Scope', scopeHeader);
           const token = auth.getAccessToken();
           if (token) {
             request.headers.set('Authorization', `Bearer ${token}`);
+          }
+          const rawBody = options.body;
+          const isFormData =
+            typeof FormData !== 'undefined' &&
+            rawBody !== undefined &&
+            rawBody !== null &&
+            rawBody instanceof FormData;
+          if (!isFormData) {
+            request.headers.set('Content-Type', 'application/json');
           }
         },
       ],

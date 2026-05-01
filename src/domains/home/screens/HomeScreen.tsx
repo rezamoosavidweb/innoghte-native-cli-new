@@ -23,7 +23,7 @@ import { homeKeys } from '@/domains/home/model/queryKeys';
 import { HOME_BANNER_MOCK } from '@/domains/home/model/banner.mock';
 import { Banner, type BannerItemData } from '@/domains/home/ui/Banner';
 import { Comments } from '@/domains/home/ui/Comments';
-import { useHomeScreenStyles } from '@/domains/home/ui/homeScreen.styles';
+import { createHomeScreenStyles } from '@/domains/home/ui/homeScreen.styles';
 import { QuickAccess } from '@/domains/home/ui/QuickAccess';
 import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
 import { useThemeColors } from '@/ui/theme';
@@ -99,7 +99,7 @@ AnimatedDrawerIcon.displayName = 'AnimatedDrawerIcon';
 const HomeScreenComponent = () => {
   const { colors } = useTheme();
   const { headerBg, headerForeground } = useThemeColors();
-  const styles = useHomeScreenStyles(colors);
+  const styles = createHomeScreenStyles(colors);
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [refreshing, setRefreshing] = React.useState(false);

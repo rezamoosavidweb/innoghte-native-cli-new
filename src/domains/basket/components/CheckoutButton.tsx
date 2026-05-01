@@ -2,13 +2,13 @@ import * as React from 'react';
 import {
   ActivityIndicator,
   Pressable,
-  StyleSheet,
   View,
-  type ViewStyle
+  type ViewStyle,
 } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
-import { useThemeColors, fontSize, fontWeight, radius, spacing } from '@/ui/theme';
+import { useCheckoutButtonStyles } from '@/domains/basket/components/checkoutButton.styles';
+import { useThemeColors } from '@/ui/theme';
 
 type Props = {
   onPress: () => void;
@@ -28,23 +28,7 @@ export const CheckoutButton = React.memo(function CheckoutButton({
   style,
 }: Props) {
   const colors = useThemeColors();
-  const s = React.useMemo(
-    () =>
-      StyleSheet.create({
-        btn: {
-          marginTop: spacing.md,
-          paddingVertical: spacing.md,
-          borderRadius: radius.md,
-          backgroundColor: colors.primary,
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: 48,
-        },
-        disabled: { opacity: 0.5 },
-        txt: { color: colors.onPrimary, fontWeight: fontWeight.semibold, fontSize: fontSize.base },
-      }),
-    [colors],
-  );
+  const s = useCheckoutButtonStyles(colors);
 
   return (
     <View style={style}>

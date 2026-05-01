@@ -1,6 +1,8 @@
+import * as React from 'react';
 import type { Theme } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 
+import type { NavigationThemeWithScheme } from '@/ui/theme/navigationThemeContract';
 import {
   colors,
   fontSize,
@@ -78,4 +80,13 @@ export function createCartMainButtonsStyles(
       textAlign: 'center',
     },
   });
+}
+
+export function useCartMainButtonsStyles(theme: NavigationThemeWithScheme) {
+  const semantic = pickSemantic(theme);
+  const { colors: themeColors } = theme;
+  return React.useMemo(
+    () => createCartMainButtonsStyles(themeColors, semantic),
+    [semantic, themeColors],
+  );
 }

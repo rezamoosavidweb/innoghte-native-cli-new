@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import type { SemanticColors, ThemeColors } from '@/ui/theme';
@@ -47,3 +48,20 @@ export const createDonationResultModalStyles = (args: {
     },
   });
 };
+
+export function useDonationResultModalStyles(
+  cardColor: string,
+  textColor: string,
+  semantic: SemanticColors,
+  titleColor: string,
+) {
+  return React.useMemo(
+    () =>
+      createDonationResultModalStyles({
+        colors: { ...semantic, card: cardColor, text: textColor },
+        semantic,
+        titleColor,
+      }),
+    [cardColor, semantic, textColor, titleColor],
+  );
+}

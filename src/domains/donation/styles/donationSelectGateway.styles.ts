@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import type { SemanticColors, ThemeColors } from '@/ui/theme';
@@ -40,3 +41,18 @@ export const createDonationSelectGatewayStyles = (args: {
     chipDisabled: { opacity: 0.45 },
   });
 };
+
+export function useDonationSelectGatewayStyles(
+  cardColor: string,
+  textColor: string,
+  semantic: SemanticColors,
+) {
+  return React.useMemo(
+    () =>
+      createDonationSelectGatewayStyles({
+        colors: { ...semantic, card: cardColor, text: textColor },
+        semantic,
+      }),
+    [cardColor, semantic, textColor],
+  );
+}

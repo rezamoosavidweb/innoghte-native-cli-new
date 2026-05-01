@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
 
 import type { ThemeColors } from '@/ui/theme/types';
@@ -7,16 +6,21 @@ import { hexAlpha } from '@/ui/theme/utils/colorUtils';
 
 const { height: SCREEN_H } = Dimensions.get('window');
 
-export function useStartupScreenStyles(colors: ThemeColors) {
-  return React.useMemo(
-    () =>
-      StyleSheet.create({
+/**
+ * Startup / first-launch atmosphere. All surfaces resolve through {@link ThemeColors}
+ * so light/dark and accent presets stay coherent.
+ *
+ * Animated layers (`orbCenterFill`, particles, `innerGlow`, breathing rings)
+ * own layout + color here; opacity / transforms are driven from the screen via Reanimated.
+ */
+export function createStartupScreenStyles(colors: ThemeColors) {
+  return StyleSheet.create({
         root: {
           flex: 1,
           backgroundColor: colors.gradientStart,
         },
 
-        // ── Decorative background orbs ───────────────────────────────────
+        // ── Decorative background orbs (static layout; optional opacity animation) ──
         orbTopLeft: {
           position: 'absolute',
           width: 260,
@@ -37,7 +41,8 @@ export function useStartupScreenStyles(colors: ThemeColors) {
           backgroundColor: colors.ambientOrb2,
           opacity: 0.09,
         },
-        orbCenter: {
+        /** Large mid-screen wash — pair with animated opacity on the wrapping `Animated.View`. */
+        orbCenterFill: {
           position: 'absolute',
           width: 380,
           height: 380,
@@ -45,47 +50,58 @@ export function useStartupScreenStyles(colors: ThemeColors) {
           top: SCREEN_H * 0.18,
           alignSelf: 'center',
           backgroundColor: colors.gradientMid,
-          // opacity controlled by ambientStyle animation (starts at 0.45)
         },
 
-        // ── Floating particles (absolute, animated externally) ───────────
+        // ── Floating particles (animated: translate Y + opacity; absolute in root) ──
         particleA: {
           position: 'absolute',
           bottom: SCREEN_H * 0.30,
           left: '18%',
-          width: 5,
-          height: 5,
-          borderRadius: 2.5,
+          width: 6,
+          height: 6,
+          borderRadius: 3,
           backgroundColor: colors.ambientOrb1,
         },
         particleB: {
           position: 'absolute',
           bottom: SCREEN_H * 0.22,
           right: '20%',
-          width: 4,
-          height: 4,
-          borderRadius: 2,
+          width: 5,
+          height: 5,
+          borderRadius: 2.5,
           backgroundColor: colors.ambientOrb2,
         },
         particleC: {
           position: 'absolute',
           bottom: SCREEN_H * 0.38,
           left: '50%',
-          width: 3,
-          height: 3,
-          borderRadius: 1.5,
-          backgroundColor: colors.ambientOrb1,
+          marginLeft: -24,
+          width: 4,
+          height: 4,
+          borderRadius: 2,
+          backgroundColor: hexAlpha(colors.ambientOrb1, 0.42),
+          borderWidth: StyleSheet.hairlineWidth,
+          borderColor: hexAlpha(colors.ambientOrb2, 0.5),
         },
 
-        // ── Illustration zone (animated externally) ──────────────────────
+        /** Soft halo behind illustration — animate scale / opacity */
+        innerGlow: {
+          position: 'absolute',
+          width: 270,
+          height: 270,
+          borderRadius: 135,
+          backgroundColor: colors.shimmer,
+          alignSelf: 'center',
+        },
+
+        // ── Breathing rings (animated scale / opacity on wrapper) ────────────────
         breathingRing: {
           position: 'absolute',
           width: 300,
           height: 300,
           borderRadius: 150,
           borderWidth: 1.5,
-          borderColor: colors.ambientOrb1,
-          opacity: 0.18,
+          borderColor: hexAlpha(colors.ambientOrb1, 0.75),
           alignSelf: 'center',
         },
         breathingRingOuter: {
@@ -94,21 +110,11 @@ export function useStartupScreenStyles(colors: ThemeColors) {
           height: 340,
           borderRadius: 170,
           borderWidth: 1,
-          borderColor: colors.ambientOrb2,
-          opacity: 0.11,
+          borderColor: hexAlpha(colors.ambientOrb2, 0.65),
           alignSelf: 'center',
-        },
-        innerGlow: {
-          position: 'absolute',
-          width: 270,
-          height: 270,
-          borderRadius: 135,
-          backgroundColor: colors.ambientOrb1,
-          alignSelf: 'center',
-          // opacity controlled by innerGlowStyle animation (0.03 → 0.09)
         },
 
-        // ── Layout ───────────────────────────────────────────────────────
+        // ── Layout ───────────────────────────────────────────────────────────────
         scroll: {
           flexGrow: 1,
           paddingTop: spacing['3xl'],
@@ -116,7 +122,7 @@ export function useStartupScreenStyles(colors: ThemeColors) {
           alignItems: 'center',
         },
 
-        // ── Brand badge ──────────────────────────────────────────────────
+        // ── Brand badge ───────────────────────────────────────────────────────────
         badge: {
           flexDirection: 'row',
           alignItems: 'center',
@@ -138,12 +144,12 @@ export function useStartupScreenStyles(colors: ThemeColors) {
         badgeText: {
           fontSize: fontSize.sm,
           fontWeight: fontWeight.medium,
-          color: colors.info,
+          color: colors.infoText,
           letterSpacing: 1.2,
           textTransform: 'uppercase',
         },
 
-        // ── Illustration zone ─────────────────────────────────────────────
+        // ── Illustration zone ──────────────────────────────────────────────────────
         illustrationZone: {
           width: 300,
           height: 300,
@@ -152,7 +158,17 @@ export function useStartupScreenStyles(colors: ThemeColors) {
           marginBottom: spacing['3xl'],
         },
 
-        // ── Text content ─────────────────────────────────────────────────
+        /** App title accent — staggered fade/scale wrapper */
+        titleAccentBar: {
+          width: 48,
+          height: 3,
+          borderRadius: radius.sm,
+          backgroundColor: colors.primary,
+          marginTop: spacing.xs,
+          opacity: 0.85,
+        },
+
+        // ── Text content ─────────────────────────────────────────────────────────────
         textBlock: {
           alignItems: 'center',
           paddingHorizontal: spacing['5xl'],
@@ -169,7 +185,7 @@ export function useStartupScreenStyles(colors: ThemeColors) {
         tagline: {
           fontSize: fontSize.base,
           fontWeight: fontWeight.light,
-          color: hexAlpha(colors.text, 0.60),
+          color: colors.textSecondary,
           textAlign: 'center',
           lineHeight: 24,
         },
@@ -177,12 +193,11 @@ export function useStartupScreenStyles(colors: ThemeColors) {
           width: 40,
           height: 2,
           borderRadius: 1,
-          backgroundColor: colors.ambientOrb2,
-          opacity: 0.7,
+          backgroundColor: colors.divider,
           marginVertical: spacing.sm,
         },
 
-        // ── Buttons ──────────────────────────────────────────────────────
+        // ── Buttons ─────────────────────────────────────────────────────────────────
         actions: {
           width: '100%',
           paddingHorizontal: spacing['3xl'],
@@ -210,19 +225,19 @@ export function useStartupScreenStyles(colors: ThemeColors) {
           height: 54,
           borderRadius: radius.lg,
           borderWidth: 1.5,
-          borderColor: hexAlpha(colors.text, 0.18),
-          backgroundColor: hexAlpha(colors.text, 0.05),
+          borderColor: colors.chipBorder,
+          backgroundColor: colors.chipBackground,
           alignItems: 'center',
           justifyContent: 'center',
         },
         btnSecondaryText: {
           fontSize: fontSize.base,
           fontWeight: fontWeight.medium,
-          color: hexAlpha(colors.text, 0.75),
+          color: colors.textSecondary,
           letterSpacing: 0.3,
         },
 
-        // ── Footer hint ──────────────────────────────────────────────────
+        // ── Footer ───────────────────────────────────────────────────────────────────
         footer: {
           marginTop: spacing['3xl'],
           alignItems: 'center',
@@ -232,7 +247,5 @@ export function useStartupScreenStyles(colors: ThemeColors) {
           color: colors.textMuted,
           letterSpacing: 0.5,
         },
-      }),
-    [colors],
-  );
+      });
 }

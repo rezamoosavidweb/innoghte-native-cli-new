@@ -1,5 +1,4 @@
 import type { Theme } from '@react-navigation/native';
-import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import {
@@ -10,10 +9,10 @@ import {
 } from '@/ui/theme';
 
 export type SectionDividerStyleSet = ReturnType<
-  typeof createSectionDividerStyles
+  typeof buildSectionDividerStyles
 >;
 
-function createSectionDividerStyles(
+function buildSectionDividerStyles(
   colors: Theme['colors'],
   sSemantic: ReturnType<typeof pickSemantic>,
 ) {
@@ -41,13 +40,9 @@ function createSectionDividerStyles(
 }
 
 /** Token-based styles for {@link SectionDivider} — safe for profile, drawer, and other surfaces. */
-export function useSectionDividerStyles(
+export function createSectionDividerStyles(
   colors: Theme['colors'],
   navigationTheme: Theme,
 ) {
-  const sSemantic = pickSemantic(navigationTheme);
-  return React.useMemo(
-    () => createSectionDividerStyles(colors, sSemantic),
-    [colors, sSemantic],
-  );
+  return buildSectionDividerStyles(colors, pickSemantic(navigationTheme));
 }

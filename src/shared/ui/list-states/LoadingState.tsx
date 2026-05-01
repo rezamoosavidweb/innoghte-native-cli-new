@@ -3,7 +3,7 @@ import * as React from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
-import { useNavScreenShellStyles } from '@/ui/theme';
+import { createNavScreenShellStyles } from '@/ui/theme';
 
 export type LoadingStateProps = {
   /** Shown below the spinner */
@@ -12,7 +12,7 @@ export type LoadingStateProps = {
 
 const LoadingStateComponent = ({ message }: LoadingStateProps) => {
   const { colors } = useTheme();
-  const shell = useNavScreenShellStyles(colors);
+  const shell = createNavScreenShellStyles(colors);
 
   return (
     <View style={shell.centered}>

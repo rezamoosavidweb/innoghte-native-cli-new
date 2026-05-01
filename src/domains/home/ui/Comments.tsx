@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Text } from '@/shared/ui/Text';
 
 import { usePublicComments } from '@/domains/home/hooks/usePublicComments';
-import { useCommentsSectionStyles } from '@/domains/home/ui/comments.styles';
+import { createCommentsSectionStyles } from '@/domains/home/ui/comments.styles';
 import {
   CommentCarousel,
   DEFAULT_AUTOPLAY_INTERVAL,
@@ -14,9 +14,10 @@ import {
 const COMMENTS_CAROUSEL_HEIGHT = 210;
 
 const CommentsComponent = () => {
-  const { colors } = useTheme();
+  const theme = useTheme();
+  const { colors } = theme;
+  const styles = createCommentsSectionStyles(colors, theme);
   const { t } = useTranslation();
-  const styles = useCommentsSectionStyles(colors);
   const { data } = usePublicComments(1, 20);
 
   return (

@@ -5,7 +5,7 @@ import { Controller } from 'react-hook-form';
 import {Pressable, TextInput, View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
-import { createDonationCreditCardFieldsStyles } from '@/domains/donation/styles/donationCreditCardFields.styles';
+import { useDonationCreditCardFieldsStyles } from '@/domains/donation/styles/donationCreditCardFields.styles';
 import type { DonationFormType } from '@/domains/donation/schema/donationForm';
 import {
   donationCartOptions,
@@ -27,10 +27,7 @@ export const DonationCreditCardFields = React.memo(
     const theme = useTheme();
     const semantic = pickSemantic(theme);
 
-    const s = React.useMemo(
-      () => createDonationCreditCardFieldsStyles({ semantic }),
-      [semantic],
-    );
+    const s = useDonationCreditCardFieldsStyles(semantic);
 
     return (
       <View style={s.grid}>

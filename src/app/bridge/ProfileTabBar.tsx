@@ -4,19 +4,20 @@ import {Image, StyleSheet, View} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Text } from '@/shared/ui/Text';
 
+import {
+  createMainTabBarLabelTint,
+  createProfileAvatarChrome,
+} from '@/app/bridge/profileTabBar.styles';
 import { TabBarGlyph } from '@/app/navigation/tabBarConfig';
 import { useCurrentUser } from '@/domains/auth';
 import { useIsAuthenticated } from '@/domains/auth';
 import { resolveAvatarUri } from '@/shared/utils/resolveAvatarUri';
 import { initialsFromDisplayName } from '@/shared/utils/initialsFromDisplayName';
 import {
-  fontSize,
-  fontWeight,
   mainTabBarLabelStyle,
   pickSemantic,
   spacing,
 } from '@/ui/theme';
-import { colors as colorPrimitives } from '@/ui/theme/colors';
 
 const glyphWrap = StyleSheet.create({
   wrap: {
@@ -46,31 +47,7 @@ export function ProfileTabBarIcon({ color, focused, size }: IconProps) {
   const dim = Math.round(size);
   const ringColor = s.tabActive;
 
-  const avatarVisual = React.useMemo(
-    () => ({
-      image: {
-        width: dim,
-        height: dim,
-        borderRadius: dim / 2,
-        borderWidth: StyleSheet.hairlineWidth,
-        borderColor: ringColor,
-      },
-      placeholder: {
-        width: dim,
-        height: dim,
-        borderRadius: dim / 2,
-        backgroundColor: ringColor,
-        alignItems: 'center' as const,
-        justifyContent: 'center' as const,
-      },
-      initials: {
-        color: colorPrimitives.white,
-        fontSize: fontSize.xs,
-        fontWeight: fontWeight.bold,
-      },
-    }),
-    [dim, ringColor],
-  );
+  const avatarChrome = createProfileAvatarChrome(dim, ringColor);
 
   if (!isAuthenticated) {
     return (
@@ -102,12 +79,12 @@ export function ProfileTabBarIcon({ color, focused, size }: IconProps) {
         <Image
           source={{ uri }}
           accessibilityIgnoresInvertColors
-          style={avatarVisual.image}
+          style={avatarChrome.image}
           resizeMode="cover"
         />
       ) : (
-        <View style={avatarVisual.placeholder}>
-          <Text style={avatarVisual.initials} numberOfLines={1}>
+        <View style={avatarChrome.placeholder}>
+          <Text style={avatarChrome.initials} numberOfLines={1}>
             {initials}
           </Text>
         </View>
@@ -124,9 +101,10 @@ export function ProfileTabBarLabel({ color }: LabelProps) {
   const { t } = useTranslation();
   const isAuthenticated = useIsAuthenticated();
   const label = isAuthenticated ? t('tabs.profile') : t('tabs.signinup');
+  const tint = createMainTabBarLabelTint(color);
 
   return (
-    <Text style={[mainTabBarLabelStyle, { color }]} numberOfLines={1}>
+    <Text style={[mainTabBarLabelStyle, tint.tint]} numberOfLines={1}>
       {label}
     </Text>
   );

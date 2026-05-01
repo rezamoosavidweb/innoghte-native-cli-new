@@ -3,7 +3,7 @@ import * as React from 'react';
 import {Pressable, View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
-import { createDonationSelectPaymentTypeStyles } from '@/domains/donation/styles/donationSelectPaymentType.styles';
+import { useDonationSelectPaymentTypeStyles } from '@/domains/donation/styles/donationSelectPaymentType.styles';
 import { pickSemantic } from '@/ui/theme';
 
 export type DonationSelectPaymentTypeProps = {
@@ -20,14 +20,7 @@ export const DonationSelectPaymentType = React.memo(
     const { colors } = theme;
     const semantic = pickSemantic(theme);
 
-    const s = React.useMemo(
-      () =>
-        createDonationSelectPaymentTypeStyles({
-          colors: { ...semantic, text: colors.text },
-          semantic,
-        }),
-      [colors.text, semantic],
-    );
+    const s = useDonationSelectPaymentTypeStyles(colors.text, semantic);
 
     return (
       <View style={s.row}>

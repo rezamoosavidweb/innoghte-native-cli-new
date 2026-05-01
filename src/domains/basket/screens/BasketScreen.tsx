@@ -46,7 +46,7 @@ import type {
 import { ApiError } from '@/shared/infra/http/apiError';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { useThemeColors } from '@/ui/theme';
-import { useBasketScreenStyles } from './basketScreen.styles';
+import { createBasketScreenStyles } from './basketScreen.styles';
 
 export type BasketScreenRouteProp =
   | RouteProp<DrawerParamList, 'Basket'>
@@ -288,7 +288,7 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
     [navigation],
   );
 
-  const s = useBasketScreenStyles(colors, insets.bottom);
+  const s = createBasketScreenStyles(colors, insets.bottom);
 
   if (!isPendingList && cartList.length === 0) {
     return (

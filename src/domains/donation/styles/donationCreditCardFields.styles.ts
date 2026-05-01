@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import type { SemanticColors } from '@/ui/theme';
@@ -53,3 +54,10 @@ export const createDonationCreditCardFieldsStyles = (args: {
     inputCenter: { textAlign: 'center' },
   });
 };
+
+export function useDonationCreditCardFieldsStyles(semantic: SemanticColors) {
+  return React.useMemo(
+    () => createDonationCreditCardFieldsStyles({ semantic }),
+    [semantic],
+  );
+}

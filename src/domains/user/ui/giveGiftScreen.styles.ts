@@ -1,5 +1,4 @@
 import type { Theme } from '@react-navigation/native';
-import * as React from 'react';
 import type { TextStyle, ViewStyle } from 'react-native';
 
 import {
@@ -184,15 +183,4 @@ export function createGiveGiftStyles(
     },
     picker,
   };
-}
-
-export function useGiveGiftStyles(
-  themeColors: Theme['colors'],
-  uiColors: ThemeColors,
-  semanticPalette: ThemeColors,
-): GiveGiftStyles {
-  return React.useMemo(
-    () => createGiveGiftStyles(themeColors, uiColors, semanticPalette),
-    [themeColors, uiColors, semanticPalette],
-  );
 }

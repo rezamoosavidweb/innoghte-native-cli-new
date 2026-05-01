@@ -3,7 +3,7 @@ import * as React from 'react';
 import {Modal, Pressable, View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
-import { createDonationResultModalStyles } from '@/domains/donation/styles/donationResultModal.styles';
+import { useDonationResultModalStyles } from '@/domains/donation/styles/donationResultModal.styles';
 import { pickSemantic } from '@/ui/theme';
 
 export type DonationResultModalProps = {
@@ -27,14 +27,11 @@ export const DonationResultModal = React.memo(function DonationResultModal({
   const titleColor =
     variant === 'error' ? '#F75555' : semantic.successText;
 
-  const s = React.useMemo(
-    () =>
-      createDonationResultModalStyles({
-        colors: { ...semantic, card: colors.card, text: colors.text },
-        semantic,
-        titleColor,
-      }),
-    [colors.card, colors.text, semantic, titleColor],
+  const s = useDonationResultModalStyles(
+    colors.card,
+    colors.text,
+    semantic,
+    titleColor,
   );
 
   return (

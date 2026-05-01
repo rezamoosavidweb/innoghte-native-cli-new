@@ -16,13 +16,13 @@ import { useProfileFinancialMenus } from '@/domains/user/hooks/useProfileFinanci
 import { useProfileMenus } from '@/domains/user/hooks/useProfileMenus';
 import { useProfileSupportMenus } from '@/domains/user/hooks/useProfileSupportMenus';
 import {
-  useProfileHeaderStyles,
-  useProfileMenuStyles,
-  useProfileShellStyles,
+  createProfileHeaderStyles,
+  createProfileMenuStyles,
+  createProfileShellStyles,
 } from '@/domains/user/ui/profileScreen.styles';
 import {
-  useScreenScaffoldStyles,
-  useSectionDividerStyles,
+  createScreenScaffoldStyles,
+  createSectionDividerStyles,
 } from '@/ui/theme';
 import type { AppLeafRouteName, TabParamList } from '@/shared/contracts/navigationApp';
 import type { VerifyChannel } from '@/shared/contracts/verification';
@@ -36,11 +36,11 @@ const ProfileScreenComponent = (_props: Props) => {
   const { t } = useTranslation();
   const navigation = useAppNavigation();
 
-  const scaffoldStyles = useScreenScaffoldStyles(colors);
-  const shellStyles = useProfileShellStyles(colors, theme);
-  const headerStyles = useProfileHeaderStyles(colors, theme);
-  const menuStyles = useProfileMenuStyles(colors);
-  const dividerStyles = useSectionDividerStyles(colors, theme);
+  const scaffoldStyles = createScreenScaffoldStyles(colors);
+  const shellStyles = createProfileShellStyles(colors, theme);
+  const headerStyles = createProfileHeaderStyles(colors, theme);
+  const menuStyles = createProfileMenuStyles(colors);
+  const dividerStyles = createSectionDividerStyles(colors, theme);
 
   const { actionItems, experienceItems } = useProfileMenus(t);
   const financialMenuItems = useProfileFinancialMenus(t);

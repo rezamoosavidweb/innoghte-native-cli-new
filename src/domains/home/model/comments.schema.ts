@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { apiPaginationResponseFieldSchema } from '@/shared/contracts/pagination.schema';
+
 /**
  * Single comment row from `GET .../public/courses/comments` — loose match for
  * legacy backend fields (see client-web `CommentDto`).
@@ -44,5 +46,5 @@ export const commentSchema = z.object({
 export const publicCommentsResponseSchema = z.looseObject({
   message: z.string(),
   data: z.array(commentSchema),
-  pagination: z.record(z.string(), z.unknown()).optional(),
+  pagination: apiPaginationResponseFieldSchema,
 });

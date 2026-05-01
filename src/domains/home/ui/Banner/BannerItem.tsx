@@ -10,6 +10,7 @@ import {
 import { Text } from '@/shared/ui/Text';
 
 import type { BannerStyles } from '@/domains/home/ui/Banner/banner.styles';
+import { createBannerDecorationStyles } from '@/domains/home/ui/Banner/bannerItemDecoration.styles';
 
 /** First headline line with accent segment (legacy web “آسمان” color). */
 export type BannerTitleAccent = {
@@ -84,39 +85,7 @@ function BannerItemComponent({ item, styles }: BannerItemProps) {
     };
   }, [windowHeight, windowWidth]);
 
-  const lampStyle = React.useMemo(
-    () =>
-      ({
-        position: 'absolute',
-        top: decorationLayout.lampTop,
-        left: decorationLayout.lampLeft,
-        width: decorationLayout.lampWidth,
-        height: decorationLayout.lampHeight,
-        zIndex: 1,
-      } as const),
-    [decorationLayout],
-  );
-
-  const parAnchorStyle = React.useMemo(
-    () =>
-      ({
-        position: 'absolute',
-        top: decorationLayout.parTop,
-        left: 0,
-        right: 0,
-        alignItems: 'center' as const,
-        zIndex: 3,
-      } as const),
-    [decorationLayout.parTop],
-  );
-
-  const parImageStyle = React.useMemo(
-    () => ({
-      width: decorationLayout.parSize,
-      height: decorationLayout.parSize,
-    }),
-    [decorationLayout.parSize],
-  );
+  const deco = createBannerDecorationStyles(decorationLayout);
 
   const hasCopy =
     Boolean(titleLine1Accent) ||
@@ -224,7 +193,7 @@ function BannerItemComponent({ item, styles }: BannerItemProps) {
         ) : null}
 
         {lampImage ? (
-          <View style={lampStyle} pointerEvents="none">
+          <View style={deco.lampWrap} pointerEvents="none">
             <Image
               accessibilityIgnoresInvertColors
               source={lampImage}
@@ -237,12 +206,12 @@ function BannerItemComponent({ item, styles }: BannerItemProps) {
         {renderCopyColumn(true)}
 
         {parImage ? (
-          <View style={parAnchorStyle} pointerEvents="none">
+          <View style={deco.parAnchor} pointerEvents="none">
             <Image
               accessibilityIgnoresInvertColors
               source={parImage}
               resizeMode="contain"
-              style={parImageStyle}
+              style={deco.parImage}
             />
           </View>
         ) : null}

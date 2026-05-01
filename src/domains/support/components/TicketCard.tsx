@@ -7,7 +7,7 @@ import { Text } from '@/shared/ui/Text';
 import { TicketLabelValue } from '@/domains/support/components/TicketLabelValue';
 import { TicketStatusBadge } from '@/domains/support/components/TicketStatusBadge';
 import type { Ticket } from '@/domains/support/model/ticket.types';
-import { useTicketScreenStyles } from '@/domains/support/ui/ticketScreen.styles';
+import { createTicketScreenStyles } from '@/domains/support/ui/ticketScreen.styles';
 
 export type TicketCardProps = {
   ticket: Ticket;
@@ -27,7 +27,7 @@ export const TicketCard = React.memo(function TicketCard({
   onOpen,
 }: TicketCardProps) {
   const { colors } = useTheme();
-  const styles = useTicketScreenStyles(colors);
+  const styles = createTicketScreenStyles(colors);
   const { t, i18n } = useTranslation();
 
   const formattedCreatedAt = React.useMemo(

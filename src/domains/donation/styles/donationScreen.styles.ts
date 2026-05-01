@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import type { SemanticColors, ThemeColors } from '@/ui/theme';
@@ -187,3 +188,19 @@ export const createDonationScreenStyles = (args: {
     },
   });
 };
+
+export function useDonationScreenStyles(
+  background: string,
+  semantic: SemanticColors,
+  isCustomAmount: boolean,
+) {
+  return React.useMemo(
+    () =>
+      createDonationScreenStyles({
+        colors: { ...semantic, background },
+        semantic,
+        isCustomAmount,
+      }),
+    [background, isCustomAmount, semantic],
+  );
+}

@@ -1,6 +1,6 @@
-export { useFaqExpandableRowStyles } from './faqExpandableRow.styles';
+export { createFaqExpandableRowStyles } from './faqExpandableRow.styles';
 export {
-  useFaqsCategoryChipStyles,
-  useFaqsScreenLayoutStyles,
-  useFaqsSearchInputStyles,
+  createFaqsCategoryChipStyles,
+  createFaqsScreenLayoutStyles,
+  createFaqsSearchInputStyles,
 } from './faqsScreen.styles';

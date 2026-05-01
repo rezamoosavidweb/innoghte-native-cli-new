@@ -2,9 +2,8 @@ import * as React from 'react';
 import {
   ActivityIndicator,
   Pressable,
-  StyleSheet,
   TextInput,
-  View
+  View,
 } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
@@ -14,7 +13,8 @@ import { useBasketCheckoutStore } from '@/domains/basket/model/basketCheckout.st
 import { ApiError } from '@/shared/infra/http/apiError';
 import { showAppToast } from '@/shared/ui/toast/toastBus';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
-import { useThemeColors, fontSize, fontWeight, radius, spacing } from '@/ui/theme';
+import { useDiscountFormStyles } from '@/domains/basket/components/discountForm.styles';
+import { useThemeColors } from '@/ui/theme';
 
 const SUBMIT_DEBOUNCE_MS = 480;
 
@@ -99,44 +99,7 @@ export const DiscountForm = React.memo(function DiscountForm({
     redirectToLoginForDiscount,
   ]);
 
-  const s = React.useMemo(
-    () =>
-      StyleSheet.create({
-        wrap: { marginBottom: spacing.lg },
-        label: {
-          fontWeight: fontWeight.medium,
-          marginBottom: spacing.sm,
-          color: colors.text,
-          fontSize: fontSize.sm + 1,
-        },
-        fieldRow: {
-          flexDirection: 'row',
-          alignItems: 'center',
-          borderRadius: radius.lg,
-          backgroundColor: colors.surfaceSecondary,
-          paddingLeft: spacing.md,
-          paddingRight: spacing.xs,
-          minHeight: 48,
-        },
-        input: {
-          flex: 1,
-          color: colors.text,
-          fontSize: fontSize.base,
-          paddingVertical: spacing.sm,
-        },
-        addBtn: {
-          width: 44,
-          height: 44,
-          borderRadius: 22,
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: colors.text,
-        },
-        addBtnDisabled: { opacity: 0.45 },
-        addLbl: { color: colors.background, fontSize: fontSize.xl, fontWeight: fontWeight.bold },
-      }),
-    [colors],
-  );
+  const s = useDiscountFormStyles(colors);
 
   return (
     <View style={s.wrap}>

@@ -24,5 +24,26 @@ export const coursesKeys = {
     const f = filters ?? {};
     return [...coursesKeys.all, 'list', f.categoryId ?? null, f.page ?? null, f.perPage ?? null] as const;
   },
-  detail: (id: string) => [...coursesKeys.all, 'detail', id] as const,
+  detail: (id: string | number) =>
+    [...coursesKeys.all, 'detail', String(id)] as const,
+  /** Paginated public comments — scope by course/category + page for correct caching. */
+  commentsPage: (
+    courseId: number | undefined,
+    categoryId: number | undefined,
+    page: number,
+    perPage: number,
+  ) =>
+    [
+      ...coursesKeys.all,
+      'commentsPage',
+      courseId ?? null,
+      categoryId ?? null,
+      page,
+      perPage,
+    ] as const,
+  commentsScopePrefix: (
+    courseId: number | undefined,
+    categoryId: number | undefined,
+  ) =>
+    [...coursesKeys.all, 'commentsPage', courseId ?? null, categoryId ?? null] as const,
 } as const;

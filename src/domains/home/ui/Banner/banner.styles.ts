@@ -47,9 +47,7 @@ export function useBannerStyles(
     [insets.top],
   );
 
-  return React.useMemo(
-    () =>
-      StyleSheet.create({
+  return StyleSheet.create({
         container: {
           width: '100%',
         },
@@ -207,20 +205,7 @@ export function useBannerStyles(
           width: 22,
           backgroundColor: themeColors.primary,
         },
-      }),
-    [
-      heroBodyPaddingBottom,
-      heroCopyTop,
-      heroDotsBottom,
-      s,
-      themeColors.background,
-      themeColors.border,
-      themeColors.card,
-      themeColors.primary,
-      themeColors.text,
-      variant,
-    ],
-  );
+      });
 }
 
 export type BannerStyles = ReturnType<typeof useBannerStyles>;

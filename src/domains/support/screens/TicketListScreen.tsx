@@ -14,7 +14,7 @@ import { TicketCard } from '@/domains/support/components/TicketCard';
 import { useInfiniteTickets } from '@/domains/support/hooks/useInfiniteTickets';
 import { ticketsKeys } from '@/domains/support/model/queryKeys';
 import type { Ticket } from '@/domains/support/model/ticket.types';
-import { useTicketScreenStyles } from '@/domains/support/ui/ticketScreen.styles';
+import { createTicketScreenStyles } from '@/domains/support/ui/ticketScreen.styles';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { useListPerformanceProfile } from '@/shared/infra/device/listPerformanceProfile';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
@@ -43,7 +43,7 @@ const TicketListScreenComponent = (_props: Props) => {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const navigation = useAppNavigation();
-  const ticketStyles = useTicketScreenStyles(colors);
+  const ticketStyles = createTicketScreenStyles(colors);
 
   const {
     flatData,

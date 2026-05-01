@@ -1,8 +1,9 @@
 import * as React from 'react';
-import {StyleSheet, View} from 'react-native';
+import { View } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
-import { useThemeColors, fontSize, fontWeight, spacing } from '@/ui/theme';
+import { useCartHeaderStyles } from '@/domains/basket/components/cartHeader.styles';
+import { useThemeColors } from '@/ui/theme';
 
 type Props = {
   title: string;
@@ -11,23 +12,7 @@ type Props = {
 
 export const CartHeader = React.memo(function CartHeader({ title, subtitle }: Props) {
   const colors = useThemeColors();
-  const s = React.useMemo(
-    () =>
-      StyleSheet.create({
-        wrap: { marginBottom: spacing.md },
-        title: {
-          fontSize: fontSize.lg + 2,
-          fontWeight: fontWeight.semibold,
-          color: colors.text,
-        },
-        sub: {
-          marginTop: spacing.xs,
-          fontSize: fontSize.sm,
-          color: colors.textSecondary,
-        },
-      }),
-    [colors.text, colors.textSecondary],
-  );
+  const s = useCartHeaderStyles(colors);
 
   return (
     <View style={s.wrap}>

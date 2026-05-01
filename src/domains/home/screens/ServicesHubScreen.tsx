@@ -7,7 +7,7 @@ import { Text } from '@/shared/ui/Text';
 
 import type { TabParamList } from '@/shared/contracts/navigationApp';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
-import { useServicesHubStyles } from '@/domains/home/ui/servicesHub.styles';
+import { createServicesHubStyles } from '@/domains/home/ui/servicesHub.styles';
 import {
   HubMenuRow,
   type HubMenuRowStyleSet,
@@ -67,7 +67,7 @@ ServicesHubMenuRow.displayName = 'ServicesHubMenuRow';
 const ServicesHubScreenComponent = (_props: Props) => {
   const { t } = useTranslation();
   const { colors } = useTheme();
-  const s = useServicesHubStyles(colors);
+  const s = createServicesHubStyles(colors);
 
   return (
     <ScrollView

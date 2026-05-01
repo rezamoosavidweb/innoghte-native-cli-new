@@ -1,10 +1,10 @@
-import * as React from 'react';
 import { DrawerActions, useTheme } from '@react-navigation/native';
-import {StyleSheet} from 'react-native';
+import * as React from 'react';
 import { HeaderButton } from '@react-navigation/elements';
 import { Text } from '@/shared/ui/Text';
 
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
+import { useDrawerMenuButtonStyles } from '@/ui/components/drawerMenuButton.styles';
 import { pickSemantic } from '@/ui/theme';
 
 /** Opens the parent drawer from screens nested under `MainTabs` (see article “Strategy 1”). */
@@ -18,18 +18,7 @@ export const DrawerMenuButton = React.memo(function DrawerMenuButton({
   const theme = useTheme();
   const s = pickSemantic(theme);
 
-  const styles = React.useMemo(
-    () =>
-      StyleSheet.create({
-        icon: {
-          fontSize: 22,
-          fontWeight: '600',
-          paddingHorizontal: 4,
-          color: iconColor ?? s.headerForeground,
-        },
-      }),
-    [iconColor, s.headerForeground],
-  );
+  const styles = useDrawerMenuButtonStyles(s, iconColor);
 
   return (
     <HeaderButton

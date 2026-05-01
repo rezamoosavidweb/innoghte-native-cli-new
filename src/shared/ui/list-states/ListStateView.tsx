@@ -3,7 +3,7 @@ import * as React from 'react';
 import type { Edge } from 'react-native-safe-area-context';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useNavScreenShellStyles } from '@/ui/theme';
+import { createNavScreenShellStyles } from '@/ui/theme';
 
 import { EmptyState } from '@/shared/ui/list-states/EmptyState';import { ErrorState } from '@/shared/ui/list-states/ErrorState';
 import { LoadingState } from '@/shared/ui/list-states/LoadingState';
@@ -54,7 +54,7 @@ const ListStateViewComponent = ({
   safeAreaEdges = ['left', 'right', 'bottom'],
 }: ListStateViewProps) => {
   const { colors } = useTheme();
-  const shell = useNavScreenShellStyles(colors);
+  const shell = createNavScreenShellStyles(colors);
 
   const resolvedErrorDetail =
     errorDetail !== undefined ? errorDetail || undefined : defaultErrorDetail(error);

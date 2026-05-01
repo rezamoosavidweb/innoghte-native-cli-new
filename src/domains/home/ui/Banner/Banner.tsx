@@ -34,6 +34,18 @@ const heroTopScrimStyles = StyleSheet.create({
   },
 });
 
+function createHeroTopScrimWrapHeight(height: number) {
+  return StyleSheet.create({
+    measured: { height },
+  });
+}
+
+function createBannerViewportHeight(height: number) {
+  return StyleSheet.create({
+    viewport: { height },
+  });
+}
+
 /**
  * Static top gradient — darkens the upper hero slightly so overlaid chrome stays readable
  * without per-image analysis. Fades out before mid-banner so imagery stays prominent.
@@ -41,11 +53,12 @@ const heroTopScrimStyles = StyleSheet.create({
 function HeroTopScrim({ width, bannerHeight }: { width: number; bannerHeight: number }) {
   const gradientId = React.useId().replace(/:/g, '');
   const scrimHeight = Math.min(200, Math.max(96, Math.round(bannerHeight * 0.34)));
+  const scrimWrap = createHeroTopScrimWrapHeight(scrimHeight);
 
   return (
     <View
       pointerEvents="none"
-      style={[heroTopScrimStyles.shell, { height: scrimHeight }]}
+      style={[heroTopScrimStyles.shell, scrimWrap.measured]}
     >
       <Svg width={width} height={scrimHeight}>
         <Defs>
@@ -119,17 +132,14 @@ function BannerComponent({
     [styles],
   );
 
-  const heightStyle = React.useMemo<ViewStyle>(
-    () => ({ height: resolvedHeight }),
-    [resolvedHeight],
-  );
+  const viewportHeight = createBannerViewportHeight(resolvedHeight);
 
   if (itemCount === 0) return null;
 
   if (itemCount === 1) {
     return (
       <View style={[styles.container, style]} testID={testID}>
-        <View style={[styles.viewportFill, heightStyle]}>
+        <View style={[styles.viewportFill, viewportHeight.viewport]}>
           <BannerItem item={items[0]} styles={styles} />
           {variant === 'hero' ? (
             <HeroTopScrim width={screenWidth} bannerHeight={resolvedHeight} />
@@ -158,8 +168,8 @@ function BannerComponent({
 
   if (variant === 'hero') {
     return (
-      <View style={[styles.container, heightStyle, style]} testID={testID}>
-        <View style={[styles.carouselHeroShell, heightStyle]}>
+      <View style={[styles.container, viewportHeight.viewport, style]} testID={testID}>
+        <View style={[styles.carouselHeroShell, viewportHeight.viewport]}>
           <Carousel
             data={items as BannerItemData[]}
             width={screenWidth}

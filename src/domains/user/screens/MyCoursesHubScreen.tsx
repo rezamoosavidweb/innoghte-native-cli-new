@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {ScrollView, View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
-import { useMyCoursesHubStyles } from '@/domains/user/ui/myCoursesHub.styles';
+import { createMyCoursesHubStyles } from '@/domains/user/ui/myCoursesHub.styles';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { HubMenuRow } from '@/ui/components/HubMenuRow';
 
@@ -27,7 +27,7 @@ const MyCoursesHubScreenComponent = () => {
   const navigation = useAppNavigation();
   const { t } = useTranslation();
   const { colors } = useTheme();
-  const s = useMyCoursesHubStyles(colors);
+  const s = createMyCoursesHubStyles(colors);
 
   const onRowPress = React.useCallback(
     (row: HubRowConfig) => {

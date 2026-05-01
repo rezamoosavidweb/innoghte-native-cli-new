@@ -3,7 +3,7 @@ import {TextInput} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import { useThemeColors } from '@/ui/theme';
-import { useFormFieldStyles } from '@/ui/theme/formField.styles';
+import { createFormFieldStyles } from '@/ui/theme/formField.styles';
 
 type Props = {
   accessibilityLabel: string;
@@ -29,7 +29,7 @@ export function InputField({
   autoCapitalize = 'none',
 }: Props) {
   const colors = useThemeColors();
-  const s = useFormFieldStyles(colors);
+  const s = createFormFieldStyles(colors);
 
   return (
     <>

@@ -3,7 +3,7 @@ import * as React from 'react';
 import {View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
-import { useNavScreenShellStyles } from '@/ui/theme';
+import { createNavScreenShellStyles } from '@/ui/theme';
 
 export type EmptyStateProps = {
   title: string;
@@ -12,7 +12,7 @@ export type EmptyStateProps = {
 
 const EmptyStateComponent = ({ title, subtitle }: EmptyStateProps) => {
   const { colors } = useTheme();
-  const shell = useNavScreenShellStyles(colors);
+  const shell = createNavScreenShellStyles(colors);
 
   return (
     <View style={shell.centered}>

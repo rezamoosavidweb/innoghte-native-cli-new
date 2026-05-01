@@ -3,7 +3,7 @@ import {LayoutAnimation, Pressable, View} from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { Text } from '@/shared/ui/Text';
 
-import { useFaqExpandableRowStyles } from '@/domains/support/faqs/ui';
+import { createFaqExpandableRowStyles } from '@/domains/support/faqs/ui';
 
 type Props = {
   question: string;
@@ -15,7 +15,7 @@ export const FaqExpandableRow = React.memo(function FaqExpandableRow({
   answer,
 }: Props) {
   const { colors } = useTheme();
-  const s = useFaqExpandableRowStyles(colors);
+  const s = createFaqExpandableRowStyles(colors);
   const [expanded, setExpanded] = React.useState(false);
 
   React.useEffect(() => {

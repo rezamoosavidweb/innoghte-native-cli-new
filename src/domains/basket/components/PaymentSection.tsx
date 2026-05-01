@@ -2,10 +2,11 @@ import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import type { Control } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
-import {Pressable, StyleSheet, TextInput, View} from 'react-native';
+import { Pressable, TextInput, View } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import { SelectPaymentType } from '@/domains/basket/components/SelectPaymentType';
+import { usePaymentSectionStyles } from '@/domains/basket/components/paymentSection.styles';
 import type { BasketIrGateway } from '@/domains/basket/model/basketCheckout.store';
 import { useBasketCheckoutStore } from '@/domains/basket/model/basketCheckout.store';
 import type { BasketPaymentFormType } from '@/domains/basket/model/paymentFormSchema';
@@ -15,13 +16,7 @@ import {
 } from '@/domains/basket/model/paymentFormSchema';
 import { isDotIr } from '@/shared/config/resolveIsDotIr';
 import { formatCardNumber } from '@/shared/utils/paymentFormatting';
-import {
-  fontSize,
-  fontWeight,
-  pickSemantic,
-  radius,
-  spacing,
-} from '@/ui/theme';
+import { pickSemantic } from '@/ui/theme';
 
 export type PaymentSectionProps = {
   control: Control<BasketPaymentFormType>;
@@ -41,71 +36,7 @@ export const PaymentSection = React.memo(function PaymentSection({
   const gateway = useBasketCheckoutStore(s => s.gatewayName);
   const setGateway = useBasketCheckoutStore(s => s.setGatewayName);
 
-  const s = React.useMemo(
-    () =>
-      StyleSheet.create({
-        title: {
-          fontSize: fontSize.lg,
-          fontWeight: fontWeight.semibold,
-          color: semantic.text,
-          marginBottom: spacing.md,
-        },
-        gatewayRow: {
-          flexDirection: 'row',
-          gap: spacing.md,
-          marginBottom: spacing.md,
-        },
-        gw: {
-          flex: 1,
-          paddingVertical: spacing.md,
-          borderRadius: radius.md,
-          borderWidth: 2,
-          borderColor: semantic.border,
-          alignItems: 'center',
-        },
-        gwOn: { borderColor: semantic.textSecondary },
-        gwLbl: {
-          fontSize: fontSize.sm,
-          fontWeight: fontWeight.medium,
-          color: semantic.text,
-        },
-        grid: { gap: spacing.md },
-        row2: { flexDirection: 'row', gap: spacing.md },
-        flex1: { flex: 1 },
-        field: { gap: spacing.xs },
-        label: {
-          fontSize: fontSize.sm,
-          fontWeight: fontWeight.medium,
-          color: semantic.text,
-        },
-        input: {
-          borderWidth: StyleSheet.hairlineWidth,
-          borderColor: semantic.border,
-          borderRadius: radius.md,
-          paddingHorizontal: spacing.md,
-          paddingVertical: spacing.sm,
-          backgroundColor: semantic.inputBackground,
-          color: semantic.text,
-          fontSize: fontSize.base,
-        },
-        error: { fontSize: fontSize.sm, color: semantic.errorText },
-        typeRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-        chip: {
-          paddingHorizontal: spacing.md,
-          paddingVertical: spacing.sm,
-          borderRadius: radius.full,
-          borderWidth: 1,
-          borderColor: semantic.border,
-          backgroundColor: semantic.surface,
-        },
-        chipOn: {
-          borderColor: semantic.primary,
-          backgroundColor: semantic.primarySoft,
-        },
-        chipTxt: { fontSize: fontSize.sm, color: semantic.text },
-      }),
-    [semantic],
-  );
+  const s = usePaymentSectionStyles(semantic);
 
   const onGatewayPress = React.useCallback(
     (g: BasketIrGateway) => {

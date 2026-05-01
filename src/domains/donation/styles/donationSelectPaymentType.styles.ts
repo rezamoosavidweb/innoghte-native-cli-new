@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import type { SemanticColors, ThemeColors } from '@/ui/theme';
@@ -38,3 +39,17 @@ export const createDonationSelectPaymentTypeStyles = (args: {
     chipTextOn: { color: colors.text },
   });
 };
+
+export function useDonationSelectPaymentTypeStyles(
+  textColor: string,
+  semantic: SemanticColors,
+) {
+  return React.useMemo(
+    () =>
+      createDonationSelectPaymentTypeStyles({
+        colors: { ...semantic, text: textColor },
+        semantic,
+      }),
+    [semantic, textColor],
+  );
+}

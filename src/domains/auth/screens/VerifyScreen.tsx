@@ -28,7 +28,7 @@ import {
 } from '@/domains/auth/ui/verify/verifyCopy';
 import { VerifyHeader } from '@/domains/auth/ui/verify/VerifyHeader';
 import { VerifyInputStep } from '@/domains/auth/ui/verify/VerifyInputStep';
-import { useVerifyScreenStyles } from '@/domains/auth/ui/verify/verifyScreen.styles';
+import { createVerifyScreenStyles } from '@/domains/auth/ui/verify/verifyScreen.styles';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import type { VerifyChannel } from '@/shared/contracts/verification';
 import { isEmailChannel } from '@/shared/contracts/verification';
@@ -43,7 +43,7 @@ const VerifyScreenComponent = ({ route }: Props) => {
   const navigation = useAppNavigation();
   const queryClient = useQueryClient();
   const colors = useThemeColors();
-  const s = useVerifyScreenStyles(colors);
+  const s = createVerifyScreenStyles(colors);
   const [state, dispatch] = React.useReducer(
     verifyScreenReducer,
     verifyInitialState,

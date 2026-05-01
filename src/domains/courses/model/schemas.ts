@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import type { PublicCoursesResponse } from '@/domains/courses/model/courseApi.dto';
-
+import { apiPaginationResponseFieldSchema } from '@/shared/contracts/pagination.schema';
 
 /** Loose object: unknown keys allowed (replaces deprecated `.passthrough()`). */
 export const courseSchema = z.looseObject({
@@ -23,5 +23,5 @@ export const publicCoursesResponseSchema: z.ZodType<PublicCoursesResponse> =
   z.looseObject({
     message: z.string(),
     data: z.array(courseSchema),
-    pagination: z.record(z.string(), z.unknown()),
+    pagination: apiPaginationResponseFieldSchema,
   }) as unknown as z.ZodType<PublicCoursesResponse>;

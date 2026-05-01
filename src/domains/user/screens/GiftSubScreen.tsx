@@ -2,17 +2,17 @@ import type { DrawerScreenProps } from '@react-navigation/drawer';
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import {ScrollView, View, StyleSheet} from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import {
   flashListContentGutters,
-  fontSize,
-  fontWeight,
   pickSemantic,
-  useNavScreenShellStyles,
+  createNavScreenShellStyles,
 } from '@/ui/theme';
+
+import { useGiftSubScreenStyles } from '@/domains/user/screens/giftSubScreen.styles';
 
 type GiftLeafName = 'GiftSend' | 'GiftReceived' | 'GiftSent';
 
@@ -29,29 +29,13 @@ export const GiftSubScreen = React.memo(function GiftSubScreen({ route }: Props)
   const theme = useTheme();
   const { colors } = theme;
   const semantic = pickSemantic(theme);
-  const shell = useNavScreenShellStyles(colors);
+  const shell = createNavScreenShellStyles(colors);
 
   const suffix = TITLE_SUFFIX[route.name];
   const title = t(`screens.gift.leaf.${suffix}.title`);
   const body = t(`screens.gift.leaf.${suffix}.body`);
 
-  const s = React.useMemo(
-    () =>
-      StyleSheet.create({
-        title: {
-          color: colors.text,
-          fontSize: fontSize.lg,
-          fontWeight: fontWeight.semibold,
-        },
-        body: {
-          color: semantic.textMuted,
-          marginTop: 12,
-          lineHeight: fontSize.base * 1.45,
-          fontSize: fontSize.base,
-        },
-      }),
-    [colors.text, semantic.textMuted],
-  );
+  const s = useGiftSubScreenStyles(colors, semantic);
 
   return (
     <ScrollView

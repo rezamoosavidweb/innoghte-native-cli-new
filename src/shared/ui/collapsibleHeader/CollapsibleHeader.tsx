@@ -11,6 +11,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { contrastingForeground } from '@/shared/ui/collapsibleHeader/colorUtils';
 import {
+  createCollapsibleShellInsetStyles,
+  createCollapsibleRowMinHeightStyles,
+  createCollapsibleStaticTitleColorStyles,
+} from '@/shared/ui/collapsibleHeader/collapsibleHeaderLayout.styles';
+import {
   COLLAPSIBLE_HEADER_DEFAULT_BAR_HEIGHT,
   type CollapsibleHeaderProps,
 } from '@/shared/ui/collapsibleHeader/types';
@@ -99,6 +104,13 @@ export const CollapsibleHeader = React.memo(function CollapsibleHeader({
     };
   }, [threshold, expanded, collapsed, contrastShadowWhileExpanded]);
 
+  const shellInset = createCollapsibleShellInsetStyles(
+    insets.top,
+    insets.top + height,
+  );
+  const rowMin = createCollapsibleRowMinHeightStyles(height);
+  const staticTitleTint = createCollapsibleStaticTitleColorStyles(expanded);
+
   const titleNode = !title ? null : animate ? (
     <Animated.Text
       accessibilityRole="header"
@@ -111,7 +123,7 @@ export const CollapsibleHeader = React.memo(function CollapsibleHeader({
     <Text
       accessibilityRole="header"
       numberOfLines={1}
-      style={[styles.title, { color: expanded }]}
+      style={[styles.title, staticTitleTint.title]}
     >
       {title}
     </Text>
@@ -120,16 +132,9 @@ export const CollapsibleHeader = React.memo(function CollapsibleHeader({
   return (
     <Animated.View
       pointerEvents="box-none"
-      style={[
-        styles.shell,
-        {
-          paddingTop: insets.top,
-          minHeight: insets.top + height,
-        },
-        shellAnimatedStyle,
-      ]}
+      style={[styles.shell, shellInset.shell, shellAnimatedStyle]}
     >
-      <View style={[styles.row, { minHeight: height }]}>
+      <View style={[styles.row, rowMin.row]}>
         {leading != null ? (
           <View style={styles.leading} pointerEvents="box-none">
             {leading}

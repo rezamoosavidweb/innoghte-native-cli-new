@@ -20,12 +20,12 @@ import {
   flashListEstimatedItemSize,
   flashListRowSeparators,
   pickSemantic,
-  useNavScreenShellStyles,
+  createNavScreenShellStyles,
 } from '@/ui/theme';
 import {
-  useFaqsCategoryChipStyles,
-  useFaqsScreenLayoutStyles,
-  useFaqsSearchInputStyles,
+  createFaqsCategoryChipStyles,
+  createFaqsScreenLayoutStyles,
+  createFaqsSearchInputStyles,
 } from '@/domains/support/faqs/ui';
 import { useFaqHubStore } from '@/domains/support/faqs/model/faqHub.store';
 
@@ -47,7 +47,7 @@ const CategoryChip = React.memo(function CategoryChip({
   onPress: () => void;
 }) {
   const { colors } = useTheme();
-  const s = useFaqsCategoryChipStyles(colors, active);
+  const s = createFaqsCategoryChipStyles(colors, active);
   return (
     <Pressable
       accessibilityRole="button"
@@ -72,9 +72,9 @@ const FaqsScreenComponent = (_props: Props) => {
   const theme = useTheme();
   const { colors } = theme;
   const semantic = pickSemantic(theme);
-  const shell = useNavScreenShellStyles(colors);
-  const inputS = useFaqsSearchInputStyles(colors);
-  const layout = useFaqsScreenLayoutStyles();
+  const shell = createNavScreenShellStyles(colors);
+  const inputS = createFaqsSearchInputStyles(colors);
+  const layout = createFaqsScreenLayoutStyles();
   const { activeCategoryId, searchQuery, setActiveCategoryId, setSearchQuery } =
     useFaqHubStore(
       useShallow(s => ({

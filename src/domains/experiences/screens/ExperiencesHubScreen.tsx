@@ -7,7 +7,7 @@ import { Text } from '@/shared/ui/Text';
 
 import type { TabParamList } from '@/shared/contracts/navigationApp';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
-import { useExperiencesHubStyles } from '@/domains/experiences/ui/experiencesHub.styles';
+import { createExperiencesHubStyles } from '@/domains/experiences/ui/experiencesHub.styles';
 import {
   HubMenuRow,
   type HubMenuRowStyleSet,
@@ -75,7 +75,7 @@ ExperiencesHubMenuRow.displayName = 'ExperiencesHubMenuRow';
 const ExperiencesHubScreenComponent = (_props: Props) => {
   const { t } = useTranslation();
   const { colors } = useTheme();
-  const s = useExperiencesHubStyles(colors);
+  const s = createExperiencesHubStyles(colors);
 
   return (
     <ScrollView

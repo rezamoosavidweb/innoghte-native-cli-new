@@ -53,6 +53,8 @@
     "supportServices": "خدمات حمایتی",
     "terms": "قوانین و مقررات",
     "copyright": "حق نشر",
+    "courseDetail": "جزئیات دوره",
+    "coursePlayer": "پخش دوره",
     "user": {
       "signedOut": "وارد نشده‌اید",
       "signInHint": "ورود از منوی تب «پروفایل»",
@@ -96,6 +98,25 @@
       "loading": "در حال بارگذاری دوره‌ها…",
       "error": "بارگذاری دوره‌ها ناموفق بود.",
       "empty": "هنوز دوره‌ای موجود نیست."
+    },
+    "courseDetail": {
+      "title": "جزئیات دوره",
+      "loading": "در حال بارگذاری…",
+      "error": "بارگذاری جزئیات دوره ناموفق بود.",
+      "empty": "دوره یافت نشد.",
+      "commentsTitle": "نظرات"
+    },
+    "coursePlayer": {
+      "title": "دوره من",
+      "loading": "در حال بارگذاری دوره…",
+      "error": "بارگذاری دوره ناموفق بود.",
+      "empty": "دوره یافت نشد.",
+      "chaptersHeading": "محتوای دوره «{{title}}»",
+      "nextVideo": "ویدیوی بعد: {{title}}",
+      "notAccessible": "این دوره برای حساب شما فعال نیست.",
+      "openMedia": "باز کردن ویدیو",
+      "externalPlaybackHint": "پخش این رسانه در اپ وب یا مرورگر انجام می‌شود.",
+      "htmlMediaHint": "این فصل شامل محتوای جاسازی‌شده است؛ در صورت نیاز از نسخه وب استفاده کنید."
     },
     "albums": {
       "loading": "در حال بارگذاری آلبوم‌ها…",
@@ -324,15 +345,60 @@
     },
     "account": {
       "title": "حساب کاربری",
-      "subtitle": "جزئیات و ترجیحات حساب (جای‌نگه‌دار)."
+      "subtitle": "جزئیات حساب و تأیید تماس",
+      "navTitle": "حساب کاربری",
+      "screenTitle": "مشخصات حساب",
+      "edit": "ویرایش",
+      "fullName": "نام و نام خانوادگی",
+      "email": "ایمیل",
+      "mobile": "موبایل",
+      "verified": "تایید شده",
+      "unverified": "تایید نشده",
+      "verify": "تایید",
+      "loadError": "بارگذاری پروفایل ناموفق بود."
     },
     "security": {
       "title": "امنیت",
-      "subtitle": "رمز عبور و امنیت ورود (جای‌نگه‌دار)."
+      "subtitle": "نشست‌ها و رمز عبور",
+      "navTitle": "امنیت",
+      "sessionsTitle": "ورود به حساب‌ها",
+      "devicesLoading": "در حال بارگذاری نشست‌ها…",
+      "devicesError": "بارگذاری نشست‌ها ناموفق بود.",
+      "devicesEmpty": "نشست فعالی ثبت نشده است.",
+      "active": "فعال",
+      "inactive": "غیرفعال",
+      "deactivate": "غیرفعال‌سازی",
+      "ipLabel": "آدرس IP",
+      "timeLabel": "زمان",
+      "statusLabel": "وضعیت",
+      "passwordCardTitle": "رمز عبور",
+      "passwordMasked": "************",
+      "changePassword": "تغییر رمز عبور",
+      "currentPassword": "رمز عبور فعلی",
+      "newPassword": "رمز عبور جدید",
+      "confirmPassword": "تکرار رمز عبور جدید",
+      "passwordHint": "رمز عبور باید حداقل شامل ۶ کاراکتر باشد.",
+      "forgetPasswordLead": "رمز عبور خود را فراموش کرده‌اید؟",
+      "forgetPassword": "فراموشی رمز عبور",
+      "cancel": "انصراف",
+      "confirm": "تایید",
+      "passwordChanged": "رمز عبور با موفقیت تغییر کرد."
     },
     "editProfile": {
       "title": "ویرایش پروفایل",
-      "subtitle": "به‌روزرسانی اطلاعات پروفایل (جای‌نگه‌دار)."
+      "subtitle": "نام، تصویر و تماس",
+      "navTitle": "ویرایش پروفایل",
+      "sectionTitle": "جزئیات حساب",
+      "avatar": "آواتار",
+      "pickImageA11y": "انتخاب تصویر پروفایل",
+      "pickImageHint": "فرمت‌های jpeg، png یا gif تا حداکثر ۳ مگابایت.",
+      "fullName": "نام و نام خانوادگی",
+      "email": "ایمیل",
+      "mobile": "شماره موبایل",
+      "save": "دخیره",
+      "saving": "لطفا صبر کنید...",
+      "success": "بروزرسانی با موفقیت انجام شد.",
+      "errorGeneric": "متاسفیم! مشکلی پیش آمده است. لطفا بعدا دوباره تلاش کنید."
     },
     "verify": {
       "inputTitleEmail": "تأیید ایمیل",
@@ -393,7 +459,19 @@
     "title": "بخش قدیمی",
     "body": "این آیتم کشو مطابق منوی اپ Innoghte قدیمی است. در صورت نیاز API یا صفحهٔ اختصاصی وصل کنید."
   },
+  "comments": {
+    "entityCourse": "دوره",
+    "submitLabel": "ثبت نظر",
+    "placeholderSuffix": " بنظرتان چطور بود؟",
+    "yourRating": "امتیاز شما",
+    "send": "ارسال",
+    "ratingRequired": "لطفا امتیاز خود را ثبت کنید",
+    "commentRequired": "لطفا نظر خود را وارد نمایید.",
+    "submitSuccess": "نظر شما با موفقیت ثبت شد و پس از دریافت تاییدیه نمایش داده خواهد شد.",
+    "submitError": "مشکلی پیش آمده لطفا پس از مدتی دوباره تلاش کنید"
+  },
   "courses": {
+    "viewCourse": "مشاهده دوره",
     "productType": "نوع محصول",
     "chaptersCount": "تعداد فصل",
     "price": "قیمت",

@@ -5,13 +5,14 @@ import { useTranslation } from 'react-i18next';
 import { Text } from '@/shared/ui/Text';
 
 import type { ProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
-import { useProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
+import { createProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
 import {
   formatNumberForApp,
   formatPriceForApp,
 } from '@/shared/infra/i18n/formatLocaleNumbers';
 import { CartMainButtons } from '@/shared/ui/cart/CartMainButtons';
 import type { Course } from '@/domains/courses/model/entities';
+import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 
 const PRICE_DISPLAY_DIVISOR = 10;
 
@@ -107,12 +108,16 @@ const CourseCardHeader = React.memo(function CourseCardHeader({
 });
 CourseCardHeader.displayName = 'CourseCardHeader';
 
-function noop(): void {}
-
 const CourseListCardComponent = ({ course }: CourseListCardProps) => {
   const { t } = useTranslation();
-  const { colors } = useTheme();
-  const s = useProductListCardStyles(colors);
+  const theme = useTheme();
+  const { colors } = theme;
+  const s = createProductListCardStyles(colors, theme);
+  const navigation = useAppNavigation();
+
+  const onMoreInformation = React.useCallback(() => {
+    navigation.navigate('CourseDetail', { courseId: course.id });
+  }, [navigation, course.id]);
   const imageUri = course.image_media[0]?.src;
   const displayPrice = formatPriceForApp(
     (course.price ?? 0) / PRICE_DISPLAY_DIVISOR,
@@ -151,7 +156,7 @@ const CourseListCardComponent = ({ course }: CourseListCardProps) => {
         />
         <Pressable
           accessibilityRole="button"
-          onPress={noop}
+          onPress={onMoreInformation}
           style={({ pressed }) =>
             pressed ? [s.buttonOutlined, s.pressed] : s.buttonOutlined
           }

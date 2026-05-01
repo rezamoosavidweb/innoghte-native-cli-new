@@ -1,10 +1,9 @@
-import { useTheme, type Theme } from '@react-navigation/native';
+import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import {
   Dimensions,
   I18nManager,
   Pressable,
-  StyleSheet,
   View,
   type StyleProp,
   type ViewStyle
@@ -15,13 +14,9 @@ import Carousel, {
 } from 'react-native-reanimated-carousel';
 
 import {
-  fontSize,
-  fontWeight,
-  lineHeight,
-  pickSemantic,
-  radius,
-  spacing,
-} from '@/ui/theme';
+  createCommentCarouselStyles,
+  createCommentCarouselEmptyLayout,
+} from '@/domains/home/ui/commentCarousel.styles';
 import StartIcon from '@/assets/icons/star.svg';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -84,7 +79,7 @@ function CommentCarouselBase({
 }: CommentCarouselProps) {
   const theme = useTheme();
   const { colors } = theme;
-  const styles = useCommentCarouselStyles(colors, theme);
+  const styles = createCommentCarouselStyles(colors, theme);
 
   const carouselRef = React.useRef<ICarouselInstance>(null);
   const resumeTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(
@@ -143,9 +138,10 @@ function CommentCarouselBase({
   );
 
   if (itemCount === 0) {
+    const emptyLayout = createCommentCarouselEmptyLayout(height, containerWidth);
     return (
       <View
-        style={[styles.empty, { height, width: containerWidth }, style]}
+        style={[styles.empty, emptyLayout.frame, style]}
         testID={testID}
       >
         <Text style={styles.emptyText}>{emptyText}</Text>
@@ -179,7 +175,7 @@ function CommentCarouselBase({
 export const CommentCarousel = React.memo(CommentCarouselBase);
 CommentCarousel.displayName = 'CommentCarousel';
 
-type CommentCarouselStyles = ReturnType<typeof useCommentCarouselStyles>;
+type CommentCarouselStyles = ReturnType<typeof createCommentCarouselStyles>;
 
 type CommentCardProps = {
   item: CommentItem;
@@ -257,82 +253,3 @@ const CommentCard = React.memo(function CommentCard({
   );
 });
 CommentCard.displayName = 'CommentCard';
-
-function useCommentCarouselStyles(
-  themeColors: Theme['colors'],
-  navigationTheme: Theme,
-) {
-  const s = pickSemantic(navigationTheme);
-
-  return React.useMemo(
-    () =>
-      StyleSheet.create({
-        container: {
-          width: '100%',
-        },
-        empty: {
-          alignItems: 'center',
-          justifyContent: 'center',
-          paddingHorizontal: spacing.xl,
-        },
-        emptyText: {
-          fontSize: fontSize.md,
-          color: s.textMuted,
-          textAlign: 'center',
-        },
-        card: {
-          flex: 1,
-          marginHorizontal: spacing.base,
-          paddingHorizontal: spacing.base,
-          paddingVertical: spacing.md,
-          borderRadius: radius.xl,
-          borderWidth: StyleSheet.hairlineWidth,
-          borderColor: themeColors.border,
-          backgroundColor: themeColors.card,
-          gap: spacing.xs + 12,
-        },
-        cardPressed: {
-          opacity: 0.82,
-        },
-        headerRow: {
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: spacing.sm,
-        },
-        userText: {
-          flexShrink: 1,
-          fontSize: fontSize.base,
-          fontWeight: fontWeight.bold,
-          color: themeColors.text,
-        },
-        dateText: {
-          fontSize: fontSize.xs,
-          color: s.textMuted,
-        },
-        courseText: {
-          fontSize: fontSize.sm,
-          fontWeight: fontWeight.semibold,
-          color: themeColors.primary,
-        },
-        contentText: {
-          flexShrink: 1,
-          fontSize: fontSize.md,
-          lineHeight: lineHeight.relaxed,
-          color: s.textSecondary,
-        },
-        starContainer: {
-          display: 'flex',
-          gap: spacing.xs,
-          flexDirection: 'row',
-        },
-      }),
-    [
-      themeColors.border,
-      themeColors.card,
-      themeColors.primary,
-      themeColors.text,
-      s,
-    ],
-  );
-}

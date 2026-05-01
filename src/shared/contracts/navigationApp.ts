@@ -43,6 +43,10 @@ export type DrawerParamList = {
   AboutUs: undefined;
   Collaboration: undefined;
   LiveMeetingOverview: undefined;
+  /** Public course marketing / purchase — `courseId` matches list + API. */
+  CourseDetail: { courseId: number };
+  /** Purchased course chapters + media — `courseId` matches detail. */
+  CoursePlayer: { courseId: number };
   /** Dev / demo drawer route — accepts optional query for SearchScreen subtitle. */
   Search: { query?: string } | undefined;
   /** Demo: collapsible header on scroll. */

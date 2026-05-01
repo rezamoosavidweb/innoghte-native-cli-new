@@ -1,10 +1,11 @@
 import * as React from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import { Pressable, View } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import { navigateToAppLeaf } from '@/app/bridge/auth/protectedNavigation';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
-import { useThemeColors, fontSize, fontWeight, radius, spacing } from '@/ui/theme';
+import { useEmptyBasketStyles } from '@/domains/basket/components/emptyBasket.styles';
+import { useThemeColors } from '@/ui/theme';
 
 export const EmptyBasket = React.memo(function EmptyBasket() {
   const colors = useThemeColors();
@@ -14,34 +15,7 @@ export const EmptyBasket = React.memo(function EmptyBasket() {
     navigateToAppLeaf(navigation, 'PublicCourses');
   }, [navigation]);
 
-  const s = React.useMemo(
-    () =>
-      StyleSheet.create({
-        wrap: {
-          flex: 1,
-          minHeight: 280,
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: spacing.xl,
-        },
-        glyph: { fontSize: 48, marginBottom: spacing.md },
-        title: {
-          fontSize: fontSize.lg,
-          fontWeight: fontWeight.bold,
-          color: colors.text,
-          textAlign: 'center',
-        },
-        btn: {
-          marginTop: spacing.xl,
-          paddingVertical: spacing.md,
-          paddingHorizontal: spacing['2xl'],
-          borderRadius: radius.md,
-          backgroundColor: colors.primary,
-        },
-        btnText: { color: colors.onPrimary, fontWeight: fontWeight.semibold },
-      }),
-    [colors],
-  );
+  const s = useEmptyBasketStyles(colors);
 
   return (
     <View style={s.wrap}>

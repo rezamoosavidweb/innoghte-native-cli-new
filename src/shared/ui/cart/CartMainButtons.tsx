@@ -15,9 +15,11 @@ import {
 } from '@/app/bridge/auth/protectedNavigation';
 import { useBasketCart } from '@/domains/basket/hooks/useBasketCart';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
-import { pickSemantic, colors as themePalette } from '@/ui/theme';
-
-import { createCartMainButtonsStyles } from './cartMainButtons.styles';
+import {
+  createCartMainButtonsStyles,
+  useCartMainButtonsStyles,
+} from './cartMainButtons.styles';
+import { colors as themePalette } from '@/ui/theme';
 
 export type CartMainButtonsProps = {
   courseId: number;
@@ -89,13 +91,7 @@ const CartMainButtonsComponent = ({
 }: CartMainButtonsProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
-  const { colors } = theme;
-  const themeSemantic = React.useMemo(() => pickSemantic(theme), [theme]);
-
-  const s = React.useMemo(
-    () => createCartMainButtonsStyles(colors, themeSemantic),
-    [colors, themeSemantic],
-  );
+  const s = useCartMainButtonsStyles(theme);
 
   const navigation = useAppNavigation();
   const {
@@ -114,8 +110,8 @@ const CartMainButtonsComponent = ({
     isPendingCreate && pendingCreateCourseId === courseId;
 
   const onViewOwned = React.useCallback(() => {
-    protectedNavigate(navigation, 'MyCourses');
-  }, [navigation]);
+    protectedNavigate(navigation, 'CoursePlayer', { courseId });
+  }, [navigation, courseId]);
 
   const onGoCart = React.useCallback(() => {
     navigateToAppLeaf(navigation, 'Cart');
@@ -144,7 +140,7 @@ const CartMainButtonsComponent = ({
       >
         <LabelWithIcons
           styles={s}
-          text={showBtnText ?? t('cart.showOwned')}
+          text={showBtnText ?? t('courses.viewCourse')}
           textStyle={[s.label, s.primaryText]}
           left={null}
           right={null}

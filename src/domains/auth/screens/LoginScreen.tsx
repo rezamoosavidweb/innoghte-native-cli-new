@@ -9,7 +9,7 @@ import { LoginForm } from '@/domains/auth/ui/forms/LoginForm';
 import { ApiError } from '@/shared/infra/http/apiError';
 import { useLogin } from '@/domains/auth/hooks/useAuth';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
-import { useLoginScreenStyles } from '@/domains/auth/ui/styles';
+import { createLoginScreenStyles } from '@/domains/auth/ui/styles';
 import { useThemeColors } from '@/ui/theme';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Login'>;
@@ -17,7 +17,7 @@ type Props = DrawerScreenProps<DrawerParamList, 'Login'>;
 const LoginScreenComponent = (_props: Props) => {
   const colors = useThemeColors();
   const { t } = useTranslation();
-  const s = useLoginScreenStyles(colors);
+  const s = createLoginScreenStyles(colors);
   const mutation = useLogin();
   const apiError =
     mutation.error instanceof ApiError

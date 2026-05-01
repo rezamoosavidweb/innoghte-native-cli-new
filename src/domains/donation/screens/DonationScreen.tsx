@@ -40,7 +40,7 @@ import {
   type DonationCreditCartErrors,
   type DonationFormType,
 } from '@/domains/donation/schema/donationForm';
-import { createDonationScreenStyles } from '@/domains/donation/styles/donationScreen.styles';
+import { useDonationScreenStyles } from '@/domains/donation/styles/donationScreen.styles';
 import { toPersianNumber } from '@/domains/donation/utils/paymentFormatting';
 import { isDotIr } from '@/shared/config/resolveIsDotIr';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
@@ -235,15 +235,7 @@ export const DonationScreen = React.memo(function DonationScreen({
     reset,
   });
 
-  const s = useMemo(
-    () =>
-      createDonationScreenStyles({
-        colors: { ...semantic, background: colors.background },
-        semantic,
-        isCustomAmount,
-      }),
-    [colors.background, isCustomAmount, semantic],
-  );
+  const s = useDonationScreenStyles(colors.background, semantic, isCustomAmount);
 
   const isCheckoutLocked = useMemo(
     () => isCheckoutProgressLocked(flow.status),

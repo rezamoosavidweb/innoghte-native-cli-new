@@ -3,3 +3,5 @@ export { useInfiniteCourses } from './hooks/useInfiniteCourses';
 export type { Course } from './model/entities';
 export type { CoursesListFilters, CoursesInfiniteListFilters } from './model/queryKeys';
 export { CoursesScreen } from './screens/CoursesScreen';
+export { CourseDetailScreen } from './screens/CourseDetailScreen';
+export { CoursePlayerScreen } from './screens/CoursePlayerScreen';

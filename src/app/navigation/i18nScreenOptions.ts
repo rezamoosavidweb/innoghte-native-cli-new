@@ -71,6 +71,8 @@ const EXTRA_DRAWER_LABELS = {
   supportServices: 'drawer.supportServices',
   terms: 'drawer.terms',
   copyright: 'drawer.copyright',
+  courseDetail: 'drawer.courseDetail',
+  coursePlayer: 'drawer.coursePlayer',
 } as const;
 
 export type ExtraDrawerLeafKey = keyof typeof EXTRA_DRAWER_LABELS;

@@ -4,7 +4,7 @@ import { useTheme } from '@react-navigation/native';
 import { Text } from '@/shared/ui/Text';
 
 import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
-import { useScreenScaffoldStyles } from '@/ui/theme';
+import { createScreenScaffoldStyles } from '@/ui/theme';
 
 type Props = {
   title?: string;
@@ -18,7 +18,7 @@ export const ScreenScaffold = React.memo(function ScreenScaffold({
   children,
 }: Props) {
   const { colors } = useTheme();
-  const s = useScreenScaffoldStyles(colors);
+  const s = createScreenScaffoldStyles(colors);
 
   return (
     <View style={s.root}>

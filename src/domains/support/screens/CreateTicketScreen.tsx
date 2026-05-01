@@ -17,14 +17,14 @@ import { z } from 'zod';
 import { TicketForm } from '@/domains/support/components/TicketForm';
 import { useCreateTicketMutation } from '@/domains/support/hooks/useTicketDetail';
 import type { CreateTicketFields } from '@/domains/support/model/createTicket.types';
-import { useTicketScreenStyles } from '@/domains/support/ui/ticketScreen.styles';
+import { createTicketScreenStyles } from '@/domains/support/ui/ticketScreen.styles';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { resolveErrorMessage } from '@/shared/infra/http/resolveErrorMessage';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { showAppToast } from '@/shared/ui/toast';
 import {
   flashListContentGutters,
-  useNavScreenShellStyles,
+  createNavScreenShellStyles,
 } from '@/ui/theme';
 
 type Props = DrawerScreenProps<DrawerParamList, 'CreateTicketScreen'>;
@@ -40,8 +40,8 @@ export const CreateTicketScreen = React.memo(function CreateTicketScreen(
   const { t } = useTranslation();
   const { colors } = useTheme();
   const navigation = useAppNavigation();
-  const shell = useNavScreenShellStyles(colors);
-  const ticketStyles = useTicketScreenStyles(colors);
+  const shell = createNavScreenShellStyles(colors);
+  const ticketStyles = createTicketScreenStyles(colors);
   const createMutation = useCreateTicketMutation();
 
   const form = useForm<CreateTicketFields>({

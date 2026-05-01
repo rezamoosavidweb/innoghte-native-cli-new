@@ -3,7 +3,6 @@ import * as React from 'react';
 import {
   Dimensions,
   FlatList,
-  StyleSheet,
   View,
   type ListRenderItem,
   type NativeScrollEvent,
@@ -12,6 +11,12 @@ import {
   type ViewStyle,
 } from 'react-native';
 
+import {
+  createSwiperCellStyles,
+  createSwiperContentInsetStyles,
+  createSwiperDotPaletteStyles,
+  swiperDotStatic,
+} from '@/shared/ui/Swiper.styles';
 import { spacing } from '@/ui/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -67,6 +72,10 @@ export function Swiper<T>({
     contentInsetStart ??
     Math.max(spacing.base, (SCREEN_WIDTH - itemWidth) / 2);
 
+  const cellStyles = createSwiperCellStyles(itemWidth, gap);
+  const contentInset = createSwiperContentInsetStyles(sidePadding);
+  const dotPalette = createSwiperDotPaletteStyles(colors.border, colors.primary);
+
   React.useEffect(() => {
     if (indexRef.current >= itemCount) {
       indexRef.current = 0;
@@ -91,26 +100,14 @@ export function Swiper<T>({
     [itemCount, onIndexChange, snapInterval],
   );
 
-  const cellStyles = React.useMemo(
-    () =>
-      StyleSheet.create({
-        cell: { width: itemWidth, marginRight: gap },
-        cellLast: { width: itemWidth, marginRight: 0 },
-      }),
-    [gap, itemWidth],
-  );
-
-  const renderListItem: ListRenderItem<T> = React.useCallback(
-    ({ item, index }) => (
-      <View
-        style={
-          index === itemCount - 1 ? cellStyles.cellLast : cellStyles.cell
-        }
-      >
-        {renderItem(item, index)}
-      </View>
-    ),
-    [cellStyles, itemCount, renderItem],
+  const renderListItem: ListRenderItem<T> = ({ item, index }) => (
+    <View
+      style={
+        index === itemCount - 1 ? cellStyles.cellLast : cellStyles.cell
+      }
+    >
+      {renderItem(item, index)}
+    </View>
   );
 
   const getItemLayout = React.useCallback(
@@ -141,24 +138,26 @@ export function Swiper<T>({
         maxToRenderPerBatch={4}
         windowSize={5}
         removeClippedSubviews={false}
-        contentContainerStyle={{ paddingHorizontal: sidePadding }}
+        contentContainerStyle={contentInset.content}
         onMomentumScrollEnd={onMomentumScrollEnd}
       />
 
       {pagination && itemCount > 1 ? (
-        <View style={styles.dots}>
+        <View style={swiperDotStatic.dots}>
           {data.map((_, i) => {
             const isActive = i === activeIndex;
             return (
               <View
                 key={i}
-                style={[
-                  styles.dot,
-                  { backgroundColor: colors.border },
+                style={
                   isActive
-                    ? [styles.dotActive, { backgroundColor: colors.primary }]
-                    : null,
-                ]}
+                    ? [
+                        swiperDotStatic.dot,
+                        swiperDotStatic.dotActive,
+                        dotPalette.active,
+                      ]
+                    : [swiperDotStatic.dot, dotPalette.idle]
+                }
               />
             );
           })}
@@ -167,20 +166,3 @@ export function Swiper<T>({
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  dots: {
-    flexDirection: 'row',
-    alignSelf: 'center',
-    marginTop: spacing.md,
-    gap: spacing.xs + 2,
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  dotActive: {
-    width: 22,
-  },
-});

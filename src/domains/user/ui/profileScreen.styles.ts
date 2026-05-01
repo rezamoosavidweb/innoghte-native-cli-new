@@ -1,5 +1,4 @@
 import type { Theme } from '@react-navigation/native';
-import * as React from 'react';
 import { StyleSheet, type ViewStyle } from 'react-native';
 
 import type { HubMenuRowStyleSet } from '@/ui/components/HubMenuRow';
@@ -12,7 +11,9 @@ import {
 } from '@/ui/theme';
 import { palette } from '@/ui/theme/colors';
 
-export type ProfileScreenShellStyleSet = ReturnType<typeof createProfileShellStyles>;
+export type ProfileScreenShellStyleSet = ReturnType<
+  typeof buildProfileShellStyles
+>;
 
 export type ProfileScreenMenuStyleSet = HubMenuRowStyleSet & {
   list: { gap: number };
@@ -21,9 +22,9 @@ export type ProfileScreenMenuStyleSet = HubMenuRowStyleSet & {
   sectionSpacing: { marginTop: number };
 };
 
-export type ProfileHeaderStyleSet = ReturnType<typeof createProfileHeaderStyles>;
+export type ProfileHeaderStyleSet = ReturnType<typeof buildProfileHeaderStyles>;
 
-function createProfileShellStyles(
+function buildProfileShellStyles(
   colors: Theme['colors'],
   sSemantic: ReturnType<typeof pickSemantic>,
 ) {
@@ -66,7 +67,7 @@ function createProfileShellStyles(
   });
 }
 
-function createProfileHeaderStyles(
+function buildProfileHeaderStyles(
   colors: Theme['colors'],
   sSemantic: ReturnType<typeof pickSemantic>,
 ) {
@@ -194,7 +195,7 @@ function createProfileHeaderStyles(
   });
 }
 
-function createMenuStyles(
+function buildProfileMenuStyles(
   themeColors: Theme['colors'],
 ): ProfileScreenMenuStyleSet {
   return {
@@ -244,22 +245,14 @@ function createMenuStyles(
   };
 }
 
-export function useProfileShellStyles(colors: Theme['colors'], theme: Theme) {
-  const sSemantic = pickSemantic(theme);
-  return React.useMemo(
-    () => createProfileShellStyles(colors, sSemantic),
-    [colors, sSemantic],
-  );
+export function createProfileShellStyles(colors: Theme['colors'], theme: Theme) {
+  return buildProfileShellStyles(colors, pickSemantic(theme));
 }
 
-export function useProfileHeaderStyles(colors: Theme['colors'], theme: Theme) {
-  const sSemantic = pickSemantic(theme);
-  return React.useMemo(
-    () => createProfileHeaderStyles(colors, sSemantic),
-    [colors, sSemantic],
-  );
+export function createProfileHeaderStyles(colors: Theme['colors'], theme: Theme) {
+  return buildProfileHeaderStyles(colors, pickSemantic(theme));
 }
 
-export function useProfileMenuStyles(colors: Theme['colors']) {
-  return React.useMemo(() => createMenuStyles(colors), [colors]);
+export function createProfileMenuStyles(colors: Theme['colors']) {
+  return buildProfileMenuStyles(colors);
 }

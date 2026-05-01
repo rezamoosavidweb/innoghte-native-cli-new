@@ -12,10 +12,10 @@ import { isDotIr } from '@/shared/config/resolveIsDotIr';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import {
   flashListContentGutters,
-  useNavScreenShellStyles,
+  createNavScreenShellStyles,
   useThemeColors,
 } from '@/ui/theme';
-import { useFormFieldStyles } from '@/ui/theme/formField.styles';
+import { createFormFieldStyles } from '@/ui/theme/formField.styles';
 
 type Props = DrawerScreenProps<DrawerParamList, 'GiftSend'>;
 
@@ -25,8 +25,8 @@ export const GiveGiftScreen = React.memo(function GiveGiftScreen(
   const theme = useTheme();
   const { colors } = theme;
   const uiColors = useThemeColors();
-  const shell = useNavScreenShellStyles(colors);
-  const formField = useFormFieldStyles(uiColors);
+  const shell = createNavScreenShellStyles(colors);
+  const formField = createFormFieldStyles(uiColors);
 
   const { control, handleSubmit, getValues, formState, mobileDefaults } =
     useGiveGiftForm();
