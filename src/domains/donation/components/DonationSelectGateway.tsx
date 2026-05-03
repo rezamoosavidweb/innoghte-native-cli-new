@@ -7,7 +7,7 @@ import {
   resolveShowVandar,
   resolveShowZarinpal,
 } from '@/domains/donation/model/env';
-import { useDonationSelectGatewayStyles } from '@/domains/donation/styles/donationSelectGateway.styles';
+import { useDonationSelectGatewayStyles } from '@/domains/donation/ui/donationSelectGateway.styles';
 import { pickSemantic } from '@/ui/theme';
 
 export type DonationSelectGatewayProps = {

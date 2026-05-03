@@ -35,8 +35,8 @@ export function createLoginScreenStyles(colors: ThemeColors) {
     input: {
       borderWidth: StyleSheet.hairlineWidth,
       borderRadius: radius.lg - 2,
+      minHeight: 48,
       paddingHorizontal: 14,
-      paddingVertical: spacing.md,
       fontSize: fontSize.base,
       borderColor: colors.border,
       color: colors.text,

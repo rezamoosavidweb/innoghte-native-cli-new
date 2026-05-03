@@ -3,7 +3,7 @@ import * as React from 'react';
 import {Pressable, View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
-import { useDonationSelectPaymentTypeStyles } from '@/domains/donation/styles/donationSelectPaymentType.styles';
+import { useDonationSelectPaymentTypeStyles } from '@/domains/donation/ui/donationSelectPaymentType.styles';
 import { pickSemantic } from '@/ui/theme';
 
 export type DonationSelectPaymentTypeProps = {

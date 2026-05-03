@@ -3,7 +3,7 @@ import * as React from 'react';
 import {Modal, Pressable, View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
-import { useDonationResultModalStyles } from '@/domains/donation/styles/donationResultModal.styles';
+import { useDonationResultModalStyles } from '@/domains/donation/ui/donationResultModal.styles';
 import { pickSemantic } from '@/ui/theme';
 
 export type DonationResultModalProps = {

@@ -5,12 +5,12 @@ import { Controller } from 'react-hook-form';
 import {Pressable, TextInput, View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
-import { useDonationCreditCardFieldsStyles } from '@/domains/donation/styles/donationCreditCardFields.styles';
-import type { DonationFormType } from '@/domains/donation/schema/donationForm';
+import { useDonationCreditCardFieldsStyles } from '@/domains/donation/ui/donationCreditCardFields.styles';
+import type { DonationFormType } from '@/domains/donation/model/donationForm.schema';
 import {
   donationCartOptions,
   type DonationCreditCartErrors,
-} from '@/domains/donation/schema/donationForm';
+} from '@/domains/donation/model/donationForm.schema';
 import { formatCardNumber } from '@/domains/donation/utils/paymentFormatting';
 import { pickSemantic } from '@/ui/theme';
 

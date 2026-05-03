@@ -38,8 +38,8 @@ import {
   donationFormResolver,
   type DonationCreditCartErrors,
   type DonationFormType,
-} from '@/domains/donation/schema/donationForm';
-import { useDonationScreenStyles } from '@/domains/donation/styles/donationScreen.styles';
+} from '@/domains/donation/model/donationForm.schema';
+import { useDonationScreenStyles } from '@/domains/donation/ui/donationScreen.styles';
 import { toPersianNumber } from '@/domains/donation/utils/paymentFormatting';
 import { isDotIr } from '@/shared/config/resolveIsDotIr';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';

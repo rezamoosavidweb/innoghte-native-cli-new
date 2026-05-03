@@ -1,4 +1,4 @@
-import type { DonationScreenParams } from '@/domains/donation/model/routeParams';
+import type { DonationScreenParams } from '@/shared/contracts/navigationDonation';
 
 export type PaymentGatewayParams = {
   authority: string | null;

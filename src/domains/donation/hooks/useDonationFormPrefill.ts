@@ -2,7 +2,7 @@ import type { UserDto } from '@/domains/auth/model/apiTypes';
 import { useEffect } from 'react';
 import type { UseFormGetValues, UseFormSetValue } from 'react-hook-form';
 
-import type { DonationFormType } from '@/domains/donation/schema/donationForm';
+import type { DonationFormType } from '@/domains/donation/model/donationForm.schema';
 
 /** Prefill empty RHF user fields from `/auth/user` (does not overwrite typed values). */
 export function useDonationFormPrefill(

@@ -8,7 +8,7 @@ import {
   donationSuccessBodyLines,
   donationSuccessTitle,
 } from '@/domains/donation/model/donationResultCopy';
-import type { DonationFormType } from '@/domains/donation/schema/donationForm';
+import type { DonationFormType } from '@/domains/donation/model/donationForm.schema';
 
 export function useDonationSubmit(args: {
   amount: string;

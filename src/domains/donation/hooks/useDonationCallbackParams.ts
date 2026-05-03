@@ -9,7 +9,7 @@ import {
   parsePaymentParamsFromUrl,
   type PaymentGatewayParams,
 } from '@/domains/donation/model/donationCallbackParams';
-import type { DonationScreenParams } from '@/domains/donation/model/routeParams';
+import type { DonationScreenParams } from '@/shared/contracts/navigationDonation';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 
 type DonationRoute = DrawerScreenProps<DrawerParamList, 'Donation'>['route'];
