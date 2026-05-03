@@ -30,7 +30,7 @@ export type DrawerParamList = {
   MyCourses: undefined;
   LiveMeetings: undefined;
   Events: undefined;
-  Startup: undefined;
+  Splash: undefined;
   Login: { redirectTo?: string; preserveState?: boolean } | undefined;
   AuthEntry: undefined;
   Register: undefined;

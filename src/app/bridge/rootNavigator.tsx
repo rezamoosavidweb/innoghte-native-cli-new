@@ -1,15 +1,14 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { CommonActions, type Theme } from '@react-navigation/native';
+import { type Theme } from '@react-navigation/native';
 import * as React from 'react';
 import { Text } from '@/shared/ui/Text';
 
-import { protectedNavigate } from '@/app/bridge/auth/protectedNavigation';
 import { useDrawerGlyphStyles } from '@/app/bridge/drawerGlyph.styles';
 import { CollapsibleHeaderExampleScreen } from '@/app/examples/CollapsibleHeaderExampleScreen';
 import { LegacyMenuPlaceholderScreen } from '@/app/navigation/LegacyMenuPlaceholderScreen';
-import { StartupScreen } from '@/app/startup/StartupScreen';
-import { AuthService, AuthEntryScreen, LoginScreen, RegisterScreen, VerifyScreen } from '@/domains/auth';
+import { SplashScreen } from '@/app/splash/SplashScreen';
+import { AuthEntryScreen, LoginScreen, RegisterScreen, VerifyScreen } from '@/domains/auth';
 import {
   CourseDetailScreen,
   CoursePlayerScreen,
@@ -188,18 +187,7 @@ const mainTabs = createBottomTabNavigator<TabParamList>({
     PublicCourses: CoursesScreen,
     PublicAlbums: PublicAlbumsScreen,
     Cart: BasketScreen,
-    Profile: {
-      screen: ProfileScreen,
-      listeners: ({ navigation }) => ({
-        tabPress: e => {
-          if (!AuthService.isAuthenticated()) {
-            e.preventDefault();
-            AuthService.setPendingNavigation({ name: 'Profile' });
-            navigation.dispatch(CommonActions.navigate({ name: 'AuthEntry' }));
-          }
-        },
-      }),
-    },
+    Profile: ProfileScreen,
   },
 });
 
@@ -243,27 +231,8 @@ function extraLeafOptions(leaf: ExtraDrawerLeafKey, icon: string) {
   };
 }
 
-function protectedAuthDrawerScreen(
-  target: 'MyCourses' | 'LiveMeetings' | 'Events',
-) {
-  return {
-    listeners: (props: {
-      navigation: {
-        dispatch: (action: { type: string; payload?: object }) => void;
-      };
-    }) => ({
-      drawerItemPress: (e: { preventDefault: () => void }) => {
-        if (AuthService.isAuthenticated()) {
-          return;
-        }
-        e.preventDefault();
-        protectedNavigate(props.navigation, target);
-      },
-    }),
-  };
-}
-
 export const rootNavigator = createDrawerNavigator<DrawerParamList>({
+  initialRouteName: 'Splash',
   backBehavior: 'history',
   drawerContent: props => <CustomDrawerContent {...props} />,
   screenOptions: ({ theme }) => {
@@ -289,6 +258,14 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
     };
   },
   screens: {
+    Splash: {
+      screen: SplashScreen,
+      options: () => ({
+        headerShown: false,
+        drawerItemStyle: { display: 'none' },
+        swipeEnabled: false,
+      }),
+    },
     MainTabs: {
       screen: mainTabs,
       options: mainTabsDrawerOptions,
@@ -353,7 +330,6 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
     MyCourses: {
       screen: MyCoursesHubScreen,
       options: () => extraLeafOptions('myCourses', '🎓'),
-      ...protectedAuthDrawerScreen('MyCourses'),
     },
     PublicCourses: {
       screen: CoursesScreen,
@@ -362,34 +338,24 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
     LiveMeetings: {
       screen: LiveMeetingsScreen,
       options: () => extraLeafOptions('liveMeetings', '🌐'),
-      ...protectedAuthDrawerScreen('LiveMeetings'),
     },
     Events: {
       screen: EventsScreen,
       options: () => extraLeafOptions('events', '📅'),
-      ...protectedAuthDrawerScreen('Events'),
-    },
-    Startup: {
-      screen: StartupScreen,
-      options: () => ({
-        ...extraLeafOptions('startup', '🚀'),
-        headerShown: false,
-      }),
     },
     Login: {
       screen: LoginScreen,
       options: () => ({
         ...extraLeafOptions('login', '🔑'),
-        headerShown: false
+        headerShown: false,
       }),
-
     },
     AuthEntry: {
       screen: AuthEntryScreen,
       options: () => ({
         ...extraLeafOptions('authEntry', '👤'),
         drawerItemStyle: { display: 'none' },
-        headerShown: false
+        headerShown: false,
       }),
     },
     Register: {

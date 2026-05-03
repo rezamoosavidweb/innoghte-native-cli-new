@@ -25,7 +25,6 @@
     "publicCourses": "Public courses",
     "liveMeetings": "Live meetings",
     "events": "Events",
-    "startup": "Startup",
     "login": "Sign in",
     "authEntry": "Sign in / Sign up",
     "register": "Register",
@@ -366,17 +365,6 @@
       "subtitle": "Legacy demo screen (theme/language toggles lived in the old app).",
       "goStartup": "Open Startup (drawer)",
       "goMainTabs": "Back to main tabs"
-    },
-    "startup": {
-      "title": "Startup",
-      "body": "Legacy stack entry screen — use the buttons below to explore.",
-      "goExample": "Open Example (drawer)",
-      "goMain": "Open main tabs",
-      "badge": "Mindfulness & Meditation",
-      "tagline": "Guided meditation and mindfulness\nfor a peaceful, present mind.",
-      "begin": "Begin Your Journey",
-      "signIn": "I already have an account",
-      "footer": "Breathe in. Breathe out. You are here."
     },
     "contact": {
       "navTitle": "Contact us",

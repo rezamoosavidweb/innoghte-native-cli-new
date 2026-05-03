@@ -44,7 +44,6 @@ const EXTRA_DRAWER_LABELS = {
   publicCourses: 'drawer.publicCourses',
   liveMeetings: 'drawer.liveMeetings',
   events: 'drawer.events',
-  startup: 'drawer.startup',
   login: 'drawer.login',
   podcast: 'drawer.podcast',
   meditation: 'drawer.meditation',

@@ -61,6 +61,24 @@ export async function getUser(): Promise<UserResponseType> {
   );
 }
 
+/**
+ * Fetch user profile during app bootstrap (SplashScreen).
+ * Uses no_redirect so the caller handles all auth failures — avoids a race
+ * between the 401 handler navigation and the SplashScreen's own redirect.
+ */
+export async function getUserForSplash(): Promise<UserResponseType> {
+  return parseJsonResponse(
+    getApiClient().get(
+      endpoints.auth.user,
+      withKyAuth401Context({
+        strategy: 'no_redirect',
+        redirectToLogin: false,
+      }),
+    ),
+    userResponseSchema,
+  );
+}
+
 export async function checkOtp(body: CheckotpBodyType): Promise<void> {
   await getApiClient().post(endpoints.auth.checkOtp, { json: body });
 }

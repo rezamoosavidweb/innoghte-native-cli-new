@@ -9,7 +9,6 @@ import { rootNavigator } from '@/app/bridge/rootNavigator';
 import { navigationRef } from '@/shared/infra/navigation/navigationRef';
 import { RootProviders } from '@/app/providers/RootProviders';
 import { useAppTheme } from '@/ui/theme';
-import { useStartupOnFirstLaunch } from '@/app/startup/useStartupOnFirstLaunch';
 
 export { queryClient } from '@/app/queryClient';
 
@@ -18,7 +17,6 @@ const Navigation = createStaticNavigation(rootNavigator);
 const AppNavigation = React.memo(function AppNavigation() {
   const { i18n: i18nInstance } = useTranslation();
   const { navigationTheme } = useAppTheme();
-  useStartupOnFirstLaunch();
 
   return (
     <>

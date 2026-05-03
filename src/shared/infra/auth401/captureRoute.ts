@@ -3,7 +3,7 @@ import type { NavigationState, PartialState } from '@react-navigation/native';
 import type { PendingNavigation } from '@/shared/contracts/pendingNavigation';
 import { navigationRef } from '@/shared/infra/navigation/navigationRef';
 
-const SKIP_RESUME_ROUTE_NAMES = new Set<string>(['Login', 'Startup']);
+const SKIP_RESUME_ROUTE_NAMES = new Set<string>(['Login', 'Splash', 'AuthEntry', 'Register']);
 
 function focusedLeafRoute(
   state: NavigationState | PartialState<NavigationState> | undefined,
