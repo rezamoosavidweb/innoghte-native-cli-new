@@ -68,8 +68,6 @@ export async function verifyCodeWithServer(
     if (c !== '123456') {
       throw new Error('INVALID_CODE');
     }
-    void channel;
-    void destination;
     return;
   }
 

@@ -34,7 +34,7 @@ const EventsScreenComponent = (_props: Props) => {
   const { data, isPending, isError, error, refetch, isSuccess } = useEvents();
   const { t } = useTranslation();
 
-  const listData = data ?? [];
+  const listData = React.useMemo(() => data ?? [], [data]);
 
   const showFullBleedLoading = isPending;
 

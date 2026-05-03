@@ -35,7 +35,7 @@ const LiveMeetingsScreenComponent = (_props: Props) => {
     useLiveMeetings();
   const { t } = useTranslation();
 
-  const listData = data ?? [];
+  const listData = React.useMemo(() => data ?? [], [data]);
 
   const showFullBleedLoading = isPending;
 

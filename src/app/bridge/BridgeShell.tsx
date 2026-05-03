@@ -4,15 +4,10 @@ import * as React from 'react';
 import { useColorScheme } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import {
-  logout,
-  useCurrentUser,
-  useIsAuthenticated,
-} from '@/domains/auth';
+import { logout, useCurrentUser, useIsAuthenticated } from '@/domains/auth';
 import { useUiThemeStore } from '@/domains/settings';
 import { UserService } from '@/domains/user';
 import { fireAndForget } from '@/shared/infra/http';
-import { navigationRef } from '@/shared/infra/navigation/navigationRef';
 import { initialsFromDisplayName } from '@/shared/utils/initialsFromDisplayName';
 import type { ThemeMode } from '@/shared/contracts/theme';
 import { resolveColorScheme } from '@/shared/utils/resolveColorScheme';
@@ -44,12 +39,7 @@ export function BridgeShell({ children }: BridgeShellProps) {
     return resolved in themes ? resolved : 'light';
   }, [preference, systemScheme]);
 
-  const onRequestLogout = React.useCallback(async () => {
-    await logout();
-    if (navigationRef.isReady()) {
-      navigationRef.navigate('Login');
-    }
-  }, []);
+  const onRequestLogout = React.useCallback(() => logout(), []);
 
   const isAuthenticated = useIsAuthenticated();
   const { data: userRes } = useCurrentUser();

@@ -50,8 +50,7 @@ export function useDonationFlowEffects(args: {
     onGatewayVerifyPaymentError,
   } = args;
 
-  const checkoutUrl =
-    flow.status === 'checkout_ready' ? flow.url : null;
+  const checkoutUrl = flow.status === 'checkout_ready' ? flow.url : null;
   const checkoutGateway =
     flow.status === 'checkout_ready' ? flow.gateway : null;
 
@@ -69,10 +68,7 @@ export function useDonationFlowEffects(args: {
     if (redirectStartedRef.current === key) return;
     redirectStartedRef.current = key;
 
-    StorageService.set(
-      DONATION_LAST_CHECKOUT_GATEWAY_KEY,
-      checkoutGateway,
-    );
+    StorageService.set(DONATION_LAST_CHECKOUT_GATEWAY_KEY, checkoutGateway);
     send({ type: 'REDIRECTED' });
 
     Linking.openURL(checkoutUrl).catch(() => {
@@ -102,28 +98,30 @@ export function useDonationFlowEffects(args: {
     send,
   ]);
 
+  const activeQueryIsSuccess = canVerifyIranian
+    ? iranQuery.isSuccess
+    : paypalQuery.isSuccess;
+  const activeQueryIsError = canVerifyIranian
+    ? iranQuery.isError
+    : paypalQuery.isError;
+
   React.useEffect(() => {
     if (!shouldVerify || !verificationFingerprint) return;
     if (flow.status !== 'verifying') return;
 
-    const query = canVerifyIranian ? iranQuery : paypalQuery;
-
-    if (query.isSuccess) {
+    if (activeQueryIsSuccess) {
       send({ type: 'VERIFICATION_SUCCESS' });
       onGatewayVerifySuccess();
-    } else if (query.isError) {
+    } else if (activeQueryIsError) {
       send({ type: 'VERIFICATION_ERROR' });
       onGatewayVerifyPaymentError();
     }
   }, [
-    canVerifyIranian,
     flow.status,
-    iranQuery.isError,
-    iranQuery.isSuccess,
+    activeQueryIsSuccess,
+    activeQueryIsError,
     onGatewayVerifyPaymentError,
     onGatewayVerifySuccess,
-    paypalQuery.isError,
-    paypalQuery.isSuccess,
     send,
     shouldVerify,
     verificationFingerprint,

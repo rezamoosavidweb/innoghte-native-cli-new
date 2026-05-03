@@ -163,7 +163,7 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
     if (!pendingPayload) {
       return;
     }
-    void startOtp(pendingPayload);
+    startOtp(pendingPayload).catch(() => {});
   }, [pendingPayload, startOtp]);
 
   const submitBusy = sendOtp.isPending || verifyCreate.isPending;

@@ -30,7 +30,7 @@ const AlbumsScreenComponent = () => {
   const { data, isPending, isError, error, refetch, isSuccess } = useAlbums();
   const { t } = useTranslation();
 
-  const listData = data ?? [];
+  const listData = React.useMemo(() => data ?? [], [data]);
 
   const showFullBleedLoading = isPending;
 

@@ -1,5 +1,6 @@
 import { getAccessToken } from '@/domains/auth/api/auth.storage';
-import { login, logout } from '@/domains/auth/api/auth.service';
+import { login } from '@/domains/auth/api/auth.service';
+import { performAppLogout } from '@/domains/auth/hooks/useLogout';
 import { useAuthStore } from '@/domains/auth/model/auth.store';
 import type { PendingNavigation } from '@/shared/contracts/pendingNavigation';
 import type { LoginBodyType, LoginResponse } from '@/domains/auth/model/apiTypes';
@@ -15,7 +16,7 @@ export type { PendingNavigation };
 export const AuthService = {
   // — Session —
   login: (body: LoginBodyType): Promise<LoginResponse> => login(body),
-  logout: (): Promise<void> => logout(),
+  logout: (): Promise<void> => performAppLogout(),
   getToken: (): string | null => getAccessToken(),
   isAuthenticated: (): boolean => useAuthStore.getState().isAuthenticated,
   /** Clear local auth state without calling the logout endpoint (used by legacy paths). */

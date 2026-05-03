@@ -5,6 +5,7 @@ import { createStaticNavigation } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useTranslation } from 'react-i18next';
 
+import { installNavigationGuard } from '@/app/bridge/auth/navigationGuard';
 import { rootNavigator } from '@/app/bridge/rootNavigator';
 import { navigationRef } from '@/shared/infra/navigation/navigationRef';
 import { RootProviders } from '@/app/providers/RootProviders';
@@ -30,6 +31,8 @@ const AppNavigation = React.memo(function AppNavigation() {
 });
 
 export default function App() {
+  React.useEffect(() => installNavigationGuard(), []);
+
   return (
     <GestureHandlerRootView style={styles.root}>
       <RootProviders>

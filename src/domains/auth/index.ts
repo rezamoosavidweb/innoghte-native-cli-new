@@ -1,4 +1,5 @@
-export { logout, login } from './api/auth.service';
+export { login } from './api/auth.service';
+export { performAppLogout as logout, useLogout } from './hooks/useLogout';
 export { useCurrentUser } from './hooks/useCurrentUser';
 export { useLogin } from './hooks/useAuth';
 export { useRegister } from './hooks/useRegister';
