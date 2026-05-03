@@ -11,7 +11,8 @@ export const POPPINS_FAMILY = {
   bold: 'Poppins-Bold',
 } as const;
 
-function normalizedLocale(locale: string): AppLanguage {
+/** Normalizes i18n locale tags (`fa-IR`, `fa`, …) to app language. */
+export function normalizeAppLanguage(locale: string): AppLanguage {
   const key = locale?.split?.('-')[0]?.toLowerCase();
   return key === 'fa' ? 'fa' : 'en';
 }
@@ -61,7 +62,7 @@ export function fontWeightHintFromStyle(weight: TextStyle['fontWeight'] | undefi
  * • `en` → Poppins face chosen from discrete files via optional `weight` hint (`"500"`, `"bold"`, etc.).
  */
 export function getFontFamily(locale: string, weight?: string): string {
-  const lng = normalizedLocale(locale);
+  const lng = normalizeAppLanguage(locale);
 
   if (lng === 'fa') {
     return DANA_MEDIUM_FAMILY;

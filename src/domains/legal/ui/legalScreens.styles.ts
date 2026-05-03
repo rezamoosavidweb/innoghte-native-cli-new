@@ -19,16 +19,12 @@ export function createLegalScreenStyles(nav: Theme['colors']) {
       fontSize: fontSize['2xl'],
       fontWeight: fontWeight.bold,
       color: nav.text,
-      textAlign: 'right',
-      writingDirection: 'rtl',
     },
     heroLead: {
       fontSize: fontSize.md + 1,
       color: nav.text,
       opacity: 0.8,
       marginTop: spacing.sm,
-      textAlign: 'right',
-      writingDirection: 'rtl',
       lineHeight: 24,
     },
     band: {
@@ -41,15 +37,12 @@ export function createLegalScreenStyles(nav: Theme['colors']) {
       fontSize: fontSize.lg,
       fontWeight: fontWeight.bold,
       color: '#FFFFFF',
-      textAlign: 'right',
-      writingDirection: 'rtl',
     },
     p: {
       fontSize: fontSize.base,
       lineHeight: 24,
       color: hexAlpha('#FFFFFF', 0.9),
       textAlign: 'justify',
-      writingDirection: 'rtl',
     },
   });
 }

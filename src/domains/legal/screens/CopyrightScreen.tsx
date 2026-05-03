@@ -1,12 +1,12 @@
+import { Text } from '@/shared/ui/Text';
 import type { DrawerScreenProps } from '@react-navigation/drawer';
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, View } from 'react-native';
-import { Text } from '@/shared/ui/Text';
 
-import { createLegalScreenStyles } from '@/domains/legal/ui/legalScreens.styles';
 import { LegalBlock } from '@/domains/legal/ui/LegalBlock';
+import { createLegalScreenStyles } from '@/domains/legal/ui/legalScreens.styles';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import {
@@ -15,8 +15,6 @@ import {
 } from '@/ui/theme';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Copyright'>;
-
-type LegalStyles = ReturnType<typeof createLegalScreenStyles>;
 
 export const CopyrightScreen = React.memo(function CopyrightScreen(
   _props: Props,
@@ -34,10 +32,7 @@ export const CopyrightScreen = React.memo(function CopyrightScreen(
   return (
     <ScrollView
       style={shell.safe}
-      contentContainerStyle={[
-        flashListContentGutters.standard,
-        s.scroll,
-      ]}
+      contentContainerStyle={[flashListContentGutters.standard, s.scroll]}
     >
       <View style={s.hero}>
         <Text style={s.heroTitle}>{t('screens.legal.copyrightTitle')}</Text>
