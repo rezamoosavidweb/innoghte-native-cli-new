@@ -9,7 +9,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
-  ScrollView
+  ScrollView,
+  View,
 } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 import { z } from 'zod';
@@ -122,13 +123,23 @@ export const CreateTicketScreen = React.memo(function CreateTicketScreen(
             interactionBusy || pressed ? ticketStyles.submitDisabled : null,
           ]}
         >
-          {interactionBusy ? (
-            <ActivityIndicator color={colors.background} />
-          ) : (
-            <Text style={ticketStyles.submitLabel}>
-              {t('screens.support.tickets.create.submit')}
-            </Text>
-          )}
+          <View style={ticketStyles.submitBtnSlot}>
+            <View style={interactionBusy ? ticketStyles.submitLabelHidden : undefined}>
+              <Text style={ticketStyles.submitLabel}>
+                {t('screens.support.tickets.create.submit')}
+              </Text>
+            </View>
+            {interactionBusy ? (
+              <View
+                style={ticketStyles.submitLoaderOverlay}
+                pointerEvents="none"
+                accessibilityElementsHidden
+                importantForAccessibility="no-hide-descendants"
+              >
+                <ActivityIndicator color={colors.background} />
+              </View>
+            ) : null}
+          </View>
         </Pressable>
       </ScrollView>
     </KeyboardAvoidingView>

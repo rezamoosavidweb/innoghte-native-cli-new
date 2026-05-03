@@ -5,6 +5,7 @@ import type { ThemeColors } from '@/ui/theme/types';
 import {
   fontSize,
   fontWeight,
+  FORM_CONTROL_HEIGHT,
   radius,
   spacing,
 } from '@/ui/theme';
@@ -26,11 +27,12 @@ export function usePaymentSectionStyles(semantic: ThemeColors) {
         },
         gw: {
           flex: 1,
-          paddingVertical: spacing.md,
+          height: FORM_CONTROL_HEIGHT,
           borderRadius: radius.md,
           borderWidth: 2,
           borderColor: semantic.border,
           alignItems: 'center',
+          justifyContent: 'center',
         },
         gwOn: { borderColor: semantic.textSecondary },
         gwLbl: {
@@ -52,7 +54,8 @@ export function usePaymentSectionStyles(semantic: ThemeColors) {
           borderColor: semantic.border,
           borderRadius: radius.md,
           paddingHorizontal: spacing.md,
-          paddingVertical: spacing.sm,
+          paddingVertical: 0,
+          height: FORM_CONTROL_HEIGHT,
           backgroundColor: semantic.inputBackground,
           color: semantic.text,
           fontSize: fontSize.base,

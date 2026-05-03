@@ -77,11 +77,22 @@ function ButtonInner({
       ]}
     >
       <View style={s.content}>
+        <Text
+          style={[label, loading ? s.labelHidden : null]}
+          numberOfLines={1}
+        >
+          {title}
+        </Text>
         {loading ? (
-          <ActivityIndicator color={indicatorColor} size="small" />
-        ) : (
-          <Text style={label}>{title}</Text>
-        )}
+          <View
+            style={s.loaderOverlay}
+            pointerEvents="none"
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+          >
+            <ActivityIndicator color={indicatorColor} size="small" />
+          </View>
+        ) : null}
       </View>
     </Pressable>
   );

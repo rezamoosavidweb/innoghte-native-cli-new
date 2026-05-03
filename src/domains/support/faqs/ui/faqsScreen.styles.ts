@@ -1,7 +1,7 @@
 import type { Theme } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 
-import { fontSize, fontWeight, radius, spacing } from '@/ui/theme';
+import { fontSize, fontWeight, FORM_CONTROL_HEIGHT, radius, spacing } from '@/ui/theme';
 
 /** Layout-only FAQ screen regions (no theme colors). */
 export function createFaqsScreenLayoutStyles() {
@@ -52,7 +52,8 @@ export function createFaqsSearchInputStyles(themeColors: Theme['colors']) {
       borderRadius: radius.lg - 2,
       borderWidth: StyleSheet.hairlineWidth,
       paddingHorizontal: 14,
-      paddingVertical: spacing.md - 2,
+      paddingVertical: 0,
+      height: FORM_CONTROL_HEIGHT,
       fontSize: fontSize.base,
       borderColor: themeColors.border,
       color: themeColors.text,

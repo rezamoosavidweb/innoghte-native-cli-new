@@ -247,7 +247,12 @@ function PhoneInputInner({
           value={dial}
           onChangeText={onDialChange}
           onBlur={onBlur}
-          style={s.input}
+          style={[
+            s.input,
+            Platform.OS === 'android'
+              ? { textAlignVertical: 'center', includeFontPadding: false }
+              : null,
+          ]}
         />
       </View>
       {error ? <Text style={s.errorText}>{error}</Text> : null}

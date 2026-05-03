@@ -2,6 +2,7 @@ import type { Theme } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 
 import type { ThemeColors } from '@/ui/theme/types';
+import { FORM_CONTROL_HEIGHT } from '@/ui/theme/core/formControlHeight';
 import { radius } from '@/ui/theme/core/radius';
 import { spacing } from '@/ui/theme/core/spacing';
 import { fontSize, fontWeight } from '@/ui/theme/core/typography';
@@ -44,7 +45,8 @@ export function createContactScreenStyles(
     },
     linkBtn: {
       alignSelf: 'flex-start',
-      paddingVertical: spacing.sm,
+      height: FORM_CONTROL_HEIGHT,
+      justifyContent: 'center',
     },
     linkLabel: {
       color: nav.primary,
@@ -70,7 +72,8 @@ export function createContactScreenStyles(
       borderRadius: radius.md,
       borderColor: hexAlpha('#FFFFFF', 0.22),
       paddingHorizontal: spacing.md,
-      paddingVertical: spacing.sm + 2,
+      paddingVertical: 0,
+      height: FORM_CONTROL_HEIGHT,
       color: '#FFFFFF',
       backgroundColor: hexAlpha('#FFFFFF', 0.06),
       fontSize: fontSize.base,
@@ -103,11 +106,24 @@ export function createContactScreenStyles(
     submit: {
       marginTop: spacing.lg,
       backgroundColor: '#67BD5C',
-      paddingVertical: spacing.md,
+      height: FORM_CONTROL_HEIGHT,
       borderRadius: radius.md,
       alignItems: 'center',
+      justifyContent: 'center',
     },
     submitDisabled: { opacity: 0.55 },
+    submitSlot: {
+      flex: 1,
+      width: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    submitLabelHidden: { opacity: 0 },
+    submitLoaderOverlay: {
+      ...StyleSheet.absoluteFill,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     submitLabel: {
       color: '#FFFFFF',
       fontWeight: fontWeight.bold,

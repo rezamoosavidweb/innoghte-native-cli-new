@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import type { ThemeColors } from '@/ui/theme/types';
 import { createCardStyle } from '@/ui/theme/core/card.styles';
 import { radius } from '@/ui/theme/core/radius';
+import { FORM_CONTROL_HEIGHT } from '@/ui/theme/core/formControlHeight';
 import { spacing } from '@/ui/theme/core/spacing';
 import { fontSize } from '@/ui/theme/core/typography';
 
@@ -30,7 +31,8 @@ export function createEditProfileScreenStyles(
       borderRadius: radius.md,
       borderColor: navColors.border,
       paddingHorizontal: spacing.md,
-      paddingVertical: spacing.sm + 2,
+      paddingVertical: 0,
+      height: FORM_CONTROL_HEIGHT,
       fontSize: fontSize.base,
       color: navColors.text,
       backgroundColor: ui.inputBackground,

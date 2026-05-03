@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import type { SemanticColors, ThemeColors } from '@/ui/theme';
-import { fontSize, fontWeight, radius, spacing } from '@/ui/theme';
+import { fontSize, fontWeight, FORM_CONTROL_HEIGHT, radius, spacing } from '@/ui/theme';
 
 export const createDonationScreenStyles = (args: {
   colors: ThemeColors;
@@ -62,7 +62,8 @@ export const createDonationScreenStyles = (args: {
       borderWidth: 2,
       borderColor: '#67BD5C',
       backgroundColor: 'rgba(103, 189, 92, 0.22)',
-      paddingVertical: spacing.sm,
+      height: FORM_CONTROL_HEIGHT,
+      paddingVertical: 0,
       paddingHorizontal: spacing.sm,
       fontSize: fontSize.lg,
       fontWeight: fontWeight.medium,
@@ -85,12 +86,13 @@ export const createDonationScreenStyles = (args: {
     amtBtn: {
       flexGrow: 1,
       minWidth: '28%',
-      paddingVertical: spacing.md,
+      height: FORM_CONTROL_HEIGHT,
       borderRadius: radius.md,
       borderWidth: 1,
       borderColor: '#67BD5C',
       backgroundColor: '#fff',
       alignItems: 'center',
+      justifyContent: 'center',
     },
     amtBtnOn: {
       backgroundColor: '#67BD5C',
@@ -134,7 +136,8 @@ export const createDonationScreenStyles = (args: {
       borderRadius: radius.lg,
       backgroundColor: '#eee',
       paddingHorizontal: spacing.md,
-      paddingVertical: spacing.sm,
+      paddingVertical: 0,
+      height: FORM_CONTROL_HEIGHT,
       fontSize: fontSize.base,
       color: '#212121',
     },
@@ -156,9 +159,11 @@ export const createDonationScreenStyles = (args: {
     },
     payBtn: {
       backgroundColor: '#67BD5C',
-      paddingVertical: spacing.md,
+      height: FORM_CONTROL_HEIGHT,
       paddingHorizontal: spacing['2xl'],
       borderRadius: radius.md,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     payBtnDisabled: { opacity: 0.65 },
     payBtnText: {

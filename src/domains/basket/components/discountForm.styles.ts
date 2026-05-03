@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import type { ThemeColors } from '@/ui/theme/types';
-import { fontSize, fontWeight, radius, spacing } from '@/ui/theme';
+import { fontSize, fontWeight, FORM_CONTROL_HEIGHT, radius, spacing } from '@/ui/theme';
 
 export function useDiscountFormStyles(colors: ThemeColors) {
   return React.useMemo(
@@ -22,21 +22,34 @@ export function useDiscountFormStyles(colors: ThemeColors) {
           backgroundColor: colors.surfaceSecondary,
           paddingLeft: spacing.md,
           paddingRight: spacing.xs,
-          minHeight: 48,
+          height: FORM_CONTROL_HEIGHT,
         },
         input: {
           flex: 1,
           color: colors.text,
           fontSize: fontSize.base,
-          paddingVertical: spacing.sm,
+          paddingVertical: 0,
         },
         addBtn: {
-          width: 44,
-          height: 44,
-          borderRadius: 22,
+          width: FORM_CONTROL_HEIGHT,
+          height: FORM_CONTROL_HEIGHT,
+          borderRadius: FORM_CONTROL_HEIGHT / 2,
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: colors.text,
+          overflow: 'hidden',
+        },
+        addBtnSlot: {
+          width: '100%',
+          height: '100%',
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+        addBtnLabelHidden: { opacity: 0 },
+        addBtnLoaderOverlay: {
+          ...StyleSheet.absoluteFill,
+          alignItems: 'center',
+          justifyContent: 'center',
         },
         addBtnDisabled: { opacity: 0.45 },
         addLbl: {

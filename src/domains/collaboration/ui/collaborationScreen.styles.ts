@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import type { ThemeColors } from '@/ui/theme/types';
 import { createCardStyle } from '@/ui/theme/core/card.styles';
+import { FORM_CONTROL_HEIGHT } from '@/ui/theme/core/formControlHeight';
 import { radius } from '@/ui/theme/core/radius';
 import { spacing } from '@/ui/theme/core/spacing';
 import { fontSize, fontWeight } from '@/ui/theme/core/typography';
@@ -45,7 +46,9 @@ export function createCollaborationScreenStyles(
       borderWidth: StyleSheet.hairlineWidth,
       borderRadius: radius.md,
       borderColor: nav.border,
-      padding: spacing.md,
+      paddingHorizontal: spacing.md,
+      paddingVertical: 0,
+      height: FORM_CONTROL_HEIGHT,
       color: nav.text,
       backgroundColor: ui.inputBackground,
       fontSize: fontSize.base,
@@ -82,11 +85,24 @@ export function createCollaborationScreenStyles(
     },
     submit: {
       backgroundColor: nav.primary,
-      paddingVertical: spacing.md,
+      height: FORM_CONTROL_HEIGHT,
       borderRadius: radius.md,
       alignItems: 'center',
+      justifyContent: 'center',
     },
     submitDisabled: { opacity: 0.55 },
+    submitSlot: {
+      flex: 1,
+      width: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    submitLabelHidden: { opacity: 0 },
+    submitLoaderOverlay: {
+      ...StyleSheet.absoluteFill,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     submitLabel: { color: '#FFFFFF', fontWeight: fontWeight.bold },
     error: { color: ui.errorText, fontSize: fontSize.sm },
   });

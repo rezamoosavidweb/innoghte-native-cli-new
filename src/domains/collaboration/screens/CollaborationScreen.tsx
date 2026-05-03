@@ -433,11 +433,21 @@ export const CollaborationScreen = React.memo(function CollaborationScreen({
               fireAndForget(handleSubmit(onValid)());
             }}
           >
-            {submitMut.isPending ? (
-              <ActivityIndicator color="#FFF" />
-            ) : (
-              <Text style={s.submitLabel}>{t('screens.collaboration.submit')}</Text>
-            )}
+            <View style={s.submitSlot}>
+              <View style={submitMut.isPending ? s.submitLabelHidden : undefined}>
+                <Text style={s.submitLabel}>{t('screens.collaboration.submit')}</Text>
+              </View>
+              {submitMut.isPending ? (
+                <View
+                  style={s.submitLoaderOverlay}
+                  pointerEvents="none"
+                  accessibilityElementsHidden
+                  importantForAccessibility="no-hide-descendants"
+                >
+                  <ActivityIndicator color="#FFF" />
+                </View>
+              ) : null}
+            </View>
           </Pressable>
         </View>
       </ScrollView>

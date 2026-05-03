@@ -39,7 +39,21 @@ export const CheckoutButton = React.memo(function CheckoutButton({
         accessibilityRole="button"
         accessibilityLabel={label}
       >
-        {loading ? <ActivityIndicator color={colors.onPrimary} /> : <Text style={s.txt}>{label}</Text>}
+        <View style={s.btnSlot}>
+          <View style={loading ? s.btnLabelHidden : undefined}>
+            <Text style={s.txt}>{label}</Text>
+          </View>
+          {loading ? (
+            <View
+              style={s.btnLoaderOverlay}
+              pointerEvents="none"
+              accessibilityElementsHidden
+              importantForAccessibility="no-hide-descendants"
+            >
+              <ActivityIndicator color={colors.onPrimary} />
+            </View>
+          ) : null}
+        </View>
       </Pressable>
     </View>
   );

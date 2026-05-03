@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import type { ThemeColors } from '@/ui/theme/types';
 import { createCardStyle } from '@/ui/theme/core/card.styles';
+import { FORM_CONTROL_HEIGHT } from '@/ui/theme/core/formControlHeight';
 import { spacing } from '@/ui/theme/core/spacing';
 import { fontSize } from '@/ui/theme/core/typography';
 
@@ -48,10 +49,12 @@ export function createSecurityScreenStyles(
     passwordMasked: { color: navColors.text, marginTop: spacing.xs },
     changePasswordBtn: {
       paddingHorizontal: spacing.md,
-      paddingVertical: spacing.sm,
+      height: FORM_CONTROL_HEIGHT,
       borderRadius: 10,
       borderWidth: 1,
       borderColor: navColors.border,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     changePasswordBtnPressed: { opacity: 0.85 },
     changePasswordLabel: { color: navColors.primary, fontWeight: '700' },

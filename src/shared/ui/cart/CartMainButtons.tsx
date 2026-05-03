@@ -204,17 +204,27 @@ const CartMainButtonsComponent = ({
         containerStyle,
       ]}
     >
-      {addLoading ? (
-        <ActivityIndicator color={themePalette.white} />
-      ) : (
-        <LabelWithIcons
-          styles={s}
-          text={addToBasketBtnText ?? t('cart.addToBasket')}
-          textStyle={[s.label, s.successLabel]}
-          left={iconLeftAddToBasket}
-          right={iconRightAddToBasket}
-        />
-      )}
+      <View style={s.addToCartSlot}>
+        <View style={addLoading ? s.addToCartLabelHidden : undefined}>
+          <LabelWithIcons
+            styles={s}
+            text={addToBasketBtnText ?? t('cart.addToBasket')}
+            textStyle={[s.label, s.successLabel]}
+            left={iconLeftAddToBasket}
+            right={iconRightAddToBasket}
+          />
+        </View>
+        {addLoading ? (
+          <View
+            style={s.addToCartLoaderOverlay}
+            pointerEvents="none"
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+          >
+            <ActivityIndicator color={themePalette.white} />
+          </View>
+        ) : null}
+      </View>
     </Pressable>
   );
 };

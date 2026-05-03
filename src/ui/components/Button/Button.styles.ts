@@ -1,6 +1,12 @@
 import { StyleSheet } from 'react-native';
 
-import { fontSize, fontWeight, radius, spacing } from '@/ui/theme';
+import {
+  fontSize,
+  fontWeight,
+  FORM_CONTROL_HEIGHT,
+  radius,
+  spacing,
+} from '@/ui/theme';
 import type { ThemeColors } from '@/ui/theme/types';
 
 /**
@@ -12,11 +18,12 @@ export function createButtonStyles(colors: ThemeColors) {
   return StyleSheet.create({
     filled: {
       width: '100%',
-      paddingVertical: spacing.md,
+      height: FORM_CONTROL_HEIGHT,
       borderRadius: radius.lg,
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.primary,
+      overflow: 'hidden',
     },
     filledLabel: {
       fontSize: fontSize.base,
@@ -25,13 +32,14 @@ export function createButtonStyles(colors: ThemeColors) {
     },
     outlined: {
       width: '100%',
-      paddingVertical: spacing.md,
+      height: FORM_CONTROL_HEIGHT,
       borderRadius: radius.lg,
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.primaryBg,
       borderWidth: 0,
       borderColor: colors.primary,
+      overflow: 'hidden',
     },
     outlinedLabel: {
       fontSize: fontSize.base,
@@ -39,14 +47,14 @@ export function createButtonStyles(colors: ThemeColors) {
       color: colors.primary,
     },
     text: {
-      paddingVertical: spacing.sm,
+      height: FORM_CONTROL_HEIGHT,
       paddingHorizontal: spacing.sm,
       borderRadius: radius.lg,
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: 'transparent',
-      minHeight: 44,
       minWidth: 44,
+      overflow: 'hidden',
     },
     textLabel: {
       fontSize: fontSize.sm,
@@ -60,9 +68,18 @@ export function createButtonStyles(colors: ThemeColors) {
       opacity: 0.88,
     },
     content: {
+      flex: 1,
+      width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
-      minHeight: fontSize.base + 2,
+    },
+    labelHidden: {
+      opacity: 0,
+    },
+    loaderOverlay: {
+      ...StyleSheet.absoluteFill,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
   });
 }

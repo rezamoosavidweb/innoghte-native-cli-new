@@ -323,11 +323,21 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
             }}
             style={[s.submit, submitBusy ? s.submitDisabled : null]}
           >
-            {submitBusy ? (
-              <ActivityIndicator color="#FFF" />
-            ) : (
-              <Text style={s.submitLabel}>{t('screens.contact.submit')}</Text>
-            )}
+            <View style={s.submitSlot}>
+              <View style={submitBusy ? s.submitLabelHidden : undefined}>
+                <Text style={s.submitLabel}>{t('screens.contact.submit')}</Text>
+              </View>
+              {submitBusy ? (
+                <View
+                  style={s.submitLoaderOverlay}
+                  pointerEvents="none"
+                  accessibilityElementsHidden
+                  importantForAccessibility="no-hide-descendants"
+                >
+                  <ActivityIndicator color="#FFF" />
+                </View>
+              ) : null}
+            </View>
           </Pressable>
 
           <Text style={s.footnote}>{t('screens.contact.footnoteSupportHours')}</Text>

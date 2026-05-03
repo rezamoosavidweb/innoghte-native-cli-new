@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {TextInput} from 'react-native';
+import { Platform, TextInput } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import { useThemeColors } from '@/ui/theme';
@@ -38,6 +38,14 @@ export function InputField({
     ? value.length > 0 ? 'left' : 'right'
     : undefined;
 
+  const androidInputMetrics =
+    Platform.OS === 'android'
+      ? ({
+          textAlignVertical: 'center' as const,
+          includeFontPadding: false,
+        } as const)
+      : null;
+
   return (
     <>
       <TextInput
@@ -50,7 +58,11 @@ export function InputField({
         onChangeText={onChangeText}
         onBlur={onBlur}
         secureTextEntry={secureTextEntry}
-        style={[s.input, textAlign ? { textAlign } : undefined]}
+        style={[
+          s.input,
+          textAlign ? { textAlign } : undefined,
+          androidInputMetrics,
+        ]}
       />
       {error ? <Text style={s.errorText}>{error}</Text> : null}
     </>

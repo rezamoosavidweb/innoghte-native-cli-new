@@ -29,6 +29,7 @@ export {
 } from '@/ui/theme/provider/AppThemeProvider';
 
 export { spacing, type SpacingToken } from '@/ui/theme/core/spacing';
+export { FORM_CONTROL_HEIGHT } from '@/ui/theme/core/formControlHeight';
 export { radius, type RadiusToken } from '@/ui/theme/core/radius';
 export {
   fontSize,

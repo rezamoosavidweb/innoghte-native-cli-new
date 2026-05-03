@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { fontSize, fontWeight, radius, spacing } from '@/ui/theme';
+import { fontSize, fontWeight, FORM_CONTROL_HEIGHT, radius, spacing } from '@/ui/theme';
 import type { ThemeColors } from '@/ui/theme/types';
 
 export function createAuthTabsStyles(colors: ThemeColors) {
@@ -14,7 +14,7 @@ export function createAuthTabsStyles(colors: ThemeColors) {
     },
     tab: {
       flex: 1,
-      paddingVertical: spacing.sm,
+      height: FORM_CONTROL_HEIGHT,
       borderRadius: radius.lg - 2,
       alignItems: 'center',
       justifyContent: 'center',

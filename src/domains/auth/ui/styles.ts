@@ -1,6 +1,13 @@
 import { StyleSheet } from 'react-native';
 
-import { fontSize, fontWeight, lineHeight, radius, spacing } from '@/ui/theme';
+import {
+  fontSize,
+  fontWeight,
+  FORM_CONTROL_HEIGHT,
+  lineHeight,
+  radius,
+  spacing,
+} from '@/ui/theme';
 import type { ThemeColors } from '@/ui/theme/types';
 
 export function createLoginScreenStyles(colors: ThemeColors) {
@@ -35,8 +42,9 @@ export function createLoginScreenStyles(colors: ThemeColors) {
     input: {
       borderWidth: StyleSheet.hairlineWidth,
       borderRadius: radius.lg - 2,
-      minHeight: 48,
+      height: FORM_CONTROL_HEIGHT,
       paddingHorizontal: 14,
+      paddingVertical: 0,
       fontSize: fontSize.base,
       borderColor: colors.border,
       color: colors.text,
@@ -51,7 +59,7 @@ export function createLoginScreenStyles(colors: ThemeColors) {
       borderWidth: StyleSheet.hairlineWidth,
       borderColor: colors.border,
       borderRadius: radius.lg - 4,
-      paddingVertical: spacing.sm,
+      height: FORM_CONTROL_HEIGHT,
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.card,

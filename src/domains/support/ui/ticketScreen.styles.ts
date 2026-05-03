@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import {
   fontSize,
   fontWeight,
+  FORM_CONTROL_HEIGHT,
   radius,
   spacing,
 } from '@/ui/theme';
@@ -162,11 +163,11 @@ export function createTicketScreenStyles(colors: Theme['colors']) {
           borderColor: colors.border,
           borderRadius: radius.sm,
           paddingHorizontal: spacing.md,
-          paddingVertical: spacing.sm,
+          paddingVertical: 0,
+          height: FORM_CONTROL_HEIGHT,
           fontSize: fontSize.base,
           color: colors.text,
           backgroundColor: colors.background,
-          minHeight: 44,
           textAlign: 'right',
           writingDirection: 'rtl',
         },
@@ -176,9 +177,10 @@ export function createTicketScreenStyles(colors: Theme['colors']) {
         },
         submitBtn: {
           marginTop: spacing.sm,
-          paddingVertical: spacing.md,
+          height: FORM_CONTROL_HEIGHT,
           borderRadius: radius.md,
           alignItems: 'center',
+          justifyContent: 'center',
           backgroundColor: colors.primary,
         },
         submitLabel: {
@@ -189,6 +191,18 @@ export function createTicketScreenStyles(colors: Theme['colors']) {
         },
         submitDisabled: {
           opacity: 0.45,
+        },
+        submitBtnSlot: {
+          flex: 1,
+          width: '100%',
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+        submitLabelHidden: { opacity: 0 },
+        submitLoaderOverlay: {
+          ...StyleSheet.absoluteFill,
+          alignItems: 'center',
+          justifyContent: 'center',
         },
         bubbleRow: {
           gap: spacing.sm,

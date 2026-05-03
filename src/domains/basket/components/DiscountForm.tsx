@@ -123,11 +123,21 @@ export const DiscountForm = React.memo(function DiscountForm({
           accessibilityRole="button"
           accessibilityLabel="اعمال تخفیف"
         >
-          {isPending ? (
-            <ActivityIndicator color={colors.background} />
-          ) : (
-            <Text style={s.addLbl}>+</Text>
-          )}
+          <View style={s.addBtnSlot}>
+            <View style={isPending ? s.addBtnLabelHidden : undefined}>
+              <Text style={s.addLbl}>+</Text>
+            </View>
+            {isPending ? (
+              <View
+                style={s.addBtnLoaderOverlay}
+                pointerEvents="none"
+                accessibilityElementsHidden
+                importantForAccessibility="no-hide-descendants"
+              >
+                <ActivityIndicator color={colors.background} />
+              </View>
+            ) : null}
+          </View>
         </Pressable>
       </View>
     </View>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import type { SemanticColors } from '@/ui/theme';
-import { fontSize, fontWeight, radius, spacing } from '@/ui/theme';
+import { fontSize, fontWeight, FORM_CONTROL_HEIGHT, radius, spacing } from '@/ui/theme';
 
 export const createDonationCreditCardFieldsStyles = (args: {
   semantic: SemanticColors;
@@ -23,7 +23,8 @@ export const createDonationCreditCardFieldsStyles = (args: {
       borderColor: semantic.border,
       backgroundColor: semantic.inputBackground,
       paddingHorizontal: spacing.md,
-      paddingVertical: spacing.sm,
+      paddingVertical: 0,
+      height: FORM_CONTROL_HEIGHT,
       fontSize: fontSize.base,
       color: semantic.text,
     },

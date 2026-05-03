@@ -7,6 +7,7 @@ import {
   colors,
   fontSize,
   fontWeight,
+  FORM_CONTROL_HEIGHT,
   pickSemantic,
   radius,
   spacing,
@@ -25,11 +26,10 @@ export function createCartMainButtonsStyles(
     pressableBase: {
       flex: 1,
       borderRadius: radius.lg - 2,
-      paddingVertical: spacing.md,
       paddingHorizontal: spacing.sm,
       alignItems: 'center',
       justifyContent: 'center',
-      minHeight: 44,
+      height: FORM_CONTROL_HEIGHT,
     },
     pressed: {
       opacity: 0.88,
@@ -66,18 +66,32 @@ export function createCartMainButtonsStyles(
     capacityWrap: {
       flex: 1,
       borderRadius: radius.lg - 2,
-      paddingVertical: spacing.md,
       paddingHorizontal: spacing.sm,
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: themeColors.border,
-      minHeight: 44,
+      height: FORM_CONTROL_HEIGHT,
     },
     capacityText: {
       fontSize: fontSize.md,
       fontWeight: fontWeight.medium,
       color: colors.white,
       textAlign: 'center',
+    },
+    /** Fills {@link pressableBase} so a spinner overlay does not change layout height. */
+    addToCartSlot: {
+      flex: 1,
+      width: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    addToCartLabelHidden: {
+      opacity: 0,
+    },
+    addToCartLoaderOverlay: {
+      ...StyleSheet.absoluteFill,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
   });
 }

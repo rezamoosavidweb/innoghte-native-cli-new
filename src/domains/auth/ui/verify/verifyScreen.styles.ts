@@ -1,6 +1,13 @@
 import { StyleSheet } from 'react-native';
 
-import { fontSize, fontWeight, lineHeight, radius, spacing } from '@/ui/theme';
+import {
+  fontSize,
+  fontWeight,
+  FORM_CONTROL_HEIGHT,
+  lineHeight,
+  radius,
+  spacing,
+} from '@/ui/theme';
 import type { ThemeColors } from '@/ui/theme/types';
 
 export function createVerifyScreenStyles(themeColors: ThemeColors) {
@@ -33,8 +40,9 @@ export function createVerifyScreenStyles(themeColors: ThemeColors) {
     input: {
       borderWidth: StyleSheet.hairlineWidth,
       borderRadius: radius.lg - 2,
-      minHeight: 48,
+      height: FORM_CONTROL_HEIGHT,
       paddingHorizontal: 14,
+      paddingVertical: 0,
       fontSize: fontSize.base,
       borderColor: themeColors.border,
       color: themeColors.text,
@@ -42,9 +50,10 @@ export function createVerifyScreenStyles(themeColors: ThemeColors) {
     },
     primaryButton: {
       marginTop: spacing.sm,
-      paddingVertical: spacing.md,
+      height: FORM_CONTROL_HEIGHT,
       borderRadius: radius.md,
       alignItems: 'center',
+      justifyContent: 'center',
       backgroundColor: themeColors.primary,
     },
     primaryButtonPressed: { opacity: 0.9 },

@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 
 import { radius } from '@/ui/theme/core/radius';
 import { spacing } from '@/ui/theme/core/spacing';
+import { FORM_CONTROL_HEIGHT } from '@/ui/theme/core/formControlHeight';
 import { fontSize, fontWeight, lineHeight } from '@/ui/theme/core/typography';
 import type { ThemeColors } from '@/ui/theme/types';
 
@@ -22,7 +23,7 @@ export function createPhoneInputStyles(colors: ThemeColors) {
       borderColor: colors.border,
       backgroundColor: colors.inputBackground,
       overflow: 'hidden',
-      minHeight: 48,
+      height: FORM_CONTROL_HEIGHT,
     },
     rowError: {
       borderColor: colors.errorText,
@@ -62,7 +63,7 @@ export function createPhoneInputStyles(colors: ThemeColors) {
     input: {
       flex: 1,
       paddingHorizontal: spacing.sm,
-      paddingVertical: spacing.md,
+      paddingVertical: 0,
       fontSize: fontSize.base,
       color: colors.text,
       backgroundColor: colors.inputBackground,

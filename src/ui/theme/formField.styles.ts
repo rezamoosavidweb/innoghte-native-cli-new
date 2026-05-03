@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 
+import { FORM_CONTROL_HEIGHT } from '@/ui/theme/core/formControlHeight';
 import { radius } from '@/ui/theme/core/radius';
 import { fontSize, lineHeight } from '@/ui/theme/core/typography';
 import type { ThemeColors } from '@/ui/theme/types';
@@ -16,8 +17,9 @@ export function createFormFieldStyles(themeColors: ThemeColors) {
     input: {
       borderWidth: StyleSheet.hairlineWidth,
       borderRadius: radius.lg - 2,
-      minHeight: 48,
+      height: FORM_CONTROL_HEIGHT,
       paddingHorizontal: 14,
+      paddingVertical: 0,
       fontSize: fontSize.base,
       borderColor: themeColors.border,
       color: themeColors.text,
