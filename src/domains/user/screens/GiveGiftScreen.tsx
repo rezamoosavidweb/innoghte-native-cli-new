@@ -1,7 +1,11 @@
 import type { DrawerScreenProps } from '@react-navigation/drawer';
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
 
 import { GiftGiveForm } from '@/domains/user/components/giveGift/GiftGiveForm';
 import { useGiveGiftCourses } from '@/domains/user/hooks/useGiveGiftCourses';
@@ -18,6 +22,8 @@ import {
 import { createFormFieldStyles } from '@/ui/theme/formField.styles';
 
 type Props = DrawerScreenProps<DrawerParamList, 'GiftSend'>;
+
+const SCROLL_CONTENT_STYLE = [flashListContentGutters.standard, { direction: 'rtl' as const }];
 
 export const GiveGiftScreen = React.memo(function GiveGiftScreen(
   _props: Props,
@@ -49,7 +55,7 @@ export const GiveGiftScreen = React.memo(function GiveGiftScreen(
       <ScrollView
         ref={scroll.scrollRef}
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={flashListContentGutters.standard}
+        contentContainerStyle={SCROLL_CONTENT_STYLE}
       >
         <GiftGiveForm
           theme={theme}

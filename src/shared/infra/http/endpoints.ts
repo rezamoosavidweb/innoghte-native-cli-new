@@ -17,6 +17,12 @@ export const endpoints = {
     cartDestroy: 'api/v1/public/carts/destroy',
     cartDeleteByToken: 'api/v1/public/carts/delete/cart-token',
     checkDiscountCode: 'api/v1/orders/validate-discount',
+    contactUsCategories: 'api/v1/public/contact-us/categories',
+    contactUsSendOtp: 'api/v1/public/contact-us/send-otp',
+    contactUsVerifyOtp: 'api/v1/public/contact-us/verify-otp',
+    contactUsCreate: 'api/v1/public/contact-us/create',
+    workWithUsCategories: 'api/v1/public/work-with-us/categories',
+    workWithUsCreate: 'api/v1/public/work-with-us/create',
   },
   /** Authenticated course actions — Bearer token (same paths as client-web dashboard). */
   coursesAuth: {
@@ -42,6 +48,8 @@ export const endpoints = {
   /** Authenticated user — see {@link fetchAndApplyPurchasedProductIds}. */
   user: {
     purchasedProductIds: 'api/v1/user/purchased-product-ids',
+    /** Order / purchase history — same path as client-web `getListOrders`. */
+    orders: 'api/v1/orders',
   },
   /** Authenticated checkout (Bearer). */
   payment: {

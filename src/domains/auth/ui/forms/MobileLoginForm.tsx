@@ -1,28 +1,44 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { InputField } from '@/ui/components/form/InputField';
+import {
+  PhoneInput,
+  type PhoneInputValue,
+} from '@/ui/components/PhoneInput';
 
 type Props = {
-  value: string;
-  onChangeText: (value: string) => void;
+  value: PhoneInputValue;
+  onChange: (value: PhoneInputValue) => void;
   onBlur: () => void;
   error?: string;
+  touched?: boolean;
+  disableDropdown?: boolean;
+  defaultCountryIso?: string;
 };
 
-export function MobileLoginForm({ value, onChangeText, onBlur, error }: Props) {
+export function MobileLoginForm({
+  value,
+  onChange,
+  onBlur,
+  error,
+  touched,
+  disableDropdown,
+  defaultCountryIso,
+}: Props) {
   const { t } = useTranslation();
-  const label = t('screens.login.mobile');
+  const placeholder = t('screens.login.mobilePlaceholder');
 
   return (
-    <InputField
-      accessibilityLabel={label}
-      placeholder={label}
-      keyboardType="phone-pad"
+    <PhoneInput
+      accessibilityLabelDial={t('screens.login.mobile')}
       value={value}
-      onChangeText={onChangeText}
+      onChange={onChange}
       onBlur={onBlur}
       error={error}
+      touched={touched}
+      placeholder={placeholder}
+      disableDropdown={disableDropdown}
+      defaultCountryIso={defaultCountryIso}
     />
   );
 }

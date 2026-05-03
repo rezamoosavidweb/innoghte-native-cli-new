@@ -43,7 +43,10 @@ const TicketListScreenComponent = (_props: Props) => {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const navigation = useAppNavigation();
-  const ticketStyles = createTicketScreenStyles(colors);
+  const ticketStyles = React.useMemo(
+    () => createTicketScreenStyles(colors),
+    [colors],
+  );
 
   const {
     flatData,

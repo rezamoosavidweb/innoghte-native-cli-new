@@ -4,34 +4,32 @@ import { useTranslation } from 'react-i18next';
 import {Pressable, View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
+import { SafeHtmlContent } from '@/shared/ui/html';
+
 import { TicketLabelValue } from '@/domains/support/components/TicketLabelValue';
 import { TicketStatusBadge } from '@/domains/support/components/TicketStatusBadge';
 import type { Ticket } from '@/domains/support/model/ticket.types';
 import { createTicketScreenStyles } from '@/domains/support/ui/ticketScreen.styles';
+import { formatTsIso } from '@/shared/utils/formatTsIso';
 
 export type TicketCardProps = {
   ticket: Ticket;
   onOpen: (id: number) => void;
 };
 
-function formatTicketDate(iso: string, locale: string): string {
-  try {
-    return new Date(iso).toLocaleString(locale === 'fa' ? 'fa-IR' : undefined);
-  } catch {
-    return iso;
-  }
-}
-
 export const TicketCard = React.memo(function TicketCard({
   ticket,
   onOpen,
 }: TicketCardProps) {
   const { colors } = useTheme();
-  const styles = createTicketScreenStyles(colors);
+  const styles = React.useMemo(
+    () => createTicketScreenStyles(colors),
+    [colors],
+  );
   const { t, i18n } = useTranslation();
 
   const formattedCreatedAt = React.useMemo(
-    () => formatTicketDate(ticket.createdAt, i18n.language),
+    () => formatTsIso(ticket.createdAt, i18n.language),
     [i18n.language, ticket.createdAt],
   );
 
@@ -43,9 +41,11 @@ export const TicketCard = React.memo(function TicketCard({
     <View style={styles.ticketCardOuter}>
       <View style={styles.ticketCard}>
         <View style={styles.ticketCardHeaderRow}>
-          <Text style={styles.ticketCardTitleText} numberOfLines={2}>
-            {ticket.title}
-          </Text>
+          <SafeHtmlContent
+            html={ticket.title}
+            style={styles.ticketCardTitleText}
+            numberOfLines={2}
+          />
           <TicketStatusBadge status={ticket.status} styles={styles} />
         </View>
 

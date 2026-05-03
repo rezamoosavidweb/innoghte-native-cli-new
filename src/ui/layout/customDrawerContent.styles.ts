@@ -36,8 +36,23 @@ export const staticDrawerStyles = StyleSheet.create({
     fontWeight: fontWeight.bold,
   },
   profileInfo: {
-    marginLeft: 14,
+    marginStart: 14,
     flex: 1,
+  },
+  guestActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.md,
+    paddingHorizontal: spacing['3xl'],
+    paddingVertical: spacing.base,
+  },
+  guestBtn: {
+    flex: 1,
+    paddingVertical: spacing.md,
+    borderRadius: radius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   dividerHairline: {
     height: StyleSheet.hairlineWidth,
@@ -57,7 +72,7 @@ export const staticDrawerStyles = StyleSheet.create({
   },
   footerIconGlyph: {
     fontSize: fontSize.lg,
-    marginRight: spacing.md - 2,
+    marginEnd: spacing.md - 2,
   },
   footerItemTextBase: {
     fontSize: fontSize.base,
@@ -74,7 +89,6 @@ export const staticDrawerStyles = StyleSheet.create({
 export function useCustomDrawerDynamicStyles(
   colors: NavigationTheme['colors'],
   s: ThemeColors,
-  isDrawerOnRight: boolean,
 ) {
   return React.useMemo(
     () => ({
@@ -112,13 +126,37 @@ export function useCustomDrawerDynamicStyles(
         { color: s.danger },
       ],
       version: [staticDrawerStyles.versionBase, { color: s.textMuted }],
+      guestBtnPrimary: [
+        staticDrawerStyles.guestBtn,
+        { backgroundColor: s.drawerActiveTint },
+      ],
+      guestBtnOutline: [
+        staticDrawerStyles.guestBtn,
+        {
+          borderWidth: StyleSheet.hairlineWidth * 2,
+          borderColor: colors.border,
+        },
+      ],
+      guestBtnPrimaryLabel: {
+        color: colorPrimitives.white,
+        fontWeight: fontWeight.semibold,
+        fontSize: fontSize.base,
+      },
+      guestBtnOutlineLabel: {
+        color: colors.text,
+        fontWeight: fontWeight.semibold,
+        fontSize: fontSize.base,
+      },
       sheet: {
         flex: 1,
         backgroundColor: colors.card,
-        borderTopLeftRadius: isDrawerOnRight ? radius['2xl'] : 0,
-        borderBottomLeftRadius: isDrawerOnRight ? radius['2xl'] : 0,
-        borderTopRightRadius: isDrawerOnRight ? 0 : radius['2xl'],
-        borderBottomRightRadius: isDrawerOnRight ? 0 : radius['2xl'],
+        // borderTopRightRadius maps to the exposed inner edge in both layouts:
+        // LTR (drawer on left, no mirror): right side is the exposed edge.
+        // RTL (drawer on right, I18nManager mirrors view): coded right → physical left = exposed edge.
+        borderTopRightRadius: radius['2xl'],
+        borderBottomRightRadius: radius['2xl'],
+        borderTopLeftRadius: 0,
+        borderBottomLeftRadius: 0,
         overflow: 'hidden' as const,
       },
     }),
@@ -126,7 +164,6 @@ export function useCustomDrawerDynamicStyles(
       colors.border,
       colors.card,
       colors.text,
-      isDrawerOnRight,
       s.danger,
       s.drawerActiveTint,
       s.drawerMutedSurface,

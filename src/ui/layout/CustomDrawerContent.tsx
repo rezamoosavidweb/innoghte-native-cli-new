@@ -1,30 +1,33 @@
-import * as React from 'react';
+import type { DrawerContentComponentProps } from '@react-navigation/drawer';
 import {
   DrawerContentScrollView,
   DrawerItemList,
-  type DrawerContentComponentProps,
 } from '@react-navigation/drawer';
 import { useTheme } from '@react-navigation/native';
-import { TouchableOpacity, View } from 'react-native';
-import { Text } from '@/shared/ui/Text';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Linking, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useShellDrawerModel } from '@/ui/layout/ShellDrawerContext';
+import { PUBLIC_WEB_ORIGIN } from '@/shared/config/publicWebOrigin';
+import { Text } from '@/shared/ui/Text';
 import {
   staticDrawerStyles,
   useCustomDrawerDynamicStyles,
 } from '@/ui/layout/customDrawerContent.styles';
+import { DrawerFooterSocials } from '@/ui/layout/DrawerFooterSocials';
+import { useShellDrawerModel } from '@/ui/layout/ShellDrawerContext';
 import { pickSemantic } from '@/ui/theme';
 import { version as appVersion } from 'appPackage';
+
+const REGISTER_WEB_URL = `${PUBLIC_WEB_ORIGIN}/auth/register`;
 
 export const CustomDrawerContent = React.memo(function CustomDrawerContent(
   props: DrawerContentComponentProps,
 ) {
   const { state, navigation, descriptors } = props;
   const { t } = useTranslation();
-  const { onRequestLogout, isDrawerOnPhysicalRight: isDrawerOnRight, user: drawerUser } =
-    useShellDrawerModel();
+  const { onRequestLogout, user: drawerUser } = useShellDrawerModel();
   const theme = useTheme();
   const { colors } = theme;
   const s = pickSemantic(theme);
@@ -32,26 +35,65 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
   const emailLine = drawerUser.emailLine;
   const avatarInitials = drawerUser.avatarInitials;
 
-  const dynamicStyles = useCustomDrawerDynamicStyles(colors, s, isDrawerOnRight);
+  const dynamicStyles = useCustomDrawerDynamicStyles(colors, s);
 
   const handleLogout = React.useCallback(() => {
     return onRequestLogout();
   }, [onRequestLogout]);
 
+  const onLogin = React.useCallback(() => {
+    navigation.navigate('Login');
+  }, [navigation]);
+
+  const onRegister = React.useCallback(() => {
+    Linking.openURL(REGISTER_WEB_URL);
+  }, []);
+
+  const isAuthed = drawerUser.isAuthenticated;
+
   return (
     <SafeAreaView style={staticDrawerStyles.safe} edges={['top', 'bottom']}>
       <View style={dynamicStyles.sheet}>
-        <View style={dynamicStyles.profileSection}>
-          <View style={dynamicStyles.avatar}>
-            <Text style={staticDrawerStyles.avatarText}>{avatarInitials}</Text>
-          </View>
-          <View style={staticDrawerStyles.profileInfo}>
-            <Text style={dynamicStyles.userName}>{displayName}</Text>
-            <Text style={dynamicStyles.userEmail}>{emailLine}</Text>
-          </View>
-        </View>
-
-        <View style={dynamicStyles.divider} />
+        {isAuthed ? (
+          <>
+            <View style={dynamicStyles.profileSection}>
+              <View style={dynamicStyles.avatar}>
+                <Text style={staticDrawerStyles.avatarText}>
+                  {avatarInitials}
+                </Text>
+              </View>
+              <View style={staticDrawerStyles.profileInfo}>
+                <Text style={dynamicStyles.userName}>{displayName}</Text>
+                <Text style={dynamicStyles.userEmail}>{emailLine}</Text>
+              </View>
+            </View>
+            <View style={dynamicStyles.divider} />
+          </>
+        ) : (
+          <>
+            <View style={staticDrawerStyles.guestActions}>
+              <TouchableOpacity
+                style={dynamicStyles.guestBtnPrimary}
+                onPress={onLogin}
+                accessibilityRole="button"
+              >
+                <Text style={dynamicStyles.guestBtnPrimaryLabel}>
+                  {t('drawer.guest.login')}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={dynamicStyles.guestBtnOutline}
+                onPress={onRegister}
+                accessibilityRole="button"
+              >
+                <Text style={dynamicStyles.guestBtnOutlineLabel}>
+                  {t('drawer.guest.register')}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={dynamicStyles.divider} />
+          </>
+        )}
 
         <DrawerContentScrollView
           {...props}
@@ -66,12 +108,18 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
 
         <View style={staticDrawerStyles.footer}>
           <View style={dynamicStyles.divider} />
-          <TouchableOpacity style={staticDrawerStyles.footerItem} onPress={handleLogout}>
-            <Text style={dynamicStyles.footerIconGlyph}>⎋</Text>
-            <Text style={dynamicStyles.footerItemText}>
-              {t('drawerFooter.logout')}
-            </Text>
-          </TouchableOpacity>
+          <DrawerFooterSocials />
+          {isAuthed ? (
+            <TouchableOpacity
+              style={staticDrawerStyles.footerItem}
+              onPress={handleLogout}
+            >
+              <Text style={dynamicStyles.footerIconGlyph}>⎋</Text>
+              <Text style={dynamicStyles.footerItemText}>
+                {t('drawerFooter.logout')}
+              </Text>
+            </TouchableOpacity>
+          ) : null}
           <Text style={dynamicStyles.version}>
             {t('drawerFooter.version', { version: appVersion })}
           </Text>
@@ -80,3 +128,5 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
     </SafeAreaView>
   );
 });
+
+CustomDrawerContent.displayName = 'CustomDrawerContent';

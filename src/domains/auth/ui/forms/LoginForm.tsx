@@ -1,18 +1,19 @@
-import { Button } from '@react-navigation/elements';
-import * as React from 'react';
 import { Text } from '@/shared/ui/Text';
+import * as React from 'react';
 
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import type { LoginBodyType } from '@/domains/auth/model/apiTypes';
+import { loginSchema, type LoginFormType } from '@/domains/auth/model/schema';
+import { AuthTabs } from '@/domains/auth/ui/AuthTabs';
 import { EmailLoginForm } from '@/domains/auth/ui/forms/EmailLoginForm';
 import { MobileLoginForm } from '@/domains/auth/ui/forms/MobileLoginForm';
-import { InputField } from '@/ui/components/form/InputField';
-import { SelectField } from '@/domains/auth/ui/forms/SelectField';
-import { loginSchema, type LoginFormType } from '@/domains/auth/model/schema';
-import type { LoginBodyType } from '@/domains/auth/model/apiTypes';
 import { createLoginScreenStyles } from '@/domains/auth/ui/styles';
+import { Button } from '@/ui/components/Button';
+import { InputField } from '@/ui/components/form/InputField';
+import { defaultPhoneInputValue } from '@/ui/components/PhoneInput';
 import { useThemeColors } from '@/ui/theme';
 
 type Props = {
@@ -21,22 +22,27 @@ type Props = {
   onSubmit: (payload: LoginBodyType) => Promise<void> | void;
 };
 
+const IS_DOT_IR = process.env.REACT_NATIVE_IS_DOT_IR === 'ir';
+
 export function LoginForm({ isSubmitting, apiError, onSubmit }: Props) {
   const { t } = useTranslation();
   const colors = useThemeColors();
-  const s = createLoginScreenStyles(colors);
+  const s = React.useMemo(
+    () => createLoginScreenStyles(colors),
+    [colors],
+  );
   const form = useForm<LoginFormType>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       mode: 'email',
       email: '',
-      mobile: '',
+      mobile: defaultPhoneInputValue(),
       password: '',
     },
   });
   const mode = form.watch('mode');
   const email = form.watch('email') ?? '';
-  const mobile = form.watch('mobile') ?? '';
+  const mobile = form.watch('mobile');
   const password = form.watch('password') ?? '';
   form.register('email');
   form.register('mobile');
@@ -44,13 +50,15 @@ export function LoginForm({ isSubmitting, apiError, onSubmit }: Props) {
 
   React.useEffect(() => {
     if (mode === 'email') {
-      form.setValue('mobile', '', { shouldValidate: false });
+      form.setValue('mobile', defaultPhoneInputValue(), {
+        shouldValidate: false,
+      });
     } else {
       form.setValue('email', '', { shouldValidate: false });
     }
   }, [form, mode]);
 
-  const modeOptions = React.useMemo(
+  const tabs = React.useMemo(
     () => [
       { label: t('screens.login.enterWithEmail'), value: 'email' },
       { label: t('screens.login.enterWithMobile'), value: 'mobile' },
@@ -67,15 +75,17 @@ export function LoginForm({ isSubmitting, apiError, onSubmit }: Props) {
           ? (values.email ?? '').trim().toLowerCase()
           : undefined,
       mobile:
-        values.mode === 'mobile' ? (values.mobile ?? '').trim() : undefined,
+        values.mode === 'mobile'
+          ? values.mobile.dial.replace(/\D/g, '')
+          : undefined,
       remember: 1,
     });
   });
 
   return (
     <>
-      <SelectField
-        options={modeOptions}
+      <AuthTabs
+        tabs={tabs}
         value={mode}
         onChange={value =>
           form.setValue('mode', value as LoginFormType['mode'], {
@@ -101,7 +111,7 @@ export function LoginForm({ isSubmitting, apiError, onSubmit }: Props) {
       ) : (
         <MobileLoginForm
           value={mobile}
-          onChangeText={value =>
+          onChange={value =>
             form.setValue('mobile', value, {
               shouldValidate: true,
               shouldDirty: true,
@@ -110,14 +120,18 @@ export function LoginForm({ isSubmitting, apiError, onSubmit }: Props) {
           onBlur={() => {
             form.trigger('mobile').catch(() => {});
           }}
-          error={form.formState.errors.mobile?.message}
+          error={form.formState.errors.mobile?.dial?.message}
+          touched={Boolean(form.formState.touchedFields.mobile)}
+          disableDropdown={IS_DOT_IR}
+          defaultCountryIso={IS_DOT_IR ? 'ir' : undefined}
         />
       )}
 
       <InputField
         accessibilityLabel={t('screens.login.password')}
-        placeholder={t('screens.login.password')}
+        placeholder={t('screens.login.passwordPlaceholder')}
         secureTextEntry
+        forceInputLtr
         value={password}
         onChangeText={value =>
           form.setValue('password', value, {
@@ -138,11 +152,12 @@ export function LoginForm({ isSubmitting, apiError, onSubmit }: Props) {
         </Text>
       ) : null}
 
-      <Button disabled={isSubmitting} onPress={submit}>
-        {isSubmitting
-          ? t('screens.login.signingIn')
-          : t('screens.login.submit')}
-      </Button>
+      <Button
+        variant="filled"
+        title={t('screens.login.submit')}
+        onPress={submit}
+        loading={isSubmitting}
+      />
     </>
   );
 }

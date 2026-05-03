@@ -35,6 +35,8 @@ export const darkColors: ThemeColors = Object.freeze({
   onPrimary: surfaceDark.page,
   primarySoft: hexAlpha(palette.primary[300], 0.15),
   accent: palette.primary[300],
+  primaryBg: palette.primary[50],
+  primaryDark: palette.primary[600],
 
   error: feedback.errorBase,
   errorBg: feedback.errorBase,

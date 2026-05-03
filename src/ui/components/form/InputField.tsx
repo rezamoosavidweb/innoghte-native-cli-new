@@ -15,6 +15,8 @@ type Props = {
   secureTextEntry?: boolean;
   keyboardType?: 'default' | 'email-address' | 'phone-pad';
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
+  /** RTL placeholder + LTR typed text (email, mobile, password fields in Farsi UI) */
+  forceInputLtr?: boolean;
 };
 
 export function InputField({
@@ -27,9 +29,14 @@ export function InputField({
   secureTextEntry,
   keyboardType = 'default',
   autoCapitalize = 'none',
+  forceInputLtr = false,
 }: Props) {
   const colors = useThemeColors();
   const s = createFormFieldStyles(colors);
+
+  const textAlign = forceInputLtr
+    ? value.length > 0 ? 'left' : 'right'
+    : undefined;
 
   return (
     <>
@@ -43,7 +50,7 @@ export function InputField({
         onChangeText={onChangeText}
         onBlur={onBlur}
         secureTextEntry={secureTextEntry}
-        style={s.input}
+        style={[s.input, textAlign ? { textAlign } : undefined]}
       />
       {error ? <Text style={s.errorText}>{error}</Text> : null}
     </>

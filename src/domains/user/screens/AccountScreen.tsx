@@ -101,40 +101,43 @@ export const AccountScreen = () => {
       contentContainerStyle={flashListContentGutters.standard}
       keyboardShouldPersistTaps="handled"
     >
-      <View style={screenStyles.headerRow}>
-        <Text style={screenStyles.screenTitle}>
-          {t('screens.account.screenTitle')}
-        </Text>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={t('screens.account.edit')}
-          onPress={onEdit}
-          style={({ pressed }) => [
-            screenStyles.editBtn,
-            pressed ? screenStyles.editBtnPressed : null,
-          ]}
-        >
-          <Text style={screenStyles.editLabel}>{t('screens.account.edit')}</Text>
-        </Pressable>
-      </View>
+      <View style={screenStyles.card}>
+        <View style={screenStyles.headerRow}>
+          <Text style={screenStyles.screenTitle}>
+            {t('screens.account.screenTitle')}
+          </Text>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('screens.account.edit')}
+            onPress={onEdit}
+            style={({ pressed }) => [
+              screenStyles.editBtn,
+              pressed ? screenStyles.editBtnPressed : null,
+            ]}
+          >
+            <Text style={screenStyles.editLabel}>{t('screens.account.edit')}</Text>
+          </Pressable>
+        </View>
 
-      <AccountRow styles={screenStyles} label={t('screens.account.fullName')} value={profileUser.fullName || '—'} />
-      <AccountRowWithBadge
-        styles={screenStyles}
-        label={t('screens.account.email')}
-        value={profileUser.email || '—'}
-        verified={profileUser.isEmailVerified}
-        verifyChannel="email"
-        onVerify={onVerify}
-      />
-      <AccountRowWithBadge
-        styles={screenStyles}
-        label={t('screens.account.mobile')}
-        value={mobileShown || '—'}
-        verified={profileUser.isPhoneVerified}
-        verifyChannel="mobile"
-        onVerify={onVerify}
-      />
+        <AccountRow styles={screenStyles} label={t('screens.account.fullName')} value={profileUser.fullName || '—'} />
+        <AccountRowWithBadge
+          styles={screenStyles}
+          label={t('screens.account.email')}
+          value={profileUser.email || '—'}
+          verified={profileUser.isEmailVerified}
+          verifyChannel="email"
+          onVerify={onVerify}
+        />
+        <AccountRowWithBadge
+          styles={screenStyles}
+          label={t('screens.account.mobile')}
+          value={mobileShown || '—'}
+          verified={profileUser.isPhoneVerified}
+          verifyChannel="mobile"
+          onVerify={onVerify}
+          isLast
+        />
+      </View>
     </ScrollView>
   );
 };
@@ -145,15 +148,17 @@ type AccountRowProps = {
   styles: AccountScreenStyles;
   label: string;
   value: string;
+  isLast?: boolean;
 };
 
 const AccountRow = React.memo(function AccountRow({
   styles: s,
   label,
   value,
+  isLast = false,
 }: AccountRowProps) {
   return (
-    <View style={s.rowBlock}>
+    <View style={isLast ? s.rowBlockLast : s.rowBlock}>
       <Text style={s.rowLabelMuted}>{label}</Text>
       <Text selectable style={s.rowValue}>
         {value}
@@ -169,6 +174,7 @@ type AccountRowWithBadgeProps = {
   verified: boolean;
   verifyChannel: VerifyChannel;
   onVerify: (c: VerifyChannel) => void;
+  isLast?: boolean;
 };
 
 const AccountRowWithBadge = React.memo(function AccountRowWithBadge({
@@ -178,6 +184,7 @@ const AccountRowWithBadge = React.memo(function AccountRowWithBadge({
   verified,
   verifyChannel,
   onVerify,
+  isLast = false,
 }: AccountRowWithBadgeProps) {
   const { t } = useTranslation();
 
@@ -186,7 +193,7 @@ const AccountRowWithBadge = React.memo(function AccountRowWithBadge({
   }, [onVerify, verifyChannel]);
 
   return (
-    <View style={s.rowBlock}>
+    <View style={isLast ? s.rowBlockLast : s.rowBlock}>
       <Text style={s.rowLabelMuted}>{label}</Text>
       <View style={s.badgeRow}>
         <Text selectable style={s.badgeValue}>

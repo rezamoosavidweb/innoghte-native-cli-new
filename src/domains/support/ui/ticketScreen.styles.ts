@@ -22,6 +22,8 @@ export function createTicketScreenStyles(colors: Theme['colors']) {
           opacity: 0.85,
           lineHeight: fontSize.sm * 1.5,
           marginBottom: spacing.sm,
+          textAlign: 'right',
+          writingDirection: 'rtl',
         },
         headerRow: {
           flexDirection: 'row',
@@ -61,6 +63,8 @@ export function createTicketScreenStyles(colors: Theme['colors']) {
           fontSize: fontSize.base,
           fontWeight: fontWeight.semibold,
           color: colors.text,
+          textAlign: 'right',
+          writingDirection: 'rtl',
         },
         ticketStatusBadge: {
           flexShrink: 0,
@@ -125,11 +129,15 @@ export function createTicketScreenStyles(colors: Theme['colors']) {
           fontSize: fontSize.base,
           fontWeight: fontWeight.semibold,
           color: colors.text,
+          textAlign: 'right',
+          writingDirection: 'rtl',
         },
         ticketMeta: {
           fontSize: fontSize.sm,
           color: colors.text,
           opacity: 0.65,
+          textAlign: 'right',
+          writingDirection: 'rtl',
         },
         modalSurface: {
           marginHorizontal: spacing.md,
@@ -146,6 +154,8 @@ export function createTicketScreenStyles(colors: Theme['colors']) {
           fontWeight: fontWeight.semibold,
           color: colors.text,
           marginBottom: spacing.xs,
+          textAlign: 'right',
+          writingDirection: 'rtl',
         },
         input: {
           borderWidth: StyleSheet.hairlineWidth,
@@ -157,6 +167,8 @@ export function createTicketScreenStyles(colors: Theme['colors']) {
           color: colors.text,
           backgroundColor: colors.background,
           minHeight: 44,
+          textAlign: 'right',
+          writingDirection: 'rtl',
         },
         multiline: {
           minHeight: 120,
@@ -173,6 +185,7 @@ export function createTicketScreenStyles(colors: Theme['colors']) {
           fontSize: fontSize.base,
           fontWeight: fontWeight.bold,
           color: colors.background,
+          textAlign: 'center',
         },
         submitDisabled: {
           opacity: 0.45,
@@ -187,16 +200,21 @@ export function createTicketScreenStyles(colors: Theme['colors']) {
           fontSize: fontSize.sm,
           fontWeight: fontWeight.semibold,
           color: colors.text,
+          textAlign: 'right',
+          writingDirection: 'rtl',
         },
         bubbleBody: {
           fontSize: fontSize.base,
           color: colors.text,
           lineHeight: fontSize.base * 1.45,
+          textAlign: 'right',
+          writingDirection: 'rtl',
         },
         bubbleTime: {
           fontSize: fontSize.sm - 1,
           color: colors.text,
           opacity: 0.55,
+          textAlign: 'right',
         },
         replyRow: {
           gap: spacing.sm,

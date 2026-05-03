@@ -27,7 +27,10 @@ export const TicketForm = React.memo(function TicketForm({
   const theme = useTheme();
   const { colors } = theme;
   const semantic = pickSemantic(theme);
-  const styles = createTicketScreenStyles(colors);
+  const styles = React.useMemo(
+    () => createTicketScreenStyles(colors),
+    [colors],
+  );
   const placeholderColor = semantic.textMuted;
 
   const titleCtrl = useController({ control, name: 'title' });

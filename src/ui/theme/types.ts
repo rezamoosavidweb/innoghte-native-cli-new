@@ -46,6 +46,10 @@ export type ThemeColors = {
   onPrimary: string;
   /** Very translucent primary tint — selected states, highlight fills. */
   primarySoft: string;
+  /** background primary tint — text buttons */
+  primaryBg: string;
+  /** darker primary  — on press buttons */
+  primaryDark: string;
   /** Secondary accent (sand in light mode, primary-adjacent in dark). */
   accent: string;
 

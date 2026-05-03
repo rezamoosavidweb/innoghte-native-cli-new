@@ -4,7 +4,7 @@ import { Text } from '@/shared/ui/Text';
 
 export type GiveGiftLabeledFieldProps = {
   label: ReactNode;
-  labelStyle: TextStyle;
+  labelStyle?: TextStyle;
   error?: string;
   errorTextStyle: TextStyle;
   children: ReactNode;
@@ -21,7 +21,11 @@ export function GiveGiftLabeledField({
 }: GiveGiftLabeledFieldProps) {
   return (
     <View style={fieldWrapperStyle}>
-      <Text style={labelStyle}>{label}</Text>
+      {typeof label === 'string' ? (
+        <Text style={labelStyle}>{label}</Text>
+      ) : (
+        label
+      )}
       {children}
       {error ? <Text style={errorTextStyle}>{error}</Text> : null}
     </View>

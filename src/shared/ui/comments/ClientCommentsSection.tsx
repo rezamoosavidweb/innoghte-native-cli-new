@@ -130,12 +130,7 @@ function ClientCommentsSectionComponent({
     | undefined;
   const total = Number(pag?.total ?? pag?.total_items ?? 0);
   const per_page = Number(pag?.per_page ?? perPage);
-  const totalPage = React.useMemo(() => {
-    if (!per_page) {
-      return 0;
-    }
-    return Math.ceil(total / per_page);
-  }, [per_page, total]);
+  const totalPage = per_page ? Math.ceil(total / per_page) : 0;
 
   const onPageChange = React.useCallback((p: number) => {
     setCurrentPage(p);

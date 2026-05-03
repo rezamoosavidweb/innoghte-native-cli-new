@@ -1,14 +1,14 @@
+import { Text } from '@/shared/ui/Text';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import {Image, View} from 'react-native';
-import { Text } from '@/shared/ui/Text';
+import { Image, View } from 'react-native';
 
 import { UserInfoRow } from '@/domains/user/components/UserInfoRow';
 import type { ProfileHeaderUser } from '@/domains/user/model/profileHeaderUser';
 import { resolveProfileHeaderDisplayName } from '@/domains/user/model/profileHeaderUser';
 import type { ProfileHeaderStyleSet } from '@/domains/user/ui/profileScreen.styles';
-import type { VerifyChannel } from '@/shared/contracts/verification';
-import { useThemeColors } from '@/ui/theme';
+import HandHear from '@/assets/icons/hand-heart.svg';
+import { VerifyChannel } from '@/shared/contracts';
 
 export type ProfileHeaderProps = {
   profileUser: ProfileHeaderUser;
@@ -26,9 +26,9 @@ export const ProfileHeader = React.memo(function ProfileHeader({
   onStartVerify,
 }: ProfileHeaderProps) {
   const { t } = useTranslation();
-  const themeColors = useThemeColors();
   const displayName = resolveProfileHeaderDisplayName(profileUser);
   const needsVerificationLabel = t('screens.profile.needsVerification');
+  const verifiedLabel = t('screens.profile.verifiedLabel');
 
   return (
     <View style={s.surface}>
@@ -48,28 +48,29 @@ export const ProfileHeader = React.memo(function ProfileHeader({
           </View>
         )}
         <View style={s.nameColumn}>
-          <Text style={s.fullName} numberOfLines={2}>
-            {displayName}
-          </Text>
+          <View style={s.displayNameRow}>
+            <Text style={s.fullName} numberOfLines={2}>
+              {displayName}
+            </Text>
+            <HandHear />
+          </View>
           <View style={s.infoRows}>
             <UserInfoRow
-              label={t('screens.profile.email')}
               value={profileUser.email || '—'}
               verified={profileUser.isEmailVerified}
               verificationKind="email"
               onPressVerify={onStartVerify}
-              verifiedIconColor={themeColors.successText}
               needsVerificationLabel={needsVerificationLabel}
+              verifiedLabel={verifiedLabel}
               styles={s}
             />
             <UserInfoRow
-              label={t('screens.profile.mobile')}
               value={profileUser.phone || '—'}
               verified={profileUser.isPhoneVerified}
               verificationKind="mobile"
               onPressVerify={onStartVerify}
-              verifiedIconColor={themeColors.successText}
               needsVerificationLabel={needsVerificationLabel}
+              verifiedLabel={verifiedLabel}
               styles={s}
             />
           </View>

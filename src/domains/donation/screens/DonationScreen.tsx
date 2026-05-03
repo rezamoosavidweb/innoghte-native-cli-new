@@ -1,7 +1,6 @@
 import type { DrawerScreenProps } from '@react-navigation/drawer';
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
-import { useMemo } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import {
   KeyboardAvoidingView,
@@ -237,10 +236,7 @@ export const DonationScreen = React.memo(function DonationScreen({
 
   const s = useDonationScreenStyles(colors.background, semantic, isCustomAmount);
 
-  const isCheckoutLocked = useMemo(
-    () => isCheckoutProgressLocked(flow.status),
-    [flow.status],
-  );
+  const isCheckoutLocked = isCheckoutProgressLocked(flow.status);
 
   const isPayProcessing =
     donateMutation.isPending || isSubmitting || isCheckoutLocked;

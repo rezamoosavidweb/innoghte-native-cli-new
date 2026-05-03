@@ -31,6 +31,8 @@ export type GiveGiftStyles = {
   halfField: ViewStyle;
   fieldLabel: TextStyle;
   fieldLabelLg: TextStyle;
+  emailLabelBlock: ViewStyle;
+  emailHintDetail: TextStyle;
   emailHint: TextStyle;
   mobileDialInput: TextStyle;
   commentInput: TextStyle;
@@ -129,6 +131,18 @@ export function createGiveGiftStyles(
       writingDirection: 'rtl',
       fontSize: fontSize.lg,
       fontWeight: fontWeight.medium,
+    },
+    emailHintDetail: {
+      color: semanticPalette.textMuted,
+      fontSize: fontSize.sm,
+      marginTop: 4,
+      textAlign: 'right',
+      writingDirection: 'rtl',
+      lineHeight: 20,
+    },
+    emailLabelBlock: {
+      marginBottom: 6,
+      gap: 4,
     },
     emailHint: {
       color: GIVE_GIFT_EMAIL_HINT_HEX,

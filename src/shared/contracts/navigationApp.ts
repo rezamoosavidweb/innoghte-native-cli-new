@@ -32,6 +32,8 @@ export type DrawerParamList = {
   Events: undefined;
   Startup: undefined;
   Login: { redirectTo?: string; preserveState?: boolean } | undefined;
+  AuthEntry: undefined;
+  Register: undefined;
   Basket: { resumeCheckout?: boolean } | undefined;
   Podcast: undefined;
   Meditation: undefined;
@@ -41,6 +43,8 @@ export type DrawerParamList = {
   PrivateConsultation: undefined;
   Donation: DonationScreenParams | undefined;
   AboutUs: undefined;
+  /** Public contact form (OTP + ticket info). */
+  Contact: undefined;
   Collaboration: undefined;
   LiveMeetingOverview: undefined;
   /** Public course marketing / purchase — `courseId` matches list + API. */

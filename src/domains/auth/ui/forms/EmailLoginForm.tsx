@@ -16,8 +16,9 @@ export function EmailLoginForm({ value, onChangeText, onBlur, error }: Props) {
   return (
     <InputField
       accessibilityLabel={t('screens.login.email')}
-      placeholder={t('screens.login.email')}
+      placeholder={t('screens.login.emailPlaceholder')}
       keyboardType="email-address"
+      forceInputLtr
       value={value}
       onChangeText={onChangeText}
       onBlur={onBlur}

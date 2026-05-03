@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useForm } from 'react-hook-form';
 
 import {
@@ -7,16 +6,13 @@ import {
 } from '@/domains/user/model/giveGiftFormSchema';
 import { isDotIr } from '@/shared/config/resolveIsDotIr';
 
-export function useGiveGiftForm() {
-  const mobileDefaults = React.useMemo(
-    () => ({
-      dialCode: isDotIr ? '+98' : '+1',
-      countryCode: isDotIr ? 'ir' : 'us',
-      dial: '',
-    }),
-    [],
-  );
+const mobileDefaults = {
+  dialCode: isDotIr ? '+98' : '+1',
+  countryCode: isDotIr ? 'ir' : 'us',
+  dial: '',
+};
 
+export function useGiveGiftForm() {
   const form = useForm<GiveGiftFormType>({
     resolver: giveGiftFormResolver,
     mode: 'onBlur',

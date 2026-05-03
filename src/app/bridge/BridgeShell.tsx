@@ -1,3 +1,4 @@
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { useShallow } from 'zustand/react/shallow';
 import * as React from 'react';
 import { useColorScheme } from 'react-native';
@@ -97,10 +98,12 @@ export function BridgeShell({ children }: BridgeShellProps) {
   return (
     <ErrorBoundary>
       <AppThemeProvider colorScheme={colorScheme}>
-        <StatusBarChromeProvider>
-          <ShellDrawerProvider value={shellDrawer}>{children}</ShellDrawerProvider>
-          <ToastHost />
-        </StatusBarChromeProvider>
+        <BottomSheetModalProvider>
+          <StatusBarChromeProvider>
+            <ShellDrawerProvider value={shellDrawer}>{children}</ShellDrawerProvider>
+            <ToastHost />
+          </StatusBarChromeProvider>
+        </BottomSheetModalProvider>
       </AppThemeProvider>
     </ErrorBoundary>
   );

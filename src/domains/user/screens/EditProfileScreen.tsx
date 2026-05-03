@@ -130,11 +130,12 @@ export const EditProfileScreen = () => {
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={flashListContentGutters.standard}
       >
-        <Text style={screenStyles.sectionTitle}>
-          {t('screens.editProfile.sectionTitle')}
-        </Text>
+        <View style={screenStyles.card}>
+          <Text style={screenStyles.sectionTitle}>
+            {t('screens.editProfile.sectionTitle')}
+          </Text>
 
-        <View style={screenStyles.stackLg}>
+          <View style={screenStyles.stackLg}>
           <View style={screenStyles.stackSm}>
             <Text style={screenStyles.fieldLabel}>
               {t('screens.editProfile.avatar')}
@@ -177,7 +178,7 @@ export const EditProfileScreen = () => {
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
-                    style={formField.input}
+                    style={[screenStyles.textInput]}
                   />
                   {errors.full_name?.message ? (
                     <Text style={formField.errorText}>
@@ -201,7 +202,11 @@ export const EditProfileScreen = () => {
                   editable={false}
                   accessibilityLabel={t('screens.editProfile.email')}
                   value={value}
-                  style={[formField.input, screenStyles.inputDisabled]}
+                  style={[
+                    screenStyles.textInput,
+                    screenStyles.textInputLtr,
+                    screenStyles.inputDisabled,
+                  ]}
                   autoCapitalize="none"
                   keyboardType="email-address"
                 />
@@ -223,7 +228,11 @@ export const EditProfileScreen = () => {
                     editable={false}
                     accessibilityLabel={t('screens.editProfile.mobile')}
                     value={value.dial}
-                    style={[formField.input, screenStyles.inputDisabled]}
+                    style={[
+                      screenStyles.textInput,
+                      screenStyles.textInputLtr,
+                      screenStyles.inputDisabled,
+                    ]}
                     keyboardType="phone-pad"
                   />
                   {errors.mobile?.dial?.message ? (
@@ -257,6 +266,7 @@ export const EditProfileScreen = () => {
               ? t('screens.editProfile.saving')
               : t('screens.editProfile.save')}
           </Button>
+        </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

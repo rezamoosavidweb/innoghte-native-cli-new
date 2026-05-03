@@ -55,6 +55,7 @@ const EXTRA_DRAWER_LABELS = {
   donation: 'drawer.donation',
   basket: 'drawer.basket',
   aboutUs: 'drawer.aboutUs',
+  contact: 'drawer.contact',
   collaboration: 'drawer.collaboration',
   liveMeetingOverview: 'drawer.liveMeetingOverview',
   search: 'drawer.search',
@@ -73,6 +74,8 @@ const EXTRA_DRAWER_LABELS = {
   copyright: 'drawer.copyright',
   courseDetail: 'drawer.courseDetail',
   coursePlayer: 'drawer.coursePlayer',
+  authEntry: 'drawer.authEntry',
+  register: 'drawer.register',
 } as const;
 
 export type ExtraDrawerLeafKey = keyof typeof EXTRA_DRAWER_LABELS;

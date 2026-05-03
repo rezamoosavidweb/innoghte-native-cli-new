@@ -140,46 +140,49 @@ export const SecurityScreen = () => {
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={flashListContentGutters.standard}
       >
-        <Text style={screenStyles.sectionHeading}>
-          {t('screens.security.sessionsTitle')}
-        </Text>
-
-        {devicesQuery.isPending ? (
-          <Text style={screenStyles.devicesMuted}>
-            {t('screens.security.devicesLoading')}
+        <View style={screenStyles.sectionCard}>
+          <Text style={screenStyles.sectionHeading}>
+            {t('screens.security.sessionsTitle')}
           </Text>
-        ) : devicesQuery.isError ? (
-          <Text style={screenStyles.devicesError}>
-            {t('screens.security.devicesError')}
-          </Text>
-        ) : devices.length === 0 ? (
-          <Text style={screenStyles.devicesMuted}>
-            {t('screens.security.devicesEmpty')}
-          </Text>
-        ) : (
-          devices.map(d => (
-            <DeviceSessionRow
-              key={d.id}
-              device={d}
-              deactivateBusy={deactivateBusy}
-              labels={rowLabels}
-              mutedColor={uiColors.textMuted}
-              textColor={colors.text}
-              borderColor={colors.border}
-              dangerBg={hexAlpha(uiColors.errorText, 0.2)}
-              dangerText={uiColors.errorText}
-              successBg={hexAlpha(uiColors.successText, 0.2)}
-              successText={uiColors.successText}
-              onDeactivate={onDeactivate}
-            />
-          ))
-        )}
 
-        <Text style={screenStyles.sectionHeadingSpaced}>
-          {t('screens.security.passwordCardTitle')}
-        </Text>
+          {devicesQuery.isPending ? (
+            <Text style={screenStyles.devicesMuted}>
+              {t('screens.security.devicesLoading')}
+            </Text>
+          ) : devicesQuery.isError ? (
+            <Text style={screenStyles.devicesError}>
+              {t('screens.security.devicesError')}
+            </Text>
+          ) : devices.length === 0 ? (
+            <Text style={screenStyles.devicesMuted}>
+              {t('screens.security.devicesEmpty')}
+            </Text>
+          ) : (
+            devices.map(d => (
+              <DeviceSessionRow
+                key={d.id}
+                device={d}
+                deactivateBusy={deactivateBusy}
+                labels={rowLabels}
+                mutedColor={uiColors.textMuted}
+                textColor={colors.text}
+                borderColor={colors.border}
+                dangerBg={hexAlpha(uiColors.errorText, 0.2)}
+                dangerText={uiColors.errorText}
+                successBg={hexAlpha(uiColors.successText, 0.2)}
+                successText={uiColors.successText}
+                onDeactivate={onDeactivate}
+              />
+            ))
+          )}
+        </View>
 
-        {!showPasswordForm ? (
+        <View style={screenStyles.sectionCard}>
+          <Text style={screenStyles.sectionHeadingSpaced}>
+            {t('screens.security.passwordCardTitle')}
+          </Text>
+
+          {!showPasswordForm ? (
           <View style={screenStyles.passwordSummaryRow}>
             <View style={screenStyles.passwordSummaryTextBlock}>
               <Text style={screenStyles.passwordSummaryLabel}>
@@ -305,6 +308,7 @@ export const SecurityScreen = () => {
             ) : null}
           </View>
         )}
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );

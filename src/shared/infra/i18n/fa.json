@@ -28,6 +28,8 @@
     "events": "رویدادها",
     "startup": "شروع",
     "login": "ورود",
+    "authEntry": "ورود و عضویت",
+    "register": "ثبت‌نام",
     "podcast": "پادکست",
     "meditation": "مدیتیشن",
     "reading": "مطالعه",
@@ -37,6 +39,7 @@
     "donation": "کمک مالی",
     "basket": "سبد خرید",
     "aboutUs": "دربارهٔ ما",
+    "contact": "تماس با ما",
     "collaboration": "همکاری",
     "liveMeetingOverview": "جلسه زنده (معرفی)",
     "search": "جستجو",
@@ -55,6 +58,10 @@
     "copyright": "حق نشر",
     "courseDetail": "جزئیات دوره",
     "coursePlayer": "پخش دوره",
+    "guest": {
+      "login": "ورود",
+      "register": "ثبت‌نام"
+    },
     "user": {
       "signedOut": "وارد نشده‌اید",
       "signInHint": "ورود از منوی تب «پروفایل»",
@@ -123,7 +130,7 @@
       "error": "بارگذاری آلبوم‌ها ناموفق بود.",
       "empty": "آلبومی در دسترس نیست."
     },
-    "servicesHub": {
+    "myCoursesHub": {
       "subtitle": "دوره‌ها، آلبوم‌ها و بیشتر — همان مرکز اپ قدیمی.",
       "comingSoonTitle": "به‌زودی",
       "comingSoonMessage": "این بخش هنوز منتقل نشده است.",
@@ -191,7 +198,8 @@
         "security": "امنیت",
         "editProfile": "ویرایش پروفایل"
       },
-      "needsVerification": "نیاز به تأیید"
+      "needsVerification": "نیاز به تأیید",
+      "verifiedLabel": " تأیید شده"
     },
     "gift": {
       "title": "هدیه",
@@ -221,6 +229,34 @@
     "financialSupport": {
       "title": "حمایت مالی",
       "body": "برای پشتیبانی مالی و مسیرهای پرداخت به‌زودی به سکوی اصلی وصل می‌شود."
+    },
+    "transactions": {
+      "loading": "در حال بارگذاری سوابق خرید…",
+      "error": "بارگذاری سوابق خرید انجام نشد.",
+      "empty": "هنوز سفارشی ثبت نشده است.",
+      "typeLabel": "نوع",
+      "dateLabel": "تاریخ",
+      "orderType": {
+        "package": "پکیج",
+        "course": "دوره"
+      },
+      "columns": {
+        "products": "محصولات",
+        "paid": "پرداختی",
+        "status": "وضعیت",
+        "details": "جزئیات"
+      },
+      "details": {
+        "title": "سفارش {{orderNumber}}",
+        "tracking": "کد پیگیری",
+        "id": "شناسه",
+        "price": "قیمت",
+        "paymentStatus": "وضعیت پرداخت",
+        "discount": "تخفیف",
+        "total": "قیمت نهایی",
+        "downloadInvoice": "دانلود فاکتور",
+        "closeA11y": "بستن"
+      }
     },
     "support": {
       "states": {
@@ -343,6 +379,62 @@
       "signIn": "قبلاً ثبت‌نام کرده‌ام",
       "footer": "نفس بکش. اینجا هستی."
     },
+    "contact": {
+      "navTitle": "تماس با ما",
+      "lead": "انتقاد و یا پیشنهادتان را پذیرا هستیم.",
+      "supportIntro": "پشتیبانی وب‌سایت به سه روش ارائه می‌شود: چت هوش مصنوعی، ارسال تیکت (پس از ورود)، و فرم زیر.",
+      "openTickets": "ارسال تیکت",
+      "hintPhoneEmail": "موبایل و ایمیل را دقیق وارد کنید؛ پاسخ از طریق پیامک و ایمیل ارسال می‌شود.",
+      "fullName": "نام و نام خانوادگی",
+      "email": "ایمیل",
+      "mobile": "موبایل (با کد کشور)",
+      "subject": "موضوع",
+      "category": "دسته‌بندی",
+      "pickCategory": "انتخاب کنید…",
+      "message": "شرح درخواست",
+      "messagePh": "اینجا بنویسید…",
+      "submit": "ارسال درخواست",
+      "submitBusy": "لطفاً صبر کنید…",
+      "footnoteSupportHours": "پشتیبانی از شنبه تا چهارشنبه ۸ تا ۱۶؛ پنجشنبه، جمعه و تعطیلات فعال نیست.",
+      "footnoteReply": "حداکثر تا ۷۲ ساعت پس از بررسی پاسخ ارسال می‌شود.",
+      "otpTitle": "کد تأیید",
+      "otpHint": "کد ارسال‌شده به ایمیل را وارد کنید.",
+      "otpResend": "ارسال مجدد کد",
+      "otpConfirm": "تأیید و ارسال",
+      "otpInvalid": "کد نامعتبر است.",
+      "success": "درخواست ثبت شد.",
+      "errorGeneric": "خطا در ارسال. دوباره تلاش کنید.",
+      "cancel": "انصراف"
+    },
+    "collaboration": {
+      "navTitle": "همکاری با ما",
+      "jobsTitle": "آگهی‌های فعال استخدام",
+      "jobsEmpty": "در حال حاضر آگهی فعالی ثبت نشده است.",
+      "formTitle": "درخواست همکاری",
+      "name": "نام",
+      "family": "نام خانوادگی",
+      "email": "ایمیل",
+      "mobile": "موبایل",
+      "birthYear": "سال تولد",
+      "gender": "جنسیت",
+      "marital": "وضعیت تأهل",
+      "experience": "سابقه کاری",
+      "unit": "واحد",
+      "city": "شهر",
+      "address": "آدرس",
+      "description": "توضیحات",
+      "submit": "ارسال درخواست",
+      "success": "رزومه با موفقیت ارسال شد.",
+      "error": "خطا در ارسال درخواست",
+      "resumePick": "انتخاب فایل رزومه (تصویر)",
+      "resumeName": "فایلی انتخاب نشده"
+    },
+    "legal": {
+      "termsTitle": "قوانین و مقررات",
+      "termsLead": "به نام خدا؛ قوانین است استفاده از وب‌سایت این نقطه به شرح زیر است:",
+      "copyrightTitle": "حق نشر و اصالت",
+      "copyrightLead": "انسان برای رشد نیازمند پرداخت بهایی است؛ نه تنها مالی، بلکه احترام، توجه و مسئولیت‌پذیری."
+    },
     "account": {
       "title": "حساب کاربری",
       "subtitle": "جزئیات حساب و تأیید تماس",
@@ -427,17 +519,57 @@
     },
     "login": {
       "title": "ورود",
-      "subtitle": "فرم دمو از اپ قدیمی (هنوز بک‌اند وصل نیست).",
+      "subtitle": "با حساب کاربری خود وارد شوید.",
       "enterWithEmail": "ورود با ایمیل",
       "enterWithMobile": "ورود با موبایل",
       "email": "ایمیل",
+      "emailPlaceholder": "ایمیل خود را وارد کنید",
       "mobile": "موبایل",
+      "mobilePlaceholder": "موبایل خود را وارد کنید",
       "password": "رمز عبور",
-      "submit": "ادامه",
+      "passwordPlaceholder": "رمز عبور خود را وارد کنید",
+      "submit": "ورود",
       "signingIn": "در حال ورود…",
       "credentialsHelper": "با اعتبارنامهٔ اپ خود ادامه دهید.",
       "demoTitle": "دمو",
-      "demoMessage": "احراز هویت در این نسخه وصل نشده است."
+      "demoMessage": "احراز هویت در این نسخه وصل نشده است.",
+      "noAccount": "اکانت نداری؟",
+      "registerLink": "ثبت نام"
+    },
+    "authEntry": {
+      "title": "ورود و عضویت",
+      "login": "ورود به حساب کاربری",
+      "register": "ثبت نام جدید"
+    },
+    "register": {
+      "title": "ثبت نام",
+      "subtitle": "حساب کاربری جدید بسازید.",
+      "name": "نام",
+      "family": "نام خانوادگی",
+      "email": "ایمیل",
+      "mobile": "موبایل",
+      "password": "رمز عبور",
+      "confirmPassword": "تکرار رمز عبور",
+      "acceptTerms": "قوانین و مقررات وب‌سایت را خوانده‌ام و می‌پذیرم.",
+      "refCode": "کد معرف (اختیاری)",
+      "submit": "ثبت نام",
+      "registering": "در حال ثبت نام…",
+      "credentialsHelper": "اطلاعات خود را وارد کنید.",
+      "hasAccount": "قبلاً ثبت‌نام کرده‌ای؟",
+      "loginLink": "ورود",
+      "otp": {
+        "title": "تأیید هویت",
+        "subtitle": "کد ارسال‌شده به ایمیل و موبایل خود را وارد کنید.",
+        "codeLabel": "کد تأیید",
+        "submit": "تأیید",
+        "verifying": "در حال تأیید…",
+        "notReceived": "کد را دریافت نکرده‌اید؟",
+        "resend": "ارسال مجدد",
+        "resendIn": "ارسال مجدد در",
+        "editInfo": "ویرایش اطلاعات",
+        "errorGeneric": "مشکلی پیش آمد. لطفاً دوباره تلاش کنید.",
+        "resendError": "ارسال مجدد ناموفق بود. لطفاً دوباره تلاش کنید."
+      }
     }
   },
   "events": {

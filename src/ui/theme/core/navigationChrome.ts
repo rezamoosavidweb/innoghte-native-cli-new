@@ -32,14 +32,9 @@ export const drawerChrome = StyleSheet.create({
     width: '78%',
     backgroundColor: 'transparent',
   },
-  radiusFromEnd: {
-    borderTopLeftRadius: radius['2xl'],
-    borderBottomLeftRadius: radius['2xl'],
-  },
-  radiusFromStart: {
-    borderTopRightRadius: radius['2xl'],
-    borderBottomRightRadius: radius['2xl'],
-  },
+  /** Rounded edge is the side opposite the screen edge; drawer chrome stays square so inner sheet controls radius. */
+  radiusFromEnd: {},
+  radiusFromStart: {},
   drawerLabel: {
     marginStart: -spacing.sm,
     fontSize: fontSize.base,

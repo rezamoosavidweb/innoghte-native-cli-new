@@ -117,12 +117,12 @@ function buildProfileHeaderStyles(
       color: colors.text,
     },
     infoRows: {
-      gap: spacing.xs,
+      // gap: spacing.xs,
     },
     userInfoRow: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: spacing.sm,
+      // gap: spacing.sm,
       minHeight: fontSize.base + fontSize.sm + spacing.xs,
     },
     userInfoTextBlock: {
@@ -138,7 +138,7 @@ function buildProfileHeaderStyles(
       letterSpacing: 0.3,
     },
     userInfoValue: {
-      fontSize: fontSize.sm,
+      fontSize: fontSize.xs,
       color: sSemantic.textSecondary,
       writingDirection: 'ltr',
     },
@@ -166,9 +166,24 @@ function buildProfileHeaderStyles(
       color: palette.primary[500],
       textAlign: 'right',
     },
+    verifiedLabel: {
+      fontSize: fontSize.xs,
+      fontWeight: fontWeight.semibold,
+      color: '#ffffff',
+      backgroundColor: palette.success[800],
+      textAlign: 'right',
+      paddingVertical: spacing.xs,
+      paddingHorizontal: spacing.sm,
+      borderRadius: radius.sm,
+    },
     actionRow: {
       flexDirection: 'row',
       alignItems: 'stretch',
+      gap: spacing.sm,
+    },
+    displayNameRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
       gap: spacing.sm,
     },
     actionButton: {
@@ -203,8 +218,8 @@ function buildProfileMenuStyles(
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingVertical: 14,
-      paddingHorizontal: 14,
+      paddingVertical: 10,
+      paddingHorizontal: 10,
       borderRadius: radius.lg,
       borderWidth: StyleSheet.hairlineWidth,
       backgroundColor: themeColors.card,
@@ -219,7 +234,7 @@ function buildProfileMenuStyles(
     },
     menuIcon: { fontSize: fontSize['2xl'] },
     menuTitle: {
-      fontSize: fontSize.base,
+      fontSize: fontSize.sm,
       fontWeight: fontWeight.semibold,
       color: themeColors.text,
     },
@@ -240,16 +255,22 @@ function buildProfileMenuStyles(
       gap: spacing.lg,
     },
     sectionSpacing: {
-      marginTop: spacing.sm,
+      marginTop: spacing.xs,
     },
   };
 }
 
-export function createProfileShellStyles(colors: Theme['colors'], theme: Theme) {
+export function createProfileShellStyles(
+  colors: Theme['colors'],
+  theme: Theme,
+) {
   return buildProfileShellStyles(colors, pickSemantic(theme));
 }
 
-export function createProfileHeaderStyles(colors: Theme['colors'], theme: Theme) {
+export function createProfileHeaderStyles(
+  colors: Theme['colors'],
+  theme: Theme,
+) {
   return buildProfileHeaderStyles(colors, pickSemantic(theme));
 }
 

@@ -55,19 +55,9 @@ const ProfileScreenComponent = (_props: Props) => {
   } = useCurrentUser();
   const user = userRes?.data;
 
-  const fallbackDisplayName = React.useMemo(
-    () => t('drawer.user.fallbackName'),
-    [t],
-  );
-
   const { profileUser, initials, avatarUri } = useProfileDerivedState(
     user,
-    fallbackDisplayName,
-  );
-
-  const loadingMessage = React.useMemo(
-    () => t('screens.profile.loading'),
-    [t],
+    t('drawer.user.fallbackName'),
   );
 
   const shellConfig = React.useMemo(
@@ -76,14 +66,14 @@ const ProfileScreenComponent = (_props: Props) => {
       scaffoldSubtitleStyle: scaffoldStyles.subtitle,
       scaffoldSectionTitleStyle: scaffoldStyles.sectionTitle,
       activityColor: colors.text,
-      loadingMessage,
+      loadingMessage: t('screens.profile.loading'),
     }),
     [
       colors.text,
-      loadingMessage,
       scaffoldStyles.sectionTitle,
       scaffoldStyles.subtitle,
       shellStyles,
+      t,
     ],
   );
 

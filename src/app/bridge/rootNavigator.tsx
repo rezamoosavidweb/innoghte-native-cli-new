@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import type { Theme } from '@react-navigation/native';
+import { CommonActions, type Theme } from '@react-navigation/native';
 import * as React from 'react';
 import { Text } from '@/shared/ui/Text';
 
@@ -9,7 +9,7 @@ import { useDrawerGlyphStyles } from '@/app/bridge/drawerGlyph.styles';
 import { CollapsibleHeaderExampleScreen } from '@/app/examples/CollapsibleHeaderExampleScreen';
 import { LegacyMenuPlaceholderScreen } from '@/app/navigation/LegacyMenuPlaceholderScreen';
 import { StartupScreen } from '@/app/startup/StartupScreen';
-import { AuthService, LoginScreen, VerifyScreen } from '@/domains/auth';
+import { AuthService, AuthEntryScreen, LoginScreen, RegisterScreen, VerifyScreen } from '@/domains/auth';
 import {
   CourseDetailScreen,
   CoursePlayerScreen,
@@ -29,9 +29,13 @@ import {
   TicketDetailScreen,
   TicketListScreen,
 } from '@/domains/support';
+import { ContactScreen } from '@/domains/contact';
+import { CollaborationScreen } from '@/domains/collaboration';
+import { TermsScreen, CopyrightScreen } from '@/domains/legal';
 import { SettingsScreen } from '@/domains/settings';
 import { BasketScreen } from '@/domains/basket';
 import { DonationScreen } from '@/domains/donation';
+import { TransactionsScreen } from '@/domains/transactions';
 import {
   AccountScreen,
   EditProfileScreen,
@@ -93,8 +97,8 @@ DrawerGlyph.displayName = 'DrawerGlyph';
 
 const drawerIcon =
   (symbol: string) =>
-  ({ color, size }: { color: string; size: number }) =>
-    <DrawerGlyph symbol={symbol} color={color} size={size} />;
+    ({ color, size }: { color: string; size: number }) =>
+      <DrawerGlyph symbol={symbol} color={color} size={size} />;
 
 function mainTabsScreenOptions({
   route,
@@ -111,7 +115,6 @@ function mainTabsScreenOptions({
     lazy: true,
     unmountOnBlur: false,
     headerLeft: () => <DrawerMenuButton />,
-    // headerShown: false,
     headerStyle: { backgroundColor: s.headerBg },
     headerTintColor: s.headerForeground,
     headerTitleStyle: mainTabHeaderTitleStyle,
@@ -191,7 +194,8 @@ const mainTabs = createBottomTabNavigator<TabParamList>({
         tabPress: e => {
           if (!AuthService.isAuthenticated()) {
             e.preventDefault();
-            protectedNavigate(navigation, 'Profile');
+            AuthService.setPendingNavigation({ name: 'Profile' });
+            navigation.dispatch(CommonActions.navigate({ name: 'AuthEntry' }));
           }
         },
       }),
@@ -260,6 +264,7 @@ function protectedAuthDrawerScreen(
 }
 
 export const rootNavigator = createDrawerNavigator<DrawerParamList>({
+  backBehavior: 'history',
   drawerContent: props => <CustomDrawerContent {...props} />,
   screenOptions: ({ theme }) => {
     const s = pickSemantic(theme);
@@ -373,7 +378,26 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
     },
     Login: {
       screen: LoginScreen,
-      options: () => extraLeafOptions('login', '🔑'),
+      options: () => ({
+        ...extraLeafOptions('login', '🔑'),
+        headerShown: false
+      }),
+
+    },
+    AuthEntry: {
+      screen: AuthEntryScreen,
+      options: () => ({
+        ...extraLeafOptions('authEntry', '👤'),
+        drawerItemStyle: { display: 'none' },
+        headerShown: false
+      }),
+    },
+    Register: {
+      screen: RegisterScreen,
+      options: () => ({
+        ...extraLeafOptions('register', '📝'),
+        drawerItemStyle: { display: 'none' },
+      }),
     },
     Podcast: {
       screen: LegacyMenuPlaceholderScreen,
@@ -411,8 +435,12 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
       screen: LegacyMenuPlaceholderScreen,
       options: () => extraLeafOptions('aboutUs', '🏛️'),
     },
+    Contact: {
+      screen: ContactScreen,
+      options: () => extraLeafOptions('contact', '📧'),
+    },
     Collaboration: {
-      screen: LegacyMenuPlaceholderScreen,
+      screen: CollaborationScreen,
       options: () => extraLeafOptions('collaboration', '🤝'),
     },
     LiveMeetingOverview: {
@@ -494,7 +522,7 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
       }),
     },
     PurchaseHistory: {
-      screen: SupportLegalPlaceholderScreen,
+      screen: TransactionsScreen,
       options: () => ({
         ...extraLeafOptions('purchaseHistory', '🧾'),
         drawerItemStyle: { display: 'none' },
@@ -508,14 +536,14 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
       }),
     },
     Terms: {
-      screen: SupportLegalPlaceholderScreen,
+      screen: TermsScreen,
       options: () => ({
         ...extraLeafOptions('terms', '📜'),
         drawerItemStyle: { display: 'none' },
       }),
     },
     Copyright: {
-      screen: SupportLegalPlaceholderScreen,
+      screen: CopyrightScreen,
       options: () => ({
         ...extraLeafOptions('copyright', '©️'),
         drawerItemStyle: { display: 'none' },

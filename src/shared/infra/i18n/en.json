@@ -27,6 +27,8 @@
     "events": "Events",
     "startup": "Startup",
     "login": "Sign in",
+    "authEntry": "Sign in / Sign up",
+    "register": "Register",
     "podcast": "Podcast",
     "meditation": "Meditation",
     "reading": "Reading",
@@ -36,6 +38,7 @@
     "donation": "Donation",
     "basket": "Basket",
     "aboutUs": "About us",
+    "contact": "Contact us",
     "collaboration": "Collaboration",
     "liveMeetingOverview": "Live meeting (overview)",
     "search": "Search",
@@ -54,6 +57,10 @@
     "copyright": "Copyright",
     "courseDetail": "Course details",
     "coursePlayer": "Course player",
+    "guest": {
+      "login": "Sign in",
+      "register": "Sign up"
+    },
     "user": {
       "signedOut": "Signed out",
       "signInHint": "Sign in from the Profile tab",
@@ -190,7 +197,8 @@
         "security": "Security",
         "editProfile": "Edit profile"
       },
-      "needsVerification": "Needs verification"
+      "needsVerification": "Needs verification",
+      "verifiedLabel":"Verified"
     },
     "gift": {
       "title": "Gift",
@@ -220,6 +228,34 @@
     "financialSupport": {
       "title": "Financial support",
       "body": "Donation rails will connect here as the commerce stack lands."
+    },
+    "transactions": {
+      "loading": "Loading purchase history…",
+      "error": "Could not load purchase history.",
+      "empty": "No orders yet.",
+      "typeLabel": "Type",
+      "dateLabel": "Date",
+      "orderType": {
+        "package": "Package",
+        "course": "Course"
+      },
+      "columns": {
+        "products": "Products",
+        "paid": "Paid",
+        "status": "Status",
+        "details": "Details"
+      },
+      "details": {
+        "title": "Order {{orderNumber}}",
+        "tracking": "Tracking code",
+        "id": "ID",
+        "price": "Price",
+        "paymentStatus": "Payment status",
+        "discount": "Discount",
+        "total": "Total",
+        "downloadInvoice": "Download invoice",
+        "closeA11y": "Close"
+      }
     },
     "support": {
       "states": {
@@ -342,6 +378,62 @@
       "signIn": "I already have an account",
       "footer": "Breathe in. Breathe out. You are here."
     },
+    "contact": {
+      "navTitle": "Contact us",
+      "lead": "We welcome your feedback and suggestions.",
+      "supportIntro": "Support is available via AI chat, tickets (after sign-in), and the form below.",
+      "openTickets": "Open tickets",
+      "hintPhoneEmail": "Enter a correct phone and email; we reply by SMS and email.",
+      "fullName": "Full name",
+      "email": "Email",
+      "mobile": "Mobile (with country code)",
+      "subject": "Subject",
+      "category": "Category",
+      "pickCategory": "Choose…",
+      "message": "Message",
+      "messagePh": "Write here…",
+      "submit": "Submit request",
+      "submitBusy": "Please wait…",
+      "footnoteSupportHours": "Support Sat–Wed 8–16 (Iran); Thu/Fri/holidays closed.",
+      "footnoteReply": "Replies are sent within 72 hours after review.",
+      "otpTitle": "Verification code",
+      "otpHint": "Enter the code sent to your email.",
+      "otpResend": "Resend code",
+      "otpConfirm": "Verify and send",
+      "otpInvalid": "Invalid code.",
+      "success": "Request submitted.",
+      "errorGeneric": "Something went wrong. Try again.",
+      "cancel": "Cancel"
+    },
+    "collaboration": {
+      "navTitle": "Collaborate with us",
+      "jobsTitle": "Open positions",
+      "jobsEmpty": "No open listings at the moment.",
+      "formTitle": "Application",
+      "name": "First name",
+      "family": "Last name",
+      "email": "Email",
+      "mobile": "Mobile",
+      "birthYear": "Birth year",
+      "gender": "Gender",
+      "marital": "Marital status",
+      "experience": "Work experience",
+      "unit": "Department",
+      "city": "City",
+      "address": "Address",
+      "description": "Description",
+      "submit": "Submit application",
+      "success": "Application sent successfully.",
+      "error": "Could not submit application",
+      "resumePick": "Pick résumé (image)",
+      "resumeName": "No file selected"
+    },
+    "legal": {
+      "termsTitle": "Terms and conditions",
+      "termsLead": "Thank you for choosing our platform. Key terms are outlined below.",
+      "copyrightTitle": "Copyright & authenticity",
+      "copyrightLead": "Growth requires a fair exchange—not only money, but respect, attention, and responsibility."
+    },
     "account": {
       "title": "Account",
       "subtitle": "Account details and verification",
@@ -426,17 +518,54 @@
     },
     "login": {
       "title": "Sign in",
-      "subtitle": "Demo form migrated from the legacy app (no backend yet).",
+      "subtitle": "Sign in to your account.",
       "enterWithEmail": "Sign in with email",
       "enterWithMobile": "Sign in with mobile",
       "email": "Email",
       "mobile": "Mobile",
       "password": "Password",
-      "submit": "Continue",
+      "submit": "Sign in",
       "signingIn": "Signing in…",
       "credentialsHelper": "Use your app credentials to continue.",
       "demoTitle": "Demo",
-      "demoMessage": "Auth is not wired in this build."
+      "demoMessage": "Auth is not wired in this build.",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Sign up"
+    },
+    "authEntry": {
+      "title": "Sign in / Sign up",
+      "login": "Sign in to your account",
+      "register": "Create new account"
+    },
+    "register": {
+      "title": "Create account",
+      "subtitle": "Fill in your details to get started.",
+      "name": "First name",
+      "family": "Last name",
+      "email": "Email",
+      "mobile": "Mobile",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "acceptTerms": "I have read and accept the terms and conditions.",
+      "refCode": "Referral code (optional)",
+      "submit": "Create account",
+      "registering": "Creating account…",
+      "credentialsHelper": "Fill in your details to continue.",
+      "hasAccount": "Already have an account?",
+      "loginLink": "Sign in",
+      "otp": {
+        "title": "Verify your account",
+        "subtitle": "Enter the code sent to your email and mobile.",
+        "codeLabel": "Verification code",
+        "submit": "Verify",
+        "verifying": "Verifying…",
+        "notReceived": "Didn't receive the code?",
+        "resend": "Resend",
+        "resendIn": "Resend in",
+        "editInfo": "Edit info",
+        "errorGeneric": "Something went wrong. Please try again.",
+        "resendError": "Resend failed. Please try again."
+      }
     }
   },
   "events": {

@@ -9,39 +9,43 @@ import { useAuthStore } from '@/domains/auth/model/auth.store';
 import { resetAuth401LoginNavigationGuard } from '@/shared/infra/auth401/loginNavigationGuard';
 import { withKyAuth401Context } from '@/shared/infra/auth401/kyContext';
 import { endpoints } from '@/shared/infra/http/endpoints';
-import { getApiClient } from '@/shared/infra/http';
+import { fireAndForget, getApiClient } from '@/shared/infra/http';
 import { parseJsonResponse } from '@/shared/infra/http/parseJson';
 import type {
+  CheckotpBodyType,
   LoginBodyType,
   LoginResponse,
   RegisterBodyType,
   RegisterResponse,
+  ResendVerifyOtpBodyType,
   UserResponseType,
 } from '@/domains/auth/model/apiTypes';
+
+function applyAuthToken(token: string | undefined): void {
+  if (!token) return;
+  useAuthStore.getState().setAuth({ accessToken: token });
+  resetAuth401LoginNavigationGuard();
+  fireAndForget(queryClient.invalidateQueries({ queryKey: AUTH_USER_QUERY_KEY }));
+}
 
 export async function login(body: LoginBodyType): Promise<LoginResponse> {
   const response = await parseJsonResponse(
     getApiClient().post(endpoints.auth.login, { json: body }),
     loginResponseSchema,
   );
-  const token = response.data?.access_token;
-  if (token) {
-    useAuthStore.getState().setAuth({ accessToken: token });
-    resetAuth401LoginNavigationGuard();
-    queryClient
-      .invalidateQueries({ queryKey: AUTH_USER_QUERY_KEY })
-      .catch(() => {});
-  }
+  applyAuthToken(response.data?.access_token);
   return response;
 }
 
 export async function register(
   body: RegisterBodyType,
 ): Promise<RegisterResponse> {
-  return parseJsonResponse(
+  const response = await parseJsonResponse(
     getApiClient().post(endpoints.auth.register, { json: body }),
     registerResponseSchema,
   );
+  applyAuthToken(response.data?.access_token);
+  return response;
 }
 
 export async function getUser(): Promise<UserResponseType> {
@@ -55,6 +59,14 @@ export async function getUser(): Promise<UserResponseType> {
     ),
     userResponseSchema,
   );
+}
+
+export async function checkOtp(body: CheckotpBodyType): Promise<void> {
+  await getApiClient().post(endpoints.auth.checkOtp, { json: body });
+}
+
+export async function resendVerifyOtp(body: ResendVerifyOtpBodyType): Promise<void> {
+  await getApiClient().post(endpoints.auth.resendVerifyOtp, { json: body });
 }
 
 export async function logout(): Promise<void> {

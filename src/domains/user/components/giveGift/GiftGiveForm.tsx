@@ -58,15 +58,13 @@ export const GiftGiveForm = React.memo(function GiftGiveForm({
   const uiColors = useThemeColors();
   const styles = createGiveGiftStyles(colors, uiColors, semantic);
 
-  const emailFieldLabel = (
-    <>
-      ایمیل هدیه گیرنده (
-      <Text style={styles.emailHint}>
-        ایمیل دریافت‌کننده هدیه را وارد کنید، در صورتی که آدرس ایمیل را اشتباه وارد کنید مسئولیت عدم{'\n'}
-        {'                        '}تحویل هدیه بر عهده شماست.
+  const emailBlock = (
+    <View style={styles.emailLabelBlock}>
+      <Text style={styles.fieldLabel}>ایمیل هدیه گیرنده</Text>
+      <Text style={styles.emailHintDetail}>
+        ایمیل دریافت‌کننده را دقیق وارد کنید؛ در صورت خطا، مسئولیت تحویل بر عهده شماست.
       </Text>
-      )
-    </>
+    </View>
   );
 
   return (
@@ -130,7 +128,7 @@ export const GiftGiveForm = React.memo(function GiftGiveForm({
           name="email"
           render={({ field }) => (
             <GiveGiftLabeledField
-              label={emailFieldLabel}
+              label={emailBlock}
               labelStyle={styles.fieldLabel}
               error={errors.email?.message}
               errorTextStyle={formField.errorText}
@@ -145,7 +143,8 @@ export const GiftGiveForm = React.memo(function GiftGiveForm({
                 placeholder="ایمیل هدیه گیرنده"
                 placeholderTextColor={semantic.textMuted}
                 style={formField.input}
-                textAlign="right"
+                textAlign="left"
+                autoCorrect={false}
               />
             </GiveGiftLabeledField>
           )}

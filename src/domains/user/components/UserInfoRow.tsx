@@ -1,19 +1,17 @@
-import * as React from 'react';
-import {Pressable, View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
+import * as React from 'react';
+import { Pressable, View } from 'react-native';
 
-import type { VerifyChannel } from '@/shared/contracts/verification';
-import { VerifiedIcon } from '@/domains/user/components/VerifiedIcon';
 import type { ProfileHeaderStyleSet } from '@/domains/user/ui/profileScreen.styles';
+import type { VerifyChannel } from '@/shared/contracts/verification';
 
 export type UserInfoRowProps = {
-  label: string;
   value: string;
   verified: boolean;
   verificationKind: VerifyChannel;
   onPressVerify: (channel: VerifyChannel) => void;
-  verifiedIconColor: string;
   needsVerificationLabel: string;
+  verifiedLabel: string;
   styles: ProfileHeaderStyleSet;
 };
 
@@ -21,13 +19,12 @@ export type UserInfoRowProps = {
  * Contact row: label + value; verified SVG badge or “needs verification” action.
  */
 export const UserInfoRow = React.memo(function UserInfoRow({
-  label,
   value,
   verified,
   verificationKind,
   onPressVerify,
-  verifiedIconColor,
   needsVerificationLabel,
+  verifiedLabel,
   styles: s,
 }: UserInfoRowProps) {
   const onPressNeedsVerification = React.useCallback(() => {
@@ -37,18 +34,15 @@ export const UserInfoRow = React.memo(function UserInfoRow({
   return (
     <View style={s.userInfoRow}>
       <View style={s.userInfoTextBlock}>
-        <Text style={s.userInfoLabel}>{label}</Text>
         <Text style={s.userInfoValue} selectable>
           {value}
         </Text>
       </View>
       <View style={s.userInfoTrailing}>
         {verified ? (
-          <VerifiedIcon
-            color={verifiedIconColor}
-            size={20}
-            accessibilityLabel={`${label} verified`}
-          />
+          <Text style={s.verifiedLabel} numberOfLines={2}>
+            {verifiedLabel}
+          </Text>
         ) : (
           <Pressable
             accessibilityRole="button"

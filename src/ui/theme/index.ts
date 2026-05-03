@@ -60,6 +60,7 @@ export {
   type SectionDividerStyleSet,
 } from '@/ui/theme/core/sectionDivider';
 export { cardShadow } from '@/ui/theme/core/shadows';
+export { createCardStyle } from '@/ui/theme/core/card.styles';
 
 export { hexAlpha } from '@/ui/theme/utils/colorUtils';
 export { pickSemantic } from '@/ui/theme/utils/pickSemantic';

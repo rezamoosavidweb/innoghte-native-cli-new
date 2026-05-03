@@ -2,6 +2,7 @@ import type { Theme } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 
 import type { ThemeColors } from '@/ui/theme/types';
+import { createCardStyle } from '@/ui/theme/core/card.styles';
 import { radius } from '@/ui/theme/core/radius';
 import { spacing } from '@/ui/theme/core/spacing';
 import { fontSize } from '@/ui/theme/core/typography';
@@ -21,9 +22,13 @@ export function createAccountScreenStyles(
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      marginBottom: spacing.lg,
+      marginBottom: 0,
       gap: spacing.md,
+      paddingBottom: spacing.md,
+      borderBottomWidth: StyleSheet.hairlineWidth,
+      borderBottomColor: navColors.border,
     },
+    card: createCardStyle(navColors, { gap: spacing.md, marginBottom: spacing.lg }),
     screenTitle: {
       fontSize: fontSize.lg,
       fontWeight: '700',
@@ -38,7 +43,15 @@ export function createAccountScreenStyles(
     },
     editBtnPressed: { opacity: 0.85 },
     editLabel: { color: navColors.primary, fontWeight: '700' },
-    rowBlock: { marginBottom: spacing.lg },
+    rowBlock: {
+      paddingVertical: spacing.md,
+      borderBottomWidth: StyleSheet.hairlineWidth,
+      borderBottomColor: hexAlpha(navColors.border, 0.75),
+    },
+    rowBlockLast: {
+      paddingVertical: spacing.md,
+      borderBottomWidth: 0,
+    },
     rowLabelMuted: {
       color: ui.textMuted,
       fontWeight: '700',

@@ -12,12 +12,16 @@ import {
   View
 } from 'react-native';
 import { Text } from '@/shared/ui/Text';
+import { SafeHtmlContent } from '@/shared/ui/html';
 
 import {
   useReplyToTicketMutation,
   useTicketDetail,
 } from '@/domains/support/hooks/useTicketDetail';
-import type { TicketThreadAuthorRole } from '@/domains/support/model/ticket.types';
+import type {
+  TicketThreadAuthorRole,
+  TicketThreadMessage,
+} from '@/domains/support/model/ticket.types';
 import { createTicketScreenStyles } from '@/domains/support/ui/ticketScreen.styles';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { formatTsIso } from '@/shared/utils/formatTsIso';
@@ -29,6 +33,34 @@ import {
 
 type Props = DrawerScreenProps<DrawerParamList, 'TicketDetailScreen'>;
 
+const TicketMessageBubble = React.memo(function TicketMessageBubble({
+  msg,
+  authorLabel,
+  ticketStyles,
+  language,
+}: {
+  msg: TicketThreadMessage;
+  authorLabel: (role: TicketThreadAuthorRole) => string;
+  ticketStyles: ReturnType<typeof createTicketScreenStyles>;
+  language: string;
+}) {
+  return (
+    <View style={ticketStyles.bubbleRow}>
+      <Text style={ticketStyles.bubbleAuthor}>
+        {authorLabel(msg.authorRole)}
+      </Text>
+      <SafeHtmlContent
+        html={msg.body}
+        style={ticketStyles.bubbleBody}
+        selectable
+      />
+      <Text style={ticketStyles.bubbleTime}>
+        {formatTsIso(msg.createdAt, language)}
+      </Text>
+    </View>
+  );
+});
+
 export const TicketDetailScreen = React.memo(function TicketDetailScreen({
   route,
 }: Props) {
@@ -37,8 +69,14 @@ export const TicketDetailScreen = React.memo(function TicketDetailScreen({
   const theme = useTheme();
   const { colors } = theme;
   const semantic = pickSemantic(theme);
-  const shell = createNavScreenShellStyles(colors);
-  const ticketStyles = createTicketScreenStyles(colors);
+  const shell = React.useMemo(
+    () => createNavScreenShellStyles(colors),
+    [colors],
+  );
+  const ticketStyles = React.useMemo(
+    () => createTicketScreenStyles(colors),
+    [colors],
+  );
 
   const {
     data: detail,
@@ -119,7 +157,7 @@ export const TicketDetailScreen = React.memo(function TicketDetailScreen({
           ticketStyles.scrollContent,
         ]}
       >
-        <Text style={ticketStyles.ticketTitle}>{detail.title}</Text>
+        <SafeHtmlContent html={detail.title} style={ticketStyles.ticketTitle} />
         <Text style={ticketStyles.ticketMeta}>
           #{detail.ticketNumber} · {detail.status}
         </Text>
@@ -129,19 +167,17 @@ export const TicketDetailScreen = React.memo(function TicketDetailScreen({
           })}
         </Text>
         {detail.description.length > 0 ? (
-          <Text style={ticketStyles.notice}>{detail.description}</Text>
+          <SafeHtmlContent html={detail.description} style={ticketStyles.notice} />
         ) : null}
         {/* TODO: Replace with FlashList when ticket volume increases */}
         {detail.messages.map(msg => (
-          <View key={msg.id} style={ticketStyles.bubbleRow}>
-            <Text style={ticketStyles.bubbleAuthor}>
-              {authorLabel(msg.authorRole)}
-            </Text>
-            <Text style={ticketStyles.bubbleBody}>{msg.body}</Text>
-            <Text style={ticketStyles.bubbleTime}>
-              {formatTsIso(msg.createdAt, i18n.language)}
-            </Text>
-          </View>
+          <TicketMessageBubble
+            key={msg.id}
+            msg={msg}
+            authorLabel={authorLabel}
+            ticketStyles={ticketStyles}
+            language={i18n.language}
+          />
         ))}
         <View style={ticketStyles.replyRow}>
           <Text style={ticketStyles.label}>

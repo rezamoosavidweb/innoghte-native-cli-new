@@ -40,8 +40,14 @@ export const CreateTicketScreen = React.memo(function CreateTicketScreen(
   const { t } = useTranslation();
   const { colors } = useTheme();
   const navigation = useAppNavigation();
-  const shell = createNavScreenShellStyles(colors);
-  const ticketStyles = createTicketScreenStyles(colors);
+  const shell = React.useMemo(
+    () => createNavScreenShellStyles(colors),
+    [colors],
+  );
+  const ticketStyles = React.useMemo(
+    () => createTicketScreenStyles(colors),
+    [colors],
+  );
   const createMutation = useCreateTicketMutation();
 
   const form = useForm<CreateTicketFields>({

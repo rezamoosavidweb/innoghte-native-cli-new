@@ -1,21 +1,18 @@
 import { StyleSheet } from 'react-native';
 
-import {
-  fontSize,
-  fontWeight,
-  lineHeight,
-  radius,
-  spacing,
-} from '@/ui/theme';
+import { fontSize, fontWeight, lineHeight, radius, spacing } from '@/ui/theme';
 import type { ThemeColors } from '@/ui/theme/types';
 
-export function createLoginScreenStyles(themeColors: ThemeColors) {
+export function createLoginScreenStyles(colors: ThemeColors) {
   return StyleSheet.create({
-    flex: { flex: 1, backgroundColor: themeColors.background },
+    flex: { flex: 1 },
+    overlay: {
+      ...StyleSheet.absoluteFill,
+    },
     inner: {
       flex: 1,
       padding: spacing.xl,
-      justifyContent: 'center',
+      justifyContent: 'flex-end',
       gap: spacing.md,
       maxWidth: 400,
       alignSelf: 'center',
@@ -25,7 +22,7 @@ export function createLoginScreenStyles(themeColors: ThemeColors) {
       fontSize: 26,
       fontWeight: fontWeight.bold,
       textAlign: 'center',
-      color: themeColors.text,
+      color: '#fff',
     },
     sub: {
       fontSize: fontSize.md,
@@ -33,7 +30,7 @@ export function createLoginScreenStyles(themeColors: ThemeColors) {
       textAlign: 'center',
       opacity: 0.8,
       marginBottom: spacing.sm,
-      color: themeColors.text,
+      color: '#fff',
     },
     input: {
       borderWidth: StyleSheet.hairlineWidth,
@@ -41,9 +38,9 @@ export function createLoginScreenStyles(themeColors: ThemeColors) {
       paddingHorizontal: 14,
       paddingVertical: spacing.md,
       fontSize: fontSize.base,
-      borderColor: themeColors.border,
-      color: themeColors.text,
-      backgroundColor: themeColors.inputBackground,
+      borderColor: colors.border,
+      color: colors.text,
+      backgroundColor: colors.inputBackground,
     },
     row: {
       flexDirection: 'row',
@@ -52,30 +49,48 @@ export function createLoginScreenStyles(themeColors: ThemeColors) {
     modeButton: {
       flex: 1,
       borderWidth: StyleSheet.hairlineWidth,
-      borderColor: themeColors.border,
+      borderColor: colors.border,
       borderRadius: radius.lg - 4,
       paddingVertical: spacing.sm,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: themeColors.card,
+      backgroundColor: colors.card,
     },
     modeButtonActive: {
-      borderColor: themeColors.primary,
+      borderColor: colors.primary,
     },
     modeText: {
-      color: themeColors.text,
+      color: colors.text,
       fontSize: fontSize.md,
       fontWeight: fontWeight.semibold,
     },
     helperText: {
-      color: themeColors.text,
+      color: colors.text,
       opacity: 0.7,
       fontSize: fontSize.sm,
     },
     errorText: {
-      color: themeColors.errorText,
+      color: colors.errorText,
       fontSize: fontSize.sm,
       lineHeight: lineHeight.normal,
+    },
+    registerCta: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: spacing.xs,
+      marginTop: spacing.sm,
+    },
+    registerCtaText: {
+      color: 'rgba(255,255,255,0.8)',
+      fontSize: fontSize.sm,
+    },
+    logoContainer: {
+      position: 'absolute',
+      top: 48,
+      left: 0,
+      right: 0,
+      alignItems: 'center',
     },
   });
 }
