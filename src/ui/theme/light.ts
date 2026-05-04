@@ -35,7 +35,7 @@ const primary = palette.primary[300]; // #FF984C
  */
 const lightOverrides: Partial<ThemeColors> = {
   // ── Surfaces ───────────────────────────────────────────────────────────
-  background:       '#FAFAF9',          // stone-50: near-white warm page
+  background:       '#F3F2F0',          // stone-50: near-white warm page
   surface:          '#FFFFFF',          // pure white: sheets, modals, inputs
   surfaceSecondary: '#F2F1EF',          // recessed section bands / sidebar
   card:             '#FFFFFF',          // navigation card role

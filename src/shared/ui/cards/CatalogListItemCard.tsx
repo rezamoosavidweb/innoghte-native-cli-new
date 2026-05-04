@@ -83,16 +83,13 @@ const CatalogListItemCardComponent = ({
       <View style={s.actionsRow}>
         {cartSlot}
         {showSecondaryButton && (
-        <Button
-          layout="auto"
-          variant="outlined"
-          title={secondaryButtonText}
-          onPress={onPressSecondary}
-          style={s.buttonOutlined}
-          contentStyle={{ width: '100%' }}
-        >
-          <Text style={s.buttonOutlinedText}>{secondaryButtonText}</Text>
-        </Button>
+          <Button
+            layout="auto"
+            variant="outlined"
+            title={secondaryButtonText}
+            onPress={onPressSecondary}
+            style={s.secondaryBtn}
+          />
         )}
       </View>
     </View>

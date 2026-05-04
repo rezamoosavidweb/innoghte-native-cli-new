@@ -126,14 +126,9 @@ export function buildProductListCardStyles(
       justifyContent: 'center',
       backgroundColor: themeColors.primary,
     },
-    buttonOutlined: {
+    secondaryBtn: {
       flex: 1,
-      borderRadius: radius.lg - 2,
-      paddingVertical: spacing.md,
       alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: StyleSheet.hairlineWidth,
-      borderColor: themeColors.primary,
     },
     buttonSuccess: {
       flex: 1,

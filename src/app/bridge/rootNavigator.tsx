@@ -182,6 +182,7 @@ function mainTabsScreenOptions({
 }
 
 const mainTabs = createBottomTabNavigator<TabParamList>({
+  backBehavior: 'history',
   screenOptions: mainTabsScreenOptions,
   screens: {
     Home: {
