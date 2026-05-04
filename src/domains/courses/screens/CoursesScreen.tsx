@@ -60,20 +60,16 @@ const CoursesScreenComponent = () => {
 
   const { t } = useTranslation();
 
-  const estimatedItemSize = React.useMemo(
-    () =>
-      Math.max(
-        80,
-        Math.round(flashListEstimatedItemSize.course * perf.estimatedItemSizeFactor),
-      ),
-    [perf.estimatedItemSizeFactor],
+  const estimatedItemSize = Math.max(
+    80,
+    Math.round(flashListEstimatedItemSize.course * perf.estimatedItemSizeFactor),
   );
 
   const showFullBleedLoading = isPending;
 
   const isEmpty = isSuccess && flatData.length === 0;
 
-  const refreshing = Boolean(isSuccess && flatData.length > 0 && isRefetching);
+  const refreshing = isSuccess && flatData.length > 0 && isRefetching;
 
   const refresh = React.useCallback(() => {
     queryClient
@@ -92,16 +88,6 @@ const CoursesScreenComponent = () => {
     fetchNextPage().catch(() => {});
   }, [fetchNextPage, shouldSuppressEndReached]);
 
-  const refreshControl = React.useMemo(
-    () => <RefreshControl refreshing={refreshing} onRefresh={refresh} />,
-    [refreshing, refresh],
-  );
-
-  const listFooter = React.useMemo(
-    () => <ListFooterLoader visible={isFetchingNextPage} />,
-    [isFetchingNextPage],
-  );
-
   const renderList = React.useCallback(() => {
     return (
       <FlashList<Course>
@@ -118,8 +104,8 @@ const CoursesScreenComponent = () => {
         {...scrollPropsForFlashList}
         scrollEventThrottle={perf.scrollEventThrottle}
         decelerationRate={perf.decelerationRate}
-        ListFooterComponent={listFooter}
-        refreshControl={refreshControl}
+        ListFooterComponent={<ListFooterLoader visible={isFetchingNextPage} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
       />
     );
   }, [
@@ -127,13 +113,14 @@ const CoursesScreenComponent = () => {
     estimatedItemSize,
     flatData,
     handleEndReached,
-    listFooter,
-    scrollPropsForFlashList,
+    isFetchingNextPage,
+    perf.decelerationRate,
     perf.onEndReachedThreshold,
     perf.scrollEventThrottle,
-    perf.decelerationRate,
-    refreshControl,
+    refresh,
+    refreshing,
     renderCourseItem,
+    scrollPropsForFlashList,
   ]);
 
   const retryOrRefetch = React.useCallback(() => {

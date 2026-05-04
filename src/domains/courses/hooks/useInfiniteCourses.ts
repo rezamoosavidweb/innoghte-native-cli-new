@@ -1,4 +1,4 @@
-import { useAppInfiniteList } from '@/shared/lib/infiniteList';
+import { buildScrollMemoryKey, useAppInfiniteList } from '@/shared/lib/infiniteList';
 
 import {
   fetchCoursesPage,
@@ -32,19 +32,13 @@ function getCoursesNextPageParam(
   return current + 1;
 }
 
-function buildCoursesScrollMemoryKey(
-  filters?: CoursesInfiniteListFilters,
-): string {
-  const keyParts = coursesKeys.infiniteList(filters);
-  return `scroll:list:${JSON.stringify(keyParts)}`;
-}
-
 /**
  * Infinite public courses feed — uses {@link useAppInfiniteList}.
  */
 export function useInfiniteCourses(filters?: CoursesInfiniteListFilters) {
   const categoryId = filters?.categoryId;
   const perPage = filters?.perPage ?? DEFAULT_PER_PAGE;
+  const queryKey = coursesKeys.infiniteList(filters);
 
   return useAppInfiniteList<
     Course,
@@ -52,12 +46,12 @@ export function useInfiniteCourses(filters?: CoursesInfiniteListFilters) {
     number,
     ReturnType<typeof coursesKeys.infiniteList>
   >({
-    queryKey: coursesKeys.infiniteList(filters),
+    queryKey,
     queryFn: ({ pageParam }) =>
       fetchCoursesPage(categoryId, pageParam as number, perPage),
     initialPageParam: 1,
     getNextPageParam: (last) => getCoursesNextPageParam(last),
     staleTime: STALE_TIME_MS,
-    scrollMemoryKey: buildCoursesScrollMemoryKey(filters),
+    scrollMemoryKey: buildScrollMemoryKey(queryKey),
   });
 }

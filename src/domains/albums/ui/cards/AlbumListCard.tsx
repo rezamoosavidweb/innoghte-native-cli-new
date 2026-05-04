@@ -5,7 +5,10 @@ import { useTranslation } from 'react-i18next';
 
 import { Text } from '@/shared/ui/Text';
 
-import { formatPriceForApp } from '@/shared/infra/i18n/formatLocaleNumbers';
+import {
+  formatNumberForApp,
+  formatPriceForApp,
+} from '@/shared/infra/i18n/formatLocaleNumbers';
 import { CartMainButtons } from '@/shared/ui/cart/CartMainButtons';
 import type { ProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
 import { createProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
@@ -65,7 +68,7 @@ const AlbumListCardComponent = ({ album }: AlbumListCardProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const { colors } = theme;
-  const s = createProductListCardStyles(colors, theme);
+  const s = React.useMemo(() => createProductListCardStyles(colors, theme), [colors, theme]);
   const navigation = useAppNavigation();
 
   const onPressPrimary = React.useCallback(() => {
@@ -90,10 +93,17 @@ const AlbumListCardComponent = ({ album }: AlbumListCardProps) => {
           value={<AlbumTypeBadge isPackage={!!album.package} s={s} />}
           s={s}
         />
+        {album.itemsCount !== undefined ? (
+          <AlbumInfoRow
+            label={t('screens.albums.itemsCountLabel')}
+            value={formatNumberForApp(album.itemsCount)}
+            s={s}
+          />
+        ) : null}
         <AlbumInfoRow label={t('courses.price')} value={displayPrice} s={s} />
       </>
     ),
-    [album.package, displayPrice, s, t],
+    [album.itemsCount, album.package, displayPrice, s, t],
   );
 
   const cartSlot = React.useMemo(

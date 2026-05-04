@@ -1,6 +1,21 @@
 /** Distinct from courses query keys; avoids cache collisions with other lists. */
 export const ALBUMS_QUERY_KEY = ['albums', 'catalog'] as const;
 
+/** Filters for authenticated / catalog album infinite list (pagination in TanStack Query). */
+export type AlbumsInfiniteListFilters = {
+  categoryId?: number;
+  perPage?: number;
+};
+
+export const albumsKeys = {
+  all: ['albums'] as const,
+  catalog: ALBUMS_QUERY_KEY,
+  infiniteList: (filters?: AlbumsInfiniteListFilters) => {
+    const f = filters ?? {};
+    return [...albumsKeys.all, 'infiniteList', f.categoryId ?? null, f.perPage ?? null] as const;
+  },
+} as const;
+
 export type PublicAlbumTracksListFilters = {
   categoryId?: number;
   page?: number;

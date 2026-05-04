@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { apiPaginationResponseFieldSchema } from '@/shared/contracts/pagination.schema';
+
 const albumItemSchema = z.record(z.string(), z.unknown());
 
 /** Permissive envelope — full item shape is normalized by `mapAlbumItem`. */
@@ -12,7 +14,22 @@ export const albumsListResponseSchema = z.union([
     .passthrough(),
 ]);
 
+/**
+ * Paginated or legacy single-shot album catalog — same query params as public
+ * courses lists (`category_id`, `page`, `per_page`).
+ */
+export const albumsCatalogPageResponseSchema = z.union([
+  z.array(albumItemSchema),
+  z.looseObject({
+    message: z.string().optional(),
+    data: z.array(albumItemSchema).optional(),
+    pagination: apiPaginationResponseFieldSchema,
+  }),
+]);
+
 export type AlbumsListResponse = z.infer<typeof albumsListResponseSchema>;
+
+export type AlbumsCatalogPageResponse = z.infer<typeof albumsCatalogPageResponseSchema>;
 
 const publicCourseMediaSchema = z
   .object({

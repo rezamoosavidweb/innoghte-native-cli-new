@@ -149,7 +149,8 @@
       "error": "بارگذاری آلبوم‌ها ناموفق بود.",
       "empty": "آلبومی در دسترس نیست.",
       "viewAlbum": "مشاهده آلبوم",
-      "moreInformation": "اطلاعات بیشتر"
+      "moreInformation": "اطلاعات بیشتر",
+      "itemsCountLabel": "تعداد"
     },
     "myCoursesHub": {
       "subtitle": "دوره‌ها، آلبوم‌ها و بیشتر — همان مرکز اپ قدیمی.",

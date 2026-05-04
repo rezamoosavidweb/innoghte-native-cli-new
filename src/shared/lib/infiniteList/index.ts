@@ -1,3 +1,4 @@
+export { buildScrollMemoryKey } from '@/shared/lib/infiniteList/buildScrollMemoryKey';
 export {
   defaultGetNextPageParam,
   type PageWithPagination,

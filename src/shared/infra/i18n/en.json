@@ -147,7 +147,8 @@
       "error": "Could not load albums.",
       "empty": "No albums available yet.",
       "viewAlbum": "View album",
-      "moreInformation": "More info"
+      "moreInformation": "More info",
+      "itemsCountLabel": "Items"
     },
     "myCoursesHub": {
       "subtitle": "Browse courses, albums, and more — same hub as the legacy app.",
