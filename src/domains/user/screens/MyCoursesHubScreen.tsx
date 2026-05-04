@@ -33,10 +33,10 @@ const MyCoursesHubScreenComponent = () => {
     (row: HubRowConfig) => {
       switch (row.action) {
         case 'courses':
-          navigation.navigate('PublicCourses');
+          navigation.navigate('Courses');
           return;
         case 'albums':
-          navigation.navigate('PublicAlbums');
+          navigation.navigate('Albums');
           return;
         case 'help':
           navigation.navigate('Help');

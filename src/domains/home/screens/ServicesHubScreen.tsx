@@ -48,10 +48,10 @@ const ServicesHubMenuRow = React.memo(function ServicesHubMenuRow({
   const onPress = React.useCallback(() => {
     switch (row.action) {
       case 'courses':
-        navigation.navigate('PublicCourses');
+        navigation.navigate('Courses');
         return;
       case 'albums':
-        navigation.navigate('PublicAlbums');
+        navigation.navigate('Albums');
         return;
       default:
         return;

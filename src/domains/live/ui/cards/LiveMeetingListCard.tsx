@@ -99,13 +99,9 @@ const LiveMeetingListCardComponent = ({ item }: Props) => {
               variant="outlined"
               title={t('courses.moreInformation')}
               onPress={noop}
-              style={s.buttonOutlined}
+              style={s.secondaryBtn}
               contentStyle={{ width: '100%' }}
-            >
-              <Text style={s.buttonOutlinedText}>
-                {t('courses.moreInformation')}
-              </Text>
-            </Button>
+            />
             <Button
               layout="auto"
               variant="filled"

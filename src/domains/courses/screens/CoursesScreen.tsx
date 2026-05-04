@@ -7,12 +7,10 @@ import { useTranslation } from 'react-i18next';
 
 import { RefreshControl, View } from 'react-native';
 
-import { CourseListCard } from '@/domains/courses/ui/cards/CourseListCard';
+import type { CatalogItem } from '@/shared/catalog/model/entities';
 
-import type { Course } from '@/domains/courses/model/entities';
-
-import { useInfiniteCourses } from '@/domains/courses/hooks/useInfiniteCourses';
-import { coursesKeys } from '@/domains/courses/model/queryKeys';
+import { useInfiniteCatalogItems } from '@/shared/catalog/hooks/useInfiniteCatalogItems';
+import { catalogKeys } from '@/shared/catalog/model/queryKeys';
 
 import { useListPerformanceProfile } from '@/shared/infra/device/listPerformanceProfile';
 
@@ -25,6 +23,9 @@ import {
   flashListEstimatedItemSize,
   flashListRowSeparators,
 } from '@/ui/theme';
+import { CourseListCard } from '@/shared/ui/cards/CourseListCard';
+
+const COURSES_CATEGORY_ID = 1;
 
 const Separator = React.memo(function CoursesListSeparator() {
   return <View style={flashListRowSeparators.h12} />;
@@ -32,7 +33,7 @@ const Separator = React.memo(function CoursesListSeparator() {
 
 Separator.displayName = 'CoursesListSeparator';
 
-function keyExtractor(item: Course): string {
+function keyExtractor(item: CatalogItem): string {
   return String(item.id);
 }
 
@@ -40,7 +41,7 @@ const CoursesScreenComponent = () => {
   const perf = useListPerformanceProfile();
   const queryClient = useQueryClient();
 
-  const renderCourseItem = React.useCallback<ListRenderItem<Course>>(
+  const renderCourseItem = React.useCallback<ListRenderItem<CatalogItem>>(
     ({ item }) => <CourseListCard course={item} />,
     [],
   );
@@ -56,13 +57,15 @@ const CoursesScreenComponent = () => {
     isFetchingNextPage,
     isRefetching,
     flashListScrollMemory,
-  } = useInfiniteCourses({ categoryId: 1 });
+  } = useInfiniteCatalogItems({ categoryId: COURSES_CATEGORY_ID });
 
   const { t } = useTranslation();
 
   const estimatedItemSize = Math.max(
     80,
-    Math.round(flashListEstimatedItemSize.course * perf.estimatedItemSizeFactor),
+    Math.round(
+      flashListEstimatedItemSize.course * perf.estimatedItemSizeFactor,
+    ),
   );
 
   const showFullBleedLoading = isPending;
@@ -73,7 +76,7 @@ const CoursesScreenComponent = () => {
 
   const refresh = React.useCallback(() => {
     queryClient
-      .invalidateQueries({ queryKey: coursesKeys.all })
+      .invalidateQueries({ queryKey: catalogKeys.all })
       .catch(() => {});
   }, [queryClient]);
 
@@ -90,7 +93,7 @@ const CoursesScreenComponent = () => {
 
   const renderList = React.useCallback(() => {
     return (
-      <FlashList<Course>
+      <FlashList<CatalogItem>
         ref={captureRef}
         keyExtractor={keyExtractor}
         renderItem={renderCourseItem}
@@ -105,7 +108,9 @@ const CoursesScreenComponent = () => {
         scrollEventThrottle={perf.scrollEventThrottle}
         decelerationRate={perf.decelerationRate}
         ListFooterComponent={<ListFooterLoader visible={isFetchingNextPage} />}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={refresh} />
+        }
       />
     );
   }, [

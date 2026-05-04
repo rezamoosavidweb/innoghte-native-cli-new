@@ -15,8 +15,8 @@ import { spacing } from '@/ui/theme';
 
 const TAB_ICON: Record<MainTabScreenName, React.ComponentType<SvgProps>> = {
   Home: HomeIcon,
-  PublicCourses: SchoolIcon,
-  PublicAlbums: HeadphoneIcon,
+  Courses: SchoolIcon,
+  Albums: HeadphoneIcon,
   Cart: ShoppingTrollyIcon,
   Profile: LoginIcon,
 };
@@ -70,7 +70,7 @@ export function TabBarGlyph({
   badgeCount = 0,
 }: IconProps) {
   useTranslation();
-  const Icon = TAB_ICON[routeName];
+  const Icon = TAB_ICON[routeName] ?? HomeIcon;
 
   return (
     <View style={styles.wrap}>

@@ -1,41 +1,48 @@
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { useQueryClient } from '@tanstack/react-query';
+
 import * as React from 'react';
+
 import { useTranslation } from 'react-i18next';
+
 import { RefreshControl, View } from 'react-native';
 
-import { AlbumListCard } from '@/domains/albums/ui/cards/AlbumListCard';
-import type { Album } from '@/domains/albums/model';
-import { useInfiniteAlbums } from '@/domains/albums/hooks/useInfiniteAlbums';
-import { albumsKeys } from '@/domains/albums/model/queryKeys';
+import type { CatalogItem } from '@/shared/catalog/model/entities';
+
+import { useInfiniteCatalogItems } from '@/shared/catalog/hooks/useInfiniteCatalogItems';
+import { catalogKeys } from '@/shared/catalog/model/queryKeys';
 
 import { useListPerformanceProfile } from '@/shared/infra/device/listPerformanceProfile';
+
 import { ListFooterLoader } from '@/shared/ui/list-states/ListFooterLoader';
+
 import { ListStateView } from '@/shared/ui/list-states/ListStateView';
+
 import {
   flashListContentGutters,
   flashListEstimatedItemSize,
   flashListRowSeparators,
 } from '@/ui/theme';
+import { CourseListCard } from '@/shared/ui/cards/CourseListCard';
 
-const LIST_CATEGORY_ID = 1;
+const COURSES_CATEGORY_ID = 9;
 
-const AlbumsCatalogRowSeparator = React.memo(function AlbumsCatalogRowSeparator() {
+const Separator = React.memo(function AlbumsListSeparator() {
   return <View style={flashListRowSeparators.h12} />;
 });
-AlbumsCatalogRowSeparator.displayName = 'AlbumsCatalogRowSeparator';
 
-function albumRowKeyExtractor(item: Album): string {
+Separator.displayName = 'AlbumsListSeparator';
+
+function keyExtractor(item: CatalogItem): string {
   return String(item.id);
 }
 
 const AlbumsScreenComponent = () => {
   const perf = useListPerformanceProfile();
   const queryClient = useQueryClient();
-  const { t } = useTranslation();
 
-  const renderAlbumRow = React.useCallback<ListRenderItem<Album>>(
-    ({ item }) => <AlbumListCard album={item} />,
+  const renderCourseItem = React.useCallback<ListRenderItem<CatalogItem>>(
+    ({ item }) => <CourseListCard course={item} />,
     [],
   );
 
@@ -50,81 +57,92 @@ const AlbumsScreenComponent = () => {
     isFetchingNextPage,
     isRefetching,
     flashListScrollMemory,
-  } = useInfiniteAlbums({ categoryId: LIST_CATEGORY_ID });
+  } = useInfiniteCatalogItems({ categoryId: COURSES_CATEGORY_ID });
 
-  const estimatedRowSize = Math.max(
+  const { t } = useTranslation();
+
+  const estimatedItemSize = Math.max(
     80,
-    Math.round(flashListEstimatedItemSize.album * perf.estimatedItemSizeFactor),
+    Math.round(
+      flashListEstimatedItemSize.course * perf.estimatedItemSizeFactor,
+    ),
   );
 
-  const showBlockingLoader = isPending;
-  const listIsEmpty = isSuccess && flatData.length === 0;
-  const pullRefreshing = isSuccess && flatData.length > 0 && isRefetching;
+  const showFullBleedLoading = isPending;
 
-  const onPullRefresh = React.useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: albumsKeys.all }).catch(() => {});
+  const isEmpty = isSuccess && flatData.length === 0;
+
+  const refreshing = isSuccess && flatData.length > 0 && isRefetching;
+
+  const refresh = React.useCallback(() => {
+    queryClient
+      .invalidateQueries({ queryKey: catalogKeys.all })
+      .catch(() => {});
   }, [queryClient]);
 
   const { captureRef, scrollPropsForFlashList, shouldSuppressEndReached } =
     flashListScrollMemory;
 
-  const onListEndApproaching = React.useCallback(() => {
+  const handleEndReached = React.useCallback(() => {
     if (shouldSuppressEndReached()) {
       return;
     }
+
     fetchNextPage().catch(() => {});
   }, [fetchNextPage, shouldSuppressEndReached]);
 
-  const renderAlbumFlashList = React.useCallback(() => {
+  const renderList = React.useCallback(() => {
     return (
-      <FlashList<Album>
+      <FlashList<CatalogItem>
         ref={captureRef}
-        keyExtractor={albumRowKeyExtractor}
-        renderItem={renderAlbumRow}
+        keyExtractor={keyExtractor}
+        renderItem={renderCourseItem}
         data={flatData}
-        estimatedItemSize={estimatedRowSize}
-        ItemSeparatorComponent={AlbumsCatalogRowSeparator}
+        estimatedItemSize={estimatedItemSize}
+        ItemSeparatorComponent={Separator}
         contentContainerStyle={flashListContentGutters.standard}
         showsVerticalScrollIndicator={false}
-        onEndReached={onListEndApproaching}
+        onEndReached={handleEndReached}
         onEndReachedThreshold={perf.onEndReachedThreshold}
         {...scrollPropsForFlashList}
         scrollEventThrottle={perf.scrollEventThrottle}
         decelerationRate={perf.decelerationRate}
         ListFooterComponent={<ListFooterLoader visible={isFetchingNextPage} />}
-        refreshControl={<RefreshControl refreshing={pullRefreshing} onRefresh={onPullRefresh} />}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={refresh} />
+        }
       />
     );
   }, [
     captureRef,
-    estimatedRowSize,
+    estimatedItemSize,
     flatData,
+    handleEndReached,
     isFetchingNextPage,
-    onListEndApproaching,
-    onPullRefresh,
     perf.decelerationRate,
     perf.onEndReachedThreshold,
     perf.scrollEventThrottle,
-    pullRefreshing,
-    renderAlbumRow,
+    refresh,
+    refreshing,
+    renderCourseItem,
     scrollPropsForFlashList,
   ]);
 
-  const onRetryList = React.useCallback(() => {
+  const retryOrRefetch = React.useCallback(() => {
     refetch().catch(() => {});
   }, [refetch]);
 
   return (
     <ListStateView
-      isLoading={showBlockingLoader}
+      isLoading={showFullBleedLoading}
       isError={Boolean(isError)}
       error={error}
-      isEmpty={listIsEmpty}
-      onRetry={onRetryList}
-      renderList={renderAlbumFlashList}
-      loadingMessage={t('screens.albums.loading')}
-      errorTitle={t('screens.albums.error')}
-      emptyTitle={t('screens.albums.empty')}
+      isEmpty={isEmpty}
+      onRetry={retryOrRefetch}
+      renderList={renderList}
+      loadingMessage={t('screens.courses.loading')}
+      errorTitle={t('screens.courses.error')}
+      emptyTitle={t('screens.courses.empty')}
       retryLabel={t('listStates.retry')}
       safeAreaEdges={['left', 'right', 'bottom']}
     />
@@ -132,4 +150,5 @@ const AlbumsScreenComponent = () => {
 };
 
 export const AlbumsScreen = React.memo(AlbumsScreenComponent);
+
 AlbumsScreen.displayName = 'AlbumsScreen';

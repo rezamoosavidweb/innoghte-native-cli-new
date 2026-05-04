@@ -16,8 +16,8 @@ import { z } from 'zod';
 
 import { hexAlpha } from '@/ui/theme/utils/colorUtils';
 
-import { useCourseCommentsPage } from '@/domains/courses/hooks/useCourseCommentsPage';
-import { useCreateCourseComment } from '@/domains/courses/hooks/useCreateCourseComment';
+import { useCatalogItemComments } from '@/shared/catalog/hooks/useCatalogItemComments';
+import { useCreateCatalogItemComment } from '@/shared/catalog/hooks/useCreateCatalogItemComment';
 import { commentSchema } from '@/domains/home/model/comments.schema';
 import { Text } from '@/shared/ui/Text';
 
@@ -73,7 +73,10 @@ const StarPickRow = React.memo(function StarPickRow({
           contentStyle={{ width: '100%' }}
         >
           <Text
-            style={[star.glyph, n <= rating ? star.glyphFilled : star.glyphEmpty]}
+            style={[
+              star.glyph,
+              n <= rating ? star.glyphFilled : star.glyphEmpty,
+            ]}
           >
             ★
           </Text>
@@ -90,9 +93,12 @@ const DashboardCommentCard = React.memo(function DashboardCommentCard({
   comment: CommentDto;
 }) {
   const { colors } = useTheme();
-  const initial = comment.user?.full_name?.trim()?.charAt(0)?.toUpperCase() ?? '';
+  const initial =
+    comment.user?.full_name?.trim()?.charAt(0)?.toUpperCase() ?? '';
   const themedCard = createDashboardCommentCardStyles(colors);
-  const initialStyles = createAvatarInitialStyles(avatarColorFor(comment.user_id));
+  const initialStyles = createAvatarInitialStyles(
+    avatarColorFor(comment.user_id),
+  );
 
   return (
     <View style={[styles.commentCard, themedCard.cardBorder]}>
@@ -150,7 +156,7 @@ function DashboardCommentSectionComponent({
   const [errorMessage, setErrorMessage] = React.useState('');
   const [rating, setRating] = React.useState(0);
 
-  const { data: comments } = useCourseCommentsPage(
+  const { data: comments } = useCatalogItemComments(
     currentPage,
     10,
     courseId,
@@ -160,7 +166,7 @@ function DashboardCommentSectionComponent({
   const {
     mutateAsync: mutateCreateComment,
     isPending: isPendingCreateComment,
-  } = useCreateCourseComment(courseId, categoryId);
+  } = useCreateCatalogItemComment(courseId, categoryId);
 
   const {
     handleSubmit,
@@ -224,8 +230,7 @@ function DashboardCommentSectionComponent({
     | undefined;
   const total = Number(pag?.total ?? pag?.total_items ?? 0);
   const per_page = Number(pag?.per_page ?? 0);
-  const totalPage =
-    per_page > 0 ? Math.ceil(total / per_page) : 0;
+  const totalPage = per_page > 0 ? Math.ceil(total / per_page) : 0;
 
   const formTheme = createDashboardFormStyles(colors);
 
@@ -306,11 +311,7 @@ function DashboardCommentSectionComponent({
   );
 
   if (commentList.length === 0) {
-    return (
-      <View style={styles.wrap}>
-        {formBlock}
-      </View>
-    );
+    return <View style={styles.wrap}>{formBlock}</View>;
   }
 
   return (

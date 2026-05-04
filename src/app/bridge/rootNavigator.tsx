@@ -1,28 +1,39 @@
+import { Text } from '@/shared/ui/Text';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { type Theme } from '@react-navigation/native';
 import * as React from 'react';
-import { Text } from '@/shared/ui/Text';
 
 import { useDrawerGlyphStyles } from '@/app/bridge/drawerGlyph.styles';
 import { CollapsibleHeaderExampleScreen } from '@/app/examples/CollapsibleHeaderExampleScreen';
 import { LegacyMenuPlaceholderScreen } from '@/app/navigation/LegacyMenuPlaceholderScreen';
 import { SplashScreen } from '@/app/splash/SplashScreen';
-import { AuthEntryScreen, LoginScreen, RegisterScreen, VerifyScreen } from '@/domains/auth';
+import {
+  AlbumDetailScreen,
+  AlbumsScreen,
+  PublicAlbumDetailScreen,
+} from '@/domains/albums';
+import {
+  AuthEntryScreen,
+  LoginScreen,
+  RegisterScreen,
+  VerifyScreen,
+} from '@/domains/auth';
+import { BasketScreen } from '@/domains/basket';
+import { CollaborationScreen } from '@/domains/collaboration';
+import { ContactScreen } from '@/domains/contact';
 import {
   CourseDetailScreen,
   CoursesScreen,
   PublicCourseDetailScreen,
 } from '@/domains/courses';
-import {
-  AlbumDetailScreen,
-  PublicAlbumDetailScreen,
-  PublicAlbumsScreen,
-} from '@/domains/albums';
+import { DonationScreen } from '@/domains/donation';
 import { EventsScreen } from '@/domains/events';
 import { HomeScreen } from '@/domains/home';
+import { CopyrightScreen, TermsScreen } from '@/domains/legal';
 import { LiveMeetingsScreen } from '@/domains/live';
 import { SearchScreen } from '@/domains/search';
+import { SettingsScreen } from '@/domains/settings';
 import {
   AboutScreen,
   CreateTicketScreen,
@@ -32,22 +43,14 @@ import {
   TicketDetailScreen,
   TicketListScreen,
 } from '@/domains/support';
-import { ContactScreen } from '@/domains/contact';
-import { CollaborationScreen } from '@/domains/collaboration';
-import { TermsScreen, CopyrightScreen } from '@/domains/legal';
-import { SettingsScreen } from '@/domains/settings';
-import { BasketScreen } from '@/domains/basket';
-import { DonationScreen } from '@/domains/donation';
 import { TransactionsScreen } from '@/domains/transactions';
 import {
   AccountScreen,
   EditProfileScreen,
   FinancialSupportScreen,
   GiftScreen,
-  GiveGiftScreen,
   GiftSubScreen,
-  MyCoursesHubScreen,
-  NOTIFICATION_BADGE_COUNT,
+  GiveGiftScreen,
   ProfileScreen,
   SecurityScreen,
 } from '@/domains/user';
@@ -62,6 +65,11 @@ import {
   tabBarSurfaceStyle,
 } from '@/ui/theme';
 
+import { cartTabBarIcon } from '@/app/bridge/BasketTabBarIcon';
+import {
+  ProfileTabBarIcon,
+  ProfileTabBarLabel,
+} from '@/app/bridge/ProfileTabBar';
 import { isDrawerPhysicalRight } from '@/app/navigation/drawerLayout';
 import {
   getDrawerLeafTranslatedFields,
@@ -70,11 +78,6 @@ import {
   getTranslatedTabFields,
   type ExtraDrawerLeafKey,
 } from '@/app/navigation/i18nScreenOptions';
-import {
-  ProfileTabBarIcon,
-  ProfileTabBarLabel,
-} from '@/app/bridge/ProfileTabBar';
-import { cartTabBarIcon } from '@/app/bridge/BasketTabBarIcon';
 import { TabBarGlyph } from '@/app/navigation/tabBarConfig';
 import type {
   DrawerParamList,
@@ -100,8 +103,8 @@ DrawerGlyph.displayName = 'DrawerGlyph';
 
 const drawerIcon =
   (symbol: string) =>
-    ({ color, size }: { color: string; size: number }) =>
-      <DrawerGlyph symbol={symbol} color={color} size={size} />;
+  ({ color, size }: { color: string; size: number }) =>
+    <DrawerGlyph symbol={symbol} color={color} size={size} />;
 
 function mainTabsScreenOptions({
   route,
@@ -142,9 +145,7 @@ function mainTabsScreenOptions({
         color: string;
         focused: boolean;
         size: number;
-      }) => (
-        <ProfileTabBarIcon color={color} focused={focused} size={size} />
-      ),
+      }) => <ProfileTabBarIcon color={color} focused={focused} size={size} />,
     };
   }
 
@@ -173,9 +174,7 @@ function mainTabsScreenOptions({
         focused={focused}
         color={color}
         size={size}
-        badgeCount={
-          route.name === 'Notifications' ? NOTIFICATION_BADGE_COUNT : 0
-        }
+        badgeCount={0}
       />
     ),
   };
@@ -189,8 +188,8 @@ const mainTabs = createBottomTabNavigator<TabParamList>({
       screen: HomeScreen,
       options: { headerShown: false },
     },
-    PublicCourses: CoursesScreen,
-    PublicAlbums: PublicAlbumsScreen,
+    Courses: CoursesScreen,
+    Albums: AlbumsScreen,
     Cart: BasketScreen,
     Profile: ProfileScreen,
   },
@@ -328,15 +327,11 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
       screen: AboutScreen,
       options: aboutDrawerOptions,
     },
-    PublicAlbums: {
-      screen: PublicAlbumsScreen,
+    Albums: {
+      screen: AlbumsScreen,
       options: () => extraLeafOptions('publicAlbums', '🎵'),
     },
-    MyCourses: {
-      screen: MyCoursesHubScreen,
-      options: () => extraLeafOptions('myCourses', '🎓'),
-    },
-    PublicCourses: {
+    Courses: {
       screen: CoursesScreen,
       options: () => extraLeafOptions('publicCourses', '📚'),
     },

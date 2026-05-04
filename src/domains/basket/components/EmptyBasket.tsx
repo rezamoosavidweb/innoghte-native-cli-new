@@ -13,7 +13,7 @@ export const EmptyBasket = React.memo(function EmptyBasket() {
   const navigation = useAppNavigation();
 
   const onBrowse = React.useCallback(() => {
-    navigateToAppLeaf(navigation, 'PublicCourses');
+    navigateToAppLeaf(navigation, 'Courses');
   }, [navigation]);
 
   const s = useEmptyBasketStyles(colors);

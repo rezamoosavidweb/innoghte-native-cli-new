@@ -6,8 +6,8 @@ import type { VerifyChannel } from './verification';
 /** Bottom tabs — primary app sections. */
 export type TabParamList = {
   Home: undefined;
-  PublicCourses: undefined;
-  PublicAlbums: undefined;
+  Courses: undefined;
+  Albums: undefined;
   Cart: undefined;
   Profile: { userId?: string } | undefined;
 };
@@ -25,9 +25,8 @@ export type DrawerParamList = {
   /** FAQs content — drawer-only (hidden item); former bottom-tab route. */
   Faqs: undefined;
   About: undefined;
-  PublicAlbums: undefined;
-  PublicCourses: undefined;
-  MyCourses: undefined;
+  Albums: undefined;
+  Courses: undefined;
   LiveMeetings: undefined;
   Events: undefined;
   Splash: undefined;

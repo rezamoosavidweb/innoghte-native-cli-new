@@ -17,14 +17,14 @@ import {
   type Theme,
 } from '@react-navigation/native';
 
-import { usePublicCourseDetail } from '@/domains/courses/hooks/usePublicCourseDetail';
-import type { PublicCourseDetailData } from '@/domains/courses/model/courseDetail.schema';
-import { coursesKeys } from '@/domains/courses/model/queryKeys';
+import { useCatalogItemDetail } from '@/shared/catalog/hooks/useCatalogItemDetail';
+import type { CatalogItemDetail } from '@/shared/catalog/model/catalogItemDetail.schema';
+import { catalogKeys } from '@/shared/catalog/model/queryKeys';
 import {
   createCoverFallbackBgStyles,
   createCoverPlaceholderGlyphStyles,
 } from '@/domains/courses/ui/courseCoverPlaceholder.styles';
-import { CourseChapterMediaArea } from '@/domains/courses/ui/CourseChapterMediaArea';
+import { AlbumChapterMediaArea } from '@/domains/albums/ui/albumChapterMediaArea';
 import { pickCoverSrc } from '@/domains/courses/utils/pickCoverSrc';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
@@ -34,9 +34,9 @@ import { ListStateView } from '@/shared/ui/list-states/ListStateView';
 import { Text } from '@/shared/ui/Text';
 import { Button } from '@/ui/components/Button';
 
-type Chapter = NonNullable<PublicCourseDetailData['chapters']>[number];
+type Chapter = NonNullable<CatalogItemDetail['chapters']>[number];
 
-function createCourseDetailSurfaceStyles(colors: Theme['colors']) {
+function createAlbumDetailSurfaceStyles(colors: Theme['colors']) {
   return StyleSheet.create({
     headerTitle: { color: colors.text },
     headerShort: { color: colors.text },
@@ -102,19 +102,21 @@ ChapterRow.displayName = 'ChapterRow';
 const AlbumDetailScreenComponent = () => {
   const navigation = useAppNavigation();
   const route = useRoute<RouteProp<DrawerParamList, 'AlbumDetail'>>();
-  const albumId = route.params.albumId;
+  const courseId = route.params.albumId;
   const { colors } = useTheme();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   const { data, isPending, isError, error, refetch, isSuccess, isRefetching } =
-    usePublicCourseDetail(albumId);
+    useCatalogItemDetail(courseId);
 
   const refreshing = Boolean(isSuccess && data != null && isRefetching);
 
   const refresh = React.useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: coursesKeys.detail(albumId) }).catch(() => {});
-  }, [queryClient, albumId]);
+    queryClient
+      .invalidateQueries({ queryKey: catalogKeys.detail(courseId) })
+      .catch(() => {});
+  }, [queryClient, courseId]);
 
   const refreshControl = React.useMemo(
     () => <RefreshControl refreshing={refreshing} onRefresh={refresh} />,
@@ -157,7 +159,7 @@ const AlbumDetailScreenComponent = () => {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      title: data?.title_fa ?? t('screens.albumDetail.title'),
+      title: data?.title_fa ?? t('screens.coursePlayer.title'),
     });
   }, [data?.title_fa, navigation, t]);
 
@@ -169,9 +171,11 @@ const AlbumDetailScreenComponent = () => {
       return null;
     }
 
-    const surf = createCourseDetailSurfaceStyles(colors);
+    const surf = createAlbumDetailSurfaceStyles(colors);
     const coverFallbackBg = createCoverFallbackBgStyles(colors.border);
-    const coverPlaceholderGlyph = createCoverPlaceholderGlyphStyles(colors.text);
+    const coverPlaceholderGlyph = createCoverPlaceholderGlyphStyles(
+      colors.text,
+    );
 
     return (
       <View style={styles.headerBlock}>
@@ -192,7 +196,7 @@ const AlbumDetailScreenComponent = () => {
         <Text style={[styles.title, surf.headerTitle]}>{data.title_fa}</Text>
         <Text style={[styles.short, surf.headerShort]}>{data.short_info}</Text>
 
-        <CourseChapterMediaArea activeChapterMedia={activeChapter?.url ?? ''} />
+        <AlbumChapterMediaArea activeChapterMedia={activeChapter?.url ?? ''} />
 
         <View style={styles.chapterHeadingRow}>
           <Text style={[styles.h4, surf.headerH4]}>
@@ -200,7 +204,7 @@ const AlbumDetailScreenComponent = () => {
           </Text>
           {showNext ? (
             <Text style={[styles.nextHint, surf.nextHint]}>
-              {t('screens.albumDetail.nextTrack', { title: nextTitle })}
+              {t('screens.coursePlayer.nextVideo', { title: nextTitle })}
             </Text>
           ) : null}
         </View>
@@ -212,7 +216,7 @@ const AlbumDetailScreenComponent = () => {
         </Text>
 
         <Text style={[styles.boxTitle, surf.boxTitle]}>
-          {t('screens.albumDetail.chaptersHeading', {
+          {t('screens.coursePlayer.chaptersHeading', {
             title: data.title_fa,
           })}
         </Text>
@@ -233,16 +237,16 @@ const AlbumDetailScreenComponent = () => {
   ]);
 
   const listFooter = React.useMemo(() => {
-    const surf = createCourseDetailSurfaceStyles(colors);
+    const surf = createAlbumDetailSurfaceStyles(colors);
     return (
       <View style={[styles.commentsBlock, surf.commentsBorder]}>
         <DashboardCommentSection
-          courseId={albumId}
+          courseId={courseId}
           title={t('comments.entityAlbum')}
         />
       </View>
     );
-  }, [albumId, colors, t]);
+  }, [colors, courseId, t]);
 
   const renderItem = React.useCallback<ListRenderItem<Chapter>>(
     ({ item }) => (
@@ -266,7 +270,7 @@ const AlbumDetailScreenComponent = () => {
     }
 
     if (!data.is_accessible) {
-      const surf = createCourseDetailSurfaceStyles(colors);
+      const surf = createAlbumDetailSurfaceStyles(colors);
       return (
         <ScrollView
           style={styles.scrollFlex}
@@ -275,7 +279,7 @@ const AlbumDetailScreenComponent = () => {
           keyboardShouldPersistTaps="handled"
         >
           <Text style={[styles.lockedText, surf.lockedBody]}>
-            {t('screens.albumDetail.notAccessible')}
+            {t('screens.coursePlayer.notAccessible')}
           </Text>
         </ScrollView>
       );
@@ -315,9 +319,9 @@ const AlbumDetailScreenComponent = () => {
       isEmpty={isEmpty}
       onRetry={onRetry}
       renderList={renderList}
-      loadingMessage={t('screens.albumDetail.loading')}
-      errorTitle={t('screens.albumDetail.error')}
-      emptyTitle={t('screens.albumDetail.empty')}
+      loadingMessage={t('screens.coursePlayer.loading')}
+      errorTitle={t('screens.coursePlayer.error')}
+      emptyTitle={t('screens.coursePlayer.empty')}
       retryLabel={t('listStates.retry')}
       safeAreaEdges={['left', 'right', 'bottom']}
     />

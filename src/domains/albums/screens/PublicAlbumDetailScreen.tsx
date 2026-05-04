@@ -10,40 +10,39 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useRoute, useTheme, type RouteProp } from '@react-navigation/native';
 
-import { usePublicCourseDetail } from '@/domains/courses/hooks/usePublicCourseDetail';
-import { coursesKeys } from '@/domains/courses/model/queryKeys';
-import { createCourseDetailBodyTextStyles } from '@/domains/courses/ui/courseDetailBody.styles';
+import { useCatalogItemDetail } from '@/shared/catalog/hooks/useCatalogItemDetail';
+import { catalogKeys } from '@/shared/catalog/model/queryKeys';
+import { createAlbumDetailBodyTextStyles } from '@/domains/albums/ui/albumDetailBody.styles';
 import {
   createCoverFallbackBgStyles,
   createCoverPlaceholderGlyphStyles,
-} from '@/domains/courses/ui/courseCoverPlaceholder.styles';
-import { pickCoverSrc } from '@/domains/courses/utils/pickCoverSrc';
+} from '@/domains/albums/ui/albumCoverPlaceholder.styles';
+import { pickCoverSrc } from '@/domains/albums/utils/pickCoverSrc';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { CartMainButtons } from '@/shared/ui/cart/CartMainButtons';
 import { ClientCommentsSection } from '@/shared/ui/comments';
 import { ListStateView } from '@/shared/ui/list-states/ListStateView';
 import { Text } from '@/shared/ui/Text';
-import { protectedNavigate } from '@/app/bridge/auth';
 
 const PublicAlbumDetailScreenComponent = () => {
   const navigation = useAppNavigation();
   const route = useRoute<RouteProp<DrawerParamList, 'PublicAlbumDetail'>>();
-  const albumId = route.params.albumId;
+  const courseId = route.params.albumId;
   const { colors } = useTheme();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   const { data, isPending, isError, error, refetch, isSuccess, isRefetching } =
-    usePublicCourseDetail(albumId);
+    useCatalogItemDetail(courseId);
 
   const refreshing = Boolean(isSuccess && data != null && isRefetching);
 
   const refresh = React.useCallback(() => {
     queryClient
-      .invalidateQueries({ queryKey: coursesKeys.detail(albumId) })
+      .invalidateQueries({ queryKey: catalogKeys.detail(courseId) })
       .catch(() => {});
-  }, [queryClient, albumId]);
+  }, [queryClient, courseId]);
 
   const refreshControl = React.useMemo(
     () => <RefreshControl refreshing={refreshing} onRefresh={refresh} />,
@@ -61,7 +60,7 @@ const PublicAlbumDetailScreenComponent = () => {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      title: data?.title_fa ?? t('screens.publicAlbumDetail.title'),
+      title: data?.title_fa ?? t('screens.courseDetail.title'),
     });
   }, [data?.title_fa, navigation, t]);
 
@@ -70,8 +69,8 @@ const PublicAlbumDetailScreenComponent = () => {
   const purchased = Boolean(data?.is_accessible);
 
   const onPressPrimary = React.useCallback(() => {
-    protectedNavigate(navigation, 'AlbumDetail', { albumId });
-  }, [albumId, navigation]);
+    navigation.navigate('AlbumDetail', { albumId:courseId });
+  }, [navigation, courseId]);
 
   const renderBody = React.useCallback(() => {
     if (!data) {
@@ -82,7 +81,7 @@ const PublicAlbumDetailScreenComponent = () => {
     const coverPlaceholderGlyph = createCoverPlaceholderGlyphStyles(
       colors.text,
     );
-    const bodyText = createCourseDetailBodyTextStyles(colors);
+    const bodyText = createAlbumDetailBodyTextStyles(colors);
 
     return (
       <ScrollView
@@ -112,25 +111,23 @@ const PublicAlbumDetailScreenComponent = () => {
 
         <View style={styles.actions}>
           <CartMainButtons
-            courseId={albumId}
+            courseId={courseId}
             isFull={(data.remain_capacity ?? 1) === 0}
             isAccessible={purchased}
-            showBtnText={t('screens.albums.viewAlbum')}
-            fullWidth={false}
             onPressPrimary={onPressPrimary}
           />
         </View>
 
         <ClientCommentsSection
-          title={t('screens.publicAlbumDetail.commentsTitle')}
-          courseId={albumId}
+          title={t('screens.courseDetail.commentsTitle')}
+          courseId={courseId}
           bgcolor={`${colors.card}`}
         />
       </ScrollView>
     );
   }, [
-    albumId,
     colors,
+    courseId,
     coverUri,
     data,
     imgFailed,
@@ -148,9 +145,9 @@ const PublicAlbumDetailScreenComponent = () => {
       isEmpty={Boolean(!isPending && !data)}
       onRetry={onRetry}
       renderList={renderBody}
-      loadingMessage={t('screens.publicAlbumDetail.loading')}
-      errorTitle={t('screens.publicAlbumDetail.error')}
-      emptyTitle={t('screens.publicAlbumDetail.empty')}
+      loadingMessage={t('screens.courseDetail.loading')}
+      errorTitle={t('screens.courseDetail.error')}
+      emptyTitle={t('screens.courseDetail.empty')}
       retryLabel={t('listStates.retry')}
       safeAreaEdges={['left', 'right', 'bottom']}
     />

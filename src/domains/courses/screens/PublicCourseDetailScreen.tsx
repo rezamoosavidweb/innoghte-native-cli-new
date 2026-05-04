@@ -1,15 +1,17 @@
 import { useQueryClient } from '@tanstack/react-query';
 import * as React from 'react';
-import { Image, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import {
-  useRoute,
-  useTheme,
-  type RouteProp,
-} from '@react-navigation/native';
+  Image,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { useRoute, useTheme, type RouteProp } from '@react-navigation/native';
 
-import { usePublicCourseDetail } from '@/domains/courses/hooks/usePublicCourseDetail';
-import { coursesKeys } from '@/domains/courses/model/queryKeys';
+import { useCatalogItemDetail } from '@/shared/catalog/hooks/useCatalogItemDetail';
+import { catalogKeys } from '@/shared/catalog/model/queryKeys';
 import { createCourseDetailBodyTextStyles } from '@/domains/courses/ui/courseDetailBody.styles';
 import {
   createCoverFallbackBgStyles,
@@ -23,7 +25,6 @@ import { ClientCommentsSection } from '@/shared/ui/comments';
 import { ListStateView } from '@/shared/ui/list-states/ListStateView';
 import { Text } from '@/shared/ui/Text';
 
-
 const PublicCourseDetailScreenComponent = () => {
   const navigation = useAppNavigation();
   const route = useRoute<RouteProp<DrawerParamList, 'PublicCourseDetail'>>();
@@ -32,20 +33,15 @@ const PublicCourseDetailScreenComponent = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
-  const {
-    data,
-    isPending,
-    isError,
-    error,
-    refetch,
-    isSuccess,
-    isRefetching,
-  } = usePublicCourseDetail(courseId);
+  const { data, isPending, isError, error, refetch, isSuccess, isRefetching } =
+    useCatalogItemDetail(courseId);
 
   const refreshing = Boolean(isSuccess && data != null && isRefetching);
 
   const refresh = React.useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: coursesKeys.detail(courseId) }).catch(() => {});
+    queryClient
+      .invalidateQueries({ queryKey: catalogKeys.detail(courseId) })
+      .catch(() => {});
   }, [queryClient, courseId]);
 
   const refreshControl = React.useMemo(
@@ -82,7 +78,9 @@ const PublicCourseDetailScreenComponent = () => {
     }
 
     const coverFallbackBg = createCoverFallbackBgStyles(colors.border);
-    const coverPlaceholderGlyph = createCoverPlaceholderGlyphStyles(colors.text);
+    const coverPlaceholderGlyph = createCoverPlaceholderGlyphStyles(
+      colors.text,
+    );
     const bodyText = createCourseDetailBodyTextStyles(colors);
 
     return (
@@ -102,29 +100,20 @@ const PublicCourseDetailScreenComponent = () => {
             }}
           />
         ) : (
-          <View
-            style={[styles.cover, styles.coverPh, coverFallbackBg.bg]}
-          >
+          <View style={[styles.cover, styles.coverPh, coverFallbackBg.bg]}>
             <Text style={coverPlaceholderGlyph.glyph}>▣</Text>
           </View>
         )}
 
-        <Text style={[styles.title, bodyText.title]}>
-          {data.title_fa}
-        </Text>
-        <Text style={[styles.short, bodyText.short]}>
-          {data.short_info}
-        </Text>
-        <Text style={[styles.full, bodyText.full]}>
-          {data.full_info}
-        </Text>
+        <Text style={[styles.title, bodyText.title]}>{data.title_fa}</Text>
+        <Text style={[styles.short, bodyText.short]}>{data.short_info}</Text>
+        <Text style={[styles.full, bodyText.full]}>{data.full_info}</Text>
 
         <View style={styles.actions}>
           <CartMainButtons
             courseId={courseId}
             isFull={(data.remain_capacity ?? 1) === 0}
             isAccessible={purchased}
-            fullWidth={false}
             onPressPrimary={onPressPrimary}
           />
         </View>

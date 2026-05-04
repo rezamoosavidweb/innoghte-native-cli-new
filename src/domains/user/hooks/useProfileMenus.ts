@@ -20,8 +20,8 @@ export type ProfileMenuRowConfig = {
 };
 
 const PROFILE_ACTION_MENU: readonly ProfileMenuRowConfig[] = [
-  { id: 'my-courses', icon: '🎓', titleKey: 'myCourses', route: 'MyCourses' },
-  { id: 'my-albums', icon: '💿', titleKey: 'myAlbums', route: 'PublicAlbums' },
+  { id: 'my-courses', icon: '🎓', titleKey: 'myCourses', route: 'Courses' },
+  { id: 'my-albums', icon: '💿', titleKey: 'myAlbums', route: 'Albums' },
 ] as const;
 
 const PROFILE_EXPERIENCES_MENU: readonly ProfileMenuRowConfig[] = [

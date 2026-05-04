@@ -1,4 +1,4 @@
-import { courseSchema } from '@/domains/courses/model/schemas';
+import { catalogItemSchema } from '@/shared/catalog/model/schemas';
 import { z } from 'zod';
 
 const paginationFlexible = z.union([
@@ -10,7 +10,7 @@ export const cartDtoSchema = z
   .object({
     id: z.number(),
     course_id: z.number(),
-    course: courseSchema.nullable(),
+    course: catalogItemSchema.nullable(),
   })
   .passthrough();
 
@@ -38,7 +38,10 @@ export const publicCheckDiscountResponseSchema = z
   .object({
     message: z.string(),
     data: checkDiscountCodeDtoSchema,
-    pagination: z.union([z.array(z.unknown()), z.record(z.string(), z.unknown())]),
+    pagination: z.union([
+      z.array(z.unknown()),
+      z.record(z.string(), z.unknown()),
+    ]),
   })
   .passthrough();
 
@@ -58,7 +61,10 @@ export const createPaymentResponseSchema = z
   .object({
     message: z.string(),
     data: createOrderDtoSchema,
-    pagination: z.union([z.array(z.unknown()), z.record(z.string(), z.unknown())]),
+    pagination: z.union([
+      z.array(z.unknown()),
+      z.record(z.string(), z.unknown()),
+    ]),
   })
   .passthrough();
 

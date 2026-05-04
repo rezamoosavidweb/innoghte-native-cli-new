@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useTheme } from '@react-navigation/native';
 import type { z } from 'zod';
 
-import { useCourseCommentsPage } from '@/domains/courses/hooks/useCourseCommentsPage';
+import { useCatalogItemComments } from '@/shared/catalog/hooks/useCatalogItemComments';
 import { commentSchema } from '@/domains/home/model/comments.schema';
 import { Text } from '@/shared/ui/Text';
 
@@ -82,9 +82,7 @@ const CommentCard = React.memo(function CommentCard({
     <View style={[styles.card, surface.bg]}>
       <View style={styles.cardHeader}>
         <Text style={[styles.name, themed.name]}>
-          {comment.user?.full_name?.trim()
-            ? comment.user.full_name
-            : '—'}
+          {comment.user?.full_name?.trim() ? comment.user.full_name : '—'}
         </Text>
         <View style={styles.headerMeta}>
           {withExtraInfo && courseTitle ? (
@@ -117,7 +115,7 @@ function ClientCommentsSectionComponent({
   const { i18n } = useTranslation();
   const { colors } = useTheme();
 
-  const { data, isFetching } = useCourseCommentsPage(
+  const { data, isFetching } = useCatalogItemComments(
     currentPage,
     perPage,
     courseId,
@@ -161,8 +159,7 @@ function ClientCommentsSectionComponent({
       />
     ) : null;
 
-  const hideWhenEmpty =
-    !shoIfEmpty && !isFetching && pageData.length === 0;
+  const hideWhenEmpty = !shoIfEmpty && !isFetching && pageData.length === 0;
 
   if (hideWhenEmpty) {
     return null;
@@ -174,7 +171,12 @@ function ClientCommentsSectionComponent({
         data={isFetching ? [] : pageData}
         keyExtractor={keyExtractor}
         ListHeaderComponent={
-          <Text style={[styles.sectionTitle, clientCommentStyles.sectionTitleColored]}>
+          <Text
+            style={[
+              styles.sectionTitle,
+              clientCommentStyles.sectionTitleColored,
+            ]}
+          >
             {title}
           </Text>
         }

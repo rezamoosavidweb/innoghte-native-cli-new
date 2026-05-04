@@ -283,7 +283,7 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
 
   const onViewCourse = React.useCallback(
     (_courseId: number) => {
-      navigateToAppLeaf(navigation, 'PublicCourses');
+      navigateToAppLeaf(navigation, 'Courses');
     },
     [navigation],
   );
