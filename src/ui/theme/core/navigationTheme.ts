@@ -4,7 +4,7 @@ import type { NavigationThemeWithScheme } from '@/ui/theme/navigationThemeContra
 import { themes } from '@/ui/theme/registry';
 import type { ColorSchemeName } from '@/ui/theme/types';
 
-const NAVIGATION_DARK_BASE = new Set<ColorSchemeName>(['dark', 'studioDark']);
+const NAVIGATION_DARK_BASE = new Set<ColorSchemeName>(['dark']);
 
 /**
  * Build the `@react-navigation/native` Theme from our semantic palette so

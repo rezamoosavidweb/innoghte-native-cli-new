@@ -1,7 +1,5 @@
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { useShallow } from 'zustand/react/shallow';
 import * as React from 'react';
-import { useColorScheme } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { logout, useCurrentUser, useIsAuthenticated } from '@/domains/auth';
@@ -9,9 +7,6 @@ import { useUiThemeStore } from '@/domains/settings';
 import { UserService } from '@/domains/user';
 import { fireAndForget } from '@/shared/infra/http';
 import { initialsFromDisplayName } from '@/shared/utils/initialsFromDisplayName';
-import type { ThemeMode } from '@/shared/contracts/theme';
-import { resolveColorScheme } from '@/shared/utils/resolveColorScheme';
-import { themes } from '@/ui/theme/registry';
 import { isDrawerPhysicalRight } from '@/app/navigation/drawerLayout';
 import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
 import { ToastHost } from '@/shared/ui/toast';
@@ -29,15 +24,7 @@ type BridgeShellProps = { children: React.ReactNode };
  */
 export function BridgeShell({ children }: BridgeShellProps) {
   const { t } = useTranslation();
-  const rawSystem = useColorScheme();
-  const systemScheme =
-    rawSystem === 'dark' ? 'dark' : rawSystem === 'light' ? 'light' : null;
-  const preference = useUiThemeStore(useShallow(s => s.preference));
-
-  const colorScheme = React.useMemo((): ThemeMode => {
-    const resolved = resolveColorScheme(preference, systemScheme);
-    return resolved in themes ? resolved : 'light';
-  }, [preference, systemScheme]);
+  const colorScheme = useUiThemeStore(s => s.preference);
 
   const onRequestLogout = React.useCallback(() => logout(), []);
 

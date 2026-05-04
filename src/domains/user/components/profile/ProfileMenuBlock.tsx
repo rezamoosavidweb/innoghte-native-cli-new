@@ -19,6 +19,7 @@ export type ProfileMenuBlockProps = Readonly<{
   items: readonly ProfileMenuListItem[];
   onNavigate: (route: AppLeafRouteName) => void;
   styles: ProfileMenuBlockStyles;
+  extraContent?: React.ReactNode;
 }>;
 
 export const ProfileMenuBlock = React.memo(function ProfileMenuBlock({
@@ -26,6 +27,7 @@ export const ProfileMenuBlock = React.memo(function ProfileMenuBlock({
   items,
   onNavigate,
   styles,
+  extraContent,
 }: ProfileMenuBlockProps) {
   return (
     <>
@@ -36,6 +38,7 @@ export const ProfileMenuBlock = React.memo(function ProfileMenuBlock({
         items={items}
         menuStyles={styles.menu}
         onNavigate={onNavigate}
+        footer={extraContent}
       />
     </>
   );

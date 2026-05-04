@@ -12,6 +12,7 @@ import type { AppLeafRouteName } from '@/shared/contracts/navigationApp';
 import type { VerifyChannel } from '@/shared/contracts/verification';
 import type { SectionDividerStyleSet } from '@/ui/theme';
 
+import { DarkModeToggleRow } from './DarkModeToggleRow';
 import { ProfileMenuBlock } from './ProfileMenuBlock';
 import { type ProfileShortcutRoute } from './ProfileShortcutButtons';
 
@@ -58,6 +59,11 @@ export const ProfileView = React.memo(function ProfileView({
           items={section.items}
           onNavigate={actions.onNavigate}
           styles={blockStyles}
+          extraContent={
+            section.key === 'general'
+              ? <DarkModeToggleRow menuStyles={styles.menu} />
+              : undefined
+          }
         />
       ))}
     </View>

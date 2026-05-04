@@ -1,17 +1,18 @@
-import { Appearance } from 'react-native';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { createStorageServiceStateStorage } from '@/shared/infra/storage/createStorageServiceAdapter';
-import type { ThemePreference } from '@/shared/contracts/theme';
+import type { ThemeMode } from '@/shared/contracts/theme';
 
 import { UI_THEME_STORAGE_KEY } from '@/domains/settings/model/uiThemeStorageKey';
 
+export type { ThemeMode } from '@/shared/contracts/theme';
 export type { ThemePreference } from '@/shared/contracts/theme';
 
 type UiThemeState = {
-  preference: ThemePreference;
-  setPreference: (p: ThemePreference) => void;
+  preference: ThemeMode;
+  setPreference: (p: ThemeMode) => void;
+  toggleTheme: () => void;
 };
 
 const uiThemePersistStorage = createStorageServiceStateStorage();
@@ -19,8 +20,10 @@ const uiThemePersistStorage = createStorageServiceStateStorage();
 export const useUiThemeStore = create<UiThemeState>()(
   persist(
     set => ({
-      preference: 'system',
+      preference: 'light',
       setPreference: p => set({ preference: p }),
+      toggleTheme: () =>
+        set(state => ({ preference: state.preference === 'dark' ? 'light' : 'dark' })),
     }),
     {
       name: UI_THEME_STORAGE_KEY,
@@ -29,11 +32,3 @@ export const useUiThemeStore = create<UiThemeState>()(
     },
   ),
 );
-
-export { resolveColorScheme } from '@/shared/utils/resolveColorScheme';
-
-/** Useful outside React (e.g. bootstrap) — mirrors default `resolveColorScheme` behaviour. */
-export function defaultSystemScheme(): 'light' | 'dark' {
-  const system = Appearance.getColorScheme();
-  return system === 'dark' ? 'dark' : 'light';
-}

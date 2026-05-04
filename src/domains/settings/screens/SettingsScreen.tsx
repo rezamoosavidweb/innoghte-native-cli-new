@@ -6,7 +6,7 @@ import {TouchableOpacity, View} from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 import { Text } from '@/shared/ui/Text';
 
-import type { ThemePreference } from '@/shared/contracts/theme';
+import type { ThemeMode } from '@/shared/contracts/theme';
 import type { AppLanguage } from '@/shared/contracts/locale';
 import { ScreenScaffold } from '@/ui/components/ScreenScaffold';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
@@ -80,17 +80,9 @@ const SettingsScreenComponent = (_props: Props) => {
         <View style={s.row}>
           {(
             [
-              ['system', 'themeSystem'],
               ['light', 'themeLight'],
               ['dark', 'themeDark'],
-              ['editorialGray', 'themeEditorialGray'],
-              ['studioDark', 'themeStudioDark'],
-              ['nighttime', 'themeNighttime'],
-              ['steady', 'themeSteady'],
-              ['stoneCalm', 'themeStoneCalm'],
-            ] as const satisfies ReadonlyArray<
-              readonly [ThemePreference, string]
-            >
+            ] as const satisfies ReadonlyArray<readonly [ThemeMode, string]>
           ).map(([value, labelKey]) => (
             <TouchableOpacity
               key={value}

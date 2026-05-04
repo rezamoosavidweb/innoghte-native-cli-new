@@ -10,12 +10,14 @@ export type ProfileMenuSectionProps = {
   items: readonly ProfileMenuListItem[];
   menuStyles: ProfileScreenMenuStyleSet;
   onNavigate: (route: AppLeafRouteName) => void;
+  footer?: React.ReactNode;
 };
 
 export const ProfileMenuSection = React.memo(function ProfileMenuSection({
   items,
   menuStyles,
   onNavigate,
+  footer,
 }: ProfileMenuSectionProps) {
   return (
     <View style={menuStyles.list}>
@@ -29,6 +31,7 @@ export const ProfileMenuSection = React.memo(function ProfileMenuSection({
           styles={menuStyles}
         />
       ))}
+      {footer}
     </View>
   );
 });

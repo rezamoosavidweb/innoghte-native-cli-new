@@ -194,7 +194,8 @@
       "actions": {
         "account": "Account",
         "security": "Security",
-        "editProfile": "Edit profile"
+        "editProfile": "Edit profile",
+        "darkMode": "Dark mode"
       },
       "needsVerification": "Needs verification",
       "verifiedLabel":"Verified"

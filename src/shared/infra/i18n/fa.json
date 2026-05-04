@@ -196,7 +196,8 @@
       "actions": {
         "account": "حساب",
         "security": "امنیت",
-        "editProfile": "ویرایش پروفایل"
+        "editProfile": "ویرایش پروفایل",
+        "darkMode": "حالت تاریک"
       },
       "needsVerification": "نیاز به تأیید",
       "verifiedLabel": " تأیید شده"

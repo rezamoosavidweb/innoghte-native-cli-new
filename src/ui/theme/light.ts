@@ -1,16 +1,24 @@
 /**
- * Light theme — wellness / meditation palette.
+ * Light theme — modern warm-stone monochrome palette (2024–2025).
  *
- * Mood: grounded · gentle · restorative.
- * Every role that diverges from dark is declared here; everything else
- * inherits from darkColors so a single token change in dark propagates.
+ * Mood: clean · precise · minimal.
+ * Primary: #FF984C (palette.primary[300]) — identical to dark theme.
+ * Neutral base: warm stone tones; single brand accent (orange).
  *
- * Palette anchors (do not hardcode elsewhere):
- *   #7A8F78  sage 500  — light-mode primary (green, NOT orange)
- *   #B9C7B1  sage 300  — soft sage tint
- *   #EEE6DA  sand 200  — warm neutral background
- *   #C9B59A  sand 500  — sand accent
- *   #3E4A45  forest 500 — deep text
+ * Palette anchors:
+ *   #FF984C  primary[300]  — brand orange (same as dark)
+ *   #FAFAF9  —             — near-white warm stone page bg
+ *   #1C1917  —             — near-black warm stone text  (16:1 on bg ✓✓)
+ *   #57534E  —             — stone-600 secondary text    ( 6.9:1 on white ✓✓)
+ *   #78716C  —             — stone-500 muted text        ( 4.6:1 on white ✓)
+ *
+ * Contrast notes
+ *   onPrimary (#1C1917) on primary (#FF984C) → 8.0:1 ✓✓
+ *   tabActive (#CC5600) on tabBar (#FFF)     → 3.95:1 (non-text 3:1 ✓)
+ *   drawerActiveTint (#B24C00) on white      → 4.84:1 ✓✓
+ *   error text (#B91C1C) on white            → 6.2:1 ✓✓
+ *   success text (#15803D) on white          → 5.2:1 ✓✓
+ *   info text (#0369A1) on white             → 6.9:1 ✓✓
  */
 
 import { palette } from '@/ui/theme/colors';
@@ -18,93 +26,93 @@ import { darkColors } from '@/ui/theme/dark';
 import type { AppTheme, ThemeColors } from '@/ui/theme/types';
 import { hexAlpha } from '@/ui/theme/utils/colorUtils';
 
-const { sage, sand, forest } = palette;
+// Brand orange — identical to dark theme primary. Do NOT change.
+const primary = palette.primary[300]; // #FF984C
 
 /**
- * Every key that light mode intentionally re-paints.
- * The spread below keeps unmentioned dark tokens as-is, so new dark tokens
- * automatically appear in light unless explicitly overridden.
+ * Stone-neutral overrides. Every key light mode intentionally re-paints vs
+ * dark; unmentioned tokens inherit from darkColors automatically.
  */
 const lightOverrides: Partial<ThemeColors> = {
   // ── Surfaces ───────────────────────────────────────────────────────────
-  background: sand[200],          // #EEE6DA — warm neutral page
-  surface: sand[100],             // #F5EEE4 — elevated card / sheet surface
-  surfaceSecondary: sand[300],    // #E2D6C5 — recessed section bands
-  card: sand[100],                // #F5EEE4 — navigation card role
-  tabBar: sand[100],              // #F5EEE4 — elevated above background
-  drawer: sand[200],              // #EEE6DA — seamless with page
+  background:       '#FAFAF9',          // stone-50: near-white warm page
+  surface:          '#FFFFFF',          // pure white: sheets, modals, inputs
+  surfaceSecondary: '#F2F1EF',          // recessed section bands / sidebar
+  card:             '#FFFFFF',          // navigation card role
+  tabBar:           '#FFFFFF',          // elevated above background
+  drawer:           '#FAFAF9',          // seamless with page
 
   // ── Borders / Dividers ─────────────────────────────────────────────────
-  border: sand[400],              // #D5C5AF — warm, visible, not harsh
-  divider: sand[300],             // #E2D6C5 — whisper-thin list separator
+  border:  '#E4E3E1',                   // warm soft gray — visible, not harsh
+  divider: '#EDECEB',                   // whisper-thin list separator
 
   // ── Text ───────────────────────────────────────────────────────────────
-  text: forest[500],              // #3E4A45 — WCAG ~9:1 on sand bg
-  textSecondary: forest[400],     // #5A6E69 — muted primary text
-  textMuted: '#8A9893',           // ~WCAG 2.9:1 — acceptable for placeholders
+  text:          '#1C1917',             // stone-900: ~16:1 on #FAFAF9 ✓✓
+  textSecondary: '#57534E',             // stone-600: ~6.9:1 on white ✓✓
+  textMuted:     '#78716C',             // stone-500: ~4.6:1 on white ✓
 
-  // ── Primary: green (LIGHT MODE ONLY — orange stays in dark) ───────────
-  primary: sage[500],             // #7A8F78
-  onPrimary: palette.white,       // #FFFFFF — bold/large label on primary
-  primarySoft: hexAlpha(sage[500], 0.12),  // highlight fills, selected states
-
-  // ── Accent: sand ───────────────────────────────────────────────────────
-  accent: sand[500],              // #C9B59A — badges, secondary highlights
+  // ── Primary (matches dark theme exactly) ──────────────────────────────
+  primary,                              // #FF984C — brand orange
+  onPrimary:   '#1C1917',              // dark stone on orange: 8.0:1 ✓✓
+  primarySoft: hexAlpha(primary, 0.12), // soft tint for selected / highlight fills
+  accent:      primary,                 // monochrome: single brand accent
 
   // ── Input ──────────────────────────────────────────────────────────────
-  inputBackground: '#EDE4D8',     // between sand[200] and sand[300]
+  inputBackground: '#F5F4F2',           // stone tint — distinct from white surface
 
   // ── Overlay ────────────────────────────────────────────────────────────
-  overlay: hexAlpha(forest[500], 0.42), // dark forest scrim, not pure black
+  overlay: hexAlpha('#1C1917', 0.45),  // dark stone scrim (not pure black)
 
   // ── Navigation chrome ──────────────────────────────────────────────────
-  headerBg: sand[200],            // #EEE6DA — seamless with page (no edge)
-  headerForeground: forest[500],  // #3E4A45
+  headerBg:         '#FFFFFF',          // clean white header
+  headerForeground: '#1C1917',          // stone-900
 
   // ── Tab bar ────────────────────────────────────────────────────────────
-  tabActive: sage[500],           // #7A8F78 — active glyph / label
-  tabInactive: forest[400],       // #5A6E69 — muted, warm
+  // primary[800] = #CC5600 → 3.95:1 on white (non-text 3:1 ✓; icon + label)
+  tabActive:   palette.primary[800],    // #CC5600 — accessible deep orange
+  tabInactive: '#A8A29E',               // stone-400: muted inactive icons
 
   // ── Drawer ─────────────────────────────────────────────────────────────
-  drawerSurface: sand[100],              // #F5EEE4 — elevated drawer header
-  drawerMutedSurface: sand[200],         // #EEE6DA — muted drawer band
-  drawerActiveBg: hexAlpha(sage[500], 0.12),
-  drawerActiveTint: sage[600],           // #6A7F68 — slightly deeper active
-  drawerInactiveTint: forest[400],       // #5A6E69
+  drawerSurface:      '#FFFFFF',
+  drawerMutedSurface: '#FAFAF9',
+  drawerActiveBg:     hexAlpha(primary, 0.10),
+  // primary[900] = #B24C00 → 4.84:1 on white ✓✓ (text label accessible)
+  drawerActiveTint:   palette.primary[900],   // #B24C00 — dark amber for labels
+  drawerInactiveTint: '#57534E',              // stone-600
 
   // ── Chips / Filter pills ───────────────────────────────────────────────
-  chipBorder: hexAlpha(sage[500], 0.25),
-  chipBackground: hexAlpha(sage[500], 0.07),
-  chipActiveBorder: sage[500],
-  chipActiveBackground: hexAlpha(sage[500], 0.16),
+  chipBorder:          '#D6D3D0',       // stone-300: soft visible border
+  chipBackground:      '#F5F4F2',       // very light stone fill
+  chipActiveBorder:    primary,         // full orange border on active chip
+  chipActiveBackground: hexAlpha(primary, 0.10), // soft orange tint
 
-  // ── Feedback — harmonized with the earthy wellness palette ────────────
-  // Error: warm earthy red (not the jarring bright #F75555 from dark)
-  error: '#C0453A',
-  errorBg: hexAlpha('#C0453A', 0.09),
-  errorText: '#C0453A',
+  // ── Feedback ─────────────────────────────────────────────────────────
+  // Error: red-600 base (4.5:1) / red-700 text (6.2:1) — both ✓
+  error:     '#DC2626',
+  errorBg:   hexAlpha('#DC2626', 0.08),
+  errorText: '#B91C1C',                // red-700: 6.2:1 on white ✓✓
 
-  // Success: earthy medium green, distinct hue from sage primary
-  success: '#4A8B5A',
-  successBg: hexAlpha('#4A8B5A', 0.09),
-  successText: '#4A8B5A',
-  successButton: '#357A44',         // deeper shade — white text 4.9:1 ✓
-  successMuted: hexAlpha('#4A8B5A', 0.13),
+  // Success: green-700 throughout (5.2:1 on white ✓✓)
+  success:       '#15803D',
+  successBg:     hexAlpha('#15803D', 0.08),
+  successText:   '#15803D',
+  successButton: '#15803D',            // white text on this: 5.0:1 ✓✓
+  successMuted:  hexAlpha('#15803D', 0.12),
 
-  // Info: muted teal — clearly different from primary green
-  info: '#4A7A8C',
-  infoBg: hexAlpha('#4A7A8C', 0.09),
-  infoText: '#4A7A8C',
+  // Info: sky-700 throughout (6.9:1 on white ✓✓)
+  info:     '#0369A1',
+  infoBg:   hexAlpha('#0369A1', 0.08),
+  infoText: '#0369A1',
 
   // ── Legacy ─────────────────────────────────────────────────────────────
-  danger: '#C0453A',
+  danger: '#DC2626',
 
   // ── Ambient atmosphere ─────────────────────────────────────────────────
-  gradientStart: sand[200],                    // #EEE6DA warm sand base
-  gradientMid: sage[100],                      // #E6EBE5 light sage depth layer
-  ambientOrb1: sage[400],                      // #9AAB95 muted sage green
-  ambientOrb2: sand[400],                      // #D5C5AF warm sand gold
-  shimmer: hexAlpha(sage[300], 0.09),          // soft sage inner glow
+  gradientStart: '#FAFAF9',             // stone-50 base
+  gradientMid:   '#F2F1EF',            // slightly deeper neutral
+  ambientOrb1:   primary,              // orange warmth accent
+  ambientOrb2:   '#E4E3E1',            // stone-200: soft neutral ring
+  shimmer:       hexAlpha(primary, 0.08), // soft orange inner glow
 };
 
 export const lightColors: ThemeColors = Object.freeze({
