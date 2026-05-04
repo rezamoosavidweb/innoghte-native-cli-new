@@ -45,6 +45,7 @@ export function createCartMainButtonsStyles(
       fontSize: fontSize.md,
       fontWeight: fontWeight.bold,
       textAlign: 'center',
+      color: '#ffffff',
     },
     primaryBg: {
       backgroundColor: themeColors.primary,
