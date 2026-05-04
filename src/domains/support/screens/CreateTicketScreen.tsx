@@ -5,12 +5,9 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import {
-  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   ScrollView,
-  View,
 } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 import { z } from 'zod';
@@ -27,6 +24,7 @@ import {
   flashListContentGutters,
   createNavScreenShellStyles,
 } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 
 type Props = DrawerScreenProps<DrawerParamList, 'CreateTicketScreen'>;
 
@@ -114,33 +112,22 @@ export const CreateTicketScreen = React.memo(function CreateTicketScreen(
             'screens.support.tickets.create.descriptionPlaceholder',
           )}
         />
-        <Pressable
-          accessibilityRole="button"
+        <Button
+          variant="filled"
+          title={t('screens.support.tickets.create.submit')}
+          loading={interactionBusy}
           disabled={interactionBusy}
           onPress={onSubmitPress}
-          style={({ pressed }) => [
+          style={[
             ticketStyles.submitBtn,
-            interactionBusy || pressed ? ticketStyles.submitDisabled : null,
+            interactionBusy ? ticketStyles.submitDisabled : null,
           ]}
+          contentStyle={ticketStyles.submitBtnSlot}
         >
-          <View style={ticketStyles.submitBtnSlot}>
-            <View style={interactionBusy ? ticketStyles.submitLabelHidden : undefined}>
-              <Text style={ticketStyles.submitLabel}>
-                {t('screens.support.tickets.create.submit')}
-              </Text>
-            </View>
-            {interactionBusy ? (
-              <View
-                style={ticketStyles.submitLoaderOverlay}
-                pointerEvents="none"
-                accessibilityElementsHidden
-                importantForAccessibility="no-hide-descendants"
-              >
-                <ActivityIndicator color={colors.background} />
-              </View>
-            ) : null}
-          </View>
-        </Pressable>
+          <Text style={ticketStyles.submitLabel}>
+            {t('screens.support.tickets.create.submit')}
+          </Text>
+        </Button>
       </ScrollView>
     </KeyboardAvoidingView>
   );

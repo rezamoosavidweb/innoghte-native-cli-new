@@ -2,7 +2,7 @@ import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import type { Control } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
-import { Pressable, TextInput, View } from 'react-native';
+import { TextInput, View } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import { SelectPaymentType } from '@/domains/basket/components/SelectPaymentType';
@@ -16,6 +16,7 @@ import {
 } from '@/domains/basket/model/paymentFormSchema';
 import { isDotIr } from '@/shared/config/resolveIsDotIr';
 import { formatCardNumber } from '@/shared/utils/paymentFormatting';
+import { Button } from '@/ui/components/Button';
 import { pickSemantic } from '@/ui/theme';
 
 export type PaymentSectionProps = {
@@ -122,20 +123,23 @@ export const PaymentSection = React.memo(function PaymentSection({
                     <Text style={s.label}>نوع کارت</Text>
                     <View style={s.typeRow}>
                       {basketCartTypeOptions.map(opt => (
-                        <Pressable
+                        <Button
                           key={opt.value}
+                          layout="auto"
+                          variant="text"
+                          title={opt.label}
                           onPress={() => field.onChange(opt.value)}
                           style={[
                             s.chip,
                             field.value === opt.value && s.chipOn,
                           ]}
-                          accessibilityRole="button"
                           accessibilityState={{
                             selected: field.value === opt.value,
                           }}
+                          contentStyle={{ width: '100%' }}
                         >
                           <Text style={s.chipTxt}>{opt.label}</Text>
-                        </Pressable>
+                        </Button>
                       ))}
                     </View>
                     {errors.cart?.cardType?.message ? (
@@ -246,20 +250,26 @@ export const PaymentSection = React.memo(function PaymentSection({
         </View>
       ) : (
         <View style={s.gatewayRow}>
-          <Pressable
+          <Button
+            layout="auto"
+            variant="text"
+            title="زرین‌پال"
             onPress={() => onGatewayPress('zarinpal')}
             style={[s.gw, gateway === 'zarinpal' && s.gwOn]}
-            accessibilityRole="button"
+            contentStyle={{ width: '100%' }}
           >
             <Text style={s.gwLbl}>زرین‌پال</Text>
-          </Pressable>
-          <Pressable
+          </Button>
+          <Button
+            layout="auto"
+            variant="text"
+            title="وندار"
             onPress={() => onGatewayPress('vandar')}
             style={[s.gw, gateway === 'vandar' && s.gwOn]}
-            accessibilityRole="button"
+            contentStyle={{ width: '100%' }}
           >
             <Text style={s.gwLbl}>وندار</Text>
-          </Pressable>
+          </Button>
         </View>
       )}
     </View>

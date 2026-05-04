@@ -1,10 +1,5 @@
 import * as React from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  TextInput,
-  View,
-} from 'react-native';
+import { TextInput, View } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import { navigateToLogin } from '@/app/bridge/auth/protectedNavigation';
@@ -15,6 +10,7 @@ import { showAppToast } from '@/shared/ui/toast/toastBus';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { useDiscountFormStyles } from '@/domains/basket/components/discountForm.styles';
 import { useThemeColors } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 
 const SUBMIT_DEBOUNCE_MS = 480;
 
@@ -116,29 +112,19 @@ export const DiscountForm = React.memo(function DiscountForm({
           onSubmitEditing={onApply}
           returnKeyType="done"
         />
-        <Pressable
-          onPress={onApply}
-          style={[s.addBtn, isPending && s.addBtnDisabled]}
-          disabled={isPending}
-          accessibilityRole="button"
+        <Button
+          layout="auto"
+          variant="filled"
+          title="اعمال تخفیف"
           accessibilityLabel="اعمال تخفیف"
+          onPress={onApply}
+          loading={isPending}
+          disabled={isPending}
+          style={[s.addBtn, isPending && s.addBtnDisabled]}
+          contentStyle={s.addBtnSlot}
         >
-          <View style={s.addBtnSlot}>
-            <View style={isPending ? s.addBtnLabelHidden : undefined}>
-              <Text style={s.addLbl}>+</Text>
-            </View>
-            {isPending ? (
-              <View
-                style={s.addBtnLoaderOverlay}
-                pointerEvents="none"
-                accessibilityElementsHidden
-                importantForAccessibility="no-hide-descendants"
-              >
-                <ActivityIndicator color={colors.background} />
-              </View>
-            ) : null}
-          </View>
-        </Pressable>
+          <Text style={s.addLbl}>+</Text>
+        </Button>
       </View>
     </View>
   );

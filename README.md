@@ -80,7 +80,7 @@ app/
 
 Each self-contained business feature. See [Domain Architecture](#domain-architecture) below.
 
-Active domains: `auth`, `basket`, `collaboration`, `contact`, `courses`, `donation`, `events`, `experiences`, `home`, `legal`, `live`, `media`, `search`, `settings`, `support`, `transactions`, `user`
+Active domains: `auth`, `albums`, `basket`, `collaboration`, `contact`, `courses`, `donation`, `events`, `experiences`, `home`, `legal`, `live`, `search`, `settings`, `support`, `transactions`, `user`
 
 ### `src/shared/`
 
@@ -252,7 +252,7 @@ All route types are in `src/shared/contracts/navigationApp.ts` (`DrawerParamList
 
 ```ts
 import { navigateToAppLeaf } from '@/app/bridge/auth';
-navigateToAppLeaf(navigation, 'CourseDetail', { courseId: 42 });
+navigateToAppLeaf(navigation, 'PublicCourseDetail', { courseId: 42 });
 ```
 
 Handles `MainTabs` nesting automatically.

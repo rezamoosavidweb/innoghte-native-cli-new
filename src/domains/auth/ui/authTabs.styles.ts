@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { fontSize, fontWeight, FORM_CONTROL_HEIGHT, radius, spacing } from '@/ui/theme';
+import { fontSize, fontWeight, FORM_CONTROL_HEIGHT, radius } from '@/ui/theme';
 import type { ThemeColors } from '@/ui/theme/types';
 
 export function createAuthTabsStyles(colors: ThemeColors) {

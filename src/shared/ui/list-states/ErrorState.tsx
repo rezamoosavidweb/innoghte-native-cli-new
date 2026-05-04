@@ -1,6 +1,6 @@
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import {
@@ -9,6 +9,7 @@ import {
 } from '@/ui/theme';
 
 import { useErrorStateButtonStyles } from '@/shared/ui/list-states/errorState.styles';
+import { Button } from '@/ui/components/Button';
 
 export type ErrorStateProps = {
   title: string;
@@ -33,17 +34,16 @@ const ErrorStateComponent = ({
     <View style={shell.centered} accessibilityRole="alert">
       <Text style={shell.errorText}>{title}</Text>
       {detail ? <Text style={shell.errorDetail}>{detail}</Text> : null}
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={retryLabel}
+      <Button
+        layout="auto"
+        variant="text"
+        title={retryLabel}
         onPress={onRetry}
-        style={({ pressed }) => [
-          btnStyles.retryPressable,
-          pressed && { opacity: 0.85 },
-        ]}
+        style={btnStyles.retryPressable}
+        contentStyle={{ width: '100%' }}
       >
         <Text style={btnStyles.retryLabel}>{retryLabel}</Text>
-      </Pressable>
+      </Button>
     </View>
   );
 };

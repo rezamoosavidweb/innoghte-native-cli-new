@@ -5,7 +5,6 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import {
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   ScrollView,
   TextInput,
   View
@@ -44,6 +43,7 @@ import { toPersianNumber } from '@/domains/donation/utils/paymentFormatting';
 import { isDotIr } from '@/shared/config/resolveIsDotIr';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { StorageService } from '@/shared/infra/storage/storage.service';
+import { Button } from '@/ui/components/Button';
 import { flashListContentGutters, pickSemantic } from '@/ui/theme';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Donation'>;
@@ -277,13 +277,16 @@ export const DonationScreen = React.memo(function DonationScreen({
               <Text style={s.currency}>{isDotIr ? 'تومان' : 'دلار'}</Text>
             </View>
             <View style={s.amountBtnsRow}>
-              <Pressable
+              <Button
+                layout="auto"
+                variant="text"
+                title={isDotIr ? '50,000' : '5'}
                 onPress={() => handlePresetAmount(isDotIr ? '50000' : '5')}
                 style={[
                   s.amtBtn,
                   (preset.isIrPreset50 || preset.isComPreset5) && s.amtBtnOn,
                 ]}
-                accessibilityRole="button"
+                contentStyle={{ width: '100%' }}
               >
                 <Text
                   style={[
@@ -294,14 +297,17 @@ export const DonationScreen = React.memo(function DonationScreen({
                 >
                   {isDotIr ? '50,000' : '5'}
                 </Text>
-              </Pressable>
-              <Pressable
+              </Button>
+              <Button
+                layout="auto"
+                variant="text"
+                title={isDotIr ? '250,000' : '25'}
                 onPress={() => handlePresetAmount(isDotIr ? '250000' : '25')}
                 style={[
                   s.amtBtn,
                   (preset.isIrPreset250 || preset.isComPreset25) && s.amtBtnOn,
                 ]}
-                accessibilityRole="button"
+                contentStyle={{ width: '100%' }}
               >
                 <Text
                   style={[
@@ -312,14 +318,17 @@ export const DonationScreen = React.memo(function DonationScreen({
                 >
                   {isDotIr ? '250,000' : '25'}
                 </Text>
-              </Pressable>
-              <Pressable
+              </Button>
+              <Button
+                layout="auto"
+                variant="text"
+                title="مبلغ دلخواه خود را وارد کنید."
                 onPress={handleCustomPress}
                 style={[
                   s.amtBtn,
                   isCustomAmount && activeButton === '' && s.amtBtnOn,
                 ]}
-                accessibilityRole="button"
+                contentStyle={{ width: '100%' }}
               >
                 <Text
                   style={[
@@ -329,7 +338,7 @@ export const DonationScreen = React.memo(function DonationScreen({
                 >
                   مبلغ دلخواه خود را وارد کنید.
                 </Text>
-              </Pressable>
+              </Button>
             </View>
           </View>
 
@@ -450,16 +459,19 @@ export const DonationScreen = React.memo(function DonationScreen({
                   {toPersianNumber(amount) + (!isDotIr ? '$' : '')}{' '}
                   {isDotIr ? 'تومان' : ''}
                 </Text>
-                <Pressable
+                <Button
+                  variant="filled"
+                  title="تائید و پرداخت"
                   onPress={handleSubmit(submitDonation)}
-                  style={[s.payBtn, isPayProcessing && s.payBtnDisabled]}
+                  loading={isPayProcessing}
                   disabled={isPayProcessing}
-                  accessibilityRole="button"
+                  style={[s.payBtn, isPayProcessing && s.payBtnDisabled]}
+                  contentStyle={{ width: '100%' }}
                 >
                   <Text style={s.payBtnText}>
                     {isPayProcessing ? 'در حال پردازش...' : 'تائید و پرداخت'}
                   </Text>
-                </Pressable>
+                </Button>
               </View>
             </View>
           </View>

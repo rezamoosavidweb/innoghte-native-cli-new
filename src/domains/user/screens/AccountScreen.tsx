@@ -3,7 +3,6 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
-  Pressable,
   ScrollView,
   View,
 } from 'react-native';
@@ -21,6 +20,7 @@ import {
   createNavScreenShellStyles,
   useThemeColors,
 } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 import {
   createAccountScreenStyles,
   type AccountScreenStyles,
@@ -82,15 +82,18 @@ export const AccountScreen = () => {
         <Text style={screenStyles.errorText}>
           {t('screens.account.loadError')}
         </Text>
-        <Pressable
-          accessibilityRole="button"
+        <Button
+          layout="auto"
+          variant="text"
+          title={t('listStates.retry')}
           onPress={() => {
             refetch().catch(() => {});
           }}
           style={screenStyles.retryPressable}
+          contentStyle={{ width: '100%' }}
         >
           <Text style={screenStyles.retryLabel}>{t('listStates.retry')}</Text>
-        </Pressable>
+        </Button>
       </View>
     );
   }
@@ -106,17 +109,17 @@ export const AccountScreen = () => {
           <Text style={screenStyles.screenTitle}>
             {t('screens.account.screenTitle')}
           </Text>
-          <Pressable
-            accessibilityRole="button"
+          <Button
+            layout="auto"
+            variant="text"
+            title={t('screens.account.edit')}
             accessibilityLabel={t('screens.account.edit')}
             onPress={onEdit}
-            style={({ pressed }) => [
-              screenStyles.editBtn,
-              pressed ? screenStyles.editBtnPressed : null,
-            ]}
+            style={screenStyles.editBtn}
+            contentStyle={{ width: '100%' }}
           >
             <Text style={screenStyles.editLabel}>{t('screens.account.edit')}</Text>
-          </Pressable>
+          </Button>
         </View>
 
         <AccountRow styles={screenStyles} label={t('screens.account.fullName')} value={profileUser.fullName || '—'} />
@@ -215,13 +218,16 @@ const AccountRowWithBadge = React.memo(function AccountRowWithBadge({
           </Text>
         </View>
         {!verified ? (
-          <Pressable
-            accessibilityRole="button"
+          <Button
+            layout="auto"
+            variant="text"
+            title={t('screens.account.verify')}
             accessibilityLabel={t('screens.account.verify')}
             onPress={onPressVerify}
+            contentStyle={{ width: '100%' }}
           >
             <Text style={s.verifyLink}>{t('screens.account.verify')}</Text>
-          </Pressable>
+          </Button>
         ) : null}
       </View>
     </View>

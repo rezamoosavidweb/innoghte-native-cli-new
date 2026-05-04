@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   ActivityIndicator,
-  Pressable,
   ScrollView,
   TextInput,
   View
@@ -28,6 +27,7 @@ import {
   createFaqsSearchInputStyles,
 } from '@/domains/support/faqs/ui';
 import { useFaqHubStore } from '@/domains/support/faqs/model/faqHub.store';
+import { Button } from '@/ui/components/Button';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Faqs'>;
 
@@ -49,14 +49,17 @@ const CategoryChip = React.memo(function CategoryChip({
   const { colors } = useTheme();
   const s = createFaqsCategoryChipStyles(colors, active);
   return (
-    <Pressable
-      accessibilityRole="button"
+    <Button
+      layout="auto"
+      variant="text"
+      title={title}
       accessibilityState={{ selected: active }}
       onPress={onPress}
-      style={({ pressed }) => [s.press, pressed ? s.pressDim : null]}
+      style={s.press}
+      contentStyle={{ width: '100%' }}
     >
       <Text style={s.label}>{title}</Text>
-    </Pressable>
+    </Button>
   );
 });
 CategoryChip.displayName = 'CategoryChip';

@@ -58,6 +58,9 @@
     "copyright": "حق نشر",
     "courseDetail": "جزئیات دوره",
     "coursePlayer": "پخش دوره",
+    "publicCourseDetail": "معرفی دوره",
+    "publicAlbumDetail": "معرفی آلبوم",
+    "albumDetail": "آلبوم من",
     "guest": {
       "login": "ورود",
       "register": "ثبت‌نام"
@@ -125,10 +128,28 @@
       "externalPlaybackHint": "پخش این رسانه در اپ وب یا مرورگر انجام می‌شود.",
       "htmlMediaHint": "این فصل شامل محتوای جاسازی‌شده است؛ در صورت نیاز از نسخه وب استفاده کنید."
     },
+    "albumDetail": {
+      "title": "آلبوم من",
+      "loading": "در حال بارگذاری آلبوم…",
+      "error": "بارگذاری آلبوم ناموفق بود.",
+      "empty": "آلبوم یافت نشد.",
+      "chaptersHeading": "قطعات آلبوم «{{title}}»",
+      "nextTrack": "قطعه بعد: {{title}}",
+      "notAccessible": "این آلبوم برای حساب شما فعال نیست."
+    },
+    "publicAlbumDetail": {
+      "title": "معرفی آلبوم",
+      "loading": "در حال بارگذاری…",
+      "error": "بارگذاری جزئیات آلبوم ناموفق بود.",
+      "empty": "آلبوم یافت نشد.",
+      "commentsTitle": "نظرات"
+    },
     "albums": {
       "loading": "در حال بارگذاری آلبوم‌ها…",
       "error": "بارگذاری آلبوم‌ها ناموفق بود.",
-      "empty": "آلبومی در دسترس نیست."
+      "empty": "آلبومی در دسترس نیست.",
+      "viewAlbum": "مشاهده آلبوم",
+      "moreInformation": "اطلاعات بیشتر"
     },
     "myCoursesHub": {
       "subtitle": "دوره‌ها، آلبوم‌ها و بیشتر — همان مرکز اپ قدیمی.",
@@ -583,6 +604,7 @@
   },
   "comments": {
     "entityCourse": "دوره",
+    "entityAlbum": "آلبوم",
     "submitLabel": "ثبت نظر",
     "placeholderSuffix": " بنظرتان چطور بود؟",
     "yourRating": "امتیاز شما",

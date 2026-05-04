@@ -71,8 +71,10 @@ const EXTRA_DRAWER_LABELS = {
   supportServices: 'drawer.supportServices',
   terms: 'drawer.terms',
   copyright: 'drawer.copyright',
-  courseDetail: 'drawer.courseDetail',
+  publicCourseDetail: 'drawer.publicCourseDetail',
   coursePlayer: 'drawer.coursePlayer',
+  publicAlbumDetail: 'drawer.publicAlbumDetail',
+  albumDetail: 'drawer.albumDetail',
   authEntry: 'drawer.authEntry',
   register: 'drawer.register',
 } as const;

@@ -5,10 +5,8 @@ import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import {
-  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   ScrollView,
   TextInput,
   View,
@@ -36,6 +34,7 @@ import {
   flashListContentGutters,
   useThemeColors,
 } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Collaboration'>;
 
@@ -173,19 +172,23 @@ export const CollaborationScreen = React.memo(function CollaborationScreen({
     ) => (
       <View style={s.chipRow}>
         {options.map(o => (
-          <Pressable
+          <Button
             key={o.value}
-            accessibilityRole="button"
+            layout="auto"
+            variant="text"
+            title={o.label}
             style={[s.chip, current === o.value ? s.chipOn : null]}
+            accessibilityState={{ selected: current === o.value }}
             onPress={() =>
               setValue(field, o.value, {
                 shouldValidate: true,
                 shouldDirty: true,
               })
             }
+            contentStyle={{ width: '100%' }}
           >
             <Text style={s.chipLabel}>{o.label}</Text>
-          </Pressable>
+          </Button>
         ))}
       </View>
     ),
@@ -338,21 +341,27 @@ export const CollaborationScreen = React.memo(function CollaborationScreen({
           <Text style={s.label}>{t('screens.collaboration.unit')}</Text>
           <View style={s.chipRow}>
             {(catQuery.data ?? []).map(c => (
-              <Pressable
+              <Button
                 key={c.id}
-                accessibilityRole="button"
+                layout="auto"
+                variant="text"
+                title={c.name}
                 style={[
                   s.chip,
                   categoryId === String(c.id) ? s.chipOn : null,
                 ]}
+                accessibilityState={{
+                  selected: categoryId === String(c.id),
+                }}
                 onPress={() =>
                   setValue('work_with_us_category_id', String(c.id), {
                     shouldValidate: true,
                   })
                 }
+                contentStyle={{ width: '100%' }}
               >
                 <Text style={s.chipLabel}>{c.name}</Text>
-              </Pressable>
+              </Button>
             ))}
           </View>
           {errors.work_with_us_category_id ? (
@@ -419,36 +428,32 @@ export const CollaborationScreen = React.memo(function CollaborationScreen({
           ) : null}
 
           <Text style={s.label}>{t('screens.collaboration.resumePick')}</Text>
-          <Pressable accessibilityRole="button" style={s.resumeBox} onPress={pickResume}>
+          <Button
+            layout="auto"
+            variant="text"
+            title={resume?.name ?? t('screens.collaboration.resumeName')}
+            style={s.resumeBox}
+            onPress={pickResume}
+            contentStyle={{ width: '100%' }}
+          >
             <Text style={s.muted}>
               {resume?.name ?? t('screens.collaboration.resumeName')}
             </Text>
-          </Pressable>
+          </Button>
 
-          <Pressable
-            accessibilityRole="button"
+          <Button
+            variant="filled"
+            title={t('screens.collaboration.submit')}
             style={[s.submit, submitMut.isPending ? s.submitDisabled : null]}
             disabled={submitMut.isPending}
+            loading={submitMut.isPending}
             onPress={() => {
               fireAndForget(handleSubmit(onValid)());
             }}
+            contentStyle={s.submitSlot}
           >
-            <View style={s.submitSlot}>
-              <View style={submitMut.isPending ? s.submitLabelHidden : undefined}>
-                <Text style={s.submitLabel}>{t('screens.collaboration.submit')}</Text>
-              </View>
-              {submitMut.isPending ? (
-                <View
-                  style={s.submitLoaderOverlay}
-                  pointerEvents="none"
-                  accessibilityElementsHidden
-                  importantForAccessibility="no-hide-descendants"
-                >
-                  <ActivityIndicator color="#FFF" />
-                </View>
-              ) : null}
-            </View>
-          </Pressable>
+            <Text style={s.submitLabel}>{t('screens.collaboration.submit')}</Text>
+          </Button>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

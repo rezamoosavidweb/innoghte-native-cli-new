@@ -131,7 +131,6 @@ const VerifyScreenComponent = ({ route }: Props) => {
         fieldLabelStyle={s.fieldLabel}
         inputStyle={s.input}
         primaryButton={s.primaryButton}
-        primaryButtonPressed={s.primaryButtonPressed}
         primaryButtonDisabled={s.primaryButtonDisabled}
         primaryButtonLabel={s.primaryButtonLabel}
         errorTextStyle={s.errorText}
@@ -156,7 +155,6 @@ const VerifyScreenComponent = ({ route }: Props) => {
           fieldLabelStyle={s.fieldLabel}
           inputStyle={s.input}
           primaryButton={s.primaryButton}
-          primaryButtonPressed={s.primaryButtonPressed}
           primaryButtonDisabled={s.primaryButtonDisabled}
           primaryButtonLabel={s.primaryButtonLabel}
           errorTextStyle={s.errorText}

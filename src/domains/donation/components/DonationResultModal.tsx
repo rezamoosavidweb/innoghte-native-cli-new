@@ -1,10 +1,11 @@
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
-import {Modal, Pressable, View} from 'react-native';
+import {Modal, View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import { useDonationResultModalStyles } from '@/domains/donation/ui/donationResultModal.styles';
 import { pickSemantic } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 
 export type DonationResultModalProps = {
   visible: boolean;
@@ -44,9 +45,16 @@ export const DonationResultModal = React.memo(function DonationResultModal({
       <View style={s.overlay}>
         <View style={s.card}>
           <View style={s.closeRow}>
-            <Pressable onPress={onClose} accessibilityRole="button">
+            <Button
+              layout="auto"
+              variant="text"
+              title="Close"
+              accessibilityLabel="Close"
+              onPress={onClose}
+              contentStyle={{ width: '100%' }}
+            >
               <Text style={s.closeText}>✕</Text>
-            </Pressable>
+            </Button>
           </View>
           <Text style={s.title}>{title}</Text>
           {bodyLines.map((line, idx) => (

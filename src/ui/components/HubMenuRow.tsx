@@ -1,6 +1,8 @@
 import * as React from 'react';
-import {Pressable, View, type ViewStyle, type TextStyle} from 'react-native';
+import {View, type ViewStyle, type TextStyle} from 'react-native';
 import { Text } from '@/shared/ui/Text';
+
+import { Button } from '@/ui/components/Button';
 
 export type HubMenuRowStyleSet = {
   menuRow: ViewStyle;
@@ -25,17 +27,25 @@ export const HubMenuRow = React.memo(function HubMenuRow({
   s,
 }: Props) {
   return (
-    <Pressable
-      accessibilityRole="button"
+    <Button
+      layout="auto"
+      variant="text"
+      title={title}
       onPress={onPress}
-      style={({ pressed }) => (pressed ? [s.menuRow, s.menuRowPressed] : s.menuRow)}
+      style={s.menuRow}
+      contentStyle={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+      }}
     >
       <View style={s.menuRowLeft}>
         <Text style={s.menuIcon}>{icon}</Text>
         <Text style={s.menuTitle}>{title}</Text>
       </View>
       <Text style={s.chevron}>›</Text>
-    </Pressable>
+    </Button>
   );
 });
 HubMenuRow.displayName = 'HubMenuRow';

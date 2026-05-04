@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   Image,
-  Pressable,
   View,
   type StyleProp,
   type ViewStyle
@@ -16,6 +15,7 @@ import {
 } from '@/domains/basket/model/courseGuards';
 import { formatTomanFa } from '@/domains/basket/utils/formatTomanFa';
 import { useThemeColors } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 
 export type CartItemProps = {
   item: CartDto;
@@ -53,14 +53,16 @@ export const CartItem = React.memo(function CartItem({
 
   return (
     <View style={[s.row, containerStyle]}>
-      <Pressable
+      <Button
+        layout="auto"
+        variant="text"
+        title="حذف از سبد"
+        accessibilityLabel="حذف از سبد"
         onPress={onRemovePress}
         style={s.removeHit}
-        accessibilityRole="button"
-        accessibilityLabel="حذف از سبد"
       >
         <Text style={s.remove}>×</Text>
-      </Pressable>
+      </Button>
       <View style={s.grow}>
         <View style={[s.thumbWrap, isDisabled && s.muted]}>
           {imageSrc ? (
@@ -82,14 +84,16 @@ export const CartItem = React.memo(function CartItem({
         </View>
       </View>
       {isDisabled ? (
-        <Pressable
+        <Button
+          layout="auto"
+          variant="filled"
+          title="مشاهده دوره"
           onPress={onViewPress}
           style={s.pill}
-          accessibilityRole="button"
-          accessibilityLabel="مشاهده دوره"
+          contentStyle={{ width: '100%' }}
         >
           <Text style={s.pillText}>مشاهده دوره</Text>
-        </Pressable>
+        </Button>
       ) : (
         <View style={s.priceCol}>
           {course?.discount_price != null &&

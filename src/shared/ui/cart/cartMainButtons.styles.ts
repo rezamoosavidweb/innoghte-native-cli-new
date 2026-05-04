@@ -34,6 +34,9 @@ export function createCartMainButtonsStyles(
     pressed: {
       opacity: 0.88,
     },
+    row:{
+      flexDirection: 'row',
+    },
     labelRow: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -93,6 +96,20 @@ export function createCartMainButtonsStyles(
       ...StyleSheet.absoluteFill,
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    buttonOutlinedText: {
+      fontSize: fontSize.md,
+      fontWeight: fontWeight.bold,
+      color: themeColors.primary,
+    },
+    buttonOutlined: {
+      flex: 1,
+      borderRadius: radius.lg - 2,
+      paddingVertical: spacing.md,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderWidth: StyleSheet.hairlineWidth,
+      borderColor: themeColors.primary,
     },
   });
 }

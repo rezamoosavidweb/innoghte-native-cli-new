@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 import { toPersianNumber } from '@/shared/utils/toPersianNumber';
 
@@ -8,6 +8,7 @@ import { createDeviceSessionRowStyles } from '@/domains/user/ui/deviceSessionRow
 import { spacing } from '@/ui/theme/core/spacing';
 import { radius } from '@/ui/theme/core/radius';
 import { fontSize } from '@/ui/theme/core/typography';
+import { Button } from '@/ui/components/Button';
 
 export type DeviceSessionRowProps = {
   device: UserDeviceDto;
@@ -85,25 +86,25 @@ export const DeviceSessionRow = React.memo(function DeviceSessionRow({
           </Text>
         </View>
         {isActive ? (
-          <Pressable
-            accessibilityRole="button"
+          <Button
+            layout="auto"
+            variant="text"
+            title={labels.deactivate}
             accessibilityLabel={labels.deactivate}
             disabled={deactivateBusy}
+            loading={deactivateBusy}
             onPress={onPressDeactivate}
-            style={({ pressed }) => [
+            style={[
               styles.deactivateBtn,
               themed.deactivateBtn,
-              deactivateBusy
-                ? themed.deactivateBtnBusy
-                : pressed
-                  ? themed.deactivateBtnPressed
-                  : null,
+              deactivateBusy ? themed.deactivateBtnBusy : null,
             ]}
+            contentStyle={{ width: '100%' }}
           >
             <Text style={[styles.deactivateLabel, themed.deactivateLabel]}>
-              {deactivateBusy ? '…' : labels.deactivate}
+              {labels.deactivate}
             </Text>
-          </Pressable>
+          </Button>
         ) : null}
       </View>
     </View>

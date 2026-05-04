@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  Pressable,
   TextInput,
   View,
   type KeyboardTypeOptions,
@@ -8,6 +7,8 @@ import {
   type ViewStyle
 } from 'react-native';
 import { Text } from '@/shared/ui/Text';
+
+import { Button } from '@/ui/components/Button';
 
 export type VerifyInputStepProps = {
   label: string;
@@ -23,7 +24,6 @@ export type VerifyInputStepProps = {
   fieldLabelStyle: TextStyle;
   inputStyle: TextStyle;
   primaryButton: ViewStyle;
-  primaryButtonPressed: ViewStyle;
   primaryButtonDisabled: ViewStyle;
   primaryButtonLabel: TextStyle;
   errorTextStyle: TextStyle;
@@ -43,7 +43,6 @@ export const VerifyInputStep = React.memo(function VerifyInputStep({
   fieldLabelStyle,
   inputStyle,
   primaryButton,
-  primaryButtonPressed,
   primaryButtonDisabled,
   primaryButtonLabel,
   errorTextStyle,
@@ -65,22 +64,21 @@ export const VerifyInputStep = React.memo(function VerifyInputStep({
         style={inputStyle}
       />
       {errorText ? <Text style={errorTextStyle}>{errorText}</Text> : null}
-      <Pressable
-        accessibilityRole="button"
+      <Button
+        variant="filled"
+        title={submitLabel}
         accessibilityState={{ disabled: submitDisabled }}
         disabled={submitDisabled}
+        loading={isSubmitting}
         onPress={onSubmit}
-        style={({ pressed }) => {
-          if (submitDisabled) {
-            return [primaryButton, primaryButtonDisabled];
-          }
-          return pressed
-            ? [primaryButton, primaryButtonPressed]
-            : primaryButton;
-        }}
+        style={[
+          primaryButton,
+          submitDisabled ? primaryButtonDisabled : null,
+        ]}
+        contentStyle={{ width: '100%' }}
       >
         <Text style={primaryButtonLabel}>{submitLabel}</Text>
-      </Pressable>
+      </Button>
     </View>
   );
 });

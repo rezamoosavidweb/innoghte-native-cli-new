@@ -8,7 +8,7 @@ import * as React from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import {Pressable, RefreshControl, View} from 'react-native';
+import {RefreshControl, View} from 'react-native';
 
 import { TicketCard } from '@/domains/support/components/TicketCard';
 import { useInfiniteTickets } from '@/domains/support/hooks/useInfiniteTickets';
@@ -20,6 +20,7 @@ import { useListPerformanceProfile } from '@/shared/infra/device/listPerformance
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { ListFooterLoader } from '@/shared/ui/list-states/ListFooterLoader';
 import { ListStateView } from '@/shared/ui/list-states/ListStateView';
+import { Button } from '@/ui/components/Button';
 import {
   flashListContentGutters,
   flashListEstimatedItemSize,
@@ -96,11 +97,17 @@ const TicketListScreenComponent = (_props: Props) => {
           <Text style={ticketStyles.ticketTitle}>
             {t('screens.support.tickets.list.title')}
           </Text>
-          <Pressable accessibilityRole="button" onPress={onCreateTicket}>
+          <Button
+            layout="auto"
+            variant="text"
+            title={t('screens.support.tickets.list.create')}
+            onPress={onCreateTicket}
+            contentStyle={{ width: '100%' }}
+          >
             <Text style={ticketStyles.createTicketLinkText}>
               {t('screens.support.tickets.list.create')}
             </Text>
-          </Pressable>
+          </Button>
         </View>
       </>
     ),

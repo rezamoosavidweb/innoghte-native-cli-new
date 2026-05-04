@@ -112,6 +112,8 @@ export function buildProductListCardStyles(
     },
     actionsRow: {
       flexDirection: 'row',
+      flexWrap: 'wrap',
+      alignItems: 'stretch',
       gap: spacing.md - 2,
       marginTop: spacing.md,
       width: '100%',

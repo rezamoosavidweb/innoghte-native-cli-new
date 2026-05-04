@@ -4,7 +4,6 @@ import {
   FlatList,
   Modal,
   Platform,
-  Pressable,
   TextInput,
   View,
   type ListRenderItem,
@@ -12,6 +11,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useThemeColors } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 
 import { createPhoneInputStyles } from './PhoneInput.styles';
 import {
@@ -77,11 +77,17 @@ const PickerRow = React.memo(function PickerRow({
   }, [item, onPick]);
 
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={`${item.name}, ${formatDialCode(item.dialDigits)}`}
+    <Button
+      layout="auto"
+      variant="text"
+      title={`${item.name}, ${formatDialCode(item.dialDigits)}`}
       onPress={onPress}
       style={styles.listRow}
+      contentStyle={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+      }}
     >
       <Text style={styles.listRowFlag}>{countryFlagEmoji(item.iso2)}</Text>
       <View style={styles.listRowBody}>
@@ -90,7 +96,7 @@ const PickerRow = React.memo(function PickerRow({
           {formatDialCode(item.dialDigits)}
         </Text>
       </View>
-    </Pressable>
+    </Button>
   );
 });
 
@@ -221,18 +227,25 @@ function PhoneInputInner({
             <Text style={s.dialPrefix}>{displayDialCode}</Text>
           </View>
         ) : (
-          <Pressable
-            accessibilityRole="button"
+          <Button
+            layout="auto"
+            variant="text"
+            title={accessibilityLabelCountry}
             accessibilityLabel={accessibilityLabelCountry}
             accessibilityState={{ disabled }}
             disabled={disabled}
             onPress={openPicker}
             style={s.countrySide}
+            contentStyle={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              width: '100%',
+            }}
           >
             <Text style={s.flag}>{countryFlagEmoji(selected.iso2)}</Text>
             <Text style={s.dialPrefix}>{displayDialCode}</Text>
             <Text style={s.chevron}>▾</Text>
-          </Pressable>
+          </Button>
         )}
         <TextInput
           accessibilityLabel={accessibilityLabelDial}
@@ -266,14 +279,17 @@ function PhoneInputInner({
         <SafeAreaView style={s.modalRoot} edges={['top', 'bottom']}>
           <View style={s.modalHeader}>
             <Text style={s.modalTitle}>Country</Text>
-            <Pressable
-              accessibilityRole="button"
+            <Button
+              layout="auto"
+              variant="text"
+              title="Done"
               accessibilityLabel="Close"
               onPress={closePicker}
               style={s.closeBtn}
+              contentStyle={{ width: '100%' }}
             >
               <Text style={s.closeBtnLabel}>Done</Text>
-            </Pressable>
+            </Button>
           </View>
           <TextInput
             accessibilityLabel="Search countries"

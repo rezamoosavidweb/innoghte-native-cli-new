@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import { useSelectPaymentTypeStyles } from '@/domains/basket/components/selectPaymentType.styles';
 import { isDotIr } from '@/shared/config/resolveIsDotIr';
 import { useThemeColors } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 
 type Props = {
   value: 'paypal' | 'credit_card';
@@ -37,22 +38,28 @@ export const SelectPaymentType = React.memo(function SelectPaymentType({
 
   return (
     <View style={s.row}>
-      <Pressable
+      <Button
+        layout="auto"
+        variant="text"
+        title="PayPal"
         onPress={() => onChange('paypal')}
         style={[s.chip, value === 'paypal' && s.chipOn]}
-        accessibilityRole="button"
         accessibilityState={{ selected: value === 'paypal' }}
+        contentStyle={{ width: '100%' }}
       >
         <Text style={s.lbl}>PayPal</Text>
-      </Pressable>
-      <Pressable
+      </Button>
+      <Button
+        layout="auto"
+        variant="text"
+        title="کارت اعتباری"
         onPress={() => onChange('credit_card')}
         style={[s.chip, value === 'credit_card' && s.chipOn]}
-        accessibilityRole="button"
         accessibilityState={{ selected: value === 'credit_card' }}
+        contentStyle={{ width: '100%' }}
       >
         <Text style={s.lbl}>کارت اعتباری</Text>
-      </Pressable>
+      </Button>
       <View style={[s.chip, s.chipMuted]}>
         <Text style={s.lbl}>—</Text>
       </View>

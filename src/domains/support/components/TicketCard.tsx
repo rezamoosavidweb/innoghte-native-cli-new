@@ -1,7 +1,7 @@
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import {Pressable, View} from 'react-native';
+import {View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import { SafeHtmlContent } from '@/shared/ui/html';
@@ -11,6 +11,7 @@ import { TicketStatusBadge } from '@/domains/support/components/TicketStatusBadg
 import type { Ticket } from '@/domains/support/model/ticket.types';
 import { createTicketScreenStyles } from '@/domains/support/ui/ticketScreen.styles';
 import { formatTsIso } from '@/shared/utils/formatTsIso';
+import { Button } from '@/ui/components/Button';
 
 export type TicketCardProps = {
   ticket: Ticket;
@@ -71,20 +72,20 @@ export const TicketCard = React.memo(function TicketCard({
           />
         </View>
 
-        <Pressable
-          accessibilityRole="button"
+        <Button
+          layout="auto"
+          variant="filled"
+          title={t('screens.support.tickets.card.view')}
           accessibilityLabel={t('screens.support.tickets.card.view')}
           accessibilityHint={ticket.title}
           onPress={onViewPress}
-          style={({ pressed }) => [
-            styles.ticketCardViewButton,
-            pressed ? styles.ticketCardViewButtonPressed : null,
-          ]}
+          style={styles.ticketCardViewButton}
+          contentStyle={{ width: '100%' }}
         >
           <Text style={styles.ticketCardViewButtonLabel}>
             {t('screens.support.tickets.card.view')}
           </Text>
-        </Pressable>
+        </Button>
       </View>
     </View>
   );

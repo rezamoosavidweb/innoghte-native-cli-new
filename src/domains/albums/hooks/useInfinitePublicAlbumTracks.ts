@@ -3,12 +3,12 @@ import { useAppInfiniteList } from '@/shared/lib/infiniteList';
 import {
   fetchPublicAlbumsPage,
   type FetchPublicAlbumsPageResult,
-} from '@/domains/media/api';
-import type { PublicAlbumTrack } from '@/domains/media/model/publicAlbum.entities';
+} from '@/domains/albums/api';
+import type { PublicAlbumTrack } from '@/domains/albums/model/publicAlbum.entities';
 import {
   publicAlbumInfiniteKeys,
   type PublicAlbumsInfiniteListFilters,
-} from '@/domains/media/model/queryKeys';
+} from '@/domains/albums/model/queryKeys';
 
 const STALE_TIME_MS = 5 * 60 * 1000;
 const DEFAULT_PER_PAGE = 15;

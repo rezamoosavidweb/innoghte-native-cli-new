@@ -3,7 +3,6 @@ import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
   FlatList,
-  Pressable,
   StyleSheet,
   TextInput,
   View,
@@ -29,6 +28,7 @@ import {
   createStarPickStyles,
 } from '@/shared/ui/comments/dashboardComment.styles';
 import { CommentsPagination } from '@/shared/ui/comments/CommentsPagination';
+import { Button } from '@/ui/components/Button';
 
 export type DashboardCommentFormValues = z.infer<typeof validationSchema>;
 
@@ -60,21 +60,24 @@ const StarPickRow = React.memo(function StarPickRow({
   return (
     <View style={styles.starRow}>
       {STAR_VALUES.map(n => (
-        <Pressable
+        <Button
           key={n}
-          accessibilityRole="button"
+          layout="auto"
+          variant="text"
+          title={`star-${n}`}
           accessibilityLabel={`star-${n}`}
           hitSlop={6}
           onPress={() => {
             onPick(n);
           }}
+          contentStyle={{ width: '100%' }}
         >
           <Text
             style={[star.glyph, n <= rating ? star.glyphFilled : star.glyphEmpty]}
           >
             ★
           </Text>
-        </Pressable>
+        </Button>
       ))}
     </View>
   );
@@ -274,24 +277,25 @@ function DashboardCommentSectionComponent({
         <Text style={formTheme.ratingLabel}>{t('comments.yourRating')}</Text>
         <StarPickRow rating={rating} onPick={onPickStar} />
       </View>
-      <Pressable
-        accessibilityRole="button"
+      <Button
+        variant="filled"
+        title={t('comments.send')}
         disabled={isPendingCreateComment || isSubmitting}
+        loading={isPendingCreateComment || isSubmitting}
         onPress={() => {
           handleSubmit(onSubmit, onInvalid)().catch(() => {});
         }}
-        style={({ pressed }) => [
+        style={[
           styles.submitBtn,
           formTheme.submitBg,
           isPendingCreateComment || isSubmitting
             ? formTheme.submitOpacityDisabled
-            : pressed
-              ? formTheme.submitOpacityPressed
-              : formTheme.submitOpacityIdle,
+            : formTheme.submitOpacityIdle,
         ]}
+        contentStyle={{ width: '100%' }}
       >
         <Text style={styles.submitBtnText}>{t('comments.send')}</Text>
-      </Pressable>
+      </Button>
       {!isPendingCreateComment && successMessage ? (
         <Text style={styles.successText}>{successMessage}</Text>
       ) : null}

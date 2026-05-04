@@ -2,7 +2,7 @@ import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import type { Control } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
-import {Pressable, TextInput, View} from 'react-native';
+import {TextInput, View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import { useDonationCreditCardFieldsStyles } from '@/domains/donation/ui/donationCreditCardFields.styles';
@@ -13,6 +13,7 @@ import {
 } from '@/domains/donation/model/donationForm.schema';
 import { formatCardNumber } from '@/domains/donation/utils/paymentFormatting';
 import { pickSemantic } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 
 export type DonationCreditCardFieldsProps = {
   control: Control<DonationFormType>;
@@ -84,18 +85,21 @@ export const DonationCreditCardFields = React.memo(
               <Text style={s.label}>نوع کارت</Text>
               <View style={s.typeRow}>
                 {donationCartOptions.map(opt => (
-                  <Pressable
+                  <Button
                     key={opt.value}
+                    layout="auto"
+                    variant="text"
+                    title={opt.label}
                     onPress={() => field.onChange(opt.value)}
                     style={[
                       s.typeChip,
                       field.value === opt.value && s.typeChipOn,
                     ]}
-                    accessibilityRole="button"
                     accessibilityState={{ selected: field.value === opt.value }}
+                    contentStyle={{ width: '100%' }}
                   >
                     <Text style={s.typeChipText}>{opt.label}</Text>
-                  </Pressable>
+                  </Button>
                 ))}
               </View>
               {errors.cart?.cardType?.message ? (

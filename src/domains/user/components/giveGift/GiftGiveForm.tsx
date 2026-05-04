@@ -2,7 +2,6 @@ import type { Theme } from '@react-navigation/native';
 import { Controller, type Control, type FieldErrors } from 'react-hook-form';
 import * as React from 'react';
 import {
-  Pressable,
   TextInput,
   View,
   type LayoutChangeEvent
@@ -16,6 +15,7 @@ import type { GiveGiftFormType } from '@/domains/user/model/giveGiftFormSchema';
 import { createGiveGiftStyles } from '@/domains/user/ui/giveGiftScreen.styles';
 import type { Course } from '@/domains/courses';
 import { pickSemantic, useThemeColors } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 import { createFormFieldStyles } from '@/ui/theme/formField.styles';
 
 export type GiftGiveFormProps = {
@@ -251,19 +251,25 @@ export const GiftGiveForm = React.memo(function GiftGiveForm({
           )}
         />
 
-        <Pressable
+        <Button
+          variant="filled"
+          title="افزودن به سبد خرید"
+          accessibilityLabel={
+            interactionBusy ? 'در حال پردازش…' : 'افزودن به سبد خرید'
+          }
           onPress={handleSubmitPress}
+          loading={interactionBusy}
           disabled={interactionBusy}
-          accessibilityRole="button"
           style={[
             styles.submitPressable,
             interactionBusy ? styles.submitPressableBusy : styles.submitPressableIdle,
           ]}
+          contentStyle={{ width: '100%' }}
         >
           <Text style={styles.submitLabel}>
             {interactionBusy ? 'در حال پردازش…' : 'افزودن به سبد خرید'}
           </Text>
-        </Pressable>
+        </Button>
       </View>
     </View>
   );

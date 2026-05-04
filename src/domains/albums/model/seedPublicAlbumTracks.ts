@@ -1,4 +1,4 @@
-import type { PublicAlbumTrack } from '@/domains/media/model';
+import type { PublicAlbumTrack } from '@/domains/albums/model';
 
 /** Static sample — live data uses `fetchPublicAlbumTracks` with albums category id (see `publicCatalog.ts`). */
 export const SEED_PUBLIC_ALBUM_TRACKS: readonly PublicAlbumTrack[] = [

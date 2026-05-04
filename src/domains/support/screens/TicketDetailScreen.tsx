@@ -6,7 +6,6 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   ScrollView,
   TextInput,
   View
@@ -30,6 +29,7 @@ import {
   pickSemantic,
   createNavScreenShellStyles,
 } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 
 type Props = DrawerScreenProps<DrawerParamList, 'TicketDetailScreen'>;
 
@@ -133,13 +133,16 @@ export const TicketDetailScreen = React.memo(function TicketDetailScreen({
         <Text style={shell.errorText}>
           {t('screens.support.states.error')}
         </Text>
-        <Pressable
-          accessibilityRole="button"
+        <Button
+          layout="auto"
+          variant="text"
+          title={t('listStates.retry')}
           onPress={onRetry}
           style={ticketStyles.retryLink}
+          contentStyle={{ width: '100%' }}
         >
           <Text style={ticketStyles.retryLinkLabel}>{t('listStates.retry')}</Text>
-        </Pressable>
+        </Button>
       </View>
     );
   }
@@ -192,19 +195,21 @@ export const TicketDetailScreen = React.memo(function TicketDetailScreen({
             value={replyDraft}
             onChangeText={setReplyDraft}
           />
-          <Pressable
-            accessibilityRole="button"
+          <Button
+            variant="filled"
+            title={t('screens.support.tickets.detail.sendReply')}
             disabled={replyDisabled}
             onPress={onSubmitReply}
-            style={({ pressed }) => [
+            style={[
               ticketStyles.submitBtn,
-              replyDisabled || pressed ? ticketStyles.submitDisabled : null,
+              replyDisabled ? ticketStyles.submitDisabled : null,
             ]}
+            contentStyle={{ width: '100%' }}
           >
             <Text style={ticketStyles.submitLabel}>
               {t('screens.support.tickets.detail.sendReply')}
             </Text>
-          </Pressable>
+          </Button>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

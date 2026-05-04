@@ -41,7 +41,7 @@ export function useAuthBootstrap(): AuthBootstrapStatus {
       }
     }
 
-    void bootstrap();
+    bootstrap().catch(() => {});
 
     return () => {
       cancelled = true;

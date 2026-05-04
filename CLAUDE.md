@@ -42,7 +42,7 @@ app →                    ui → (shared/contracts only)
 | Layer | Location | Purpose |
 |-------|----------|---------|
 | **app** | `src/app/` | Shell composition, navigation bootstrap, providers. No business logic. |
-| **domains** | `src/domains/` | Feature modules: `auth`, `basket`, `courses`, `donation`, `events`, `experiences`, `home`, `live`, `media`, `search`, `settings`, `support`, `user` |
+| **domains** | `src/domains/` | Feature modules: `albums`, `auth`, `basket`, `courses`, `donation`, `events`, `experiences`, `home`, `live`, `search`, `settings`, `support`, `user` |
 | **shared** | `src/shared/` | HTTP client, storage, auth401, i18n, contracts, pagination utilities |
 | **ui** | `src/ui/` | Design tokens, theme provider, global components |
 

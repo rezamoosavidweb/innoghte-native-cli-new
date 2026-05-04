@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import { navigateToAppLeaf } from '@/app/bridge/auth/protectedNavigation';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { useEmptyBasketStyles } from '@/domains/basket/components/emptyBasket.styles';
 import { useThemeColors } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 
 export const EmptyBasket = React.memo(function EmptyBasket() {
   const colors = useThemeColors();
@@ -23,9 +24,16 @@ export const EmptyBasket = React.memo(function EmptyBasket() {
         🛒
       </Text>
       <Text style={s.title}>سبد خرید شما خالی است.</Text>
-      <Pressable onPress={onBrowse} style={s.btn} accessibilityRole="button">
+      <Button
+        layout="auto"
+        variant="filled"
+        title="مشاهده لیست دوره‌ها"
+        onPress={onBrowse}
+        style={s.btn}
+        contentStyle={{ width: '100%' }}
+      >
         <Text style={s.btnText}>مشاهده لیست دوره‌ها</Text>
-      </Pressable>
+      </Button>
     </View>
   );
 });

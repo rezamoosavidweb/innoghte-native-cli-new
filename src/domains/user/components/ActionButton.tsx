@@ -1,6 +1,8 @@
 import * as React from 'react';
-import {Pressable, type ViewStyle, type TextStyle} from 'react-native';
+import {type ViewStyle, type TextStyle} from 'react-native';
 import { Text } from '@/shared/ui/Text';
+
+import { Button } from '@/ui/components/Button';
 
 export type ProfileActionButtonStyleSet = {
   button: ViewStyle;
@@ -21,16 +23,18 @@ export const ProfileActionButton = React.memo(function ProfileActionButton({
   styles: s,
 }: ProfileActionButtonProps) {
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={label}
+    <Button
+      layout="auto"
+      variant="text"
+      title={label}
       onPress={onPress}
-      style={({ pressed }) => (pressed ? [s.button, s.buttonPressed] : s.button)}
+      style={s.button}
+      contentStyle={{ width: '100%' }}
     >
       <Text style={s.label} numberOfLines={2}>
         {label}
       </Text>
-    </Pressable>
+    </Button>
   );
 });
 ProfileActionButton.displayName = 'ProfileActionButton';

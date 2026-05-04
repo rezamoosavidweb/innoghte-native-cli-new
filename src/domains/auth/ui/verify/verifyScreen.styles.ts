@@ -56,7 +56,6 @@ export function createVerifyScreenStyles(themeColors: ThemeColors) {
       justifyContent: 'center',
       backgroundColor: themeColors.primary,
     },
-    primaryButtonPressed: { opacity: 0.9 },
     primaryButtonDisabled: { opacity: 0.55 },
     primaryButtonLabel: {
       fontSize: fontSize.base,

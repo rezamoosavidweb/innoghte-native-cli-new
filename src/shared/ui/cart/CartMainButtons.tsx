@@ -1,25 +1,17 @@
-import * as React from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  View,
-  type ViewStyle
-} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 import { useTheme } from '@react-navigation/native';
+import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { View, type ViewStyle } from 'react-native';
 
-import {
-  navigateToAppLeaf,
-  protectedNavigate,
-} from '@/app/bridge/auth/protectedNavigation';
+import { navigateToAppLeaf } from '@/app/bridge/auth/protectedNavigation';
 import { useBasketCart } from '@/domains/basket/hooks/useBasketCart';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
+import { Button } from '@/ui/components/Button';
 import {
   createCartMainButtonsStyles,
   useCartMainButtonsStyles,
 } from './cartMainButtons.styles';
-import { colors as themePalette } from '@/ui/theme';
 
 export type CartMainButtonsProps = {
   courseId: number;
@@ -27,6 +19,7 @@ export type CartMainButtonsProps = {
   isAccessible: boolean;
   fullWidth?: boolean;
   showBtnText?: string;
+  secondaryButtonText?: string;
   addToBasketBtnText?: string;
   inBasketBtnText?: string;
   capacityFullText?: string;
@@ -36,6 +29,8 @@ export type CartMainButtonsProps = {
   iconRightAddToBasket?: React.ReactNode | null;
   iconLeftInBasket?: React.ReactNode | null;
   iconRightInBasket?: React.ReactNode | null;
+  onPressPrimary: () => void;
+  onPressSecondary?: () => void;
 };
 
 type LabelProps = {
@@ -79,6 +74,9 @@ const CartMainButtonsComponent = ({
   isAccessible,
   fullWidth,
   showBtnText,
+  secondaryButtonText,
+  onPressPrimary,
+  onPressSecondary,
   addToBasketBtnText,
   inBasketBtnText,
   capacityFullText,
@@ -94,24 +92,15 @@ const CartMainButtonsComponent = ({
   const s = useCartMainButtonsStyles(theme);
 
   const navigation = useAppNavigation();
-  const {
-    cartCourseIds,
-    addToCart,
-    isPendingCreate,
-    pendingCreateCourseId,
-  } = useBasketCart();
+  const { cartCourseIds, addToCart, isPendingCreate, pendingCreateCourseId } =
+    useBasketCart();
 
   const isAddedToCart = React.useMemo(
     () => cartCourseIds.has(courseId),
     [cartCourseIds, courseId],
   );
 
-  const addLoading =
-    isPendingCreate && pendingCreateCourseId === courseId;
-
-  const onViewOwned = React.useCallback(() => {
-    protectedNavigate(navigation, 'CoursePlayer', { courseId });
-  }, [navigation, courseId]);
+  const addLoading = isPendingCreate && pendingCreateCourseId === courseId;
 
   const onGoCart = React.useCallback(() => {
     navigateToAppLeaf(navigation, 'Cart');
@@ -127,16 +116,12 @@ const CartMainButtonsComponent = ({
 
   if (isAccessible) {
     return (
-      <Pressable
-        accessibilityRole="button"
-        onPress={onViewOwned}
-        style={({ pressed }) => [
-          wrapperStyle,
-          s.pressableBase,
-          s.primaryBg,
-          pressed ? s.pressed : null,
-          containerStyle,
-        ]}
+      <Button
+        layout="auto"
+        variant="filled"
+        title={showBtnText ?? t('courses.viewCourse')}
+        onPress={onPressPrimary}
+        style={[wrapperStyle, s.pressableBase, s.primaryBg, containerStyle]}
       >
         <LabelWithIcons
           styles={s}
@@ -145,18 +130,14 @@ const CartMainButtonsComponent = ({
           left={null}
           right={null}
         />
-      </Pressable>
+      </Button>
     );
   }
 
   if (isFull) {
     return (
       <View
-        style={[
-          wrapperStyle,
-          s.capacityWrap,
-          fillCapacityStyle,
-        ]}
+        style={[wrapperStyle, s.capacityWrap, fillCapacityStyle]}
         accessibilityRole="text"
         accessibilityState={{ disabled: true }}
       >
@@ -167,65 +148,64 @@ const CartMainButtonsComponent = ({
     );
   }
 
+  const secondarySlot = onPressSecondary ? (
+    <Button
+      layout="auto"
+      variant="outlined"
+      title={secondaryButtonText ?? t('courses.moreInformation')}
+      onPress={onPressSecondary}
+      style={s.buttonOutlined}
+    >
+      <Text style={s.buttonOutlinedText}>
+        {secondaryButtonText ?? t('courses.moreInformation')}
+      </Text>
+    </Button>
+  ) : null;
+
   if (isAddedToCart) {
     return (
-      <Pressable
-        accessibilityRole="button"
-        onPress={onGoCart}
-        style={({ pressed }) => [
-          wrapperStyle,
-          s.pressableBase,
-          s.successBorder,
-          pressed ? s.pressed : null,
-          containerStyle,
-        ]}
-      >
-        <LabelWithIcons
-          styles={s}
-          text={inBasketBtnText ?? t('cart.inBasket')}
-          textStyle={[s.label, s.successLabel]}
-          left={iconLeftInBasket}
-          right={iconRightInBasket}
-        />
-      </Pressable>
+      <View style={s.row}>
+        {secondarySlot}
+        <Button
+          layout="auto"
+          variant="filled"
+          title={inBasketBtnText ?? t('cart.inBasket')}
+          onPress={onGoCart}
+          style={[wrapperStyle, s.pressableBase, s.successBorder, containerStyle]}
+        >
+          <LabelWithIcons
+            styles={s}
+            text={inBasketBtnText ?? t('cart.inBasket')}
+            textStyle={[s.label, s.successLabel]}
+            left={iconLeftInBasket}
+            right={iconRightInBasket}
+          />
+        </Button>
+      </View>
     );
   }
 
   return (
-    <Pressable
-      accessibilityRole="button"
-      onPress={onAddToCart}
-      disabled={addLoading}
-      style={({ pressed }) => [
-        wrapperStyle,
-        s.pressableBase,
-        s.successBg,
-        pressed && !addLoading ? s.pressed : null,
-        containerStyle,
-      ]}
-    >
-      <View style={s.addToCartSlot}>
-        <View style={addLoading ? s.addToCartLabelHidden : undefined}>
-          <LabelWithIcons
-            styles={s}
-            text={addToBasketBtnText ?? t('cart.addToBasket')}
-            textStyle={[s.label, s.successLabel]}
-            left={iconLeftAddToBasket}
-            right={iconRightAddToBasket}
-          />
-        </View>
-        {addLoading ? (
-          <View
-            style={s.addToCartLoaderOverlay}
-            pointerEvents="none"
-            accessibilityElementsHidden
-            importantForAccessibility="no-hide-descendants"
-          >
-            <ActivityIndicator color={themePalette.white} />
-          </View>
-        ) : null}
-      </View>
-    </Pressable>
+    <View style={s.row}>
+      {secondarySlot}
+      <Button
+        layout="auto"
+        variant="filled"
+        title={addToBasketBtnText ?? t('cart.addToBasket')}
+        onPress={onAddToCart}
+        loading={addLoading}
+        style={[wrapperStyle, s.pressableBase, s.successBg, containerStyle]}
+        contentStyle={s.addToCartSlot}
+      >
+        <LabelWithIcons
+          styles={s}
+          text={addToBasketBtnText ?? t('cart.addToBasket')}
+          textStyle={[s.label, s.successLabel]}
+          left={iconLeftAddToBasket}
+          right={iconRightAddToBasket}
+        />
+      </Button>
+    </View>
   );
 };
 

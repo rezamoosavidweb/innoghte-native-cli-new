@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 import type { OrderDto } from '@/domains/transactions/model/order.schemas';
@@ -15,6 +15,7 @@ import {
 } from '@/domains/transactions/model/orderStatus';
 import { Text } from '@/shared/ui/Text';
 import { useThemeColors } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 
 import type { TransactionItemStyleSet } from '@/domains/transactions/ui/TransactionItem.styles';
 
@@ -67,13 +68,17 @@ const TransactionItemComponent = ({
       : '—';
 
   return (
-    <Pressable
-      accessibilityRole="button"
+    <Button
+      layout="auto"
+      variant="text"
+      title={productLine}
       onPress={onRowPress}
-      style={({ pressed }) => [
-        s.pressable,
-        pressed && { opacity: 0.78 },
-      ]}
+      style={s.pressable}
+      contentStyle={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+      }}
     >
       <View style={s.colProducts}>
         <Text style={s.productText} numberOfLines={2}>
@@ -105,7 +110,7 @@ const TransactionItemComponent = ({
           <DetailsArrowIcon color={uiColors.primary} />
         </View>
       </View>
-    </Pressable>
+    </Button>
   );
 };
 

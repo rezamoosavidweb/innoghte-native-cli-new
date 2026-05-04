@@ -11,13 +11,17 @@ import { SplashScreen } from '@/app/splash/SplashScreen';
 import { AuthEntryScreen, LoginScreen, RegisterScreen, VerifyScreen } from '@/domains/auth';
 import {
   CourseDetailScreen,
-  CoursePlayerScreen,
   CoursesScreen,
+  PublicCourseDetailScreen,
 } from '@/domains/courses';
+import {
+  AlbumDetailScreen,
+  PublicAlbumDetailScreen,
+  PublicAlbumsScreen,
+} from '@/domains/albums';
 import { EventsScreen } from '@/domains/events';
 import { HomeScreen } from '@/domains/home';
 import { LiveMeetingsScreen } from '@/domains/live';
-import { PublicAlbumsScreen } from '@/domains/media';
 import { SearchScreen } from '@/domains/search';
 import {
   AboutScreen,
@@ -413,17 +417,31 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
       screen: LegacyMenuPlaceholderScreen,
       options: () => extraLeafOptions('liveMeetingOverview', '📡'),
     },
-    CourseDetail: {
-      screen: CourseDetailScreen,
+    PublicCourseDetail: {
+      screen: PublicCourseDetailScreen,
       options: () => ({
-        ...extraLeafOptions('courseDetail', '📘'),
+        ...extraLeafOptions('publicCourseDetail', '📘'),
         drawerItemStyle: { display: 'none' },
       }),
     },
-    CoursePlayer: {
-      screen: CoursePlayerScreen,
+    CourseDetail: {
+      screen: CourseDetailScreen,
       options: () => ({
         ...extraLeafOptions('coursePlayer', '▶️'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    PublicAlbumDetail: {
+      screen: PublicAlbumDetailScreen,
+      options: () => ({
+        ...extraLeafOptions('publicAlbumDetail', '💿'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    AlbumDetail: {
+      screen: AlbumDetailScreen,
+      options: () => ({
+        ...extraLeafOptions('albumDetail', '🎵'),
         drawerItemStyle: { display: 'none' },
       }),
     },

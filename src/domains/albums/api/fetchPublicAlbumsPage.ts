@@ -4,8 +4,8 @@ import { getPublicCourses } from '@/domains/courses/api/fetchPublicCourses';
 import {
   mapPublicCourseListItemToAlbumTrack,
   type PublicCourseListItemLike,
-} from '@/domains/media/api/fetchPublicAlbumTracks';
-import type { PublicAlbumTrack } from '@/domains/media/model/publicAlbum.entities';
+} from '@/domains/albums/api/fetchPublicAlbumTracks';
+import type { PublicAlbumTrack } from '@/domains/albums/model/publicAlbum.entities';
 
 import type { PaginationDto } from '@/shared/contracts/pagination';
 

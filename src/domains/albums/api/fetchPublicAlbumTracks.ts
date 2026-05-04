@@ -5,8 +5,8 @@ import {
 } from '@/shared/infra/http';
 import { endpoints } from '@/shared/infra/http/endpoints';
 
-import type { PublicAlbumTrack } from '@/domains/media/model/publicAlbum.entities';
-import { publicAlbumTracksResponseSchema } from '@/domains/media/model/schemas';
+import type { PublicAlbumTrack } from '@/domains/albums/model/publicAlbum.entities';
+import { publicAlbumTracksResponseSchema } from '@/domains/albums/model/schemas';
 
 /** Normalized subset of public-course payloads used for album-track cards (single API source). */
 export type PublicCourseListItemLike = {

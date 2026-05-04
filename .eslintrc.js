@@ -19,6 +19,8 @@ module.exports = {
   },
 
   rules: {
+    /** Inline layout hints on `Button` / `Pressable` are common; StyleSheet churn is high. */
+    'react-native/no-inline-styles': 'off',
     'boundaries/dependencies': 'off',
     'import/no-internal-modules': [
       'error',

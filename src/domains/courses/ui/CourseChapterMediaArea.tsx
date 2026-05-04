@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Linking, Pressable, StyleSheet, View } from 'react-native';
+import { Linking, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@react-navigation/native';
 
@@ -9,6 +9,7 @@ import {
   createChapterMediaPlaceholderStyles,
   createChapterMediaThemedStyles,
 } from '@/domains/courses/ui/courseChapterMediaArea.styles';
+import { Button } from '@/ui/components/Button';
 
 type JsonMediaItem = { uuid?: string; title?: string };
 
@@ -94,15 +95,18 @@ const CourseChapterMediaAreaComponent = ({
 
   if (parsedBlocks.kind === 'url') {
     return (
-      <Pressable
-        accessibilityRole="button"
+      <Button
+        layout="auto"
+        variant="text"
+        title={t('screens.coursePlayer.openMedia')}
         style={[styles.linkBtn, themedChrome.linkBtn]}
         onPress={() => {
           openUrl(parsedBlocks.url);
         }}
+        contentStyle={{ width: '100%' }}
       >
         <Text style={styles.linkText}>{t('screens.coursePlayer.openMedia')}</Text>
-      </Pressable>
+      </Button>
     );
   }
 

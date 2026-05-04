@@ -5,7 +5,6 @@ import {
   ActivityIndicator,
   Image,
   Linking,
-  Pressable,
   View
 } from 'react-native';
 import { Text } from '@/shared/ui/Text';
@@ -19,6 +18,7 @@ import {
 } from '@/domains/home/ui/quickAccess.styles';
 import { Swiper } from '@/shared/ui/Swiper';
 import { spacing } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 
 const HIT_SLOP = 4;
 
@@ -113,12 +113,15 @@ const QuickAccessCard = React.memo(function QuickAccessCard({
   }, [item, onPress]);
 
   return (
-    <Pressable
-      accessibilityRole="button"
+    <Button
+      layout="auto"
+      variant="text"
+      title={item.title}
       accessibilityLabel={item.title}
       hitSlop={HIT_SLOP}
       onPress={handlePress}
-      style={({ pressed }) => [s.card, pressed ? s.cardPressed : null]}
+      style={s.card}
+      contentStyle={{ width: '100%' }}
     >
       <CardImage uri={item.imageUrl} s={s} />
       <View style={s.cardBody}>
@@ -131,7 +134,7 @@ const QuickAccessCard = React.memo(function QuickAccessCard({
           </Text>
         ) : null}
       </View>
-    </Pressable>
+    </Button>
   );
 });
 QuickAccessCard.displayName = 'QuickAccessCard';

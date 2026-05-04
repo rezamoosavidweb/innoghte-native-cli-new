@@ -1,9 +1,10 @@
 import * as React from 'react';
-import {Pressable, View} from 'react-native';
+import {View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import { createLoginScreenStyles } from '@/domains/auth/ui/styles';
 import { useThemeColors } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 
 type Option = { label: string; value: string };
 
@@ -22,18 +23,21 @@ export function SelectField({ options, value, onChange, error }: Props) {
     <View>
       <View style={s.row}>
         {options.map(option => (
-          <Pressable
+          <Button
             key={option.value}
-            accessibilityRole="button"
+            layout="auto"
+            variant="text"
+            title={option.label}
             accessibilityState={{ selected: option.value === value }}
             style={[
               s.modeButton,
               option.value === value ? s.modeButtonActive : null,
             ]}
             onPress={() => onChange(option.value)}
+            contentStyle={{ width: '100%' }}
           >
             <Text style={s.modeText}>{option.label}</Text>
-          </Pressable>
+          </Button>
         ))}
       </View>
       {error ? <Text style={s.errorText}>{error}</Text> : null}

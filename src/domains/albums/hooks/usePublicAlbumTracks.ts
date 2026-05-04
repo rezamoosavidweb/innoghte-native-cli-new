@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import {
   publicAlbumTracksKeys,
   type PublicAlbumTracksListFilters,
-} from '@/domains/media/model/queryKeys';
-import { fetchPublicAlbumTracks } from '@/domains/media/api';
+} from '@/domains/albums/model/queryKeys';
+import { fetchPublicAlbumTracks } from '@/domains/albums/api';
 
 const STALE_TIME_MS = 5 * 60 * 1000;
 

@@ -211,13 +211,17 @@ const RegisterScreenComponent = (_props: Props) => {
           <View style={s.resendRow}>
             <Text style={s.resendText}>{t('screens.register.otp.notReceived')}</Text>
             {countdownExpired ? (
-              <Pressable
+              <Button
+                layout="auto"
+                variant="text"
+                title={t('screens.register.otp.resend')}
                 onPress={handleResend}
                 disabled={isResending}
-                accessibilityRole="button"
+                loading={isResending}
+                contentStyle={{ width: '100%' }}
               >
                 <Text style={s.resendLink}>{t('screens.register.otp.resend')}</Text>
-              </Pressable>
+              </Button>
             ) : (
               <Text style={s.resendTimer}>
                 {t('screens.register.otp.resendIn')} {formatCountdown(remaining)}
@@ -225,9 +229,16 @@ const RegisterScreenComponent = (_props: Props) => {
             )}
           </View>
 
-          <Pressable onPress={handleEditInfo} style={s.editInfoButton} accessibilityRole="button">
+          <Button
+            layout="auto"
+            variant="text"
+            title={t('screens.register.otp.editInfo')}
+            onPress={handleEditInfo}
+            style={s.editInfoButton}
+            contentStyle={{ width: '100%' }}
+          >
             <Text style={s.editInfoText}>{t('screens.register.otp.editInfo')}</Text>
-          </Pressable>
+          </Button>
 
           <Button
             variant="filled"

@@ -6,7 +6,7 @@ import {
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Linking, TouchableOpacity, View } from 'react-native';
+import { Linking, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PUBLIC_WEB_ORIGIN } from '@/shared/config/publicWebOrigin';
@@ -17,6 +17,7 @@ import {
 } from '@/ui/layout/customDrawerContent.styles';
 import { DrawerFooterSocials } from '@/ui/layout/DrawerFooterSocials';
 import { useShellDrawerModel } from '@/ui/layout/ShellDrawerContext';
+import { Button } from '@/ui/components/Button';
 import { pickSemantic } from '@/ui/theme';
 import { version as appVersion } from 'appPackage';
 
@@ -72,24 +73,30 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
         ) : (
           <>
             <View style={staticDrawerStyles.guestActions}>
-              <TouchableOpacity
+              <Button
+                layout="auto"
+                variant="filled"
+                title={t('drawer.guest.login')}
                 style={dynamicStyles.guestBtnPrimary}
                 onPress={onLogin}
-                accessibilityRole="button"
+                contentStyle={{ width: '100%' }}
               >
                 <Text style={dynamicStyles.guestBtnPrimaryLabel}>
                   {t('drawer.guest.login')}
                 </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
+              </Button>
+              <Button
+                layout="auto"
+                variant="outlined"
+                title={t('drawer.guest.register')}
                 style={dynamicStyles.guestBtnOutline}
                 onPress={onRegister}
-                accessibilityRole="button"
+                contentStyle={{ width: '100%' }}
               >
                 <Text style={dynamicStyles.guestBtnOutlineLabel}>
                   {t('drawer.guest.register')}
                 </Text>
-              </TouchableOpacity>
+              </Button>
             </View>
             <View style={dynamicStyles.divider} />
           </>
@@ -110,15 +117,24 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
           <View style={dynamicStyles.divider} />
           <DrawerFooterSocials />
           {isAuthed ? (
-            <TouchableOpacity
+            <Button
+              layout="auto"
+              variant="text"
+              title={t('drawerFooter.logout')}
               style={staticDrawerStyles.footerItem}
               onPress={handleLogout}
+              contentStyle={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 8,
+                width: '100%',
+              }}
             >
               <Text style={dynamicStyles.footerIconGlyph}>⎋</Text>
               <Text style={dynamicStyles.footerItemText}>
                 {t('drawerFooter.logout')}
               </Text>
-            </TouchableOpacity>
+            </Button>
           ) : null}
           <Text style={dynamicStyles.version}>
             {t('drawerFooter.version', { version: appVersion })}

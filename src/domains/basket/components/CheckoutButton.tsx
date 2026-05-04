@@ -1,14 +1,9 @@
 import * as React from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  View,
-  type ViewStyle,
-} from 'react-native';
-import { Text } from '@/shared/ui/Text';
+import { View, type ViewStyle } from 'react-native';
 
 import { useCheckoutButtonStyles } from '@/domains/basket/components/checkoutButton.styles';
 import { useThemeColors } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 
 type Props = {
   onPress: () => void;
@@ -32,29 +27,14 @@ export const CheckoutButton = React.memo(function CheckoutButton({
 
   return (
     <View style={style}>
-      <Pressable
+      <Button
+        variant="filled"
+        title={label}
         onPress={onPress}
-        disabled={disabled || loading}
+        loading={loading}
+        disabled={disabled}
         style={[s.btn, (disabled || loading) && s.disabled]}
-        accessibilityRole="button"
-        accessibilityLabel={label}
-      >
-        <View style={s.btnSlot}>
-          <View style={loading ? s.btnLabelHidden : undefined}>
-            <Text style={s.txt}>{label}</Text>
-          </View>
-          {loading ? (
-            <View
-              style={s.btnLoaderOverlay}
-              pointerEvents="none"
-              accessibilityElementsHidden
-              importantForAccessibility="no-hide-descendants"
-            >
-              <ActivityIndicator color={colors.onPrimary} />
-            </View>
-          ) : null}
-        </View>
-      </Pressable>
+      />
     </View>
   );
 });

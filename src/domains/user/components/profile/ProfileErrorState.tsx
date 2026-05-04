@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import {TouchableOpacity, View, type TextStyle} from 'react-native';
+import {View, type TextStyle} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import { getRetryLabelKey } from '@/domains/user/model/profileScreenLabels';
 import type { ProfileScreenShellStyleSet } from '@/domains/user/ui/profileScreen.styles';
+import { Button } from '@/ui/components/Button';
 
 export type ProfileErrorStateProps = {
   shellStyles: ProfileScreenShellStyleSet;
@@ -37,13 +38,16 @@ export const ProfileErrorState = React.memo(function ProfileErrorState({
       <Text style={[errorTitleStyle, shellStyles.errorTitleAlign]}>
         {t('screens.profile.error')}
       </Text>
-      <TouchableOpacity
-        accessibilityRole="button"
+      <Button
+        layout="auto"
+        variant="text"
+        title={t(retryLabelKey)}
         onPress={onRetry}
         disabled={isFetching}
+        contentStyle={{ width: '100%' }}
       >
         <Text style={retryTextStyle}>{t(retryLabelKey)}</Text>
-      </TouchableOpacity>
+      </Button>
     </View>
   );
 });

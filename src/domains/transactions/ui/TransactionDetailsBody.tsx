@@ -1,7 +1,7 @@
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, Share, View } from 'react-native';
+import { Share, View } from 'react-native';
 
 import type { OrderDto } from '@/domains/transactions/model/order.schemas';
 import {
@@ -18,6 +18,7 @@ import type { TransactionDetailsStyleSet } from '@/domains/transactions/ui/Trans
 import { Text } from '@/shared/ui/Text';
 import { toPersianNumber } from '@/shared/utils/toPersianNumber';
 import { useThemeColors } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 
 function buildShareMessage(
   order: OrderDto,
@@ -73,15 +74,17 @@ function TransactionDetailsBodyComponent({
   return (
     <View style={styles.sheet}>
       <View style={styles.header}>
-        <Pressable
-          accessibilityRole="button"
+        <Button
+          layout="auto"
+          variant="text"
+          title={t('screens.transactions.details.closeA11y')}
           accessibilityLabel={t('screens.transactions.details.closeA11y')}
           hitSlop={12}
           onPress={onClosePress}
           style={styles.closePress}
         >
           <Text style={styles.closeGlyph}>×</Text>
-        </Pressable>
+        </Button>
         <Text style={styles.title} numberOfLines={1}>
           {t('screens.transactions.details.title', {
             orderNumber: orderNumDisplay,
@@ -155,15 +158,17 @@ function TransactionDetailsBodyComponent({
           </View>
         </View>
       </BottomSheetScrollView>
-      <Pressable
-        accessibilityRole="button"
+      <Button
+        variant="filled"
+        title={t('screens.transactions.details.downloadInvoice')}
         onPress={onShare}
         style={styles.primaryButton}
+        contentStyle={{ width: '100%' }}
       >
         <Text style={styles.primaryButtonText}>
           {t('screens.transactions.details.downloadInvoice')}
         </Text>
-      </Pressable>
+      </Button>
     </View>
   );
 }

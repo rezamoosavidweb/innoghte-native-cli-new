@@ -2,7 +2,7 @@ import type { DrawerScreenProps } from '@react-navigation/drawer';
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 import { Text } from '@/shared/ui/Text';
 
@@ -14,6 +14,7 @@ import { useLanguageStore } from '@/domains/settings/model/language.store';
 import { useUiThemeStore } from '@/domains/settings/model/uiTheme.store';
 import { createScreenScaffoldStyles, useThemeColors } from '@/ui/theme';
 import { createSettingsScreenStyles } from '@/domains/settings/ui/settingsScreen.styles';
+import { Button } from '@/ui/components/Button';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Settings'>;
 
@@ -55,19 +56,26 @@ const SettingsScreenComponent = (_props: Props) => {
         </Text>
         <View style={s.row}>
           {(['fa', 'en'] as const).map(lang => (
-            <TouchableOpacity
+            <Button
               key={lang}
+              layout="auto"
+              variant="text"
+              title={t(
+                lang === 'fa'
+                  ? 'screens.settings.languagePersian'
+                  : 'screens.settings.languageEnglish',
+              )}
               style={[s.chip, currentLanguage === lang ? s.chipActive : null]}
               onPress={() => selectLanguage(lang)}
-              accessibilityRole="button"
               accessibilityState={{ selected: currentLanguage === lang }}
+              contentStyle={{ width: '100%' }}
             >
               <Text style={s.chipText}>
                 {t(lang === 'fa'
                   ? 'screens.settings.languagePersian'
                   : 'screens.settings.languageEnglish')}
               </Text>
-            </TouchableOpacity>
+            </Button>
           ))}
         </View>
       </View>
@@ -84,17 +92,20 @@ const SettingsScreenComponent = (_props: Props) => {
               ['dark', 'themeDark'],
             ] as const satisfies ReadonlyArray<readonly [ThemeMode, string]>
           ).map(([value, labelKey]) => (
-            <TouchableOpacity
+            <Button
               key={value}
+              layout="auto"
+              variant="text"
+              title={t(`screens.settings.${labelKey}`)}
               style={[s.chip, preference === value ? s.chipActive : null]}
               onPress={() => setPreference(value)}
-              accessibilityRole="button"
               accessibilityState={{ selected: preference === value }}
+              contentStyle={{ width: '100%' }}
             >
               <Text style={s.chipText}>
                 {t(`screens.settings.${labelKey}`)}
               </Text>
-            </TouchableOpacity>
+            </Button>
           ))}
         </View>
       </View>

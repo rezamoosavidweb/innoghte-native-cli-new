@@ -5,11 +5,9 @@ import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import {
-  ActivityIndicator,
   KeyboardAvoidingView,
   Modal,
   Platform,
-  Pressable,
   ScrollView,
   StyleSheet,
   TextInput,
@@ -37,6 +35,7 @@ import {
   flashListContentGutters,
   useThemeColors,
 } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Contact'>;
 
@@ -185,13 +184,16 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
 
         <View style={s.darkBand}>
           <Text style={s.darkBandTitle}>{t('screens.contact.supportIntro')}</Text>
-          <Pressable
-            accessibilityRole="button"
+          <Button
+            layout="auto"
+            variant="text"
+            title={t('screens.contact.openTickets')}
             style={s.linkBtn}
             onPress={() => navigation.navigate('TicketListScreen')}
+            contentStyle={{ width: '100%' }}
           >
             <Text style={s.linkLabel}>{t('screens.contact.openTickets')}</Text>
-          </Pressable>
+          </Button>
 
           <Text style={s.hint}>{t('screens.contact.hintPhoneEmail')}</Text>
 
@@ -280,13 +282,16 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
 
           <View>
             <Text style={s.fieldLabel}>{t('screens.contact.category')}</Text>
-            <Pressable
+            <Button
+              layout="auto"
+              variant="text"
+              title={categoryLabel}
               style={s.categorySelector}
               onPress={() => setCategoryModal(true)}
-              accessibilityRole="button"
+              contentStyle={{ width: '100%' }}
             >
               <Text style={s.categorySelectorLabel}>{categoryLabel}</Text>
-            </Pressable>
+            </Button>
             {errors.category_id ? (
               <Text style={s.error}>{errors.category_id.message}</Text>
             ) : null}
@@ -315,30 +320,19 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
             )}
           />
 
-          <Pressable
-            accessibilityRole="button"
+          <Button
+            variant="filled"
+            title={t('screens.contact.submit')}
             disabled={submitBusy}
+            loading={submitBusy}
             onPress={() => {
               fireAndForget(handleSubmit(startOtp)());
             }}
             style={[s.submit, submitBusy ? s.submitDisabled : null]}
+            contentStyle={s.submitSlot}
           >
-            <View style={s.submitSlot}>
-              <View style={submitBusy ? s.submitLabelHidden : undefined}>
-                <Text style={s.submitLabel}>{t('screens.contact.submit')}</Text>
-              </View>
-              {submitBusy ? (
-                <View
-                  style={s.submitLoaderOverlay}
-                  pointerEvents="none"
-                  accessibilityElementsHidden
-                  importantForAccessibility="no-hide-descendants"
-                >
-                  <ActivityIndicator color="#FFF" />
-                </View>
-              ) : null}
-            </View>
-          </Pressable>
+            <Text style={s.submitLabel}>{t('screens.contact.submit')}</Text>
+          </Button>
 
           <Text style={s.footnote}>{t('screens.contact.footnoteSupportHours')}</Text>
           <Text style={s.footnote}>{t('screens.contact.footnoteReply')}</Text>
@@ -352,19 +346,27 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
         onRequestClose={() => setCategoryModal(false)}
       >
         <View style={s.modalBackdrop}>
-          <Pressable
-            accessibilityRole="button"
+          <Button
+            layout="auto"
+            variant="text"
+            title="Dismiss"
+            accessibilityLabel="Dismiss"
             style={StyleSheet.absoluteFill}
             onPress={() => setCategoryModal(false)}
-          />
+          >
+            <View style={StyleSheet.absoluteFill} />
+          </Button>
           <View style={s.modalCard}>
             <ScrollView
               keyboardShouldPersistTaps="handled"
               style={s.categoryScroll}
             >
               {(categoriesQuery.data ?? []).map(c => (
-                <Pressable
+                <Button
                   key={c.id}
+                  layout="auto"
+                  variant="text"
+                  title={c.name}
                   style={s.categoryRow}
                   onPress={() => {
                     setValue('category_id', String(c.id), {
@@ -372,9 +374,10 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
                     });
                     setCategoryModal(false);
                   }}
+                  contentStyle={{ width: '100%' }}
                 >
                   <Text style={s.categoryRowLabel}>{c.name}</Text>
-                </Pressable>
+                </Button>
               ))}
             </ScrollView>
           </View>
@@ -403,21 +406,38 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
             />
             {otpErr ? <Text style={s.error}>{otpErr}</Text> : null}
             <View style={s.row}>
-              <Pressable accessibilityRole="button" style={s.smallBtn} onPress={otpSheet.hide}>
+              <Button
+                layout="auto"
+                variant="text"
+                title={t('screens.contact.cancel')}
+                style={s.smallBtn}
+                onPress={otpSheet.hide}
+                contentStyle={{ width: '100%' }}
+              >
                 <Text style={s.smallBtnLabel}>{t('screens.contact.cancel')}</Text>
-              </Pressable>
-              <Pressable accessibilityRole="button" style={s.smallBtn} onPress={resendOtp}>
+              </Button>
+              <Button
+                layout="auto"
+                variant="text"
+                title={t('screens.contact.otpResend')}
+                style={s.smallBtn}
+                onPress={resendOtp}
+                contentStyle={{ width: '100%' }}
+              >
                 <Text style={s.smallBtnLabel}>{t('screens.contact.otpResend')}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityRole="button"
+              </Button>
+              <Button
+                layout="auto"
+                variant="filled"
+                title={t('screens.contact.otpConfirm')}
                 style={[s.smallBtn, s.smallBtnPrimary]}
                 onPress={onConfirmOtp}
+                contentStyle={{ width: '100%' }}
               >
                 <Text style={s.smallBtnLabelOnPrimary}>
                   {t('screens.contact.otpConfirm')}
                 </Text>
-              </Pressable>
+              </Button>
             </View>
           </View>
         </View>

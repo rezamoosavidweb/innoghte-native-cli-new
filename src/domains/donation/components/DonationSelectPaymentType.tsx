@@ -1,10 +1,11 @@
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
-import {Pressable, View} from 'react-native';
+import {View} from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import { useDonationSelectPaymentTypeStyles } from '@/domains/donation/ui/donationSelectPaymentType.styles';
 import { pickSemantic } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 
 export type DonationSelectPaymentTypeProps = {
   value: 'paypal' | 'credit_card';
@@ -25,26 +26,32 @@ export const DonationSelectPaymentType = React.memo(
     return (
       <View style={s.row}>
         <Text style={s.label}>روش پرداخت:</Text>
-        <Pressable
+        <Button
+          layout="auto"
+          variant="text"
+          title="PayPal"
           onPress={() => onChange('paypal')}
           style={[s.chip, value === 'paypal' && s.chipOn]}
-          accessibilityRole="button"
           accessibilityState={{ selected: value === 'paypal' }}
+          contentStyle={{ width: '100%' }}
         >
           <Text style={[s.chipText, value === 'paypal' && s.chipTextOn]}>
             PayPal
           </Text>
-        </Pressable>
-        <Pressable
+        </Button>
+        <Button
+          layout="auto"
+          variant="text"
+          title="کارت"
           onPress={() => onChange('credit_card')}
           style={[s.chip, value === 'credit_card' && s.chipOn]}
-          accessibilityRole="button"
           accessibilityState={{ selected: value === 'credit_card' }}
+          contentStyle={{ width: '100%' }}
         >
           <Text style={[s.chipText, value === 'credit_card' && s.chipTextOn]}>
             کارت
           </Text>
-        </Pressable>
+        </Button>
       </View>
     );
   },

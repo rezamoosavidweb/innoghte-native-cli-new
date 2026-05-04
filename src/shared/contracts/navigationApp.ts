@@ -48,9 +48,13 @@ export type DrawerParamList = {
   Collaboration: undefined;
   LiveMeetingOverview: undefined;
   /** Public course marketing / purchase — `courseId` matches list + API. */
-  CourseDetail: { courseId: number };
+  PublicCourseDetail: { courseId: number };
   /** Purchased course chapters + media — `courseId` matches detail. */
-  CoursePlayer: { courseId: number };
+  CourseDetail: { courseId: number };
+  /** Purchased album chapters + media — `albumId` matches list + public course API id. */
+  AlbumDetail: { albumId: number };
+  /** Public album marketing — `albumId` matches list + API. */
+  PublicAlbumDetail: { albumId: number };
   /** Dev / demo drawer route — accepts optional query for SearchScreen subtitle. */
   Search: { query?: string } | undefined;
   /** Demo: collapsible header on scroll. */

@@ -1,12 +1,14 @@
 import { useQueryClient } from '@tanstack/react-query';
 import * as React from 'react';
-import { Image, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import {
-  useRoute,
-  useTheme,
-  type RouteProp,
-} from '@react-navigation/native';
+  Image,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { useRoute, useTheme, type RouteProp } from '@react-navigation/native';
 
 import { usePublicCourseDetail } from '@/domains/courses/hooks/usePublicCourseDetail';
 import { coursesKeys } from '@/domains/courses/model/queryKeys';
@@ -22,31 +24,26 @@ import { CartMainButtons } from '@/shared/ui/cart/CartMainButtons';
 import { ClientCommentsSection } from '@/shared/ui/comments';
 import { ListStateView } from '@/shared/ui/list-states/ListStateView';
 import { Text } from '@/shared/ui/Text';
+import { protectedNavigate } from '@/app/bridge/auth';
 
-
-const PublicCourseDetailScreenComponent = () => {
+const PublicAlbumDetailScreenComponent = () => {
   const navigation = useAppNavigation();
-  const route = useRoute<RouteProp<DrawerParamList, 'PublicCourseDetail'>>();
-  const courseId = route.params.courseId;
+  const route = useRoute<RouteProp<DrawerParamList, 'PublicAlbumDetail'>>();
+  const albumId = route.params.albumId;
   const { colors } = useTheme();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
-  const {
-    data,
-    isPending,
-    isError,
-    error,
-    refetch,
-    isSuccess,
-    isRefetching,
-  } = usePublicCourseDetail(courseId);
+  const { data, isPending, isError, error, refetch, isSuccess, isRefetching } =
+    usePublicCourseDetail(albumId);
 
   const refreshing = Boolean(isSuccess && data != null && isRefetching);
 
   const refresh = React.useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: coursesKeys.detail(courseId) }).catch(() => {});
-  }, [queryClient, courseId]);
+    queryClient
+      .invalidateQueries({ queryKey: coursesKeys.detail(albumId) })
+      .catch(() => {});
+  }, [queryClient, albumId]);
 
   const refreshControl = React.useMemo(
     () => <RefreshControl refreshing={refreshing} onRefresh={refresh} />,
@@ -64,7 +61,7 @@ const PublicCourseDetailScreenComponent = () => {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      title: data?.title_fa ?? t('screens.courseDetail.title'),
+      title: data?.title_fa ?? t('screens.publicAlbumDetail.title'),
     });
   }, [data?.title_fa, navigation, t]);
 
@@ -73,8 +70,8 @@ const PublicCourseDetailScreenComponent = () => {
   const purchased = Boolean(data?.is_accessible);
 
   const onPressPrimary = React.useCallback(() => {
-    navigation.navigate('CourseDetail', { courseId });
-  }, [navigation, courseId]);
+    protectedNavigate(navigation, 'AlbumDetail', { albumId });
+  }, [albumId, navigation]);
 
   const renderBody = React.useCallback(() => {
     if (!data) {
@@ -82,7 +79,9 @@ const PublicCourseDetailScreenComponent = () => {
     }
 
     const coverFallbackBg = createCoverFallbackBgStyles(colors.border);
-    const coverPlaceholderGlyph = createCoverPlaceholderGlyphStyles(colors.text);
+    const coverPlaceholderGlyph = createCoverPlaceholderGlyphStyles(
+      colors.text,
+    );
     const bodyText = createCourseDetailBodyTextStyles(colors);
 
     return (
@@ -102,43 +101,36 @@ const PublicCourseDetailScreenComponent = () => {
             }}
           />
         ) : (
-          <View
-            style={[styles.cover, styles.coverPh, coverFallbackBg.bg]}
-          >
+          <View style={[styles.cover, styles.coverPh, coverFallbackBg.bg]}>
             <Text style={coverPlaceholderGlyph.glyph}>▣</Text>
           </View>
         )}
 
-        <Text style={[styles.title, bodyText.title]}>
-          {data.title_fa}
-        </Text>
-        <Text style={[styles.short, bodyText.short]}>
-          {data.short_info}
-        </Text>
-        <Text style={[styles.full, bodyText.full]}>
-          {data.full_info}
-        </Text>
+        <Text style={[styles.title, bodyText.title]}>{data.title_fa}</Text>
+        <Text style={[styles.short, bodyText.short]}>{data.short_info}</Text>
+        <Text style={[styles.full, bodyText.full]}>{data.full_info}</Text>
 
         <View style={styles.actions}>
           <CartMainButtons
-            courseId={courseId}
+            courseId={albumId}
             isFull={(data.remain_capacity ?? 1) === 0}
             isAccessible={purchased}
+            showBtnText={t('screens.albums.viewAlbum')}
             fullWidth={false}
             onPressPrimary={onPressPrimary}
           />
         </View>
 
         <ClientCommentsSection
-          title={t('screens.courseDetail.commentsTitle')}
-          courseId={courseId}
+          title={t('screens.publicAlbumDetail.commentsTitle')}
+          courseId={albumId}
           bgcolor={`${colors.card}`}
         />
       </ScrollView>
     );
   }, [
+    albumId,
     colors,
-    courseId,
     coverUri,
     data,
     imgFailed,
@@ -156,9 +148,9 @@ const PublicCourseDetailScreenComponent = () => {
       isEmpty={Boolean(!isPending && !data)}
       onRetry={onRetry}
       renderList={renderBody}
-      loadingMessage={t('screens.courseDetail.loading')}
-      errorTitle={t('screens.courseDetail.error')}
-      emptyTitle={t('screens.courseDetail.empty')}
+      loadingMessage={t('screens.publicAlbumDetail.loading')}
+      errorTitle={t('screens.publicAlbumDetail.error')}
+      emptyTitle={t('screens.publicAlbumDetail.empty')}
       retryLabel={t('listStates.retry')}
       safeAreaEdges={['left', 'right', 'bottom']}
     />
@@ -206,5 +198,5 @@ const styles = StyleSheet.create({
   },
 });
 
-PublicCourseDetailScreenComponent.displayName = 'PublicCourseDetailScreen';
-export const PublicCourseDetailScreen = PublicCourseDetailScreenComponent;
+PublicAlbumDetailScreenComponent.displayName = 'PublicAlbumDetailScreen';
+export const PublicAlbumDetailScreen = PublicAlbumDetailScreenComponent;

@@ -1,4 +1,4 @@
-import { Button } from '@react-navigation/elements';
+import { Button as NavElementsButton } from '@react-navigation/elements';
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import {
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   ScrollView,
   View,
 } from 'react-native';
@@ -29,6 +28,7 @@ import {
   createNavScreenShellStyles,
   useThemeColors,
 } from '@/ui/theme';
+import { Button } from '@/ui/components/Button';
 import { InputField } from '@/ui/components/form/InputField';
 import { createFormFieldStyles } from '@/ui/theme/formField.styles';
 import { hexAlpha } from '@/ui/theme/utils/colorUtils';
@@ -192,19 +192,19 @@ export const SecurityScreen = () => {
                 {t('screens.security.passwordMasked')}
               </Text>
             </View>
-            <Pressable
-              accessibilityRole="button"
+            <Button
+              layout="auto"
+              variant="text"
+              title={t('screens.security.changePassword')}
               accessibilityLabel={t('screens.security.changePassword')}
               onPress={onTogglePasswordForm}
-              style={({ pressed }) => [
-                screenStyles.changePasswordBtn,
-                pressed ? screenStyles.changePasswordBtnPressed : null,
-              ]}
+              style={screenStyles.changePasswordBtn}
+              contentStyle={{ width: '100%' }}
             >
               <Text style={screenStyles.changePasswordLabel}>
                 {t('screens.security.changePassword')}
               </Text>
-            </Pressable>
+            </Button>
           </View>
         ) : (
           <View style={screenStyles.formStack}>
@@ -272,17 +272,23 @@ export const SecurityScreen = () => {
             <Text style={screenStyles.hintMuted}>
               {t('screens.security.passwordHint')}
             </Text>
-            <Pressable accessibilityRole="button" onPress={onForgetPassword}>
+            <Button
+              layout="auto"
+              variant="text"
+              title={`${t('screens.security.forgetPasswordLead')} ${t('screens.security.forgetPassword')}`}
+              onPress={onForgetPassword}
+              contentStyle={{ width: '100%' }}
+            >
               <Text style={screenStyles.forgetPasswordText}>
                 {`${t('screens.security.forgetPasswordLead')} ${t('screens.security.forgetPassword')}`}
               </Text>
-            </Pressable>
+            </Button>
 
             <View style={screenStyles.buttonRow}>
-              <Button disabled={pwdBusy} onPress={onHidePasswordForm}>
+              <NavElementsButton disabled={pwdBusy} onPress={onHidePasswordForm}>
                 {t('screens.security.cancel')}
-              </Button>
-              <Button
+              </NavElementsButton>
+              <NavElementsButton
                 disabled={pwdBusy}
                 onPress={() => {
                   submitPassword().catch(() => undefined);
@@ -291,7 +297,7 @@ export const SecurityScreen = () => {
                 {pwdBusy
                   ? t('screens.editProfile.saving')
                   : t('screens.security.confirm')}
-              </Button>
+              </NavElementsButton>
             </View>
 
             {passwordMutation.isSuccess ? (

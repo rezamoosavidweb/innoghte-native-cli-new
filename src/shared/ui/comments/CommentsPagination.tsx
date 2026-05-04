@@ -1,9 +1,10 @@
 import type { Theme } from '@react-navigation/native';
 import * as React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 
 import { Text } from '@/shared/ui/Text';
+import { Button } from '@/ui/components/Button';
 
 const MORE_STR = '. . .';
 
@@ -139,42 +140,51 @@ const CommentsPaginationComponent = ({
 
   return (
     <View style={paginationLayout.row}>
-      <Pressable
-        accessibilityRole="button"
+      <Button
+        layout="auto"
+        variant="text"
+        title="Previous page"
+        accessibilityLabel="Previous page"
         accessibilityState={{ disabled: currentPage === 1 }}
         disabled={currentPage === 1}
         onPress={onPrev}
-        style={({ pressed }) => [
-          paginationLayout.arrowBtn,
-          themed.prevBtnBorder,
-          pressed ? themed.arrowPressed : null,
-        ]}
+        style={[paginationLayout.arrowBtn, themed.prevBtnBorder]}
+        contentStyle={{ width: '100%' }}
       >
         <Text style={themed.prevLabel}>{'‹'}</Text>
-      </Pressable>
+      </Button>
 
-      {pages.map((page, i) => (
-        <Pressable
-          key={`${String(page)}-${i}`}
-          accessibilityRole={page === MORE_STR ? 'none' : 'button'}
-          disabled={page === MORE_STR}
-          onPress={() => {
-            if (typeof page === 'number') {
-              onPageChange(page);
-            }
-          }}
-          style={({ pressed }) => [
-            paginationLayout.pageBtn,
-            themed.pageBtnFace,
-            typeof page === 'number' && currentPage === page
-              ? themed.pageBgSelected
-              : themed.pageBgIdle,
-            typeof page === 'number' && pressed ? themed.pagePressed : null,
-          ]}
-        >
-          {page === MORE_STR ? (
+      {pages.map((page, i) =>
+        page === MORE_STR ? (
+          <View
+            key={`${String(page)}-${i}`}
+            style={[
+              paginationLayout.pageBtn,
+              themed.pageBtnFace,
+              themed.pageBgIdle,
+            ]}
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+          >
             <Text style={themed.dots}>{MORE_STR}</Text>
-          ) : (
+          </View>
+        ) : (
+          <Button
+            key={`${String(page)}-${i}`}
+            layout="auto"
+            variant="text"
+            title={String(page)}
+            accessibilityState={{ selected: currentPage === page }}
+            onPress={() => {
+              onPageChange(page as number);
+            }}
+            style={[
+              paginationLayout.pageBtn,
+              themed.pageBtnFace,
+              currentPage === page ? themed.pageBgSelected : themed.pageBgIdle,
+            ]}
+            contentStyle={{ width: '100%' }}
+          >
             <Text
               style={
                 currentPage === page
@@ -184,23 +194,23 @@ const CommentsPaginationComponent = ({
             >
               {(page as number).toLocaleString()}
             </Text>
-          )}
-        </Pressable>
-      ))}
+          </Button>
+        ),
+      )}
 
-      <Pressable
-        accessibilityRole="button"
+      <Button
+        layout="auto"
+        variant="text"
+        title="Next page"
+        accessibilityLabel="Next page"
         accessibilityState={{ disabled: currentPage === totalPages }}
         disabled={currentPage === totalPages}
         onPress={onNext}
-        style={({ pressed }) => [
-          paginationLayout.arrowBtn,
-          themed.nextBtnBorder,
-          pressed ? themed.arrowPressed : null,
-        ]}
+        style={[paginationLayout.arrowBtn, themed.nextBtnBorder]}
+        contentStyle={{ width: '100%' }}
       >
         <Text style={themed.nextLabel}>{'›'}</Text>
-      </Pressable>
+      </Button>
     </View>
   );
 };

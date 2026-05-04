@@ -7,14 +7,14 @@ import { useTranslation } from 'react-i18next';
 
 import { RefreshControl, View } from 'react-native';
 
-import { PUBLIC_ALBUM_CATEGORY_ID } from '@/domains/media/model/publicCatalog';
+import { PUBLIC_ALBUM_CATEGORY_ID } from '@/domains/albums/model/publicCatalog';
 
-import type { PublicAlbumTrack } from '@/domains/media/model';
+import type { PublicAlbumTrack } from '@/domains/albums/model';
 
-import { useInfinitePublicAlbumTracks } from '@/domains/media/hooks/useInfinitePublicAlbumTracks';
-import { publicAlbumInfiniteKeys } from '@/domains/media/model/queryKeys';
+import { useInfinitePublicAlbumTracks } from '@/domains/albums/hooks/useInfinitePublicAlbumTracks';
+import { publicAlbumInfiniteKeys } from '@/domains/albums/model/queryKeys';
 
-import { PublicAlbumTrackCard } from '@/domains/media/ui/cards/PublicAlbumTrackCard';
+import { PublicAlbumTrackCard } from '@/domains/albums/ui/cards/PublicAlbumTrackCard';
 
 import { useListPerformanceProfile } from '@/shared/infra/device/listPerformanceProfile';
 

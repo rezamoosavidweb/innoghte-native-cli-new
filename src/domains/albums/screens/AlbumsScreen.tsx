@@ -3,9 +3,9 @@ import { View } from 'react-native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
 
-import { AlbumListCard } from '@/domains/media/ui/cards/AlbumListCard';
-import type { Album } from '@/domains/media/model';
-import { useAlbums } from '@/domains/media/hooks/useAlbums';
+import { AlbumListCard } from '@/domains/albums/ui/cards/AlbumListCard';
+import type { Album } from '@/domains/albums/model';
+import { useAlbums } from '@/domains/albums/hooks/useAlbums';
 import { ListStateView } from '@/shared/ui/list-states/ListStateView';
 import {
   flashListContentGutters,

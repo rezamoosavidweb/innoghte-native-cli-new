@@ -3,7 +3,6 @@ import * as React from 'react';
 import {
   FlatList,
   Image,
-  Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -33,11 +32,11 @@ import { hexAlpha } from '@/ui/theme/utils/colorUtils';
 import { DashboardCommentSection } from '@/shared/ui/comments';
 import { ListStateView } from '@/shared/ui/list-states/ListStateView';
 import { Text } from '@/shared/ui/Text';
+import { Button } from '@/ui/components/Button';
 
 type Chapter = NonNullable<PublicCourseDetailData['chapters']>[number];
 
-
-function createCoursePlayerSurfaceStyles(colors: Theme['colors']) {
+function createCourseDetailSurfaceStyles(colors: Theme['colors']) {
   return StyleSheet.create({
     headerTitle: { color: colors.text },
     headerShort: { color: colors.text },
@@ -76,29 +75,33 @@ const ChapterRow = React.memo(function ChapterRow({
   const themed = createChapterRowStyles(colors, active);
 
   return (
-    <Pressable
-      accessibilityRole="button"
+    <Button
+      layout="auto"
+      variant="text"
+      title={chapter.title_fa}
       onPress={() => {
         onSelect(chapter);
       }}
-      style={({ pressed }) => [
-        styles.chapterRow,
-        themed.face,
-        pressed ? themed.pressed : themed.idle,
-      ]}
+      style={[styles.chapterRow, themed.face]}
+      contentStyle={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+      }}
     >
       <Text style={[styles.chapterTitle, themed.title]} numberOfLines={2}>
         {chapter.title_fa}
       </Text>
       <Text style={themed.bullet}>{active ? '●' : '▶'}</Text>
-    </Pressable>
+    </Button>
   );
 });
 ChapterRow.displayName = 'ChapterRow';
 
-const CoursePlayerScreenComponent = () => {
+const CourseDetailScreenComponent = () => {
   const navigation = useAppNavigation();
-  const route = useRoute<RouteProp<DrawerParamList, 'CoursePlayer'>>();
+  const route = useRoute<RouteProp<DrawerParamList, 'CourseDetail'>>();
   const courseId = route.params.courseId;
   const { colors } = useTheme();
   const { t } = useTranslation();
@@ -166,7 +169,7 @@ const CoursePlayerScreenComponent = () => {
       return null;
     }
 
-    const surf = createCoursePlayerSurfaceStyles(colors);
+    const surf = createCourseDetailSurfaceStyles(colors);
     const coverFallbackBg = createCoverFallbackBgStyles(colors.border);
     const coverPlaceholderGlyph = createCoverPlaceholderGlyphStyles(colors.text);
 
@@ -230,7 +233,7 @@ const CoursePlayerScreenComponent = () => {
   ]);
 
   const listFooter = React.useMemo(() => {
-    const surf = createCoursePlayerSurfaceStyles(colors);
+    const surf = createCourseDetailSurfaceStyles(colors);
     return (
       <View style={[styles.commentsBlock, surf.commentsBorder]}>
         <DashboardCommentSection
@@ -263,7 +266,7 @@ const CoursePlayerScreenComponent = () => {
     }
 
     if (!data.is_accessible) {
-      const surf = createCoursePlayerSurfaceStyles(colors);
+      const surf = createCourseDetailSurfaceStyles(colors);
       return (
         <ScrollView
           style={styles.scrollFlex}
@@ -411,5 +414,5 @@ const styles = StyleSheet.create({
   },
 });
 
-CoursePlayerScreenComponent.displayName = 'CoursePlayerScreen';
-export const CoursePlayerScreen = CoursePlayerScreenComponent;
+CourseDetailScreenComponent.displayName = 'CourseDetailScreen';
+export const CourseDetailScreen = CourseDetailScreenComponent;

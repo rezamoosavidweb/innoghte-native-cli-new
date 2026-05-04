@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
   ActivityIndicator,
   Image,
-  Pressable,
   StyleSheet,
   View,
 } from 'react-native';
@@ -15,6 +14,7 @@ import { resolveAvatarUri } from '@/shared/utils/resolveAvatarUri';
 import { useThemeColors } from '@/ui/theme';
 import { spacing } from '@/ui/theme/core/spacing';
 import { radius } from '@/ui/theme/core/radius';
+import { Button } from '@/ui/components/Button';
 
 export type ProfileAvatarPickerProps = {
   accessibilityPickLabel: string;
@@ -78,16 +78,19 @@ export const ProfileAvatarPicker = React.memo(function ProfileAvatarPicker({
 
   return (
     <View style={styles.wrap}>
-      <Pressable
-        accessibilityRole="button"
+      <Button
+        layout="auto"
+        variant="text"
+        title={accessibilityPickLabel}
         accessibilityLabel={accessibilityPickLabel}
         disabled={busy}
         onPress={onPick}
-        style={({ pressed }) => [
-          styles.frame,
-          avatarChrome.frame,
-          pressed ? avatarChrome.framePressed : null,
-        ]}
+        style={[styles.frame, avatarChrome.frame]}
+        contentStyle={{
+          width: '100%',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
       >
         {previewUri ? (
           <Image
@@ -106,7 +109,7 @@ export const ProfileAvatarPicker = React.memo(function ProfileAvatarPicker({
             <ActivityIndicator color={colors.text} />
           </View>
         ) : null}
-      </Pressable>
+      </Button>
       <Text style={[styles.hint, avatarChrome.hintMuted]}>{pickHintLabel}</Text>
       {error ? (
         <Text style={[styles.error, avatarChrome.errorTint]}>{error}</Text>

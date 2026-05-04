@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, Pressable, View } from 'react-native';
+import { Image, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Text } from '@/shared/ui/Text';
@@ -10,6 +10,7 @@ import {
 } from '@/shared/infra/i18n/formatLocaleNumbers';
 import type { EventType } from '@/domains/events/model/event.entities';
 import { useEventListCardStyles } from '@/domains/events/ui/cards/eventListCard.styles';
+import { Button } from '@/ui/components/Button';
 
 const PRICE_DIVISOR = 10;
 
@@ -81,46 +82,50 @@ const EventListCardComponent = ({ item }: Props) => {
       </View>
       <View style={s.actions}>
         {isUpcoming && eventType === 'retreat' ? (
-          <Pressable
-            accessibilityRole="button"
+          <Button
+            layout="auto"
+            variant="filled"
+            title={t('events.registerInfo')}
             onPress={noop}
-            style={({ pressed }) =>
-              pressed ? [s.successBtn, s.pressed] : s.successBtn
-            }
+            style={s.successBtn}
+            contentStyle={{ width: '100%' }}
           >
             <Text style={s.btnSuccessText}>{t('events.registerInfo')}</Text>
-          </Pressable>
+          </Button>
         ) : isUpcoming && eventType === 'workshop' ? (
           <>
-            <Pressable
-              accessibilityRole="button"
+            <Button
+              layout="auto"
+              variant="outlined"
+              title={t('courses.moreInformation')}
               onPress={noop}
-              style={({ pressed }) =>
-                pressed ? [s.outlineBtn, s.pressed] : s.outlineBtn
-              }
+              style={s.outlineBtn}
+              contentStyle={{ width: '100%' }}
             >
               <Text style={s.outlineTxt}>{t('courses.moreInformation')}</Text>
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
+            </Button>
+            <Button
+              layout="auto"
+              variant="filled"
+              title={t('courses.buy')}
               onPress={noop}
-              style={({ pressed }) =>
-                pressed ? [s.successBtn, s.pressed] : s.successBtn
-              }
+              style={s.successBtn}
+              contentStyle={{ width: '100%' }}
             >
               <Text style={s.btnSuccessText}>{t('courses.buy')}</Text>
-            </Pressable>
+            </Button>
           </>
         ) : (
-          <Pressable
-            accessibilityRole="button"
+          <Button
+            layout="auto"
+            variant="filled"
+            title={t('courses.moreInformation')}
             onPress={noop}
-            style={({ pressed }) =>
-              pressed ? [s.primaryBtn, s.pressed] : s.primaryBtn
-            }
+            style={s.primaryBtn}
+            contentStyle={{ width: '100%' }}
           >
             <Text style={s.btnPrimaryText}>{t('courses.moreInformation')}</Text>
-          </Pressable>
+          </Button>
         )}
       </View>
     </View>

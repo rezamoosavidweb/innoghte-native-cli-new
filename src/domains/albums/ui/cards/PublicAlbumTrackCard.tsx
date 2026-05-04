@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Image, Pressable, StyleSheet, View} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Text } from '@/shared/ui/Text';
@@ -7,6 +7,7 @@ import { Text } from '@/shared/ui/Text';
 import { isProductPurchased } from '@/shared/purchases';
 import { createProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
 import { CartMainButtons } from '@/shared/ui/cart/CartMainButtons';
+import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import {
   colors,
   fontSize,
@@ -14,7 +15,8 @@ import {
   radius,
   spacing,
 } from '@/ui/theme';
-import type { PublicAlbumMedia, PublicAlbumTrack } from '@/domains/media/model';
+import type { PublicAlbumMedia, PublicAlbumTrack } from '@/domains/albums/model';
+import { Button } from '@/ui/components/Button';
 
 /** Legacy drawer card surface (**`PublicCourseDto`** list) — aligns with `#122320` album tiles. */
 const album = {
@@ -84,6 +86,7 @@ function noop(): void {}
 
 const PublicAlbumTrackCardComponent = ({ item }: Props) => {
   const { t } = useTranslation();
+  const navigation = useAppNavigation();
   const theme = useTheme();
   const { colors: themeColors } = theme;
   const s = createPublicAlbumTrackStyles();
@@ -92,6 +95,10 @@ const PublicAlbumTrackCardComponent = ({ item }: Props) => {
   const uri = images[0]?.src;
   const [failed, setFailed] = React.useState(false);
   const purchased = isProductPurchased(item.id);
+
+  const onPressPrimary = React.useCallback(() => {
+    navigation.navigate('AlbumDetail', { albumId: item.id });
+  }, [navigation, item.id]);
 
   return (
     <View style={s.card}>
@@ -127,24 +134,25 @@ const PublicAlbumTrackCardComponent = ({ item }: Props) => {
           courseId={item.id}
           isFull={false}
           isAccessible={purchased}
+          showBtnText={t('screens.albums.viewAlbum')}
+          onPressPrimary={onPressPrimary}
           iconLeftAddToBasket={null}
           iconRightAddToBasket={null}
           iconLeftInBasket={null}
           iconRightInBasket={null}
         />
-        <Pressable
-          accessibilityRole="button"
+        <Button
+          layout="auto"
+          variant="outlined"
+          title={t('courses.moreInformation')}
           onPress={noop}
-          style={({ pressed }) =>
-            pressed
-              ? [productS.buttonOutlined, productS.pressed]
-              : productS.buttonOutlined
-          }
+          style={productS.buttonOutlined}
+          contentStyle={{ width: '100%' }}
         >
           <Text style={productS.buttonOutlinedText}>
             {t('courses.moreInformation')}
           </Text>
-        </Pressable>
+        </Button>
       </View>
     </View>
   );

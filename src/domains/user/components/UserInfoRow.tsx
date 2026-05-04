@@ -1,8 +1,9 @@
 import { Text } from '@/shared/ui/Text';
 import * as React from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
 import type { ProfileHeaderStyleSet } from '@/domains/user/ui/profileScreen.styles';
+import { Button } from '@/ui/components/Button';
 import type { VerifyChannel } from '@/shared/contracts/verification';
 
 export type UserInfoRowProps = {
@@ -44,20 +45,19 @@ export const UserInfoRow = React.memo(function UserInfoRow({
             {verifiedLabel}
           </Text>
         ) : (
-          <Pressable
-            accessibilityRole="button"
+          <Button
+            layout="auto"
+            variant="text"
+            title={needsVerificationLabel}
             accessibilityLabel={needsVerificationLabel}
             onPress={onPressNeedsVerification}
-            style={({ pressed }) =>
-              pressed
-                ? [s.needsVerificationButton, s.needsVerificationButtonPressed]
-                : s.needsVerificationButton
-            }
+            style={s.needsVerificationButton}
+            contentStyle={{ width: '100%' }}
           >
             <Text style={s.needsVerificationLabel} numberOfLines={2}>
               {needsVerificationLabel}
             </Text>
-          </Pressable>
+          </Button>
         )}
       </View>
     </View>

@@ -1,12 +1,13 @@
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import * as React from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text } from '@/shared/ui/Text';
 
 import { CollapsibleHeader } from '@/shared/ui/collapsibleHeader/CollapsibleHeader';
 import { CollapsibleHeaderScrollView } from '@/shared/ui/collapsibleHeader/CollapsibleHeaderScrollView';
 import { useCollapsibleHeader } from '@/shared/ui/collapsibleHeader/useCollapsibleHeader';
+import { Button } from '@/ui/components/Button';
 
 const ROWS = Array.from({ length: 48 }, (_, i) => `Row ${i + 1}`);
 
@@ -50,13 +51,16 @@ export const CollapsibleHeaderExampleScreen = () => {
         title="Transparent header"
         adaptiveTitleColor
       >
-        <Pressable
-          accessibilityRole="button"
+        <Button
+          layout="auto"
+          variant="text"
+          title="Action"
           onPress={onActionPress}
           style={styles.chip}
+          contentStyle={{ width: '100%' }}
         >
           <Text style={styles.chipLabel}>Action</Text>
-        </Pressable>
+        </Button>
       </CollapsibleHeader>
       <CollapsibleHeaderScrollView
         onScroll={ch.onScroll}

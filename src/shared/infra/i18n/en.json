@@ -56,6 +56,9 @@
     "copyright": "Copyright",
     "courseDetail": "Course details",
     "coursePlayer": "Course player",
+    "publicCourseDetail": "Course overview",
+    "publicAlbumDetail": "Album overview",
+    "albumDetail": "My album",
     "guest": {
       "login": "Sign in",
       "register": "Sign up"
@@ -123,10 +126,28 @@
       "externalPlaybackHint": "This media opens in your browser or the web app.",
       "htmlMediaHint": "This lesson uses embedded content; use the web version if needed."
     },
+    "albumDetail": {
+      "title": "My album",
+      "loading": "Loading album…",
+      "error": "Could not load album.",
+      "empty": "Album not found.",
+      "chaptersHeading": "Album tracks \"{{title}}\"",
+      "nextTrack": "Next track: {{title}}",
+      "notAccessible": "This album is not enabled for your account."
+    },
+    "publicAlbumDetail": {
+      "title": "Album overview",
+      "loading": "Loading…",
+      "error": "Could not load album details.",
+      "empty": "Album not found.",
+      "commentsTitle": "Comments"
+    },
     "albums": {
       "loading": "Loading albums…",
       "error": "Could not load albums.",
-      "empty": "No albums available yet."
+      "empty": "No albums available yet.",
+      "viewAlbum": "View album",
+      "moreInformation": "More info"
     },
     "myCoursesHub": {
       "subtitle": "Browse courses, albums, and more — same hub as the legacy app.",
@@ -578,6 +599,7 @@
   },
   "comments": {
     "entityCourse": "Course",
+    "entityAlbum": "Album",
     "submitLabel": "Leave a comment",
     "placeholderSuffix": " — what did you think?",
     "yourRating": "Your rating",

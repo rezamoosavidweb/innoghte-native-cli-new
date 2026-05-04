@@ -1,18 +1,21 @@
-import * as React from 'react';
-import {Image, Pressable, View} from 'react-native';
 import { useTheme } from '@react-navigation/native';
+import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
+
 import { Text } from '@/shared/ui/Text';
 
-import type { ProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
-import { createProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
+import type { Course } from '@/domains/courses/model/entities';
 import {
   formatNumberForApp,
   formatPriceForApp,
 } from '@/shared/infra/i18n/formatLocaleNumbers';
-import { CartMainButtons } from '@/shared/ui/cart/CartMainButtons';
-import type { Course } from '@/domains/courses/model/entities';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
+import { CatalogListItemCard } from '@/shared/ui/cards/CatalogListItemCard';
+import type { ProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
+import { createProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
+import { CartMainButtons } from '@/shared/ui/cart/CartMainButtons';
+import { protectedNavigate } from '@/app/bridge/auth';
 
 const PRICE_DISPLAY_DIVISOR = 10;
 
@@ -68,56 +71,21 @@ const CourseInfoRow = React.memo(function CourseInfoRow({
 });
 CourseInfoRow.displayName = 'CourseInfoRow';
 
-const CourseCardHeader = React.memo(function CourseCardHeader({
-  title,
-  imageUri,
-  starLabel,
-  s,
-}: {
-  title: string;
-  imageUri: string | undefined;
-  starLabel: string;
-  s: ProductListCardStyles;
-}) {
-  const [failed, setFailed] = React.useState(false);
-
-  return (
-    <View style={s.headerRow}>
-      <View style={s.headerTextCol}>
-        <Text style={s.title} numberOfLines={3}>
-          {title}
-        </Text>
-        <Text style={s.stars}>{starLabel}</Text>
-      </View>
-      {!failed && imageUri ? (
-        <Image
-          accessibilityIgnoresInvertColors
-          source={{ uri: imageUri }}
-          style={s.thumb}
-          onError={() => {
-            setFailed(true);
-          }}
-        />
-      ) : (
-        <View style={[s.thumb, s.imagePlaceholder]}>
-          <Text style={s.placeholderGlyph}>▣</Text>
-        </View>
-      )}
-    </View>
-  );
-});
-CourseCardHeader.displayName = 'CourseCardHeader';
-
 const CourseListCardComponent = ({ course }: CourseListCardProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const { colors } = theme;
-  const s = createProductListCardStyles(colors, theme);
+  const s = React.useMemo(() => createProductListCardStyles(colors, theme), [colors, theme]);
   const navigation = useAppNavigation();
 
-  const onMoreInformation = React.useCallback(() => {
-    navigation.navigate('CourseDetail', { courseId: course.id });
+  const onPressPrimary = React.useCallback(() => {
+    protectedNavigate(navigation, 'CourseDetail', { courseId: course.id });
+  }, [course.id, navigation]);
+
+  const onPressSecondary = React.useCallback(() => {
+    navigation.navigate('PublicCourseDetail', { courseId: course.id });
   }, [navigation, course.id]);
+
   const imageUri = course.image_media[0]?.src;
   const displayPrice = formatPriceForApp(
     (course.price ?? 0) / PRICE_DISPLAY_DIVISOR,
@@ -125,46 +93,53 @@ const CourseListCardComponent = ({ course }: CourseListCardProps) => {
   );
   const chapters = formatNumberForApp(course.count_chapters ?? 0);
 
-  return (
-    <View style={s.card}>
-      <CourseCardHeader
-        title={course.title_fa}
-        imageUri={imageUri}
-        starLabel={buildStarString(course.points)}
-        s={s}
-      />
-
-      <View style={s.metaBlock}>
+  const metaBlock = React.useMemo(
+    () => (
+      <>
         <CourseInfoRow
           label={t('courses.productType')}
           value={<CourseTypeBadge isPackage={!!course.package} s={s} />}
           s={s}
         />
-        <CourseInfoRow label={t('courses.chaptersCount')} value={chapters} s={s} />
-        <CourseInfoRow label={t('courses.price')} value={displayPrice} s={s} />
-      </View>
-
-      <View style={s.actionsRow}>
-        <CartMainButtons
-          courseId={course.id}
-          isFull={course.remainCapacity === 0}
-          isAccessible={course.isAccessible}
-          iconLeftAddToBasket={null}
-          iconRightAddToBasket={null}
-          iconLeftInBasket={null}
-          iconRightInBasket={null}
+        <CourseInfoRow
+          label={t('courses.chaptersCount')}
+          value={chapters}
+          s={s}
         />
-        <Pressable
-          accessibilityRole="button"
-          onPress={onMoreInformation}
-          style={({ pressed }) =>
-            pressed ? [s.buttonOutlined, s.pressed] : s.buttonOutlined
-          }
-        >
-          <Text style={s.buttonOutlinedText}>{t('courses.moreInformation')}</Text>
-        </Pressable>
-      </View>
-    </View>
+        <CourseInfoRow label={t('courses.price')} value={displayPrice} s={s} />
+      </>
+    ),
+    [chapters, course.package, displayPrice, s, t],
+  );
+
+  const cartSlot = React.useMemo(
+    () => (
+      <CartMainButtons
+        courseId={course.id}
+        isFull={course.remainCapacity === 0}
+        isAccessible={course.isAccessible}
+        onPressPrimary={onPressPrimary}
+        iconLeftAddToBasket={null}
+        iconRightAddToBasket={null}
+        iconLeftInBasket={null}
+        iconRightInBasket={null}
+      />
+    ),
+    [course.id, course.isAccessible, course.remainCapacity, onPressPrimary],
+  );
+
+  return (
+    <CatalogListItemCard
+      title={course.title_fa}
+      imageUri={imageUri}
+      starLabel={buildStarString(course.points)}
+      styles={s}
+      metaBlock={metaBlock}
+      cartSlot={cartSlot}
+      showSecondaryButton={!course.isAccessible}
+      secondaryButtonText={t('courses.moreInformation')}
+      onPressSecondary={onPressSecondary}
+    />
   );
 };
 

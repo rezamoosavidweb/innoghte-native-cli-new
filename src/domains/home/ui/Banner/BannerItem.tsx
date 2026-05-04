@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
   Image,
   ImageBackground,
-  Pressable,
   View,
   useWindowDimensions,
   type ImageSourcePropType,
@@ -11,6 +10,7 @@ import { Text } from '@/shared/ui/Text';
 
 import type { BannerStyles } from '@/domains/home/ui/Banner/banner.styles';
 import { createBannerDecorationStyles } from '@/domains/home/ui/Banner/bannerItemDecoration.styles';
+import { Button } from '@/ui/components/Button';
 
 /** First headline line with accent segment (legacy web “آسمان” color). */
 export type BannerTitleAccent = {
@@ -154,8 +154,10 @@ function BannerItemComponent({ item, styles }: BannerItemProps) {
 
       {cta ? (
         <View style={hero ? styles.ctaRowHero : styles.ctaRow}>
-          <Pressable
-            accessibilityRole="button"
+          <Button
+            layout="auto"
+            variant="text"
+            title={cta}
             accessibilityLabel={cta}
             hitSlop={HIT_SLOP}
             onPress={handlePress}
@@ -169,11 +171,12 @@ function BannerItemComponent({ item, styles }: BannerItemProps) {
                 ? styles.ctaButtonHero
                 : styles.ctaButton
             }
+            contentStyle={{ width: '100%' }}
           >
             <Text style={styles.ctaText} numberOfLines={hero ? 1 : undefined}>
               {cta}
             </Text>
-          </Pressable>
+          </Button>
         </View>
       ) : null}
     </View>
@@ -243,14 +246,16 @@ function BannerItemComponent({ item, styles }: BannerItemProps) {
   }
 
   return (
-    <Pressable
+    <Button
+      layout="auto"
+      variant="text"
+      title={accessibilityLabel ?? title ?? titleRest ?? cta ?? 'Banner'}
       style={cardStyle}
       onPress={handlePress}
-      accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel ?? title ?? titleRest ?? cta}
+      contentStyle={{ width: '100%', flex: 1 }}
     >
       {content}
-    </Pressable>
+    </Button>
   );
 }
 
