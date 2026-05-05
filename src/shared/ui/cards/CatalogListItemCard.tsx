@@ -82,7 +82,7 @@ const CatalogListItemCardComponent = ({
 
       <View style={s.actionsRow}>
         {cartSlot}
-        {showSecondaryButton && (
+        {true && (
           <Button
             layout="auto"
             variant="outlined"

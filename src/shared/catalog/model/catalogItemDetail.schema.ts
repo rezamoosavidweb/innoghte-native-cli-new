@@ -8,7 +8,15 @@ export const catalogItemDetailSchema = z.looseObject({
   title_fa: z.string(),
   short_info: z.string(),
   full_info: z.string(),
+  from_album: z.string().nullable(),
+  color: z.string().nullable(),
+  price: z.number(),
   is_accessible: z.boolean().nullable().optional(),
+  is_downloadable: z.number().optional(),
+  requirements: z.string().nullable(),
+  demo: z.string().nullable(),
+  access_type: z.string().nullable(),
+  is_package: z.boolean().nullable().optional(),
   chapters: z
     .array(
       z.looseObject({
@@ -26,6 +34,15 @@ export const catalogItemDetailSchema = z.looseObject({
         type: z.string(),
         src: z.string(),
         is_cover: z.boolean().optional(),
+      }),
+    )
+    .optional(),
+  details: z
+    .array(
+      z.looseObject({
+        title: z.string(),
+        info: z.string(),
+        image: z.string(),
       }),
     )
     .optional(),

@@ -23,7 +23,7 @@ export type ButtonStyleProp =
 
 export type ButtonProps = {
   /** Visible label when `children` is omitted; always used as fallback for `accessibilityLabel`. */
-  title: string;
+  title?: string;
   accessibilityLabel?: string;
   accessibilityHint?: string;
   accessibilityState?: PressableProps['accessibilityState'];
