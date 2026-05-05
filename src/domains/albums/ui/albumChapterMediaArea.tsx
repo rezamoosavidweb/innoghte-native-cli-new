@@ -8,7 +8,7 @@ import { Text } from '@/shared/ui/Text';
 import {
   createChapterMediaPlaceholderStyles,
   createChapterMediaThemedStyles,
-} from '@/domains/courses/ui/courseChapterMediaArea.styles';
+} from '@/domains/courses/ui/course-detail/courseChapterMediaArea.styles';
 import { Button } from '@/ui/components/Button';
 
 type JsonMediaItem = { uuid?: string; title?: string };

@@ -24,7 +24,7 @@ import {
   createCoverFallbackBgStyles,
   createCoverPlaceholderGlyphStyles,
 } from '@/domains/courses/ui/courseCoverPlaceholder.styles';
-import { CourseChapterMediaArea } from '@/domains/courses/ui/CourseChapterMediaArea';
+import { CourseChapterMediaArea } from '@/domains/courses/ui/course-detail/CourseChapterMediaArea';
 import { pickCoverSrc } from '@/domains/courses/utils/pickCoverSrc';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';

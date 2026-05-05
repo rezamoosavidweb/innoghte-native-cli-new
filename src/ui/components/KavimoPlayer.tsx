@@ -15,10 +15,17 @@ export function KavimoPlayer({
   const parts = url.pathname.split('/').filter(Boolean);
   const domainName = url.hostname;
   const mediaID = parts[0];
+  console.log({ activeChapterMedia, mediaID, domainName });
 
   return (
     <View style={{ height: 300, width: '100%', padding: 20 }}>
-      <Vis3 domainName={domainName} ID={mediaID} />
+      <Vis3
+        domainName={domainName}
+        ID={mediaID}
+        onLoad={props33 => {
+          console.log(props33);
+        }}
+      />
     </View>
   );
 }

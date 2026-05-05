@@ -14,6 +14,7 @@ import {
 } from '@/shared/ui/comments/clientComments.styles';
 import { CommentsPagination } from '@/shared/ui/comments/CommentsPagination';
 import { CommentsSkeleton } from '@/shared/ui/comments/CommentsSkeleton';
+import { spacing } from '@/ui/theme';
 
 export type CommentDto = z.infer<typeof commentSchema>;
 
@@ -193,7 +194,8 @@ function ClientCommentsSectionComponent({
 const styles = StyleSheet.create({
   wrap: {
     width: '100%',
-    paddingVertical: 16,
+    padding: spacing.lg,
+    marginTop: 5*spacing.lg,
   },
   flatContent: {
     paddingBottom: 8,

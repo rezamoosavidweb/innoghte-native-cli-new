@@ -8,7 +8,7 @@ import { Text } from '@/shared/ui/Text';
 import {
   createChapterMediaPlaceholderStyles,
   createChapterMediaThemedStyles,
-} from '@/domains/courses/ui/courseChapterMediaArea.styles';
+} from '@/domains/courses/ui/course-detail/courseChapterMediaArea.styles';
 import { Button } from '@/ui/components/Button';
 
 type JsonMediaItem = { uuid?: string; title?: string };
@@ -65,7 +65,9 @@ const CourseChapterMediaAreaComponent = ({
   if (!activeChapterMedia?.trim()) {
     return (
       <View style={[styles.placeholder, placeholderChrome.placeholderBg]}>
-        <Text style={[styles.placeholderGlyph, placeholderChrome.glyph]}>▶</Text>
+        <Text style={[styles.placeholderGlyph, placeholderChrome.glyph]}>
+          ▶
+        </Text>
       </View>
     );
   }
@@ -105,7 +107,9 @@ const CourseChapterMediaAreaComponent = ({
         }}
         contentStyle={{ width: '100%' }}
       >
-        <Text style={styles.linkText}>{t('screens.coursePlayer.openMedia')}</Text>
+        <Text style={styles.linkText}>
+          {t('screens.coursePlayer.openMedia')}
+        </Text>
       </Button>
     );
   }
@@ -163,5 +167,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export const CourseChapterMediaArea = React.memo(CourseChapterMediaAreaComponent);
+export const CourseChapterMediaArea = React.memo(
+  CourseChapterMediaAreaComponent,
+);
 CourseChapterMediaArea.displayName = 'CourseChapterMediaArea';
