@@ -155,13 +155,12 @@ const HomeScreenComponent = () => {
       ?.scrollTo({ y: Math.max(0, quickAccessOffsetRef.current - 8), animated: true });
   }, []);
 
-  const bannerItems = React.useMemo<ReadonlyArray<BannerItemData>>(
-    () =>
-      HOME_BANNER_MOCK.map(item => ({
-        ...item,
-        cta: t('screens.home.banner.cta'),
-        onPress: handleBannerCta,
-      })),
+  const bannerItem = React.useMemo<BannerItemData>(
+    () => ({
+      ...HOME_BANNER_MOCK[0],
+      cta: t('screens.home.banner.cta'),
+      onPress: handleBannerCta,
+    }),
     [handleBannerCta, t],
   );
 
@@ -192,7 +191,7 @@ const HomeScreenComponent = () => {
             />
           }
         >
-          <Banner variant="hero" items={bannerItems} autoplay loop />
+          <Banner variant="hero" item={bannerItem} />
           <View onLayout={handleQuickAccessLayout}>
             <QuickAccess />
           </View>

@@ -12,9 +12,9 @@ import {
 
 import DiamondIcon from '@/assets/icons/diamond.svg';
 
+import PublicChapters from '@/domains/courses/ui/public-course-detail/chapter/PublicChapters';
 import { Details } from '@/domains/courses/ui/public-course-detail/Detail';
 import { OptionItem } from '@/domains/courses/ui/public-course-detail/OptionIem';
-import PublicChapters from '@/domains/courses/ui/public-course-detail/chapter/PublicChapters';
 import { createPublicCourseDetailStyles } from '@/domains/courses/ui/public-course-detail/publicCourseDetail.styles';
 import { pickCoverSrc } from '@/domains/courses/utils/pickCoverSrc';
 import { useCatalogItemDetail } from '@/shared/catalog/hooks/useCatalogItemDetail';
@@ -101,7 +101,7 @@ const PublicCourseDetailScreenComponent = () => {
         contentContainerStyle={s.scrollContent}
         keyboardShouldPersistTaps="handled"
         refreshControl={refreshControl}
-        nestedScrollEnabled
+        // nestedScrollEnabled
       >
         <Text style={[s.short, s.themText]}>{data?.short_info}</Text>
         <View style={s.container}>

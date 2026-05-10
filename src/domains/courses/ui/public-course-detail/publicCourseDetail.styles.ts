@@ -11,10 +11,13 @@ export function createPublicCourseDetailStyles(colors: Theme['colors']) {
     wrapper: {
       flex: 1,
     },
-    scroll: { flex: 1, paddingVertical: spacing.lg },
+    scroll: {
+      flex: 1,
+      // paddingVertical: spacing.lg,
+    },
 
     scrollContent: {
-      paddingBottom: 28,
+      paddingBottom: 4 * spacing.xl,
     },
 
     container: {

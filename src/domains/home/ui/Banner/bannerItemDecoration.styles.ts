@@ -19,6 +19,14 @@ export function createBannerDecorationStyles(layout: BannerDecorationLayout) {
       height: layout.lampHeight,
       zIndex: 1,
     },
+    lampWrap2: {
+      position: 'absolute',
+      top: 200,
+      left: 200,
+      width: 200,
+      height: 200,
+      zIndex: 1,
+    },
     parAnchor: {
       position: 'absolute',
       top: layout.parTop,

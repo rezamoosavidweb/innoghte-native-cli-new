@@ -212,7 +212,7 @@ function BannerItemComponent({ item, styles }: BannerItemProps) {
           <View style={deco.parAnchor} pointerEvents="none">
             <Image
               accessibilityIgnoresInvertColors
-              source={parImage}
+              source={image}
               resizeMode="contain"
               style={deco.parImage}
             />

@@ -1,13 +1,12 @@
+import { Text } from '@/shared/ui/Text';
+import { useTheme } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
-import { useTheme } from '@react-navigation/native';
-import { Text } from '@/shared/ui/Text';
 import { createPublicCourseDetailStyles } from '../publicCourseDetail.styles';
 import getChapterConfig from './getChapterConfig';
 
 import DiamondIcon from '@/assets/icons/diamond.svg';
 import MeditationIcon from '@/assets/icons/meditation.svg';
-
 const renderIcon = (name?: string) => {
   if (name === 'diamond') return <DiamondIcon width={40} height={30} />;
   if (name === 'meditation') return <MeditationIcon width={30} height={30} />;
@@ -20,7 +19,7 @@ interface Props {
   index: number;
 }
 
-const ChapterCard = ({ title, shortInfo, index }: Props) => {
+const ChapterRow = ({ title, shortInfo, index }: Props) => {
   const { colors } = useTheme();
   const s = createPublicCourseDetailStyles(colors);
 
@@ -37,4 +36,4 @@ const ChapterCard = ({ title, shortInfo, index }: Props) => {
   );
 };
 
-export default ChapterCard;
+export default ChapterRow;

@@ -1,23 +1,22 @@
+import { Text } from '@/shared/ui/Text';
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import {
   Dimensions,
   I18nManager,
-  Pressable,
   View,
   type StyleProp,
-  type ViewStyle
+  type ViewStyle,
 } from 'react-native';
-import { Text } from '@/shared/ui/Text';
 import Carousel, {
   type ICarouselInstance,
 } from 'react-native-reanimated-carousel';
 
 import {
-  createCommentCarouselStyles,
   createCommentCarouselEmptyLayout,
+  createCommentCarouselStyles,
 } from '@/domains/home/ui/commentCarousel.styles';
-import StartIcon from '@/assets/icons/star.svg';
+import { CommentCard, CommentItem } from '@/ui/components/CommentCard';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 export const DEFAULT_HEIGHT = 200;
@@ -25,13 +24,6 @@ export const DEFAULT_AUTOPLAY_INTERVAL = 3500;
 const DEFAULT_RESUME_DELAY = 4000;
 const DEFAULT_CONTENT_LINES = 17;
 const DEFAULT_SCROLL_ANIMATION_MS = 500;
-
-export type CommentItem = {
-  user?: string | null;
-  createdAt?: string | null;
-  courseTitle?: string | null;
-  content: string;
-};
 
 export type CommentCarouselProps = {
   data: ReadonlyArray<CommentItem>;
@@ -68,7 +60,6 @@ function CommentCarouselBase({
   loop = true,
   height = DEFAULT_HEIGHT,
   width,
-  onPressItem,
   onIndexChange,
   emptyText = 'No comments yet',
   anonymousLabel = 'Anonymous',
@@ -112,38 +103,29 @@ function CommentCarouselBase({
 
   React.useEffect(() => clearResumeTimer, [clearResumeTimer]);
 
-  const handlePressItem = React.useCallback(
-    (item: CommentItem, index: number) => {
-      pauseAutoPlay();
-      onPressItem?.(item, index);
-    },
-    [onPressItem, pauseAutoPlay],
-  );
-
-  const cardOnPress = onPressItem ? handlePressItem : undefined;
-
   const renderItem = React.useCallback(
     ({ item, index }: { item: CommentItem; index: number }) => (
       <CommentCard
-        item={item}
+        content={item.content}
+        courseTitle={item.courseTitle}
+        createdAt={item.createdAt}
+        writer={item.user}
         index={index}
-        styles={styles}
         starColor={colors.primary}
         anonymousLabel={anonymousLabel}
         numberOfLines={numberOfLines}
-        onPress={cardOnPress}
       />
     ),
-    [anonymousLabel, cardOnPress, colors.primary, numberOfLines, styles],
+    [anonymousLabel, colors.primary, numberOfLines],
   );
 
   if (itemCount === 0) {
-    const emptyLayout = createCommentCarouselEmptyLayout(height, containerWidth);
+    const emptyLayout = createCommentCarouselEmptyLayout(
+      height,
+      containerWidth,
+    );
     return (
-      <View
-        style={[styles.empty, emptyLayout.frame, style]}
-        testID={testID}
-      >
+      <View style={[styles.empty, emptyLayout.frame, style]} testID={testID}>
         <Text style={styles.emptyText}>{emptyText}</Text>
       </View>
     );
@@ -174,82 +156,3 @@ function CommentCarouselBase({
 
 export const CommentCarousel = React.memo(CommentCarouselBase);
 CommentCarousel.displayName = 'CommentCarousel';
-
-type CommentCarouselStyles = ReturnType<typeof createCommentCarouselStyles>;
-
-type CommentCardProps = {
-  item: CommentItem;
-  index: number;
-  styles: CommentCarouselStyles;
-  starColor: string;
-  anonymousLabel: string;
-  numberOfLines: number;
-  onPress?: (item: CommentItem, index: number) => void;
-};
-
-const CommentCard = React.memo(function CommentCard({
-  item,
-  index,
-  styles,
-  starColor,
-  anonymousLabel,
-  numberOfLines,
-  onPress,
-}: CommentCardProps) {
-  const handlePress = React.useCallback(() => {
-    onPress?.(item, index);
-  }, [index, item, onPress]);
-
-  const userLabel =
-    typeof item.user === 'string' && item.user.trim().length > 0
-      ? item.user
-      : anonymousLabel;
-
-  // const dateLabel =
-  //   typeof item.createdAt === 'string' && item.createdAt.trim().length > 0
-  //     ? item.createdAt
-  //     : null;
-
-  const courseLabel =
-    typeof item.courseTitle === 'string' && item.courseTitle.trim().length > 0
-      ? item.courseTitle
-      : null;
-
-  const cardStyleFn = React.useCallback(
-    ({ pressed }: { pressed: boolean }) =>
-      pressed ? [styles.card, styles.cardPressed] : styles.card,
-    [styles],
-  );
-
-  return (
-    <Pressable
-      style={onPress ? cardStyleFn : styles.card}
-      onPress={onPress ? handlePress : undefined}
-      disabled={!onPress}
-      accessibilityRole={onPress ? 'button' : undefined}
-      accessibilityLabel={userLabel}
-    >
-      <View style={styles.headerRow}>
-        <Text style={styles.userText} numberOfLines={1}>
-          {userLabel}
-        </Text>
-        <View style={styles.starContainer}>
-          {[...Array(5)].map((_, i) => (
-            <StartIcon key={i} width={14} color={starColor} />
-          ))}
-        </View>
-      </View>
-
-      {courseLabel ? (
-        <Text style={styles.courseText} numberOfLines={1}>
-          {courseLabel}
-        </Text>
-      ) : null}
-
-      <Text style={styles.contentText} numberOfLines={numberOfLines}>
-        {item.content}
-      </Text>
-    </Pressable>
-  );
-});
-CommentCard.displayName = 'CommentCard';

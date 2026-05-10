@@ -3,6 +3,7 @@ export type IconKey = 'diamond' | 'meditation';
 export type ChapterConfig = {
   icon?: IconKey;
   reverse?: boolean;
+  showDecoration?: boolean;
 };
 
 const firstTen: Record<number, ChapterConfig> = {
@@ -24,8 +25,21 @@ const firstTen: Record<number, ChapterConfig> = {
   7: {
     icon: 'meditation',
   },
-  8: { icon: 'diamond', reverse: true },
-  9: { icon: 'meditation', reverse: true },
+  8: { reverse: true },
+  9: { reverse: true },
+  10: { icon: 'diamond' },
+  11: { icon: 'meditation' },
+  12: { reverse: true },
+  13: { reverse: true },
+  14: { icon: 'diamond' },
+  15: { icon: 'meditation' },
+  16: { reverse: true },
+  17: { reverse: true },
+  18: { },
+  19: { reverse: true },
+  20: {icon: 'diamond'  },
+  21: { reverse: true },
+  22: { reverse: true },
 };
 
 function dynamicForAfterTen(index: number): ChapterConfig {
@@ -50,12 +64,27 @@ export const decorations = [
       left: 0,
       top: 0,
     },
+    showDecoration: true,
   },
   {
-    condition: (length: number) => length >= 5,
+    condition: (length: number) => length >= 6,
     styles: {
       right: 0,
-      top: 500,
+      top: 550,
+    },
+  },
+  {
+    condition: (length: number) => length >= 11,
+    styles: {
+      left: 0,
+      top: 1350,
+    },
+  },
+  {
+    condition: (length: number) => length >= 16,
+    styles: {
+      right: 0,
+      top: 1900,
     },
   },
 ];

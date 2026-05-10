@@ -1,19 +1,16 @@
+import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { FlatList, StyleSheet, View, type ListRenderItem } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import { useTheme } from '@react-navigation/native';
 import type { z } from 'zod';
 
-import { useCatalogItemComments } from '@/shared/catalog/hooks/useCatalogItemComments';
 import { commentSchema } from '@/domains/home/model/comments.schema';
+import { useCatalogItemComments } from '@/shared/catalog/hooks/useCatalogItemComments';
 import { Text } from '@/shared/ui/Text';
 
-import {
-  createClientCommentStyles,
-  createCommentCardBg,
-} from '@/shared/ui/comments/clientComments.styles';
+import { createClientCommentStyles } from '@/shared/ui/comments/clientComments.styles';
 import { CommentsPagination } from '@/shared/ui/comments/CommentsPagination';
 import { CommentsSkeleton } from '@/shared/ui/comments/CommentsSkeleton';
+import { CommentCard } from '@/ui/components/CommentCard';
 import { spacing } from '@/ui/theme';
 
 export type CommentDto = z.infer<typeof commentSchema>;
@@ -28,94 +25,19 @@ export type ClientCommentsSectionProps = {
   shoIfEmpty?: boolean;
 };
 
-const starGlyphsStatic = StyleSheet.create({
-  glyphs: { writingDirection: 'ltr', letterSpacing: 1 },
-});
-
-function formatCommentDate(value: string | undefined, locale: string): string {
-  if (!value) {
-    return '';
-  }
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return '';
-  }
-  try {
-    return new Intl.DateTimeFormat(locale || 'fa-IR', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    }).format(date);
-  } catch {
-    return date.toISOString().slice(0, 10);
-  }
-}
-
-function StarRow({ points }: { points: number }) {
-  const filled = Math.min(5, Math.max(0, Math.round(points)));
-  const label = `${'★'.repeat(filled)}${'☆'.repeat(5 - filled)}`;
-  return <Text style={starGlyphsStatic.glyphs}>{label}</Text>;
-}
-
-const CommentCard = React.memo(function CommentCard({
-  comment,
-  withExtraInfo,
-  bgcolor,
-  locale,
-}: {
-  comment: CommentDto;
-  withExtraInfo: boolean;
-  bgcolor: string;
-  locale: string;
-}) {
-  const { colors } = useTheme();
-  const dateLabel = formatCommentDate(comment.created_at, locale);
-  const surface = createCommentCardBg(bgcolor);
-  const themed = createClientCommentStyles(colors);
-  const courseTitle =
-    comment.course &&
-    typeof comment.course === 'object' &&
-    'title_fa' in comment.course
-      ? String((comment.course as { title_fa?: string }).title_fa ?? '')
-      : '';
-
-  return (
-    <View style={[styles.card, surface.bg]}>
-      <View style={styles.cardHeader}>
-        <Text style={[styles.name, themed.name]}>
-          {comment.user?.full_name?.trim() ? comment.user.full_name : '—'}
-        </Text>
-        <View style={styles.headerMeta}>
-          {withExtraInfo && courseTitle ? (
-            <Text style={[styles.meta, themed.meta]}>{courseTitle}</Text>
-          ) : null}
-          <StarRow points={comment.points ?? 0} />
-        </View>
-      </View>
-      {withExtraInfo && dateLabel ? (
-        <Text style={[styles.dateRow, themed.dateRow]}>{dateLabel}</Text>
-      ) : null}
-      <Text style={[styles.body, themed.body]}>{comment.comment}</Text>
-    </View>
-  );
-});
-CommentCard.displayName = 'CommentCard';
-
 const keyExtractor = (item: CommentDto) => String(item.id);
 
 function ClientCommentsSectionComponent({
   title,
-  withExtraInfo = false,
   courseId,
   categoryId,
-  bgcolor = '#fff',
   perPage = 10,
   shoIfEmpty = false,
 }: ClientCommentsSectionProps) {
   const [currentPage, setCurrentPage] = React.useState(1);
-  const { i18n } = useTranslation();
-  const { colors } = useTheme();
 
+  const { colors } = useTheme();
+  const anonymousLabel = 'Anonymous';
   const { data, isFetching } = useCatalogItemComments(
     currentPage,
     perPage,
@@ -140,15 +62,18 @@ function ClientCommentsSectionComponent({
   const clientCommentStyles = createClientCommentStyles(colors);
 
   const renderItem = React.useCallback<ListRenderItem<CommentDto>>(
-    ({ item }) => (
+    ({ item, index }) => (
       <CommentCard
-        comment={item}
-        withExtraInfo={withExtraInfo}
-        bgcolor={bgcolor}
-        locale={i18n.language}
+        content={item.comment}
+        writer={item.user?.full_name}
+        courseTitle={item?.course}
+        anonymousLabel={anonymousLabel}
+        index={index}
+        starColor={colors.primary}
+        numberOfLines={12}
       />
     ),
-    [bgcolor, i18n.language, withExtraInfo],
+    [colors.primary],
   );
 
   const listFooter =
@@ -195,7 +120,7 @@ const styles = StyleSheet.create({
   wrap: {
     width: '100%',
     padding: spacing.lg,
-    marginTop: 5*spacing.lg,
+    marginTop:  spacing.lg,
   },
   flatContent: {
     paddingBottom: 8,

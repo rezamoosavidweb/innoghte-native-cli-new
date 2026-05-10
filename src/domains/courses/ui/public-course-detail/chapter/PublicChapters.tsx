@@ -3,7 +3,7 @@ import { useTheme } from '@react-navigation/native';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { createPublicCourseDetailStyles } from '../publicCourseDetail.styles';
-import ChapterCard from './ChapterCard';
+import ChapterRow from './ChapterRow';
 import LinDecoration from '@/assets/line-decoration-gray.svg';
 import { decorations } from './getChapterConfig';
 
@@ -16,7 +16,7 @@ const PublicChapters = ({ data }: { data: CatalogItemDetail['chapters'] }) => {
 
       <View style={s.chapterList}>
         {data?.map((item, index) => (
-          <ChapterCard
+          <ChapterRow
             key={item.id}
             index={index}
             title={item?.title_fa}
@@ -30,7 +30,7 @@ const PublicChapters = ({ data }: { data: CatalogItemDetail['chapters'] }) => {
               <LinDecoration
                 key={index}
                 fill={colors.text}
-                height='640'
+                height="520"
                 style={{ position: 'absolute', height: 300, ...item?.styles }}
               />
             ),
