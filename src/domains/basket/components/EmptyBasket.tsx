@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View } from 'react-native';
 import { Text } from '@/shared/ui/Text';
-
+import ShoppingBagFrownIcon from '@/assets/icons/shopping-bag-frown.svg';
 import { navigateToAppLeaf } from '@/app/bridge/auth/protectedNavigation';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { useEmptyBasketStyles } from '@/domains/basket/components/emptyBasket.styles';
@@ -20,20 +20,15 @@ export const EmptyBasket = React.memo(function EmptyBasket() {
 
   return (
     <View style={s.wrap}>
-      <Text style={s.glyph} accessibilityLabel="">
-        🛒
-      </Text>
+      <ShoppingBagFrownIcon width={75} height={75} style={s.glyph} />
       <Text style={s.title}>سبد خرید شما خالی است.</Text>
       <Button
         layout="auto"
         variant="filled"
-        title="مشاهده لیست دوره‌ها"
         onPress={onBrowse}
         style={s.btn}
-        contentStyle={{ width: '100%' }}
-      >
-        <Text style={s.btnText}>مشاهده لیست دوره‌ها</Text>
-      </Button>
+        title="مشاهده لیست دوره‌ها"
+      />
     </View>
   );
 });

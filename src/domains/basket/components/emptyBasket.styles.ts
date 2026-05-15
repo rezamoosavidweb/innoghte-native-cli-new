@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import type { ThemeColors } from '@/ui/theme/types';
-import { fontSize, fontWeight, radius, spacing } from '@/ui/theme';
+import { fontWeight, radius, spacing } from '@/ui/theme';
 
 export function useEmptyBasketStyles(colors: ThemeColors) {
   return React.useMemo(
@@ -15,22 +15,17 @@ export function useEmptyBasketStyles(colors: ThemeColors) {
           justifyContent: 'center',
           padding: spacing.xl,
         },
-        glyph: { fontSize: 48, marginBottom: spacing.md },
+        glyph: { marginBottom: spacing.lg, color: colors.error },
         title: {
-          fontSize: fontSize.lg,
-          fontWeight: fontWeight.bold,
-          color: colors.text,
+          color: colors.error,
           textAlign: 'center',
         },
         btn: {
-          marginTop: spacing.xl,
-          paddingVertical: spacing.md,
-          paddingHorizontal: spacing['2xl'],
+          marginTop: spacing['5xl'],
           borderRadius: radius.md,
-          backgroundColor: colors.primary,
         },
         btnText: { color: colors.onPrimary, fontWeight: fontWeight.semibold },
       }),
-    [colors.onPrimary, colors.primary, colors.text],
+    [colors.onPrimary, colors.error],
   );
 }

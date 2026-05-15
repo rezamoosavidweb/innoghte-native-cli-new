@@ -15,6 +15,7 @@ export const staticDrawerStyles = StyleSheet.create({
   safe: {
     flex: 1,
     backgroundColor: 'transparent',
+    paddingVertical: 0,
   },
   profileSectionBase: {
     flexDirection: 'row',

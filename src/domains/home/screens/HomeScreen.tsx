@@ -1,5 +1,5 @@
-import { DrawerActions, useTheme } from '@react-navigation/native';
 import { HeaderButton } from '@react-navigation/elements';
+import { DrawerActions, useTheme } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,7 +10,6 @@ import {
   View,
   type LayoutChangeEvent,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, {
   Extrapolation,
   interpolate,
@@ -18,21 +17,21 @@ import Animated, {
   useAnimatedStyle,
   type SharedValue,
 } from 'react-native-reanimated';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { homeKeys } from '@/domains/home/model/queryKeys';
-import { HOME_BANNER_MOCK } from '@/domains/home/model/banner.mock';
-import { Banner, type BannerItemData } from '@/domains/home/ui/Banner';
 import { Comments } from '@/domains/home/ui/Comments';
 import { createHomeScreenStyles } from '@/domains/home/ui/homeScreen.styles';
 import { QuickAccess } from '@/domains/home/ui/QuickAccess';
-import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
-import { useThemeColors } from '@/ui/theme';
+import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import {
   CollapsibleHeader,
   CollapsibleHeaderScrollView,
   useCollapsibleHeader,
 } from '@/shared/ui/collapsibleHeader';
-import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
+import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
+import { useThemeColors } from '@/ui/theme';
+import BannerNew from '../ui/Banner/Banner';
 
 /**
  * Icon color at scroll=0 (transparent header, over hero banner).
@@ -80,7 +79,12 @@ const AnimatedDrawerIcon = React.memo(function AnimatedDrawerIcon({
         ['rgba(0,0,0,0.52)', 'rgba(0,0,0,0)'],
       );
       style.textShadowOffset = { width: 0, height: 1 };
-      style.textShadowRadius = interpolate(p, [0, 1], [6, 0], Extrapolation.CLAMP);
+      style.textShadowRadius = interpolate(
+        p,
+        [0, 1],
+        [6, 0],
+        Extrapolation.CLAMP,
+      );
     }
     return style;
   }, [scrollY, threshold, collapsedColor, contrastShadow]);
@@ -149,20 +153,7 @@ const HomeScreenComponent = () => {
     [],
   );
 
-  const handleBannerCta = React.useCallback(() => {
-    // Animated.ScrollView exposes scrollTo via the underlying native handle.
-    (scrollRef.current as unknown as { scrollTo(opts: { y: number; animated: boolean }): void })
-      ?.scrollTo({ y: Math.max(0, quickAccessOffsetRef.current - 8), animated: true });
-  }, []);
-
-  const bannerItem = React.useMemo<BannerItemData>(
-    () => ({
-      ...HOME_BANNER_MOCK[0],
-      cta: t('screens.home.banner.cta'),
-      onPress: handleBannerCta,
-    }),
-    [handleBannerCta, t],
-  );
+  
 
   return (
     <SafeAreaView style={styles.safe} edges={['left', 'right']}>
@@ -191,7 +182,7 @@ const HomeScreenComponent = () => {
             />
           }
         >
-          <Banner variant="hero" item={bannerItem} />
+          <BannerNew />
           <View onLayout={handleQuickAccessLayout}>
             <QuickAccess />
           </View>

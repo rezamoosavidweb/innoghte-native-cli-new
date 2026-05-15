@@ -78,7 +78,7 @@ function buildProfileHeaderStyles(
       borderRadius: radius.lg,
       borderWidth: StyleSheet.hairlineWidth,
       borderColor: colors.border,
-      padding: spacing['2xl'],
+      padding: spacing.md,
       gap: spacing.lg,
     },
     headerRow: {
@@ -150,8 +150,7 @@ function buildProfileHeaderStyles(
       justifyContent: 'center',
     },
     needsVerificationButton: {
-      paddingVertical: 6,
-      paddingHorizontal: 8,
+      paddingHorizontal: 0,
       borderRadius: radius.sm,
       borderWidth: StyleSheet.hairlineWidth,
       borderColor: palette.primary[500],
@@ -224,6 +223,14 @@ function buildProfileMenuStyles(
       borderWidth: StyleSheet.hairlineWidth,
       backgroundColor: themeColors.card,
       borderColor: themeColors.border,
+      flexWrap: 'nowrap',
+    },
+    menuRowContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: '100%',
+      flexWrap: 'nowrap',
     },
     menuRowPressed: { opacity: 0.92 },
     menuRowLeft: {
@@ -232,16 +239,18 @@ function buildProfileMenuStyles(
       gap: spacing.md,
       flex: 1,
     },
-    menuIcon: { fontSize: fontSize['2xl'] },
+    menuIcon: {
+      color: themeColors.text,
+    },
+
     menuTitle: {
       fontSize: fontSize.sm,
       fontWeight: fontWeight.semibold,
       color: themeColors.text,
     },
     chevron: {
-      fontSize: fontSize['2xl'],
       fontWeight: fontWeight.light,
-      opacity: 0.55,
+      opacity: 0.75,
       color: themeColors.text,
     },
     list: {

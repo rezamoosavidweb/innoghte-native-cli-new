@@ -116,6 +116,7 @@ function ButtonInner({
     [accessibilityStateProp, isInactive, loading],
   );
 
+
   return (
     <Pressable
       accessibilityRole="button"
@@ -127,8 +128,7 @@ function ButtonInner({
       onPress={onPress}
       android_ripple={androidRipple}
       style={state => {
-        const resolved =
-          typeof style === 'function' ? style(state) : style;
+        const resolved = typeof style === 'function' ? style(state) : style;
         return [
           shell,
           isInactive ? s.disabled : null,
@@ -137,11 +137,12 @@ function ButtonInner({
         ];
       }}
     >
-      <View style={[s.content, contentStyle]}>
+      <View
+        style={[s.content, contentStyle]}
+        pointerEvents={children ? 'box-none' : 'box-only'}
+      >
         {children ? (
-          <View style={loading ? s.labelHidden : null} pointerEvents="box-none">
-            {children}
-          </View>
+          children
         ) : (
           <Text
             style={[label, loading ? s.labelHidden : null]}

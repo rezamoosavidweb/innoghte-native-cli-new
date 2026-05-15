@@ -92,7 +92,7 @@ const SplashScreenComponent = () => {
   return (
     <View style={[styles.root, { backgroundColor: colors.background }]}>
       <Animated.View style={[styles.logoWrap, logoStyle]}>
-        <LogoSvg width={LOGO_SIZE} height={LOGO_SIZE} />
+        <LogoSvg width={LOGO_SIZE} height={LOGO_SIZE} color={colors.text} />
       </Animated.View>
 
       <View style={styles.dots}>

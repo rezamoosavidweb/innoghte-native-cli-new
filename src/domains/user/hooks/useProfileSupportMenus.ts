@@ -3,10 +3,15 @@ import * as React from 'react';
 
 import type { ProfileMenuListItem } from '@/domains/user/model/profileMenu.types';
 import type { AppLeafRouteName } from '@/shared/contracts/navigationApp';
+import DocPlainTextIcon from '@/assets/icons/doc-plaintext.svg';
+import DocTextIcon from '@/assets/icons/doc-text.svg';
+import PaymentRegularIcon from '@/assets/icons/payment-regular.svg';
+import CopyrightLightIcon from '@/assets/icons/copyright-light.svg';
+import { SvgProps } from 'react-native-svg';
 
 type SupportMenuRowConfig = {
   readonly id: string;
-  readonly icon: string;
+  readonly icon: React.FC<SvgProps>;
   readonly titleKey:
     | 'support'
     | 'purchaseHistory'
@@ -19,31 +24,31 @@ type SupportMenuRowConfig = {
 const PROFILE_SUPPORT_MENU: readonly SupportMenuRowConfig[] = [
   {
     id: 'support-tickets',
-    icon: '🎫',
+    icon: DocPlainTextIcon,
     titleKey: 'support',
     route: 'TicketListScreen',
   },
   {
     id: 'purchase-history',
-    icon: '🧾',
+    icon: PaymentRegularIcon,
     titleKey: 'purchaseHistory',
     route: 'PurchaseHistory',
   },
   {
     id: 'support-services',
-    icon: '🛟',
+    icon: DocTextIcon,
     titleKey: 'supportServices',
     route: 'SupportServices',
   },
   {
     id: 'terms',
-    icon: '📜',
+    icon: DocTextIcon,
     titleKey: 'terms',
     route: 'Terms',
   },
   {
     id: 'copyright',
-    icon: '©️',
+    icon: CopyrightLightIcon,
     titleKey: 'copyright',
     route: 'Copyright',
   },
@@ -62,5 +67,8 @@ function mapSupportMenuConfig(
 }
 
 export function useProfileSupportMenus(t: TFunction): ProfileMenuListItem[] {
-  return React.useMemo(() => mapSupportMenuConfig(PROFILE_SUPPORT_MENU, t), [t]);
+  return React.useMemo(
+    () => mapSupportMenuConfig(PROFILE_SUPPORT_MENU, t),
+    [t],
+  );
 }

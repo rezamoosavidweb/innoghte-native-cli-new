@@ -3,10 +3,13 @@ import * as React from 'react';
 
 import type { ProfileMenuListItem } from '@/domains/user/model/profileMenu.types';
 import type { AppLeafRouteName } from '@/shared/contracts/navigationApp';
+import PaymentRegularIcon from '@/assets/icons/payment-regular.svg';
+import GiftThinIcon from '@/assets/icons/gift-thin.svg';
+import { SvgProps } from 'react-native-svg';
 
 type FinancialMenuRowConfig = {
   readonly id: string;
-  readonly icon: string;
+  readonly icon: React.FC<SvgProps>;
   readonly titleKey: 'financialSupport' | 'gift';
   readonly route: AppLeafRouteName;
 };
@@ -14,13 +17,13 @@ type FinancialMenuRowConfig = {
 const PROFILE_FINANCIAL_MENU: readonly FinancialMenuRowConfig[] = [
   {
     id: 'financial-support',
-    icon: '💳',
+    icon: PaymentRegularIcon,
     titleKey: 'financialSupport',
     route: 'FinancialSupport',
   },
   {
     id: 'gift',
-    icon: '🎁',
+    icon: GiftThinIcon,
     titleKey: 'gift',
     route: 'GiftScreen',
   },
@@ -39,7 +42,8 @@ function mapFinancialMenuConfig(
 }
 
 export function useProfileFinancialMenus(t: TFunction): ProfileMenuListItem[] {
-  return React.useMemo(() => mapFinancialMenuConfig(PROFILE_FINANCIAL_MENU, t), [
-    t,
-  ]);
+  return React.useMemo(
+    () => mapFinancialMenuConfig(PROFILE_FINANCIAL_MENU, t),
+    [t],
+  );
 }

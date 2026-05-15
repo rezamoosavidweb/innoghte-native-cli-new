@@ -3,8 +3,8 @@ import * as React from 'react';
 import { View } from 'react-native';
 
 import type { ProfileHeaderStyleSet } from '@/domains/user/ui/profileScreen.styles';
-import { Button } from '@/ui/components/Button';
 import type { VerifyChannel } from '@/shared/contracts/verification';
+import { Tag } from '@/ui/components/tag';
 
 export type UserInfoRowProps = {
   value: string;
@@ -41,23 +41,14 @@ export const UserInfoRow = React.memo(function UserInfoRow({
       </View>
       <View style={s.userInfoTrailing}>
         {verified ? (
-          <Text style={s.verifiedLabel} numberOfLines={2}>
-            {verifiedLabel}
-          </Text>
+          <Tag title={verifiedLabel} color="success" />
         ) : (
-          <Button
-            layout="auto"
-            variant="text"
+          <Tag
             title={needsVerificationLabel}
-            accessibilityLabel={needsVerificationLabel}
             onPress={onPressNeedsVerification}
-            style={s.needsVerificationButton}
-            contentStyle={{ width: '100%' }}
-          >
-            <Text style={s.needsVerificationLabel} numberOfLines={2}>
-              {needsVerificationLabel}
-            </Text>
-          </Button>
+            variant="outlined"
+            color="primary"
+          />
         )}
       </View>
     </View>
