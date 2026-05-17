@@ -6,7 +6,7 @@ import {
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Linking, View } from 'react-native';
+import { Linking, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PUBLIC_WEB_ORIGIN } from '@/shared/config/publicWebOrigin';
@@ -50,6 +50,10 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
     Linking.openURL(REGISTER_WEB_URL);
   }, []);
 
+  const onProfilePress = React.useCallback(() => {
+    navigation.navigate('MainTabs', { screen: 'Profile' });
+  }, [navigation]);
+
   const isAuthed = drawerUser.isAuthenticated;
 
   return (
@@ -57,7 +61,11 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
       <View style={dynamicStyles.sheet}>
         {isAuthed ? (
           <>
-            <View style={dynamicStyles.profileSection}>
+            <TouchableOpacity
+              style={dynamicStyles.profileSection}
+              onPress={onProfilePress}
+              activeOpacity={0.7}
+            >
               <View style={dynamicStyles.avatar}>
                 <Text style={staticDrawerStyles.avatarText}>
                   {avatarInitials}
@@ -67,7 +75,7 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
                 <Text style={dynamicStyles.userName}>{displayName}</Text>
                 <Text style={dynamicStyles.userEmail}>{emailLine}</Text>
               </View>
-            </View>
+            </TouchableOpacity>
             <View style={dynamicStyles.divider} />
           </>
         ) : (

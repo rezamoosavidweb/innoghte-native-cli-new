@@ -55,12 +55,14 @@ import {
   SecurityScreen,
 } from '@/domains/user';
 import i18n from '@/shared/infra/i18n';
-import { DrawerMenuButton } from '@/ui/components/DrawerMenuButton';
+import {
+  createAppHeaderOptions,
+  createRootHeaderOptions,
+} from '@/app/navigation/appHeaderOptions';
 import { CustomDrawerContent } from '@/ui/layout/CustomDrawerContent';
 import {
   drawerChrome,
   mainTabBarLabelStyle,
-  mainTabHeaderTitleStyle,
   pickSemantic,
   tabBarSurfaceStyle,
 } from '@/ui/theme';
@@ -118,18 +120,15 @@ function mainTabsScreenOptions({
   const s = pickSemantic(theme);
 
   const base = {
+    ...createRootHeaderOptions(theme),
     lazy: true,
     unmountOnBlur: false,
-    headerLeft: () => <DrawerMenuButton />,
-    headerStyle: { backgroundColor: s.headerBg },
-    headerTintColor: s.headerForeground,
-    headerTitleStyle: mainTabHeaderTitleStyle,
     title,
     tabBarActiveTintColor: s.tabActive,
     tabBarInactiveTintColor: s.tabInactive,
     tabBarStyle: tabBarSurfaceStyle(theme),
     tabBarLabelStyle: mainTabBarLabelStyle,
-  } as const;
+  };
 
   if (route.name === 'Profile') {
     return {
@@ -242,8 +241,7 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
   screenOptions: ({ theme }) => {
     const s = pickSemantic(theme);
     return {
-      headerStyle: { backgroundColor: s.headerBg },
-      headerTintColor: s.headerForeground,
+      ...createAppHeaderOptions(theme),
       drawerPosition: drawerOpensFromEnd ? 'right' : 'left',
       drawerActiveBackgroundColor: s.drawerActiveBg,
       drawerActiveTintColor: s.drawerActiveTint,
