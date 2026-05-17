@@ -61,6 +61,10 @@
     "publicCourseDetail": "معرفی دوره",
     "publicAlbumDetail": "معرفی آلبوم",
     "albumDetail": "آلبوم من",
+    "section": {
+      "services": "خدمات",
+      "experience": "تجربه کن"
+    },
     "guest": {
       "login": "ورود",
       "register": "ثبت‌نام"

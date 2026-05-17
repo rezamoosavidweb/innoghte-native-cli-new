@@ -1,8 +1,8 @@
 import type { TFunction } from 'i18next';
 import * as React from 'react';
-import PaymentRegularIcon from '@/assets/icons/payment-regular.svg';
-import EditUserIcon from '@/assets/icons/user-edit.svg';
-import ShieldThinIcon from '@/assets/icons/shield-thin.svg';
+import PaymentRegularIcon from '@/assets/icons/inn/payment.svg';
+import EditUserIcon from '@/assets/icons/inn/user.svg';
+import ShieldThinIcon from '@/assets/icons/inn/shield.svg';
 import type { ProfileMenuListItem } from '@/domains/user/model/profileMenu.types';
 import type { AppLeafRouteName } from '@/shared/contracts/navigationApp';
 import { SvgProps } from 'react-native-svg';
@@ -22,7 +22,7 @@ const PROFILE_GENERAL_MENU: readonly GeneralMenuRowConfig[] = [
     route: 'Account',
   },
   {
-    id: 'general-editProfiel',
+    id: 'general-editProfile',
     icon: EditUserIcon,
     titleKey: 'editProfile',
     route: 'EditProfile',

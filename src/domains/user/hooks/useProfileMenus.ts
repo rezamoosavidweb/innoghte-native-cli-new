@@ -1,11 +1,15 @@
 import type { TFunction } from 'i18next';
 import * as React from 'react';
 
+import AlbumIcon from '@/assets/icons/inn/album.svg';
+import CourseIcon from '@/assets/icons/inn/course.svg';
+import ListeningIcon from '@/assets/icons/inn/listening.svg';
+import MeditationIcon from '@/assets/icons/inn/meditation.svg';
+import ReadingIcon from '@/assets/icons/inn/reading.svg';
+import WritingIcon from '@/assets/icons/inn/writing.svg';
 import type { ProfileMenuListItem } from '@/domains/user/model/profileMenu.types';
 import type { AppLeafRouteName } from '@/shared/contracts/navigationApp';
 import { SvgProps } from 'react-native-svg';
-import CoursesIcon from '@/assets/icons/school.svg';
-import AlbumIcon from '@/assets/icons/headphone.svg';
 
 export type { ProfileMenuListItem } from '@/domains/user/model/profileMenu.types';
 
@@ -25,7 +29,7 @@ export type ProfileMenuRowConfig = {
 const PROFILE_ACTION_MENU: readonly ProfileMenuRowConfig[] = [
   {
     id: 'my-courses',
-    icon: CoursesIcon,
+    icon: CourseIcon,
     titleKey: 'myCourses',
     route: 'Courses',
   },
@@ -35,15 +39,15 @@ const PROFILE_ACTION_MENU: readonly ProfileMenuRowConfig[] = [
 const PROFILE_EXPERIENCES_MENU: readonly ProfileMenuRowConfig[] = [
   {
     id: 'meditations',
-    icon: CoursesIcon,
+    icon: MeditationIcon,
     titleKey: 'meditations',
     route: 'Meditation',
   },
-  { id: 'readings', icon: CoursesIcon, titleKey: 'readings', route: 'Reading' },
-  { id: 'writings', icon: CoursesIcon, titleKey: 'writings', route: 'Writing' },
+  { id: 'readings', icon: ReadingIcon, titleKey: 'readings', route: 'Reading' },
+  { id: 'writings', icon: WritingIcon, titleKey: 'writings', route: 'Writing' },
   {
     id: 'listenings',
-    icon: CoursesIcon,
+    icon: ListeningIcon,
     titleKey: 'listenings',
     route: 'Listening',
   },

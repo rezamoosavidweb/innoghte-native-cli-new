@@ -55,6 +55,9 @@ export const staticDrawerStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  sectionDividerWrapper: {
+    marginHorizontal: spacing.sm,
+  },
   dividerHairline: {
     height: StyleSheet.hairlineWidth,
     marginHorizontal: spacing.md,

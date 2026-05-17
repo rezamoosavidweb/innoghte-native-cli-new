@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import type { SvgProps } from 'react-native-svg';
 
-import HeadphoneIcon from '@/assets/icons/headphone.svg';
-import HomeIcon from '@/assets/icons/home.svg';
+import AlbumIcon from '@/assets/icons/inn/album.svg';
+import CourseIcon from '@/assets/icons/inn/course.svg';
+import HomeIcon from '@/assets/icons/inn/home.svg';
 import LoginIcon from '@/assets/icons/login.svg';
-import SchoolIcon from '@/assets/icons/school.svg';
 import ShoppingTrollyIcon from '@/assets/icons/shopping-trolly.svg';
 import type { MainTabScreenName } from '@/shared/contracts/navigationApp';
 import { formatNumberForApp } from '@/shared/infra/i18n/formatLocaleNumbers';
@@ -15,8 +15,8 @@ import { spacing } from '@/ui/theme';
 
 const TAB_ICON: Record<MainTabScreenName, React.ComponentType<SvgProps>> = {
   Home: HomeIcon,
-  Courses: SchoolIcon,
-  Albums: HeadphoneIcon,
+  Courses: CourseIcon,
+  Albums: AlbumIcon,
   Cart: ShoppingTrollyIcon,
   Profile: LoginIcon,
 };

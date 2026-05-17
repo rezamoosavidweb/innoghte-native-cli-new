@@ -59,6 +59,10 @@
     "publicCourseDetail": "Course overview",
     "publicAlbumDetail": "Album overview",
     "albumDetail": "My album",
+    "section": {
+      "services": "Services",
+      "experience": "Experience"
+    },
     "guest": {
       "login": "Sign in",
       "register": "Sign up"

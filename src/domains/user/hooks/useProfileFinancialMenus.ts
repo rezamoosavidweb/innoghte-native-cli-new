@@ -3,8 +3,8 @@ import * as React from 'react';
 
 import type { ProfileMenuListItem } from '@/domains/user/model/profileMenu.types';
 import type { AppLeafRouteName } from '@/shared/contracts/navigationApp';
-import PaymentRegularIcon from '@/assets/icons/payment-regular.svg';
-import GiftThinIcon from '@/assets/icons/gift-thin.svg';
+import PaymentIcon from '@/assets/icons/inn/payment.svg';
+import GiftThinIcon from '@/assets/icons/gift.svg';
 import { SvgProps } from 'react-native-svg';
 
 type FinancialMenuRowConfig = {
@@ -17,7 +17,7 @@ type FinancialMenuRowConfig = {
 const PROFILE_FINANCIAL_MENU: readonly FinancialMenuRowConfig[] = [
   {
     id: 'financial-support',
-    icon: PaymentRegularIcon,
+    icon: PaymentIcon,
     titleKey: 'financialSupport',
     route: 'FinancialSupport',
   },
