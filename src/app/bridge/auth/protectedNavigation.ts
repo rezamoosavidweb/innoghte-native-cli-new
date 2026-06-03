@@ -1,8 +1,5 @@
 import type { NavigationAction } from '@react-navigation/native';
-import {
-  CommonActions,
-  StackActions,
-} from '@react-navigation/native';
+import { CommonActions } from '@react-navigation/native';
 
 import type { PendingNavigation } from '@/shared/contracts/pendingNavigation';
 
@@ -107,8 +104,6 @@ export function protectedNavigate<N extends AppLeafRouteName>(
   queuePendingIfNeeded(name, params);
   dispatchLogin(navigation);
 }
-
-export const navigateProtected = protectedNavigate;
 
 export function protectedPush<N extends AppLeafRouteName>(
   navigation: NavigateDispatchable & {
@@ -231,5 +226,3 @@ export function completePendingAuthNavigation(): void {
 }
 
 let pendingAuthNavigationUnsubscribe: (() => void) | null = null;
-
-export { StackActions };

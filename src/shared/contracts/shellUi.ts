@@ -10,7 +10,5 @@ export type ShellDrawerUserSnapshot = {
 };
 
 export type ShellDrawerUiModel = {
-  onRequestLogout: () => void | Promise<void>;
-  isDrawerOnPhysicalRight: boolean;
   user: ShellDrawerUserSnapshot;
 };

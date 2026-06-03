@@ -3,9 +3,9 @@ import type { TextStyle } from 'react-native';
 import type { AppLanguage } from '@/shared/contracts/locale';
 
 /** Matches linked font files (use `Dana-Medium.ttf` in `src/assets/font/`). */
-export const DANA_MEDIUM_FAMILY = 'Dana-Medium';
+const DANA_MEDIUM_FAMILY = 'Dana-Medium';
 
-export const POPPINS_FAMILY = {
+const POPPINS_FAMILY = {
   regular: 'Poppins-Regular',
   medium: 'Poppins-Medium',
   bold: 'Poppins-Bold',

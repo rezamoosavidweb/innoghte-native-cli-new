@@ -2,12 +2,11 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { logout, useCurrentUser, useIsAuthenticated } from '@/domains/auth';
+import { useCurrentUser, useIsAuthenticated } from '@/domains/auth';
 import { useUiThemeStore } from '@/domains/settings';
 import { UserService } from '@/domains/user';
 import { fireAndForget } from '@/shared/infra/http';
 import { initialsFromDisplayName } from '@/shared/utils/initialsFromDisplayName';
-import { isDrawerPhysicalRight } from '@/app/navigation/drawerLayout';
 import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
 import { ToastHost } from '@/shared/ui/toast';
 import { ShellDrawerProvider } from '@/ui/layout/ShellDrawerContext';
@@ -25,8 +24,6 @@ type BridgeShellProps = { children: React.ReactNode };
 export function BridgeShell({ children }: BridgeShellProps) {
   const { t } = useTranslation();
   const colorScheme = useUiThemeStore(s => s.preference);
-
-  const onRequestLogout = React.useCallback(() => logout(), []);
 
   const isAuthenticated = useIsAuthenticated();
   const { data: userRes } = useCurrentUser();
@@ -62,14 +59,11 @@ export function BridgeShell({ children }: BridgeShellProps) {
     }
   }, [isAuthenticated]);
 
-  const isDrawerOnPhysicalRight = isDrawerPhysicalRight();
   const shellDrawer = React.useMemo(
     () => ({
-      onRequestLogout,
-      isDrawerOnPhysicalRight,
       user: shellUser,
     }),
-    [onRequestLogout, isDrawerOnPhysicalRight, shellUser],
+    [shellUser],
   );
 
   return (
