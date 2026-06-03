@@ -17,8 +17,8 @@ import type {
 
 const TAB_ROUTE_NAMES = new Set<keyof TabParamList>([
   'Home',
-  'Courses',
-  'Albums',
+  'Services',
+  'Faqs',
   'Cart',
   'Profile',
 ]);

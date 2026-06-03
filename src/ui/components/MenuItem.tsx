@@ -1,10 +1,14 @@
 import * as React from 'react';
 
 import type { AppLeafRouteName } from '@/shared/contracts/navigationApp';
-import { HubMenuRow, type HubMenuRowStyleSet } from '@/ui/components/HubMenuRow';
+import {
+  HubMenuRow,
+  type HubMenuIcon,
+  type HubMenuRowStyleSet,
+} from '@/ui/components/HubMenuRow';
 
 export type MenuItemProps = {
-  icon: string;
+  icon: HubMenuIcon;
   title: string;
   route: AppLeafRouteName;
   onNavigate: (route: AppLeafRouteName) => void;
@@ -12,7 +16,7 @@ export type MenuItemProps = {
 };
 
 /**
- * Profile shortcut row: icon, label, chevron. Delegates row chrome to {@link HubMenuRow}.
+ * Hub menu row: icon, label, chevron. Delegates row chrome to {@link HubMenuRow}.
  */
 export const MenuItem = React.memo(function MenuItem({
   icon,

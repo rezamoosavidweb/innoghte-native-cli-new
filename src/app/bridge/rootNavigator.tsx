@@ -86,6 +86,7 @@ import type {
   MainTabScreenName,
   TabParamList,
 } from '@/shared/contracts/navigationApp';
+import { ServicesScreen } from '@/domains/services';
 
 const drawerOpensFromEnd = isDrawerPhysicalRight();
 
@@ -187,8 +188,8 @@ const mainTabs = createBottomTabNavigator<TabParamList>({
       screen: HomeScreen,
       options: { headerShown: false },
     },
-    Courses: CoursesScreen,
-    Albums: AlbumsScreen,
+    Services: ServicesScreen,
+    Faqs: FaqsScreen,
     Cart: BasketScreen,
     Profile: ProfileScreen,
   },

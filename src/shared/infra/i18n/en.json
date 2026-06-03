@@ -5,6 +5,7 @@
     "search": "Search",
     "courses": "Courses",
     "albums": "Albums",
+    "services": "My courses",
     "cart": "Cart",
     "faqs": "FAQs",
     "notifications": "Notifications",
@@ -84,6 +85,16 @@
     "retry": "Try again"
   },
   "screens": {
+    "services": {
+      "title": "My courses",
+      "menu": {
+        "courses": "Educational Courses",
+        "albums": "Albums",
+        "live": "Live",
+        "support": "Support Services",
+        "events": "Events"
+      }
+    },
     "home": {
       "title": "Home",
       "subtitle": "Primary tab — drawer hosts settings and more.",

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { useCourses } from '@/domains/courses';
+import { useCatalogItems } from '@/domains/courses';
 
 const HIDE_COURSE_IDS = new Set([99]);
 
@@ -17,8 +17,8 @@ const ALBUM_CATEGORY_FILTERS = {
 } as const;
 
 export function useGiveGiftCourses() {
-  const coursesQuery = useCourses(COURSE_CATEGORY_FILTERS);
-  const albumsQuery = useCourses(ALBUM_CATEGORY_FILTERS);
+  const coursesQuery = useCatalogItems(COURSE_CATEGORY_FILTERS);
+  const albumsQuery = useCatalogItems(ALBUM_CATEGORY_FILTERS);
 
   const courseOptions = React.useMemo(() => {
     const list = coursesQuery.data ?? [];

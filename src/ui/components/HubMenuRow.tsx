@@ -8,7 +8,7 @@ import { SvgProps } from 'react-native-svg';
 
 export type HubMenuRowStyleSet = {
   menuRow: ViewStyle;
-  menuRowContent: ViewStyle;
+  menuRowContent?: ViewStyle;
   menuRowPressed: ViewStyle;
   menuRowLeft: ViewStyle;
   menuIcon: TextStyle;
@@ -16,8 +16,11 @@ export type HubMenuRowStyleSet = {
   chevron: TextStyle;
 };
 
+/** Row icon — an SVG component (preferred) or an emoji/text glyph (legacy hubs). */
+export type HubMenuIcon = React.FC<SvgProps> | string;
+
 type Props = {
-  icon: React.FC<SvgProps>;
+  icon: HubMenuIcon;
   title: string;
   onPress: () => void;
   s: HubMenuRowStyleSet;
@@ -29,7 +32,7 @@ export const HubMenuRow = React.memo(function HubMenuRow({
   onPress,
   s,
 }: Props) {
-  const Icon = icon;
+  const Icon = typeof icon === 'string' ? null : icon;
   return (
     <Button
       layout="auto"
@@ -40,7 +43,11 @@ export const HubMenuRow = React.memo(function HubMenuRow({
       contentStyle={s.menuRowContent}
     >
       <View style={s.menuRowLeft}>
-        <Icon width={24} height={24} style={s.menuIcon} />
+        {typeof icon === 'string' ? (
+          <Text style={s.menuIcon}>{icon}</Text>
+        ) : Icon ? (
+          <Icon width={24} height={24} style={s.menuIcon} />
+        ) : null}
         <Text style={s.menuTitle}>{title}</Text>
       </View>
       <IconLeftIcon width={24} height={24} style={s.chevron} />

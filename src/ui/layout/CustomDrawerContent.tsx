@@ -1,8 +1,5 @@
 import type { DrawerContentComponentProps } from '@react-navigation/drawer';
-import {
-  DrawerContentScrollView,
-  DrawerItem,
-} from '@react-navigation/drawer';
+import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { DrawerActions, useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -26,20 +23,20 @@ import {
 } from '@/ui/theme';
 import { version as appVersion } from 'appPackage';
 
-import LiveIcon from '@/assets/icons/inn/live.svg';
 import HandHeartIcon from '@/assets/icons/hand-heart.svg';
 import AlbumIcon from '@/assets/icons/inn/album.svg';
-import PodcastIcon from '@/assets/icons/inn/podcast.svg';
+import ConsultantIcon from '@/assets/icons/inn/consultant.svg';
 import CourseIcon from '@/assets/icons/inn/course.svg';
 import DocIcon from '@/assets/icons/inn/doc.svg';
 import Doc2Icon from '@/assets/icons/inn/doc2.svg';
-import MeditationIcon from '@/assets/icons/inn/meditation.svg';
-import WritingIcon from '@/assets/icons/inn/writing.svg';
-import ListeningIcon from '@/assets/icons/inn/listening.svg';
-import ConsultantIcon from '@/assets/icons/inn/consultant.svg';
 import EventIcon from '@/assets/icons/inn/event.svg';
+import ListeningIcon from '@/assets/icons/inn/listening.svg';
+import LiveIcon from '@/assets/icons/inn/live.svg';
+import MeditationIcon from '@/assets/icons/inn/meditation.svg';
+import PodcastIcon from '@/assets/icons/inn/podcast.svg';
 import ReadingIcon from '@/assets/icons/inn/reading.svg';
 import ShieldIcon from '@/assets/icons/inn/shield.svg';
+import WritingIcon from '@/assets/icons/inn/writing.svg';
 import StarIcon from '@/assets/icons/star.svg';
 import Star2Icon from '@/assets/icons/star2.svg';
 
@@ -50,46 +47,51 @@ type IconSizing = number | { width?: number; height?: number };
 
 const svgIcon =
   (Svg: React.ComponentType<SvgProps>, color: string, sizing?: IconSizing) =>
-    ({ size }: { color: string; size: number }) =>
-      <Svg width={typeof sizing === 'object' ? sizing?.width : size} height={typeof sizing === 'object' ? sizing?.height : size} color={color} />;
+  ({ size }: { color: string; size: number }) =>
+    (
+      <Svg
+        width={typeof sizing === 'object' ? sizing?.width : size}
+        height={typeof sizing === 'object' ? sizing?.height : size}
+        color={color}
+      />
+    );
 
 export const CustomDrawerContent = React.memo(function CustomDrawerContent(
   props: DrawerContentComponentProps,
 ) {
   const { state, navigation } = props;
   const { t } = useTranslation();
-  const { onRequestLogout, user: drawerUser } = useShellDrawerModel();
+  const { user: drawerUser } = useShellDrawerModel();
   const theme = useTheme();
   const { colors } = theme;
   const s = pickSemantic(theme);
 
-  const icons = React.useMemo(() => ({
-    courses: svgIcon(CourseIcon, colors.text, 20),
-    albums: svgIcon(AlbumIcon, colors.text, 20),
-    liveMeetings: svgIcon(LiveIcon, colors.text, 21),
-    meditation: svgIcon(MeditationIcon, colors.text, 45),
-    writing: svgIcon(WritingIcon, colors.text, 45),
-    listening: svgIcon(ListeningIcon, colors.text, 45),
-    reading: svgIcon(ReadingIcon, colors.text, 45),
-    consultant: svgIcon(ConsultantIcon, colors.text, 45),
-    event: svgIcon(EventIcon, colors.text, 45),
-    docPlain: svgIcon(DocIcon, colors.text),
-    docText: svgIcon(Doc2Icon, colors.text),
-    shield: svgIcon(ShieldIcon, colors.text),
-    star: svgIcon(StarIcon, colors.text),
-    handHeart: svgIcon(HandHeartIcon, colors.text),
-    star2: svgIcon(Star2Icon, colors.text),
-    podcast: svgIcon(PodcastIcon, colors.text),
-  }), [colors.text]);
+  const icons = React.useMemo(
+    () => ({
+      courses: svgIcon(CourseIcon, colors.text, 20),
+      albums: svgIcon(AlbumIcon, colors.text, 20),
+      liveMeetings: svgIcon(LiveIcon, colors.text, 21),
+      meditation: svgIcon(MeditationIcon, colors.text, 45),
+      writing: svgIcon(WritingIcon, colors.text, 45),
+      listening: svgIcon(ListeningIcon, colors.text, 45),
+      reading: svgIcon(ReadingIcon, colors.text, 45),
+      consultant: svgIcon(ConsultantIcon, colors.text, 45),
+      event: svgIcon(EventIcon, colors.text, 45),
+      docPlain: svgIcon(DocIcon, colors.text),
+      docText: svgIcon(Doc2Icon, colors.text),
+      shield: svgIcon(ShieldIcon, colors.text),
+      star: svgIcon(StarIcon, colors.text),
+      handHeart: svgIcon(HandHeartIcon, colors.text),
+      star2: svgIcon(Star2Icon, colors.text),
+      podcast: svgIcon(PodcastIcon, colors.text),
+    }),
+    [colors.text],
+  );
   const displayName = drawerUser.displayName;
   const emailLine = drawerUser.emailLine;
   const avatarInitials = drawerUser.avatarInitials;
 
   const dynamicStyles = useCustomDrawerDynamicStyles(colors, s);
-
-  const handleLogout = React.useCallback(() => {
-    return onRequestLogout();
-  }, [onRequestLogout]);
 
   const onLogin = React.useCallback(() => {
     navigation.navigate('Login');
@@ -113,7 +115,10 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
   const currentRoute = state.routes[state.index]?.name;
 
   const go = (routeName: string) => () =>
-    navigation.dispatch({ ...DrawerActions.jumpTo(routeName), target: state.key });
+    navigation.dispatch({
+      ...DrawerActions.jumpTo(routeName),
+      target: state.key,
+    });
 
   const itemProps = {
     style: drawerChrome.drawerItem,
@@ -291,26 +296,6 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
         <View style={staticDrawerStyles.footer}>
           <View style={dynamicStyles.divider} />
           <DrawerFooterSocials />
-          {isAuthed ? (
-            <Button
-              layout="auto"
-              variant="text"
-              title={t('drawerFooter.logout')}
-              style={staticDrawerStyles.footerItem}
-              onPress={handleLogout}
-              contentStyle={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 8,
-                width: '100%',
-              }}
-            >
-              <Text style={dynamicStyles.footerIconGlyph}>⎋</Text>
-              <Text style={dynamicStyles.footerItemText}>
-                {t('drawerFooter.logout')}
-              </Text>
-            </Button>
-          ) : null}
           <Text style={dynamicStyles.version}>
             {t('drawerFooter.version', { version: appVersion })}
           </Text>

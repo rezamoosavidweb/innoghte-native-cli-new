@@ -4,7 +4,6 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, View } from 'react-native';
 
-import { ProfileMenuSection } from '@/domains/user/components/profile/ProfileMenuSection';
 import { useGiftHubMenus } from '@/domains/user/hooks/useGiftHubMenus';
 import {
   createProfileMenuStyles,
@@ -12,6 +11,7 @@ import {
 import { navigateToAppLeaf } from '@/app/bridge/auth';
 import type { AppLeafRouteName, DrawerParamList } from '@/shared/contracts/navigationApp';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
+import { MenuSection } from '@/ui/components/MenuSection';
 import { SectionDivider } from '@/ui/components/SectionDivider';
 import { createSectionDividerStyles } from '@/ui/theme';
 
@@ -43,9 +43,9 @@ export const GiftScreen = React.memo(function GiftScreen(_props: Props) {
         <View style={menuStyles.sectionSpacing}>
           <SectionDivider title={t('screens.gift.title')} styles={dividerStyles} />
         </View>
-        <ProfileMenuSection
+        <MenuSection
           items={items}
-          menuStyles={menuStyles}
+          styles={menuStyles}
           onNavigate={onNavigate}
         />
       </View>

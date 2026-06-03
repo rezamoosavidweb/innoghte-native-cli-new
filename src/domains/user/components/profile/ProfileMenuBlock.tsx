@@ -4,10 +4,9 @@ import { View } from 'react-native';
 import type { ProfileMenuListItem } from '@/domains/user/model/profileMenu.types';
 import type { ProfileScreenMenuStyleSet } from '@/domains/user/ui/profileScreen.styles';
 import type { AppLeafRouteName } from '@/shared/contracts/navigationApp';
+import { MenuSection } from '@/ui/components/MenuSection';
 import { SectionDivider } from '@/ui/components/SectionDivider';
 import type { SectionDividerStyleSet } from '@/ui/theme';
-
-import { ProfileMenuSection } from './ProfileMenuSection';
 
 export type ProfileMenuBlockStyles = Readonly<{
   menu: ProfileScreenMenuStyleSet;
@@ -34,9 +33,9 @@ export const ProfileMenuBlock = React.memo(function ProfileMenuBlock({
       <View style={styles.menu.sectionSpacing}>
         <SectionDivider title={title} styles={styles.divider} />
       </View>
-      <ProfileMenuSection
+      <MenuSection
         items={items}
-        menuStyles={styles.menu}
+        styles={styles.menu}
         onNavigate={onNavigate}
         footer={extraContent}
       />

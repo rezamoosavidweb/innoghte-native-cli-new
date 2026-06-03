@@ -1,13 +1,12 @@
-import type { AppLeafRouteName } from '@/shared/contracts/navigationApp';
-import { SvgProps } from 'react-native-svg';
+import type { MenuSectionItem } from '@/ui/components/MenuSection';
 
-/** Profile hub menu row — resolved titles + typed navigation targets. */
-export type ProfileMenuListItem = {
-  readonly id: string;
-  readonly title: string;
-  readonly icon: React.FC<SvgProps>;
-  readonly route: AppLeafRouteName;
-};
+/**
+ * Profile hub menu row — resolved titles + typed navigation targets.
+ *
+ * @deprecated Alias of {@link MenuSectionItem} from `@/ui/components/MenuSection`.
+ * Prefer importing `MenuSectionItem` directly.
+ */
+export type ProfileMenuListItem = MenuSectionItem;
 
 /** Data-driven profile hub section (services, financial, experiences, support). */
 export type ProfileScreenSection = Readonly<{

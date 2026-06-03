@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import type { SvgProps } from 'react-native-svg';
 
-import AlbumIcon from '@/assets/icons/inn/album.svg';
-import CourseIcon from '@/assets/icons/inn/course.svg';
+import FaqIcon from '@/assets/icons/inn/faq.svg';
+import CategoryIcon from '@/assets/icons/inn/category.svg';
 import HomeIcon from '@/assets/icons/inn/home.svg';
 import LoginIcon from '@/assets/icons/login.svg';
 import ShoppingTrollyIcon from '@/assets/icons/shopping-trolly.svg';
@@ -15,8 +15,8 @@ import { spacing } from '@/ui/theme';
 
 const TAB_ICON: Record<MainTabScreenName, React.ComponentType<SvgProps>> = {
   Home: HomeIcon,
-  Courses: CourseIcon,
-  Albums: AlbumIcon,
+  Services: CategoryIcon,
+  Faqs: FaqIcon,
   Cart: ShoppingTrollyIcon,
   Profile: LoginIcon,
 };
@@ -84,7 +84,9 @@ export function TabBarGlyph({
           importantForAccessibility="no-hide-descendants"
         >
           <Badge visible size={CART_TAB_BADGE_SIZE} style={styles.cartTabBadge}>
-            {badgeCount > 99 ? `${formatNumberForApp(99)}+` : formatNumberForApp(badgeCount)}
+            {badgeCount > 99
+              ? `${formatNumberForApp(99)}+`
+              : formatNumberForApp(badgeCount)}
           </Badge>
         </View>
       ) : null}

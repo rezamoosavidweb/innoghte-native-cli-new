@@ -6,8 +6,8 @@ import type { VerifyChannel } from './verification';
 /** Bottom tabs — primary app sections. */
 export type TabParamList = {
   Home: undefined;
-  Courses: undefined;
-  Albums: undefined;
+  Services: undefined;
+  Faqs: undefined;
   Cart: undefined;
   Profile: { userId?: string } | undefined;
 };

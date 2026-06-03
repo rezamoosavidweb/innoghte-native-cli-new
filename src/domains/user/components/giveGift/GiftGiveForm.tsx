@@ -13,7 +13,7 @@ import { GiveGiftLabeledField } from '@/domains/user/components/giveGift/GiveGif
 import { GiftProductMultiPicker } from '@/domains/user/components/giveGift/GiftProductMultiPicker';
 import type { GiveGiftFormType } from '@/domains/user/model/giveGiftFormSchema';
 import { createGiveGiftStyles } from '@/domains/user/ui/giveGiftScreen.styles';
-import type { Course } from '@/domains/courses';
+import type { CatalogItem } from '@/domains/courses';
 import { pickSemantic, useThemeColors } from '@/ui/theme';
 import { Button } from '@/ui/components/Button';
 import { createFormFieldStyles } from '@/ui/theme/formField.styles';
@@ -28,8 +28,8 @@ export type GiftGiveFormProps = {
   mobileDefaults: GiveGiftFormType['mobile'];
   coursesPending: boolean;
   albumsPending: boolean;
-  courseOptions: readonly Course[];
-  albumOptions: readonly Course[];
+  courseOptions: readonly CatalogItem[];
+  albumOptions: readonly CatalogItem[];
   purchasedError: string;
   setPurchasedError: React.Dispatch<React.SetStateAction<string>>;
   interactionBusy: boolean;

@@ -8,14 +8,14 @@ import {
 } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
-import type { Course } from '@/domains/courses';
+import type { CatalogItem } from '@/domains/courses';
 import type { GiveGiftPickerStyles } from '@/domains/user/ui/giveGiftScreen.styles';
 
 export type GiftProductMultiPickerProps = {
   label: string;
   disabled?: boolean;
   loading: boolean;
-  options: readonly Course[];
+  options: readonly CatalogItem[];
   selected: string[];
   onChange: (next: string[]) => void;
   styles: GiveGiftPickerStyles;
