@@ -7,7 +7,7 @@ import CourseIcon from '@/assets/icons/inn/course.svg';
 import EventIcon from '@/assets/icons/inn/event.svg';
 import LiveIcon from '@/assets/icons/inn/live.svg';
 import SupportIcon from '@/assets/icons/inn/support-financial.svg';
-import type { ProfileMenuListItem } from '@/domains/user/model/profileMenu.types';
+import type { MenuSectionItem } from '@/ui/components/MenuSection';
 import type { AppLeafRouteName } from '@/shared/contracts/navigationApp';
 
 type ServicesMenuRowConfig = {
@@ -53,7 +53,7 @@ const SERVICES_MENU: readonly ServicesMenuRowConfig[] = [
 function mapServicesMenuConfig(
   rows: readonly ServicesMenuRowConfig[],
   t: TFunction,
-): ProfileMenuListItem[] {
+): MenuSectionItem[] {
   return rows.map(row => ({
     id: row.id,
     icon: row.icon,
@@ -62,6 +62,6 @@ function mapServicesMenuConfig(
   }));
 }
 
-export function useServicesMenus(t: TFunction): ProfileMenuListItem[] {
+export function useServicesMenus(t: TFunction): MenuSectionItem[] {
   return React.useMemo(() => mapServicesMenuConfig(SERVICES_MENU, t), [t]);
 }

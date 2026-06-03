@@ -8,11 +8,12 @@ import {
   createMainTabBarLabelTint,
   createProfileAvatarChrome,
 } from '@/app/bridge/profileTabBar.styles';
-import { TabBarGlyph } from '@/app/navigation/tabBarConfig';
+import { TabBarGlyph, type TabBarIconArgs } from '@/app/navigation/tabBarConfig';
 import { useCurrentUser } from '@/domains/auth';
 import { useIsAuthenticated } from '@/domains/auth';
 import { resolveAvatarUri } from '@/shared/utils/resolveAvatarUri';
 import { initialsFromDisplayName } from '@/shared/utils/initialsFromDisplayName';
+import { resolveDisplayName } from '@/shared/utils/resolveDisplayName';
 import {
   mainTabBarLabelStyle,
   pickSemantic,
@@ -30,13 +31,7 @@ const glyphWrap = StyleSheet.create({
   blurred: { opacity: 0.55 },
 });
 
-type IconProps = {
-  color: string;
-  focused: boolean;
-  size: number;
-};
-
-export function ProfileTabBarIcon({ color, focused, size }: IconProps) {
+export function ProfileTabBarIcon({ color, focused, size }: TabBarIconArgs) {
   const theme = useTheme();
   const s = pickSemantic(theme);
   const isAuthenticated = useIsAuthenticated();
@@ -60,11 +55,7 @@ export function ProfileTabBarIcon({ color, focused, size }: IconProps) {
     );
   }
 
-  const displayName = (
-    user?.full_name?.trim() ||
-    [user?.name, user?.family].filter(Boolean).join(' ').trim() ||
-    t('drawer.user.fallbackName')
-  ).trim();
+  const displayName = resolveDisplayName(user, t);
   const initials = initialsFromDisplayName(displayName);
   const uri = resolveAvatarUri(user?.avatar);
 

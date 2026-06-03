@@ -29,6 +29,13 @@ type IconProps = {
   badgeCount?: number;
 };
 
+/** Args React Navigation passes to a tab's `tabBarIcon` callback. */
+export type TabBarIconArgs = {
+  color: string;
+  focused: boolean;
+  size: number;
+};
+
 /** Larger than default tab badge; forced square so it renders as a circle (not a pill). */
 const CART_TAB_BADGE_SIZE = spacing['2xl'];
 

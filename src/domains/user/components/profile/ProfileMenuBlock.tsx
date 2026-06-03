@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View } from 'react-native';
 
-import type { ProfileMenuListItem } from '@/domains/user/model/profileMenu.types';
+import type { MenuSectionItem } from '@/ui/components/MenuSection';
 import type { ProfileScreenMenuStyleSet } from '@/domains/user/ui/profileScreen.styles';
 import type { AppLeafRouteName } from '@/shared/contracts/navigationApp';
 import { MenuSection } from '@/ui/components/MenuSection';
@@ -15,7 +15,7 @@ export type ProfileMenuBlockStyles = Readonly<{
 
 export type ProfileMenuBlockProps = Readonly<{
   title: string;
-  items: readonly ProfileMenuListItem[];
+  items: readonly MenuSectionItem[];
   onNavigate: (route: AppLeafRouteName) => void;
   styles: ProfileMenuBlockStyles;
   extraContent?: React.ReactNode;

@@ -1,13 +1,7 @@
 import * as React from 'react';
 
-import { TabBarGlyph } from '@/app/navigation/tabBarConfig';
+import { TabBarGlyph, type TabBarIconArgs } from '@/app/navigation/tabBarConfig';
 import { useBasketCart } from '@/domains/basket/hooks/useBasketCart';
-
-type TabBarIconArgs = {
-  color: string;
-  focused: boolean;
-  size: number;
-};
 
 /** Cart tab only: badge count from `useBasketCart` (other tabs unchanged). */
 export const BasketTabBarIcon = React.memo(function BasketTabBarIcon({

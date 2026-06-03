@@ -7,11 +7,9 @@ import ListeningIcon from '@/assets/icons/inn/listening.svg';
 import MeditationIcon from '@/assets/icons/inn/meditation.svg';
 import ReadingIcon from '@/assets/icons/inn/reading.svg';
 import WritingIcon from '@/assets/icons/inn/writing.svg';
-import type { ProfileMenuListItem } from '@/domains/user/model/profileMenu.types';
+import type { MenuSectionItem } from '@/ui/components/MenuSection';
 import type { AppLeafRouteName } from '@/shared/contracts/navigationApp';
 import { SvgProps } from 'react-native-svg';
-
-export type { ProfileMenuListItem } from '@/domains/user/model/profileMenu.types';
 
 export type ProfileMenuRowConfig = {
   readonly id: string;
@@ -56,7 +54,7 @@ const PROFILE_EXPERIENCES_MENU: readonly ProfileMenuRowConfig[] = [
 function mapMenuConfig(
   rows: readonly ProfileMenuRowConfig[],
   t: TFunction,
-): ProfileMenuListItem[] {
+): MenuSectionItem[] {
   return rows.map(row => ({
     id: row.id,
     icon: row.icon,

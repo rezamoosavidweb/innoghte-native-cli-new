@@ -1,7 +1,7 @@
 import type { TFunction } from 'i18next';
 import * as React from 'react';
 
-import type { ProfileMenuListItem } from '@/domains/user/model/profileMenu.types';
+import type { MenuSectionItem } from '@/ui/components/MenuSection';
 import type { AppLeafRouteName } from '@/shared/contracts/navigationApp';
 
 type GiftHubMenuRowConfig = {
@@ -35,7 +35,7 @@ const GIFT_HUB_MENU: readonly GiftHubMenuRowConfig[] = [
 function mapGiftHubMenu(
   rows: readonly GiftHubMenuRowConfig[],
   t: TFunction,
-): ProfileMenuListItem[] {
+): MenuSectionItem[] {
   return rows.map(row => ({
     id: row.id,
     icon: row.icon,
@@ -44,6 +44,6 @@ function mapGiftHubMenu(
   }));
 }
 
-export function useGiftHubMenus(t: TFunction): ProfileMenuListItem[] {
+export function useGiftHubMenus(t: TFunction): MenuSectionItem[] {
   return React.useMemo(() => mapGiftHubMenu(GIFT_HUB_MENU, t), [t]);
 }

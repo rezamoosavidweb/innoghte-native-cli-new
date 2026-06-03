@@ -80,7 +80,7 @@ import {
   getTranslatedTabFields,
   type ExtraDrawerLeafKey,
 } from '@/app/navigation/i18nScreenOptions';
-import { TabBarGlyph } from '@/app/navigation/tabBarConfig';
+import { TabBarGlyph, type TabBarIconArgs } from '@/app/navigation/tabBarConfig';
 import type {
   DrawerParamList,
   MainTabScreenName,
@@ -137,15 +137,9 @@ function mainTabsScreenOptions({
       tabBarLabel: ({ color }: { color: string }) => (
         <ProfileTabBarLabel color={color} />
       ),
-      tabBarIcon: ({
-        color,
-        focused,
-        size,
-      }: {
-        color: string;
-        focused: boolean;
-        size: number;
-      }) => <ProfileTabBarIcon color={color} focused={focused} size={size} />,
+      tabBarIcon: ({ color, focused, size }: TabBarIconArgs) => (
+        <ProfileTabBarIcon color={color} focused={focused} size={size} />
+      ),
     };
   }
 
@@ -160,15 +154,7 @@ function mainTabsScreenOptions({
   return {
     ...base,
     tabBarLabel,
-    tabBarIcon: ({
-      color,
-      focused,
-      size,
-    }: {
-      color: string;
-      focused: boolean;
-      size: number;
-    }) => (
+    tabBarIcon: ({ color, focused, size }: TabBarIconArgs) => (
       <TabBarGlyph
         routeName={route.name as MainTabScreenName}
         focused={focused}

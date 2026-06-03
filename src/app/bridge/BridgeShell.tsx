@@ -7,6 +7,7 @@ import { useUiThemeStore } from '@/domains/settings';
 import { UserService } from '@/domains/user';
 import { fireAndForget } from '@/shared/infra/http';
 import { initialsFromDisplayName } from '@/shared/utils/initialsFromDisplayName';
+import { resolveDisplayName } from '@/shared/utils/resolveDisplayName';
 import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
 import { ToastHost } from '@/shared/ui/toast';
 import { ShellDrawerProvider } from '@/ui/layout/ShellDrawerContext';
@@ -38,11 +39,7 @@ export function BridgeShell({ children }: BridgeShellProps) {
         avatarInitials: '—',
       };
     }
-    const displayName = (
-      user?.full_name?.trim() ||
-      [user?.name, user?.family].filter(Boolean).join(' ').trim() ||
-      t('drawer.user.fallbackName')
-    ).trim();
+    const displayName = resolveDisplayName(user, t);
     return {
       isAuthenticated: true,
       displayName,

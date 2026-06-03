@@ -6,7 +6,7 @@ import DocIcon from '@/assets/icons/inn/doc.svg';
 import Doc2Icon from '@/assets/icons/inn/doc2.svg';
 import PaymentIcon from '@/assets/icons/inn/payment.svg';
 import supportFinancial from '@/assets/icons/inn/support-financial.svg';
-import type { ProfileMenuListItem } from '@/domains/user/model/profileMenu.types';
+import type { MenuSectionItem } from '@/ui/components/MenuSection';
 import type { AppLeafRouteName } from '@/shared/contracts/navigationApp';
 import { SvgProps } from 'react-native-svg';
 
@@ -58,7 +58,7 @@ const PROFILE_SUPPORT_MENU: readonly SupportMenuRowConfig[] = [
 function mapSupportMenuConfig(
   rows: readonly SupportMenuRowConfig[],
   t: TFunction,
-): ProfileMenuListItem[] {
+): MenuSectionItem[] {
   return rows.map(row => ({
     id: row.id,
     icon: row.icon,
@@ -67,7 +67,7 @@ function mapSupportMenuConfig(
   }));
 }
 
-export function useProfileSupportMenus(t: TFunction): ProfileMenuListItem[] {
+export function useProfileSupportMenus(t: TFunction): MenuSectionItem[] {
   return React.useMemo(
     () => mapSupportMenuConfig(PROFILE_SUPPORT_MENU, t),
     [t],
