@@ -14,7 +14,6 @@ import {
 import { navigateToAppLeaf, navigateToLogin } from '@/app/bridge/auth';
 import { AuthService, useIsAuthenticated } from '@/domains/auth';
 import { deleteCartByToken } from '@/domains/basket/api/basketApi';
-import { CartHeader } from '@/domains/basket/components/CartHeader';
 import { CartList } from '@/domains/basket/components/CartList';
 import { CheckoutButton } from '@/domains/basket/components/CheckoutButton';
 import { DiscountForm } from '@/domains/basket/components/DiscountForm';
@@ -292,9 +291,8 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
 
   if (!isPendingList && cartList.length === 0) {
     return (
-      <SafeAreaView style={s.flex} edges={['top', 'left', 'right']}>
-        <View style={[s.scroll, s.emptyWrap]}>
-          <CartHeader title="سبد خرید" />
+      <SafeAreaView style={s.flex} edges={['left', 'right']}>
+        <View style={s.emptyWrap}>
           <EmptyBasket />
         </View>
       </SafeAreaView>
@@ -304,42 +302,36 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
   const showStrike = totals.displayPrice !== totals.displayDiscountPrice;
 
   return (
-    <SafeAreaView style={s.flex} edges={['top', 'left', 'right']}>
+    <SafeAreaView style={s.flex} edges={['left', 'right']}>
       {isPendingList ? (
         <View style={s.loading}>
           <ActivityIndicator size="large" />
         </View>
       ) : (
-        <>
-          <ScrollView
-            style={s.flex}
-            contentContainerStyle={[s.scroll, s.scrollContentBottom]}
-            keyboardShouldPersistTaps="handled"
-          >
-            <CartHeader title="سفارش شما" />
-            <View style={s.card}>
-              <View style={s.rowBetween}>
-                <Text style={s.muted}>محصول</Text>
-                <Text style={s.muted}>جمع کل</Text>
-              </View>
-              <CartList
-                cartList={cartList}
-                giftsCourseIds={gift.giftsCourseIds}
-                onRemove={onRemove}
-                onViewCourse={onViewCourse}
-              />
-              <View style={s.rowBetween}>
-                <Text style={s.muted}>قیمت نهایی</Text>
-                <View style={s.priceRow}>
-                  {showStrike ? (
-                    <Text style={s.strike}>
-                      {formatTomanFa(totals.displayPrice)}
-                    </Text>
-                  ) : null}
-                  <Text style={s.total}>
-                    {formatTomanFa(totals.displayDiscountPrice)}
+        <ScrollView
+          style={s.flex}
+          contentContainerStyle={[s.scroll, s.scrollContentBottom]}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={s.card}>
+            <CartList
+              cartList={cartList}
+              giftsCourseIds={gift.giftsCourseIds}
+              onRemove={onRemove}
+              onViewCourse={onViewCourse}
+            />
+
+            <View style={s.totalRow}>
+              <Text style={s.totalLabel}>جمع کل</Text>
+              <View style={s.priceRow}>
+                {showStrike ? (
+                  <Text style={s.strike}>
+                    {formatTomanFa(totals.displayPrice)}
                   </Text>
-                </View>
+                ) : null}
+                <Text style={s.total}>
+                  {formatTomanFa(totals.displayDiscountPrice)}
+                </Text>
               </View>
             </View>
 
@@ -349,39 +341,38 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
               discountEligibleCourseIds={discountIds}
             />
 
-            <View style={[s.banner, s.bannerInfo]}>
-              <Text style={s.bannerTxtInfo}>
-                لطفا در نظر داشته باشید که دوره‌های مجموعه «این نقطه» در قالب
-                اشتراک آنلاین ارائه می‌شود.
-              </Text>
-            </View>
-            {isDotIr ? (
-              <View style={[s.banner, s.bannerWarn]}>
-                <Text style={s.bannerTxtWarn}>
-                  بعد از خرید، اشتراک شما تنها در جهت استفاده در کشور ایران فعال
-                  خواهد بود.
-                </Text>
-              </View>
-            ) : null}
+            <PaymentSection
+              control={form.control}
+              errors={form.formState.errors}
+              paymentType={paymentType}
+              onPaymentTypeChange={onPaymentTypeChange}
+            />
 
-            <View style={s.card}>
-              <PaymentSection
-                control={form.control}
-                errors={form.formState.errors}
-                paymentType={paymentType}
-                onPaymentTypeChange={onPaymentTypeChange}
-              />
+            <View style={s.terms}>
+              <TermsCheckbox />
             </View>
-          </ScrollView>
-          <View style={s.footer}>
-            <TermsCheckbox />
             <CheckoutButton
               onPress={submitHandler}
               loading={paymentMutation.isPending}
               disabled={payableIds.length === 0}
             />
           </View>
-        </>
+
+          <View style={[s.banner, s.bannerInfo]}>
+            <Text style={s.bannerTxtInfo}>
+              لطفا در نظر داشته باشید که دوره‌های مجموعه «این نقطه» در قالب
+              اشتراک آنلاین ارائه می‌شود.
+            </Text>
+          </View>
+          {isDotIr ? (
+            <View style={[s.banner, s.bannerWarn]}>
+              <Text style={s.bannerTxtWarn}>
+                بعد از خرید، اشتراک شما تنها در جهت استفاده در کشور ایران فعال
+                خواهد بود.
+              </Text>
+            </View>
+          ) : null}
+        </ScrollView>
       )}
     </SafeAreaView>
   );

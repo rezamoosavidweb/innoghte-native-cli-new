@@ -53,6 +53,13 @@ export const endpoints = {
   },
   /** Authenticated checkout (Bearer). */
   payment: {
+    /** `.ir` gateways (Zarinpal/Vandar) — matches client-web `postCreatePayment`. */
     create: 'api/v1/payment/create',
+    /** `.com` (PayPal/credit card) — matches client-web `postCreatePaymentPaypal`. */
+    createPaypal: 'api/v1/payment/paypal/create',
+    /** `.ir` gateway callback verify — matches client-web `getVerifyPayment`. */
+    verify: 'api/v1/payment/verify',
+    /** `.com` PayPal callback verify — matches client-web `getVerifyPaymentPaypal`. */
+    verifyPaypal: 'api/v1/payment/paypal/verify',
   },
 } as const;

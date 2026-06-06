@@ -2,12 +2,7 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import type { ThemeColors } from '@/ui/theme/types';
-import {
-  fontSize,
-  fontWeight,
-  radius,
-  spacing,
-} from '@/ui/theme';
+import { radius, spacing } from '@/ui/theme';
 
 export function useSelectPaymentTypeStyles(colors: ThemeColors) {
   return React.useMemo(
@@ -15,27 +10,33 @@ export function useSelectPaymentTypeStyles(colors: ThemeColors) {
       StyleSheet.create({
         row: {
           flexDirection: 'row',
-          gap: spacing.md,
+          gap: spacing.sm,
           marginBottom: spacing.md,
         },
-        chip: {
+        card: {
           flex: 1,
-          paddingVertical: spacing.lg,
-          borderRadius: radius.md,
-          borderWidth: 2,
+          minHeight: 60,
+          paddingVertical: spacing.md,
+          paddingHorizontal: spacing.sm,
+          borderRadius: radius.lg,
+          borderWidth: 1,
           borderColor: colors.border,
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: colors.surface,
+          backgroundColor: colors.surfaceSecondary,
         },
-        chipOn: { borderColor: colors.textSecondary },
-        chipMuted: { opacity: 0.45 },
-        lbl: {
-          fontSize: fontSize.sm,
-          fontWeight: fontWeight.medium,
-          color: colors.text,
+        cardOn: {
+          borderColor: colors.primary,
+          backgroundColor: colors.primarySoft,
+        },
+        cardDisabled: { opacity: 0.5 },
+        slot: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
         },
       }),
-    [colors.border, colors.surface, colors.text, colors.textSecondary],
+    [colors.border, colors.primary, colors.primarySoft, colors.surfaceSecondary],
   );
 }

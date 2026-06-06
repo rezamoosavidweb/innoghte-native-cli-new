@@ -1,52 +1,36 @@
 import { StyleSheet } from 'react-native';
 
 import type { ThemeColors } from '@/ui/theme/types';
-import {
-  fontSize,
-  fontWeight,
-  radius,
-  spacing,
-} from '@/ui/theme';
+import { fontSize, fontWeight, radius, spacing } from '@/ui/theme';
 
 export function createCartItemStyles(colors: ThemeColors) {
   return StyleSheet.create({
     row: {
       flexDirection: 'row',
       alignItems: 'center',
+      gap: spacing.sm,
       paddingVertical: spacing.md,
       borderBottomWidth: StyleSheet.hairlineWidth,
       borderBottomColor: colors.border,
     },
-    grow: { flex: 1, flexDirection: 'row', alignItems: 'center' },
-    thumbWrap: {
-      width: 72,
-      height: 72,
-      borderRadius: radius.sm,
-      borderWidth: 2,
-      borderColor: colors.border,
-      marginHorizontal: spacing.sm,
-      overflow: 'hidden',
-      padding: 3,
-    },
-    thumb: { width: '100%', height: '100%', borderRadius: 4 },
-    thumbPlaceholder: {
-      backgroundColor: colors.surfaceSecondary,
-    },
-    muted: { opacity: 0.35 },
+    info: { flex: 1, gap: spacing.xs },
     title: {
-      flex: 1,
-      fontSize: fontSize.base + 1,
+      fontSize: fontSize.base,
       fontWeight: fontWeight.medium,
       color: colors.text,
     },
-    removeHit: { padding: spacing.sm },
-    remove: { fontSize: fontSize.lg, color: colors.textSecondary },
-    qty: {
-      fontSize: fontSize.sm,
-      color: colors.textSecondary,
-      marginTop: 4,
+    metaRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
     },
-    priceCol: { alignItems: 'flex-end' },
+    metaLabel: { fontSize: fontSize.sm, color: colors.textSecondary },
+    metaValue: { fontSize: fontSize.sm, color: colors.text },
+    priceValue: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 6,
+    },
     price: {
       fontSize: fontSize.base,
       fontWeight: fontWeight.semibold,
@@ -57,8 +41,22 @@ export function createCartItemStyles(colors: ThemeColors) {
       textDecorationLine: 'line-through',
       color: colors.textMuted,
     },
+    thumbWrap: {
+      width: 70,
+      height: 70,
+      borderRadius: radius.md,
+      borderWidth: 2,
+      borderColor: colors.border,
+      overflow: 'hidden',
+      padding: 3,
+    },
+    thumb: { width: '100%', height: '100%', borderRadius: 4 },
+    thumbPlaceholder: { backgroundColor: colors.surfaceSecondary },
+    muted: { opacity: 0.35 },
+    removeHit: { padding: 0, width: 20, minWidth: 0 },
     pill: {
-      marginTop: spacing.sm,
+      marginTop: spacing.xs,
+      alignSelf: 'flex-start',
       paddingHorizontal: spacing.md,
       paddingVertical: spacing.xs,
       borderRadius: radius.full,

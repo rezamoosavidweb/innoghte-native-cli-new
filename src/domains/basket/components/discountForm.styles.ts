@@ -2,7 +2,10 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import type { ThemeColors } from '@/ui/theme/types';
-import { fontSize, fontWeight, FORM_CONTROL_HEIGHT, radius, spacing } from '@/ui/theme';
+import { fontSize, fontWeight, hexAlpha, radius, spacing } from '@/ui/theme';
+
+const FIELD_HEIGHT = 56;
+const ADD_BTN_SIZE = 36;
 
 export function useDiscountFormStyles(colors: ThemeColors) {
   return React.useMemo(
@@ -18,25 +21,32 @@ export function useDiscountFormStyles(colors: ThemeColors) {
         fieldRow: {
           flexDirection: 'row',
           alignItems: 'center',
+          gap: spacing.sm,
           borderRadius: radius.lg,
+          borderWidth: 1,
+          borderColor: colors.border,
           backgroundColor: colors.surfaceSecondary,
-          paddingLeft: spacing.md,
-          paddingRight: spacing.xs,
-          height: FORM_CONTROL_HEIGHT,
+          paddingHorizontal: spacing.md,
+          height: FIELD_HEIGHT,
         },
         input: {
           flex: 1,
           color: colors.text,
           fontSize: fontSize.base,
           paddingVertical: 0,
+          textAlign: 'right',
         },
         addBtn: {
-          width: FORM_CONTROL_HEIGHT,
-          height: FORM_CONTROL_HEIGHT,
-          borderRadius: FORM_CONTROL_HEIGHT / 2,
+          width: ADD_BTN_SIZE,
+          height: ADD_BTN_SIZE,
+          // Override Button layout="auto" (minHeight:48 + alignSelf:'stretch')
+          // so the control stays a fixed circle instead of filling the field.
+          minHeight: ADD_BTN_SIZE,
+          alignSelf: 'center',
+          borderRadius: ADD_BTN_SIZE / 2,
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: colors.text,
+          backgroundColor: hexAlpha(colors.text, 0.16),
           overflow: 'hidden',
         },
         addBtnSlot: {
@@ -45,23 +55,8 @@ export function useDiscountFormStyles(colors: ThemeColors) {
           alignItems: 'center',
           justifyContent: 'center',
         },
-        addBtnLabelHidden: { opacity: 0 },
-        addBtnLoaderOverlay: {
-          ...StyleSheet.absoluteFill,
-          alignItems: 'center',
-          justifyContent: 'center',
-        },
         addBtnDisabled: { opacity: 0.45 },
-        addLbl: {
-          color: colors.background,
-          fontSize: fontSize.xl,
-          fontWeight: fontWeight.bold,
-        },
       }),
-    [
-      colors.background,
-      colors.surfaceSecondary,
-      colors.text,
-    ],
+    [colors.border, colors.surfaceSecondary, colors.text],
   );
 }

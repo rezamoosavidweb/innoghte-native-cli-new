@@ -29,6 +29,7 @@ import {
 } from '@/domains/courses';
 import { DonationScreen } from '@/domains/donation';
 import { EventsScreen } from '@/domains/events';
+import { PaymentResultScreen } from '@/domains/payment';
 import { HomeScreen } from '@/domains/home';
 import { CopyrightScreen, TermsScreen } from '@/domains/legal';
 import { LiveMeetingsScreen } from '@/domains/live';
@@ -381,6 +382,24 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
     Donation: {
       screen: DonationScreen,
       options: () => extraLeafOptions('donation', '❤️'),
+    },
+    PaymentResult: {
+      screen: PaymentResultScreen,
+      // Gateway redirect: innoghte://payment/result?Authority=…&Status=… → params.
+      linking: { path: 'payment/result' },
+      // TEMP preview seed: tapping the drawer entry opens with these example
+      // callback values. Real values arrive via the `payment/result` deep link
+      // (provided params override these). Remove `initialParams` for production.
+      initialParams: {
+        Authority: 'S00000000000000000000000000000v22vpz',
+        Status: 'OK',
+        gatewayName: 'zarinpal',
+      },
+      options: () => ({
+        title: 'نتیجه پرداخت',
+        drawerLabel: 'نتیجه پرداخت',
+        drawerIcon: drawerIcon('🧾'),
+      }),
     },
     AboutUs: {
       screen: LegacyMenuPlaceholderScreen,

@@ -27,14 +27,18 @@ export function usePaymentSectionStyles(semantic: ThemeColors) {
         },
         gw: {
           flex: 1,
-          height: FORM_CONTROL_HEIGHT,
-          borderRadius: radius.md,
-          borderWidth: 2,
+          minHeight: 56,
+          borderRadius: radius.lg,
+          borderWidth: 1,
           borderColor: semantic.border,
+          backgroundColor: semantic.surfaceSecondary,
           alignItems: 'center',
           justifyContent: 'center',
         },
-        gwOn: { borderColor: semantic.textSecondary },
+        gwOn: {
+          borderColor: semantic.primary,
+          backgroundColor: semantic.primarySoft,
+        },
         gwLbl: {
           fontSize: fontSize.sm,
           fontWeight: fontWeight.medium,
@@ -83,8 +87,8 @@ export function usePaymentSectionStyles(semantic: ThemeColors) {
       semantic.primary,
       semantic.primarySoft,
       semantic.surface,
+      semantic.surfaceSecondary,
       semantic.text,
-      semantic.textSecondary,
     ],
   );
 }

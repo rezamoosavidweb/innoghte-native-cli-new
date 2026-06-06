@@ -1,16 +1,18 @@
+import { Text } from '@/shared/ui/Text';
 import * as React from 'react';
 import { TextInput, View } from 'react-native';
-import { Text } from '@/shared/ui/Text';
 
 import { navigateToLogin } from '@/app/bridge/auth/protectedNavigation';
+import DiscountIcon from '@/assets/icons/inn/discount.svg';
+import PlusIcon from '@/assets/icons/inn/plus.svg';
 import { AuthService } from '@/domains/auth';
+import { useDiscountFormStyles } from '@/domains/basket/components/discountForm.styles';
 import { useBasketCheckoutStore } from '@/domains/basket/model/basketCheckout.store';
 import { ApiError } from '@/shared/infra/http/apiError';
-import { showAppToast } from '@/shared/ui/toast/toastBus';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
-import { useDiscountFormStyles } from '@/domains/basket/components/discountForm.styles';
-import { useThemeColors } from '@/ui/theme';
+import { showAppToast } from '@/shared/ui/toast/toastBus';
 import { Button } from '@/ui/components/Button';
+import { useThemeColors } from '@/ui/theme';
 
 const SUBMIT_DEBOUNCE_MS = 480;
 
@@ -57,7 +59,8 @@ export const DiscountForm = React.memo(function DiscountForm({
     }
     lastSubmitAt.current = now;
 
-    const shouldValidate = Boolean(trimmed) && discountEligibleCourseIds.length > 0;
+    const shouldValidate =
+      Boolean(trimmed) && discountEligibleCourseIds.length > 0;
     if (!shouldValidate) {
       return;
     }
@@ -101,10 +104,15 @@ export const DiscountForm = React.memo(function DiscountForm({
     <View style={s.wrap}>
       <Text style={s.label}>اگر کد تخفیف دارید لطفا در زیر بنویسید.</Text>
       <View style={s.fieldRow}>
+        <DiscountIcon
+          width={22}
+          height={22}
+          color={colors.primary}
+        />
         <TextInput
           value={code}
           onChangeText={setCode}
-          placeholder="کد تخفیف"
+          placeholder="Agnai13679@"
           placeholderTextColor={colors.textMuted}
           style={s.input}
           autoCapitalize="none"
@@ -123,7 +131,7 @@ export const DiscountForm = React.memo(function DiscountForm({
           style={[s.addBtn, isPending && s.addBtnDisabled]}
           contentStyle={s.addBtnSlot}
         >
-          <Text style={s.addLbl}>+</Text>
+          <PlusIcon />
         </Button>
       </View>
     </View>

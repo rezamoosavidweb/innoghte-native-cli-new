@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { fontSize, fontWeight, radius, spacing } from '@/ui/theme';
+import { fontSize, fontWeight, hexAlpha, radius, spacing } from '@/ui/theme';
 import type { ThemeColors } from '@/ui/theme/types';
 
 export function createBasketScreenStyles(
@@ -9,43 +9,51 @@ export function createBasketScreenStyles(
 ) {
   return StyleSheet.create({
     flex: { flex: 1, backgroundColor: colors.background },
-    scroll: { paddingHorizontal: spacing.lg, paddingTop: spacing.md },
+    scroll: { paddingHorizontal: spacing.lg, paddingTop: spacing["3xl"] },
+    scrollContentBottom: {
+      paddingBottom: Math.max(bottomInset, spacing.lg) + spacing.md,
+    },
     card: {
       borderWidth: StyleSheet.hairlineWidth,
       borderColor: colors.border,
-      borderRadius: 16,
+      borderRadius: radius.xl,
       padding: spacing.lg,
-      marginBottom: spacing.md,
       backgroundColor: colors.card,
     },
-    rowBetween: {
+    totalRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: spacing.sm,
+      paddingVertical: spacing.md,
     },
-    muted: { color: colors.textSecondary, fontWeight: fontWeight.medium },
-    total: {
-      fontWeight: fontWeight.semibold,
+    totalLabel: {
       color: colors.text,
+      fontWeight: fontWeight.semibold,
       fontSize: fontSize.base,
     },
+    priceRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
     strike: {
       textDecorationLine: 'line-through',
       color: colors.textMuted,
       fontSize: fontSize.sm,
     },
-    priceRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+    total: {
+      fontWeight: fontWeight.semibold,
+      color: colors.text,
+      fontSize: fontSize.base,
+    },
+    section: { marginTop: spacing.lg },
+    terms: { marginTop: spacing.lg },
     banner: {
       flexDirection: 'row',
       alignItems: 'flex-start',
       gap: spacing.sm,
       padding: spacing.md,
       borderRadius: radius.md,
-      marginBottom: spacing.sm,
+      marginTop: spacing.md,
     },
     bannerInfo: { backgroundColor: colors.infoBg },
-    bannerWarn: { backgroundColor: colors.errorBg },
+    bannerWarn: { backgroundColor: hexAlpha(colors.error, 0.12) },
     bannerTxtInfo: {
       flex: 1,
       color: colors.infoText,
@@ -58,16 +66,7 @@ export function createBasketScreenStyles(
       fontWeight: fontWeight.medium,
       fontSize: fontSize.sm,
     },
-    footer: {
-      borderTopWidth: StyleSheet.hairlineWidth,
-      borderTopColor: colors.border,
-      paddingHorizontal: spacing.lg,
-      paddingTop: spacing.md,
-      paddingBottom: Math.max(bottomInset, spacing.md),
-      backgroundColor: colors.background,
-    },
-    loading: { padding: spacing.xl, alignItems: 'center' },
+    loading: { flex: 1, alignItems: 'center', justifyContent: 'center' },
     emptyWrap: { flex: 1 },
-    scrollContentBottom: { paddingBottom: 120 },
   });
 }

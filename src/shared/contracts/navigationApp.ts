@@ -1,6 +1,7 @@
 import type { NavigatorScreenParams } from '@react-navigation/native';
 
 import type { DonationScreenParams } from '@/shared/contracts/navigationDonation';
+import type { PaymentResultParams } from '@/shared/contracts/navigationPayment';
 import type { VerifyChannel } from './verification';
 
 /** Bottom tabs — primary app sections. */
@@ -41,6 +42,8 @@ export type DrawerParamList = {
   Writing: undefined;
   PrivateConsultation: undefined;
   Donation: DonationScreenParams | undefined;
+  /** Post-checkout gateway-callback result (deep link: `payment/result`). */
+  PaymentResult: PaymentResultParams | undefined;
   AboutUs: undefined;
   /** Public contact form (OTP + ticket info). */
   Contact: undefined;

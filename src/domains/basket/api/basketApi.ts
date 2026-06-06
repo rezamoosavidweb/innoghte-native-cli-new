@@ -1,4 +1,4 @@
-import { scopeHeader } from '@/shared/config/resolveIsDotIr';
+import { isDotIr, scopeHeader } from '@/shared/config/resolveIsDotIr';
 import { endpoints, parseJsonResponse } from '@/shared/infra/http';
 import { getApiClient } from '@/shared/infra/http/appHttpClient';
 
@@ -89,8 +89,11 @@ export type CreateBasketPaymentBody = {
 export async function createBasketPayment(
   body: CreateBasketPaymentBody,
 ): Promise<CreatePaymentResult> {
+  // `.ir` uses the gateway endpoint; `.com` uses the PayPal endpoint
+  // (mirrors client-web `isDotIr ? postCreatePayment : postCreatePaymentPaypal`).
+  const path = isDotIr ? endpoints.payment.create : endpoints.payment.createPaypal;
   return parseJsonResponse(
-    getApiClient().post(endpoints.payment.create, {
+    getApiClient().post(path, {
       json: body,
       headers: { Scope: scopeHeader },
     }),
