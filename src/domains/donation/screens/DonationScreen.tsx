@@ -11,11 +11,12 @@ import {
 } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
+import MailIcon from '@/assets/icons/inn/mail.svg';
+import UserIcon from '@/assets/icons/inn/user.svg';
 import { useCurrentUser } from '@/domains/auth';
 import { DonationCreditCardFields } from '@/domains/donation/components/DonationCreditCardFields';
 import { DonationResultModal } from '@/domains/donation/components/DonationResultModal';
 import { DonationSelectGateway } from '@/domains/donation/components/DonationSelectGateway';
-import { DonationSelectPaymentType } from '@/domains/donation/components/DonationSelectPaymentType';
 import { useDonateMutation } from '@/domains/donation/hooks/useDonateMutation';
 import { useDonationAmountState } from '@/domains/donation/hooks/useDonationAmountState';
 import { useDonationCallbackParams } from '@/domains/donation/hooks/useDonationCallbackParams';
@@ -43,8 +44,11 @@ import { toPersianNumber } from '@/domains/donation/utils/paymentFormatting';
 import { isDotIr } from '@/shared/config/resolveIsDotIr';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { StorageService } from '@/shared/infra/storage/storage.service';
+import { groupThousands } from '@/shared/utils/groupThousands';
 import { Button } from '@/ui/components/Button';
-import { flashListContentGutters, pickSemantic } from '@/ui/theme';
+import { SelectPaymentType } from '@/ui/components/SelectPaymentType';
+import { Textarea } from '@/ui/components/Textarea';
+import { pickSemantic } from '@/ui/theme';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Donation'>;
 
@@ -79,7 +83,6 @@ export const DonationScreen = React.memo(function DonationScreen({
 
   const {
     amount,
-    activeButton,
     isCustomAmount,
     amountRef,
     preset,
@@ -241,6 +244,9 @@ export const DonationScreen = React.memo(function DonationScreen({
   const isPayProcessing =
     donateMutation.isPending || isSubmitting || isCheckoutLocked;
 
+  const preset1On = preset.isIrPreset50 || preset.isComPreset5;
+  const preset2On = preset.isIrPreset250 || preset.isComPreset25;
+
   return (
     <KeyboardAvoidingView
       style={s.keyboardRoot}
@@ -248,234 +254,198 @@ export const DonationScreen = React.memo(function DonationScreen({
     >
       <ScrollView
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={[
-          flashListContentGutters.vertical,
-          s.scrollBottomPad,
-        ]}
+        contentContainerStyle={s.scrollContent}
       >
         <View style={s.topSection}>
-          <Text style={s.topTitle}>دوست و همراه عزیز</Text>
+          <Text style={s.topTitle}>دوست و همراه عزیز سلام،</Text>
           <Text style={s.topSubtitle}>
             از اینکه با حمایت مالی من را در ادامه مسیر همراهی میکنی، سپاسگزارم.
           </Text>
         </View>
 
-        <View style={s.darkSection}>
-          <Text style={s.darkTitle}>حمایت مالی</Text>
+        <View style={s.hero} />
 
-          <View style={s.amountCard}>
-            <View style={s.amountRow}>
-              <Text style={s.currency}>مبلغ حمایت مالی:</Text>
-              <TextInput
-                ref={amountRef}
-                style={[s.amountInput, !isCustomAmount && s.amountInputLocked]}
-                keyboardType="decimal-pad"
-                value={amount}
-                editable={isCustomAmount}
-                onChangeText={onAmountChangeText}
-              />
-              <Text style={s.currency}>{isDotIr ? 'تومان' : 'دلار'}</Text>
-            </View>
-            <View style={s.amountBtnsRow}>
-              <Button
-                layout="auto"
-                variant="text"
-                title={isDotIr ? '50,000' : '5'}
-                onPress={() => handlePresetAmount(isDotIr ? '50000' : '5')}
-                style={[
-                  s.amtBtn,
-                  (preset.isIrPreset50 || preset.isComPreset5) && s.amtBtnOn,
-                ]}
-                contentStyle={{ width: '100%' }}
-              >
-                <Text
-                  style={[
-                    s.amtBtnText,
-                    (preset.isIrPreset50 || preset.isComPreset5) &&
-                      s.amtBtnTextOn,
-                  ]}
-                >
-                  {isDotIr ? '50,000' : '5'}
-                </Text>
-              </Button>
-              <Button
-                layout="auto"
-                variant="text"
-                title={isDotIr ? '250,000' : '25'}
-                onPress={() => handlePresetAmount(isDotIr ? '250000' : '25')}
-                style={[
-                  s.amtBtn,
-                  (preset.isIrPreset250 || preset.isComPreset25) && s.amtBtnOn,
-                ]}
-                contentStyle={{ width: '100%' }}
-              >
-                <Text
-                  style={[
-                    s.amtBtnText,
-                    (preset.isIrPreset250 || preset.isComPreset25) &&
-                      s.amtBtnTextOn,
-                  ]}
-                >
-                  {isDotIr ? '250,000' : '25'}
-                </Text>
-              </Button>
-              <Button
-                layout="auto"
-                variant="text"
-                title="مبلغ دلخواه خود را وارد کنید."
-                onPress={handleCustomPress}
-                style={[
-                  s.amtBtn,
-                  isCustomAmount && activeButton === '' && s.amtBtnOn,
-                ]}
-                contentStyle={{ width: '100%' }}
-              >
-                <Text
-                  style={[
-                    s.amtBtnText,
-                    isCustomAmount && activeButton === '' && s.amtBtnTextOn,
-                  ]}
-                >
-                  مبلغ دلخواه خود را وارد کنید.
-                </Text>
-              </Button>
-            </View>
+        <Text style={s.sectionHeading}>
+          {isDotIr ? 'حمایت مالی' : 'حمایت مالی با پی‌پل'}
+        </Text>
+
+        <View style={s.amountGroup}>
+          <View style={s.amountRow}>
+            <Text style={s.currency}>مبلغ حمایت مالی:</Text>
+            <TextInput
+              ref={amountRef}
+              style={[s.amountInput, isCustomAmount && s.amountInputActive]}
+              keyboardType="decimal-pad"
+              value={groupThousands(amount)}
+              onChangeText={onAmountChangeText}
+            />
+            <Text style={s.currency}>{isDotIr ? 'تومان' : 'دلار'}</Text>
           </View>
 
-          <View>
-            <View style={s.formBlock}>
-              {!isDotIr && (
-                <>
-                  <Controller
-                    name="paymentType"
-                    control={control}
-                    render={({ field }) => (
-                      <DonationSelectPaymentType
-                        value={field.value}
-                        onChange={v => {
-                          field.onChange(v);
-                          handlePaymentTypeChange(v);
-                        }}
-                      />
-                    )}
+          <View style={s.presetsRow}>
+            <Button
+              layout="auto"
+              variant="text"
+              title={isDotIr ? '50,000' : '$5'}
+              onPress={() => handlePresetAmount(isDotIr ? '50000' : '5')}
+              style={[s.amtBtn, preset1On && s.amtBtnOn]}
+              contentStyle={{ width: '100%' }}
+            >
+              <Text style={[s.amtBtnText, preset1On && s.amtBtnTextOn]}>
+                {isDotIr ? '50,000' : '$5'}
+              </Text>
+            </Button>
+            <Button
+              layout="auto"
+              variant="text"
+              title={isDotIr ? '250,000' : '$25'}
+              onPress={() => handlePresetAmount(isDotIr ? '250000' : '25')}
+              style={[s.amtBtn, preset2On && s.amtBtnOn]}
+              contentStyle={{ width: '100%' }}
+            >
+              <Text style={[s.amtBtnText, preset2On && s.amtBtnTextOn]}>
+                {isDotIr ? '250,000' : '$25'}
+              </Text>
+            </Button>
+          </View>
+
+          <Button
+            layout="auto"
+            variant="filled"
+            title="مبلغ دلخواه خود را وارد کنید."
+            onPress={handleCustomPress}
+            style={s.customBtn}
+            contentStyle={{ width: '100%' }}
+          >
+            <Text style={s.customBtnText}>مبلغ دلخواه خود را وارد کنید.</Text>
+          </Button>
+        </View>
+
+        <View style={s.paymentGroup}>
+          <Text style={s.paymentHeading}>
+            {isDotIr ? 'انتخاب درگاه' : 'روش پرداخت'}
+          </Text>
+          {!isDotIr ? (
+            <>
+              <Controller
+                name="paymentType"
+                control={control}
+                render={({ field }) => (
+                  <SelectPaymentType
+                    value={field.value}
+                    onChange={v => {
+                      field.onChange(v);
+                      handlePaymentTypeChange(v);
+                    }}
                   />
-                  {paymentType === 'credit_card' ? (
-                    <DonationCreditCardFields
-                      control={control}
-                      errors={cartErrors}
-                    />
-                  ) : null}
-                </>
-              )}
-
-              <View style={s.sepRow}>
-                <View style={s.sepLine} />
-                <View style={s.sepLine} />
-              </View>
-
-              <Text style={s.sectionTitle}>مشخصات حامی مالی</Text>
-
-              <View style={s.fieldsGap}>
-                <Controller
-                  name="user.fullName"
+                )}
+              />
+              {paymentType === 'credit_card' ? (
+                <DonationCreditCardFields
                   control={control}
-                  render={({ field }) => (
-                    <View>
-                      <Text style={s.label}>نام و نام خانوادگی</Text>
-                      <TextInput
-                        style={s.input}
-                        value={field.value}
-                        onChangeText={field.onChange}
-                        onBlur={field.onBlur}
-                        placeholderTextColor={semantic.textMuted}
-                      />
-                      {errors.user?.fullName?.message ? (
-                        <Text style={s.fieldError}>
-                          {errors.user.fullName.message}
-                        </Text>
-                      ) : null}
-                    </View>
-                  )}
+                  errors={cartErrors}
                 />
-                <Controller
-                  name="user.email"
-                  control={control}
-                  render={({ field }) => (
-                    <View>
-                      <Text style={s.label}>آدرس ایمیل</Text>
-                      <TextInput
-                        style={s.input}
-                        autoCapitalize="none"
-                        keyboardType="email-address"
-                        value={field.value}
-                        onChangeText={field.onChange}
-                        onBlur={field.onBlur}
-                        placeholderTextColor={semantic.textMuted}
-                      />
-                      {errors.user?.email?.message ? (
-                        <Text style={s.fieldError}>
-                          {errors.user.email.message}
-                        </Text>
-                      ) : null}
-                    </View>
-                  )}
-                />
-                <Controller
-                  name="user.comment"
-                  control={control}
-                  render={({ field }) => (
-                    <View>
-                      <Text style={s.label}>پیام شما</Text>
-                      <TextInput
-                        style={[s.input, s.textarea]}
-                        multiline
-                        maxLength={200}
-                        value={field.value ?? ''}
-                        onChangeText={field.onChange}
-                        onBlur={field.onBlur}
-                        placeholder="اینجا بنویسید..."
-                        placeholderTextColor={semantic.textMuted}
-                      />
-                    </View>
-                  )}
-                />
-              </View>
+              ) : null}
+            </>
+          ) : (
+            <DonationSelectGateway
+              gateway={gateway === 'zarinpal' ? 'zarinpal' : 'vandar'}
+              onChange={setGateway}
+            />
+          )}
+        </View>
 
-              {isDotIr ? (
-                <View style={s.gatewayBlock}>
-                  <Text style={s.label}>انتخاب درگاه</Text>
-                  <View style={s.gatewayPanel}>
-                    <DonationSelectGateway
-                      gateway={gateway === 'zarinpal' ? 'zarinpal' : 'vandar'}
-                      onChange={setGateway}
+        <View style={s.sepLine} />
+
+        <Text style={s.sectionTitle}>مشخصات حامی مالی</Text>
+
+        <View style={s.fieldsGap}>
+            <Controller
+              name="user.fullName"
+              control={control}
+              render={({ field }) => (
+                <View>
+                  <Text style={s.label}>نام و نام خانوادگی</Text>
+                  <View style={s.inputWrap}>
+                    <UserIcon width={18} height={18} color={semantic.textMuted} />
+                    <TextInput
+                      style={s.input}
+                      value={field.value}
+                      onChangeText={field.onChange}
+                      onBlur={field.onBlur}
+                      placeholderTextColor={semantic.textMuted}
                     />
                   </View>
+                  {errors.user?.fullName?.message ? (
+                    <Text style={s.fieldError}>
+                      {errors.user.fullName.message}
+                    </Text>
+                  ) : null}
                 </View>
-              ) : null}
-
-              <View style={s.footerRow}>
-                <Text style={s.total}>
-                  مجموع قابل پرداخت:{' '}
-                  {toPersianNumber(amount) + (!isDotIr ? '$' : '')}{' '}
-                  {isDotIr ? 'تومان' : ''}
-                </Text>
-                <Button
-                  variant="filled"
-                  title="تائید و پرداخت"
-                  onPress={handleSubmit(submitDonation)}
-                  loading={isPayProcessing}
-                  disabled={isPayProcessing}
-                  style={[s.payBtn, isPayProcessing && s.payBtnDisabled]}
-                  contentStyle={{ width: '100%' }}
-                >
-                  <Text style={s.payBtnText}>
-                    {isPayProcessing ? 'در حال پردازش...' : 'تائید و پرداخت'}
-                  </Text>
-                </Button>
-              </View>
-            </View>
+              )}
+            />
+            <Controller
+              name="user.email"
+              control={control}
+              render={({ field }) => (
+                <View>
+                  <Text style={s.label}>پست الکترونیکی</Text>
+                  <View style={s.inputWrap}>
+                    <MailIcon width={18} height={18} color={semantic.textMuted} />
+                    <TextInput
+                      style={s.input}
+                      autoCapitalize="none"
+                      keyboardType="email-address"
+                      value={field.value}
+                      onChangeText={field.onChange}
+                      onBlur={field.onBlur}
+                      placeholderTextColor={semantic.textMuted}
+                    />
+                  </View>
+                  {errors.user?.email?.message ? (
+                    <Text style={s.fieldError}>{errors.user.email.message}</Text>
+                  ) : null}
+                </View>
+              )}
+            />
+            <Controller
+              name="user.comment"
+              control={control}
+              render={({ field }) => (
+                <View>
+                  <Text style={s.label}>پیام شما</Text>
+                  <Textarea
+                    value={field.value ?? ''}
+                    onChangeText={field.onChange}
+                    onBlur={field.onBlur}
+                    maxLength={250}
+                    placeholder="اینجا بنویسید..."
+                  />
+                </View>
+              )}
+            />
           </View>
-        </View>
+
+          <View style={s.footerRow}>
+            <Text style={s.total}>
+              مجموع قابل پرداخت:{' '}
+              {toPersianNumber(groupThousands(amount)) + (!isDotIr ? '$' : '')}{' '}
+              {isDotIr ? 'تومان' : ''}
+            </Text>
+            <Button
+              variant="filled"
+              title="تائید و پرداخت"
+              onPress={handleSubmit(submitDonation)}
+              loading={isPayProcessing}
+              disabled={isPayProcessing}
+              style={[s.payBtn, isPayProcessing && s.payBtnDisabled]}
+              contentStyle={{ width: '100%' }}
+            >
+              <Text style={s.payBtnText}>
+                {isPayProcessing ? 'در حال پردازش...' : 'تائید و پرداخت'}
+              </Text>
+            </Button>
+          </View>
       </ScrollView>
 
       <DonationResultModal

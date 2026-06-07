@@ -4,15 +4,23 @@ import { View } from 'react-native';
 import CardLogo from '@/assets/icons/payments/card.svg';
 import PaypalLogo from '@/assets/icons/payments/paypal.svg';
 import VenmoLogo from '@/assets/icons/payments/venmo.svg';
-import { useSelectPaymentTypeStyles } from '@/domains/basket/components/selectPaymentType.styles';
 import { useThemeColors } from '@/ui/theme';
 import { Button } from '@/ui/components/Button';
 
+import { useSelectPaymentTypeStyles } from './selectPaymentType.styles';
+
+export type SelectPaymentTypeValue = 'paypal' | 'credit_card';
+
 type Props = {
-  value: 'paypal' | 'credit_card';
-  onChange: (v: 'paypal' | 'credit_card') => void;
+  value: SelectPaymentTypeValue;
+  onChange: (v: SelectPaymentTypeValue) => void;
 };
 
+/**
+ * `.com` payment-method selector: PayPal and Card are selectable; Venmo is
+ * shown disabled (no backend support). Brand logos adapt to the theme via
+ * `currentColor`. Shared across basket + donation checkout.
+ */
 export const SelectPaymentType = React.memo(function SelectPaymentType({
   value,
   onChange,
@@ -54,3 +62,4 @@ export const SelectPaymentType = React.memo(function SelectPaymentType({
     </View>
   );
 });
+SelectPaymentType.displayName = 'SelectPaymentType';

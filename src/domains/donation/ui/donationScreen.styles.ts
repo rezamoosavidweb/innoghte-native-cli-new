@@ -1,195 +1,207 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
-import type { SemanticColors, ThemeColors } from '@/ui/theme';
-import { fontSize, fontWeight, FORM_CONTROL_HEIGHT, radius, spacing } from '@/ui/theme';
+import type { SemanticColors } from '@/ui/theme';
+import {
+  fontSize,
+  fontWeight,
+  FORM_CONTROL_HEIGHT,
+  hexAlpha,
+  lineHeight,
+  radius,
+  spacing,
+} from '@/ui/theme';
 
 export const createDonationScreenStyles = (args: {
-  colors: ThemeColors;
+  background: string;
   semantic: SemanticColors;
   isCustomAmount?: boolean;
 }) => {
-  const { colors, semantic, isCustomAmount = false } = args;
+  const { background, semantic } = args;
 
   return StyleSheet.create({
-    topSection: {
+    keyboardRoot: { flex: 1, backgroundColor: background },
+    scrollContent: {
       paddingHorizontal: spacing.lg,
       paddingTop: spacing.md,
-      paddingBottom: spacing.md,
+      paddingBottom: spacing['4xl'],
     },
+
+    topSection: { marginBottom: spacing.md },
     topTitle: {
       fontSize: fontSize.xl,
       fontWeight: fontWeight.bold,
-      color: colors.text,
+      color: semantic.text,
       marginBottom: spacing.sm,
     },
     topSubtitle: {
       fontSize: fontSize.base,
-      color: colors.textSecondary,
-      lineHeight: fontSize.base * 1.45,
+      color: semantic.textSecondary,
+      lineHeight: lineHeight.relaxed,
     },
-    darkSection: {
-      flex: 1,
-      backgroundColor: '#141726',
-      paddingHorizontal: spacing.lg,
-      paddingBottom: spacing['3xl'],
-      paddingTop: spacing.lg,
+
+    hero: {
+      width: '100%',
+      height: 200,
+      borderRadius: radius.lg,
+      backgroundColor: semantic.surfaceSecondary,
+      borderWidth: StyleSheet.hairlineWidth,
+      borderColor: semantic.border,
+      overflow: 'hidden',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: spacing.lg,
     },
-    darkTitle: {
+    heroImage: { width: '100%', height: '100%' },
+
+    sectionHeading: {
       fontSize: fontSize.lg,
       fontWeight: fontWeight.bold,
-      color: '#fff',
+      color: semantic.text,
       textAlign: 'center',
       marginBottom: spacing.md,
     },
-    amountCard: {
-      backgroundColor: '#444965',
-      borderRadius: radius.lg,
-      padding: spacing.lg,
-      gap: spacing.md,
-      marginBottom: spacing.md,
-    },
+
+    amountGroup: { gap: spacing.md, marginBottom: spacing.lg },
+    paymentGroup: { gap: spacing.sm, marginBottom: spacing.lg },
+
     amountRow: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
       gap: spacing.sm,
     },
+    currency: { color: semantic.textSecondary, fontSize: fontSize.base },
     amountInput: {
       flex: 1,
-      maxWidth: '50%',
+      maxWidth: '52%',
       borderRadius: radius.lg,
       borderWidth: 2,
-      borderColor: '#67BD5C',
-      backgroundColor: 'rgba(103, 189, 92, 0.22)',
+      borderColor: semantic.border,
+      backgroundColor: semantic.surface,
       height: FORM_CONTROL_HEIGHT,
       paddingVertical: 0,
       paddingHorizontal: spacing.sm,
       fontSize: fontSize.lg,
       fontWeight: fontWeight.medium,
-      color: '#fff',
+      color: semantic.text,
       textAlign: 'center',
     },
-    amountInputLocked: {
-      opacity: isCustomAmount ? 1 : 0.95,
+    amountInputActive: {
+      borderColor: semantic.primary,
+      backgroundColor: hexAlpha(semantic.primary, 0.12),
     },
-    currency: {
-      color: '#e4e4e4',
-      fontSize: fontSize.base,
-    },
-    amountBtnsRow: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'space-between',
-      gap: spacing.sm,
-    },
+
+    presetsRow: { flexDirection: 'row', gap: spacing.sm },
     amtBtn: {
-      flexGrow: 1,
-      minWidth: '28%',
+      flex: 1,
       height: FORM_CONTROL_HEIGHT,
       borderRadius: radius.md,
       borderWidth: 1,
-      borderColor: '#67BD5C',
-      backgroundColor: '#fff',
+      borderColor: semantic.border,
+      backgroundColor: semantic.surface,
       alignItems: 'center',
       justifyContent: 'center',
     },
     amtBtnOn: {
-      backgroundColor: '#67BD5C',
+      borderColor: semantic.primary,
+      backgroundColor: semantic.primarySoft,
     },
     amtBtnText: {
-      color: '#67BD5C',
+      color: semantic.text,
       fontWeight: fontWeight.semibold,
       fontSize: fontSize.sm,
     },
-    amtBtnTextOn: { color: '#fff' },
-    sepRow: {
-      flexDirection: 'row',
+    amtBtnTextOn: { color: semantic.primary },
+
+    customBtn: {
+      height: FORM_CONTROL_HEIGHT,
+      borderRadius: radius.md,
+      backgroundColor: semantic.primary,
       alignItems: 'center',
-      marginVertical: spacing.sm,
+      justifyContent: 'center',
     },
+    customBtnText: {
+      color: semantic.onPrimary,
+      fontWeight: fontWeight.semibold,
+      fontSize: fontSize.sm,
+    },
+
+    paymentHeading: {
+      fontSize: fontSize.lg,
+      fontWeight: fontWeight.semibold,
+      color: semantic.text,
+      marginBottom: spacing.sm,
+    },
+
     sepLine: {
-      flex: 1,
       height: StyleSheet.hairlineWidth,
-      backgroundColor: '#E0E0E0',
-    },
-    formBlock: {
-      backgroundColor: '#444965',
-      borderRadius: radius.lg,
-      padding: spacing.lg,
-      gap: spacing.md,
-      marginBottom: spacing.md,
+      backgroundColor: semantic.border,
+      marginVertical: spacing.md,
     },
     sectionTitle: {
       fontSize: fontSize.base,
       fontWeight: fontWeight.bold,
-      color: '#fff',
+      color: semantic.text,
       textAlign: 'center',
+      marginBottom: spacing.sm,
     },
+
+    fieldsGap: { gap: spacing.md },
     label: {
       fontSize: fontSize.sm,
       fontWeight: fontWeight.medium,
-      color: '#e4e4e4',
+      color: semantic.textSecondary,
       marginBottom: spacing.xs,
     },
-    input: {
+    inputWrap: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
       borderRadius: radius.lg,
-      backgroundColor: '#eee',
+      borderWidth: StyleSheet.hairlineWidth,
+      borderColor: semantic.border,
+      backgroundColor: semantic.inputBackground,
       paddingHorizontal: spacing.md,
-      paddingVertical: 0,
       height: FORM_CONTROL_HEIGHT,
-      fontSize: fontSize.base,
-      color: '#212121',
     },
-    textarea: { minHeight: 88, textAlignVertical: 'top' },
+    input: {
+      flex: 1,
+      color: semantic.text,
+      fontSize: fontSize.base,
+      paddingVertical: 0,
+      textAlign: 'right',
+    },
+    fieldError: { color: semantic.errorText, fontSize: fontSize.xs },
+
     footerRow: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
       gap: spacing.md,
       flexWrap: 'wrap',
-      marginTop: spacing.sm,
+      marginTop: spacing.lg,
     },
     total: {
-      color: '#fff',
+      color: semantic.text,
       fontSize: fontSize.sm,
       fontWeight: fontWeight.bold,
       flex: 1,
-      minWidth: 160,
+      minWidth: 150,
     },
     payBtn: {
-      backgroundColor: '#67BD5C',
+      backgroundColor: semantic.primary,
       height: FORM_CONTROL_HEIGHT,
       paddingHorizontal: spacing['2xl'],
       borderRadius: radius.md,
       alignItems: 'center',
       justifyContent: 'center',
     },
-    payBtnDisabled: { opacity: 0.65 },
+    payBtnDisabled: { opacity: 0.6 },
     payBtnText: {
-      color: '#fff',
+      color: semantic.onPrimary,
       fontWeight: fontWeight.semibold,
       fontSize: fontSize.base,
-    },
-    keyboardRoot: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
-    scrollBottomPad: {
-      paddingBottom: spacing['4xl'],
-    },
-    fieldsGap: {
-      gap: spacing.md,
-    },
-    fieldError: {
-      color: semantic.errorText,
-      fontSize: fontSize.xs,
-    },
-    gatewayBlock: { marginTop: spacing.md },
-    gatewayPanel: {
-      backgroundColor: '#fff',
-      borderRadius: radius.md,
-      padding: spacing.md,
     },
   });
 };
@@ -200,12 +212,7 @@ export function useDonationScreenStyles(
   isCustomAmount: boolean,
 ) {
   return React.useMemo(
-    () =>
-      createDonationScreenStyles({
-        colors: { ...semantic, background },
-        semantic,
-        isCustomAmount,
-      }),
+    () => createDonationScreenStyles({ background, semantic, isCustomAmount }),
     [background, isCustomAmount, semantic],
   );
 }

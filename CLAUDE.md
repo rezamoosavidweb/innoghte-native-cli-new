@@ -161,6 +161,15 @@ The app targets two regions: Iran (`.ir`) and international (`.com`). Region is 
 
 **Env var inlining:** `REACT_NATIVE_IS_DOT_IR`, `REACT_NATIVE_API_URL`, and other `REACT_NATIVE_*` vars are **inlined at compile time** by `babel-plugin-transform-inline-environment-variables` — set them before bundling, not at runtime.
 
+## Screen Migration & Design Parity
+
+When implementing, fixing, or re-skinning a screen from a Figma design, follow the **`screen-migration` skill** (`.claude/skills/screen-migration/`). Recurring rules (so they don't need repeating):
+
+- **Figma = visual truth** — pull via the `figma` MCP, but it is heavily rate-limited (429, ~23h); fall back to the user's screenshot. **innoghte-web** (`f:\github\react-native\innoghte-web`, sibling repo) **= business-logic / API truth** — mirror its calls, payload field names, validation, and flows, and **check both `.com` and `.ir`**.
+- The dev device **`emulator-5554` is an `.ir` build**; Figma mocks are usually the `.com` variant, so a `.com`-only element legitimately won't show on it.
+- **Plan before coding; reuse before creating** (promote shared components to `@/ui/components`); **match the design layout exactly** (e.g. flat sections vs. boxed `card`s; put payment/gateway selection where the design places it); only semantic theme tokens.
+- Don't add API fields the web/backend doesn't support (e.g. web donation has no mobile field) without confirming. Finish with `tsc --noEmit` + `eslint` clean and **verify on `emulator-5554`** (`adb … screencap`, crop with Python PIL — ImageMagick is not installed).
+
 ## Forms
 
 Forms use **react-hook-form v7** with **Zod** schemas via `zodResolver` from `@hookform/resolvers/zod`.
@@ -170,6 +179,8 @@ Forms use **react-hook-form v7** with **Zod** schemas via `zodResolver` from `@h
 - `InputField` from `@/ui/components/form/InputField` — themed text input that accepts `error` prop
 - `form.register(field)` is called manually (RN doesn't use native DOM refs), then `form.setValue` on change and `form.trigger` on blur
 - `form.handleSubmit(handler)` wraps submit; pass `isSubmitting` state down to disable the button
+- **Mobile / phone fields:** always reuse `@/ui/components/PhoneInput` (RHF `Controller` with `value` / `onChange` / `onBlur` / `error`). Schema shape `{ dial, countryCode, dialCode }`. `.ir` → pass `disableDropdown` (country **locked to Iran**); `.com` → dropdown enabled (**country selectable**). Seed with `defaultPhoneInputValue()` and prefill from the user like `EditProfileScreen`. Used by register, login, and edit-profile — do not build a new phone input.
+- **Multi-line text:** always reuse `@/ui/components/Textarea` (never a raw multiline `TextInput`). Pass `maxLength` to render a live "characters remaining" counter that counts down from `maxLength`. A leading field icon goes on the **right** — render it as the **first child** of the input row (RTL places it at the start).
 
 ## Lists (FlashList)
 
@@ -251,6 +262,23 @@ The `donation` domain handles a multi-step payment flow with gateway selection a
 - **State machine:** `useDonationFlow()` drives a pure (non-library) state machine in `model/donationFlowMachine.ts`. States: `idle → creating_checkout → checkout_ready → redirecting → verifying → success|error`. Dispatch transitions via the hook, not by mutating store directly.
 - **Callback parsing:** Payment gateways redirect back with query params. `mergeDonationCallbackSources()` and `parsePaymentParamsFromUrl()` in `model/donationCallbackParams.ts` merge params from three sources (discrete nav params, `returnUrl` query string, URL capture) with defined precedence. `donationVerificationFingerprint()` produces a dedup key to coalesce parallel verify calls.
 - **Route params:** `DonationScreenParams` in [src/shared/contracts/navigationDonation.ts](src/shared/contracts/navigationDonation.ts) captures all possible gateway callback fields (`Authority`, `Status`, `paymentId`, `PayerID`, `token`, `payment_status`, `returnUrl`, `gatewayName`).
+
+## Payment Result Domain
+
+`src/domains/payment` verifies a gateway callback and renders the order:
+
+- **Verify:** `.ir` `getVerifyPayment` (`payment/verify?gateway_name&Authority&Status`); `.com` `getVerifyPaymentPaypal` (`payment/paypal/verify`). Chosen by `isDotIr` in `api/paymentApi.ts`. Prices arrive in Rial → ÷10 for `.ir` display (`utils/formatOrder.ts`).
+- **Screen:** `PaymentResultScreen` → `SuccessOrder` (green card, design border `#4AAF57`) or `OtherStatusOrder`; status via `deriveUnifiedStatus` (Status / payment_status / PayerID).
+- **Deep link:** `innoghte://payment/result?Authority=…&Status=…` → `PaymentResult` route. Wired by `linking` in `App.tsx` + per-screen `linking: { path }` + the `innoghte` scheme intent-filter in `AndroidManifest.xml` (**needs a native rebuild** to take effect).
+
+## Shared Checkout / Form Components
+
+Move a component to `src/ui/components/<Name>/` when 2+ domains need it (a `ui` component must not import from `domains`); repoint importers and delete the old copy.
+
+- **`@/ui/components/SelectPaymentType`** — `.com` brand payment cards (PayPal / Venmo-disabled / Card), monochrome `currentColor` logos in `assets/icons/payments/`. Shared by basket + donation; `.ir` flows render gateway chips instead.
+- **`@/ui/components/PhoneInput`** — the only phone field (see Forms).
+- **`@/ui/components/Textarea`** — the only multi-line text field; `maxLength` shows a live remaining-character counter (see Forms).
+- **`groupThousands` (`@/shared/utils`)** — thousands-separator display for amount inputs; keep the raw value for the API.
 
 ## GiveGift Feature (user domain)
 

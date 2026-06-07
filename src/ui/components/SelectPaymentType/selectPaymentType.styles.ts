@@ -4,6 +4,10 @@ import { StyleSheet } from 'react-native';
 import type { ThemeColors } from '@/ui/theme/types';
 import { radius, spacing } from '@/ui/theme';
 
+/**
+ * Shared payment-method brand cards (PayPal / Venmo·disabled / Card).
+ * Used by both the basket and donation checkout flows.
+ */
 export function useSelectPaymentTypeStyles(colors: ThemeColors) {
   return React.useMemo(
     () =>

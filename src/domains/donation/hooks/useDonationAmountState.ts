@@ -31,8 +31,12 @@ export function useDonationAmountState(isDotIr: boolean) {
   }, []);
 
   const onAmountChangeText = React.useCallback((v: string) => {
-    setAmount(v);
+    // Strip thousands separators (and any non-numeric) so `amount` stays raw
+    // for the API; editing a value turns it into a custom (non-preset) amount.
+    const raw = v.replace(/[^\d.]/g, '');
+    setAmount(raw);
     setActiveButton('');
+    setIsCustomAmount(true);
   }, []);
 
   const preset = useMemo(

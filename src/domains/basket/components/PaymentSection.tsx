@@ -5,7 +5,7 @@ import { Controller } from 'react-hook-form';
 import { TextInput, View } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
-import { SelectPaymentType } from '@/domains/basket/components/SelectPaymentType';
+import { SelectPaymentType } from '@/ui/components/SelectPaymentType';
 import { usePaymentSectionStyles } from '@/domains/basket/components/paymentSection.styles';
 import type { BasketIrGateway } from '@/domains/basket/model/basketCheckout.store';
 import { useBasketCheckoutStore } from '@/domains/basket/model/basketCheckout.store';

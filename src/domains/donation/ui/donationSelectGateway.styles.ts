@@ -11,34 +11,30 @@ export const createDonationSelectGatewayStyles = (args: {
   const { colors, semantic } = args;
 
   return StyleSheet.create({
+    // Mirrors the basket gateway row (paymentSection.styles `gw` / `gwOn`).
     row: {
       flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'center',
       gap: spacing.sm,
-      marginTop: spacing.sm,
     },
     chip: {
-      flexGrow: 1,
-      minWidth: '40%',
-      paddingVertical: spacing.md,
-      paddingHorizontal: spacing.sm,
-      borderRadius: radius.md,
+      flex: 1,
+      minHeight: 60,
+      borderRadius: radius.lg,
       borderWidth: 1,
       borderColor: semantic.border,
       alignItems: 'center',
-      backgroundColor: colors.card,
+      justifyContent: 'center',
+      backgroundColor: semantic.surfaceSecondary,
     },
     chipActive: {
-      borderWidth: 2,
-      borderColor: '#444',
+      borderColor: semantic.primary,
+      backgroundColor: semantic.primarySoft,
     },
     chipLabel: {
       fontSize: fontSize.sm,
-      fontWeight: fontWeight.semibold,
+      fontWeight: fontWeight.medium,
       color: colors.text,
     },
-    chipDisabled: { opacity: 0.45 },
   });
 };
 
