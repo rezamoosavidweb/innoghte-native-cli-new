@@ -102,19 +102,20 @@ const RegisterScreenComponent = (_props: Props) => {
   registerForm.register('ref_code');
 
   const submitRegister = registerForm.handleSubmit(async values => {
+    // Mirror web payload: mobile prefixed `00`, country_code is the ISO code
+    // (matches the previously migrated Contact screen's `00${dial}` convention).
+    const normalizedEmail = values.email.trim().toLowerCase();
+    const normalizedMobile = `00${values.mobile.dial.replace(/\D/g, '')}`;
     await registerMutation.mutateAsync({
       name: values.name.trim(),
       family: values.family.trim(),
-      email: values.email.trim().toLowerCase(),
-      mobile: values.mobile.dial.replace(/\D/g, ''),
+      email: normalizedEmail,
+      mobile: normalizedMobile,
       password: values.password,
-      country_code: values.mobile.dialCode,
+      country_code: values.mobile.countryCode,
       ref_code: values.ref_code?.trim() ?? '',
     });
-    setIdentifiers({
-      email: values.email.trim().toLowerCase(),
-      mobile: values.mobile.dial.replace(/\D/g, ''),
-    });
+    setIdentifiers({ email: normalizedEmail, mobile: normalizedMobile });
     setStep('otp');
   });
 

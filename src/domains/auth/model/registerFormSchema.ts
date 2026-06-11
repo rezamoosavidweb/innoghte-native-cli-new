@@ -6,11 +6,11 @@ const PASSWORD_PATTERN = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/;
 
 export const registerSchema = z
   .object({
-    name: z.string().min(2, 'Name must be at least 2 characters.').max(50, 'Name must be at most 50 characters.'),
-    family: z.string().min(2, 'Last name must be at least 2 characters.').max(50, 'Last name must be at most 50 characters.'),
+    name: z.string().min(2, 'حداقل ۲ کاراکتر').max(50, 'حداکثر ۵۰ کاراکتر'),
+    family: z.string().min(2, 'حداقل ۲ کاراکتر').max(50, 'حداکثر ۵۰ کاراکتر'),
     email: z.string().refine(
       val => EMAIL_PATTERN.test(val.trim().toLowerCase()),
-      { message: 'Enter a valid email address.' },
+      { message: 'ایمیل معتبر نیست.' },
     ),
     mobile: z
       .object({
@@ -20,34 +20,34 @@ export const registerSchema = z
       })
       .refine(
         val => MOBILE_PATTERN.test(val.dial.replace(/\D/g, '')),
-        { message: 'Enter a valid mobile number.', path: ['dial'] },
+        { message: 'شماره موبایل معتبر نیست.', path: ['dial'] },
       ),
     password: z
       .string()
-      .min(6, 'Password must be at least 6 characters.')
-      .max(50, 'Password must be at most 50 characters.')
-      .regex(PASSWORD_PATTERN, 'Password must contain both letters and numbers.'),
+      .min(6, 'حداقل ۶ کاراکتر')
+      .max(50, 'حداکثر ۵۰ کاراکتر')
+      .regex(PASSWORD_PATTERN, 'رمز باید شامل حروف انگلیسی و عدد باشد.'),
     confirmPassword: z
       .string()
-      .min(6, 'Password must be at least 6 characters.')
-      .max(50, 'Password must be at most 50 characters.'),
+      .min(6, 'حداقل ۶ کاراکتر')
+      .max(50, 'حداکثر ۵۰ کاراکتر'),
     acceptTerms: z
       .boolean()
-      .refine(val => val === true, { message: 'You must accept the terms and conditions.' }),
+      .refine(val => val === true, { message: 'باید شرایط و ضوابط را بپذیرید.' }),
     ref_code: z.string().optional(),
   })
   .superRefine(({ confirmPassword, password }, ctx) => {
     if (confirmPassword !== password) {
       ctx.addIssue({
         code: 'custom',
-        message: 'Passwords do not match.',
+        message: 'رمز عبور با تکرار آن مطابقت ندارد.',
         path: ['confirmPassword'],
       });
     }
   });
 
 export const otpSchema = z.object({
-  otp: z.string().min(3, 'Code must be at least 3 characters.'),
+  otp: z.string().min(3, 'کد باید حداقل ۳ کاراکتر باشد.'),
 });
 
 export type RegisterFormType = z.infer<typeof registerSchema>;
