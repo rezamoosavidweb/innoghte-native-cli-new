@@ -5,6 +5,7 @@ import { useTheme } from '@react-navigation/native';
 
 import { Text } from '@/shared/ui/Text';
 import { Button } from '@/ui/components/Button';
+import { palette } from '@/ui/theme/colors';
 
 const MORE_STR = '. . .';
 
@@ -99,7 +100,7 @@ function createCommentsPaginationStyles(
     pageBgSelected: { backgroundColor: colors.primary },
     pageBgIdle: { backgroundColor: 'transparent' },
     pagePressed: { opacity: 0.85 },
-    pageNumSelected: { color: '#fff', fontWeight: '700' },
+    pageNumSelected: { color: palette.white, fontWeight: '700' },
     pageNumIdle: { color: colors.primary, fontWeight: '500' },
     dots: {
       paddingHorizontal: 4,
@@ -118,7 +119,7 @@ const CommentsPaginationComponent = ({
   const { colors } = useTheme();
   const pages = usePaginationPages(currentPage, totalPages);
 
-  const disabledArrow = colors.border ?? '#d9d9d9';
+  const disabledArrow = colors.border;
   const themed = createCommentsPaginationStyles(
     colors,
     disabledArrow,

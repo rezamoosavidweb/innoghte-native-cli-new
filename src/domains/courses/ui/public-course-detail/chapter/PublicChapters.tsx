@@ -1,14 +1,14 @@
 import { CatalogItemDetail } from '@/shared/catalog/model/catalogItemDetail.schema';
-import { useTheme } from '@react-navigation/native';
 import React from 'react';
 import { Text, View } from 'react-native';
+import { useThemeColors } from '@/ui/theme';
 import { createPublicCourseDetailStyles } from '../publicCourseDetail.styles';
 import ChapterRow from './ChapterRow';
 import LinDecoration from '@/assets/line-decoration-gray.svg';
 import { decorations } from './getChapterConfig';
 
 const PublicChapters = ({ data }: { data: CatalogItemDetail['chapters'] }) => {
-  const { colors } = useTheme();
+  const colors = useThemeColors();
   const s = createPublicCourseDetailStyles(colors);
   return (
     <View style={s.chapterContainer}>

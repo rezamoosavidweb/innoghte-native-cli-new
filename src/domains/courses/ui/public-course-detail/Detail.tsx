@@ -1,8 +1,7 @@
 import { CatalogItemDetail } from '@/shared/catalog/model/catalogItemDetail.schema';
 import { Text } from '@/shared/ui/Text';
-import { fontWeight } from '@/ui/theme';
+import { fontWeight, useThemeColors } from '@/ui/theme';
 import type { TBlock } from '@native-html/transient-render-engine';
-import { useTheme } from '@react-navigation/native';
 import React from 'react';
 import { Image, useWindowDimensions, View } from 'react-native';
 import type { CustomRenderer } from 'react-native-render-html';
@@ -66,7 +65,7 @@ const createHtmlImgRenderer = (
 
 export const Details = ({ data }: { data: CatalogItemDetail['details'] }) => {
   const { width } = useWindowDimensions();
-  const { colors } = useTheme();
+  const colors = useThemeColors();
   const s = createPublicCourseDetailStyles(colors);
   const htmlImgRenderer = React.useMemo(() => createHtmlImgRenderer(s), [s]);
   return (

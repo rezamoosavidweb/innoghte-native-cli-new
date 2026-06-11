@@ -43,13 +43,13 @@ export function toneColors(
 ): { backgroundColor: string; color: string } {
   switch (tone) {
     case 'success':
-      return { backgroundColor: '#0E2A2C', color: '#4ADE80' };
+      return { backgroundColor: colors.successMuted, color: colors.successText };
     case 'warning':
-      return { backgroundColor: '#272A24', color: '#CA8A04' };
+      return { backgroundColor: colors.warningBg, color: colors.warningText };
     case 'danger':
-      return { backgroundColor: '#302024', color: '#F87171' };
+      return { backgroundColor: colors.errorMuted, color: colors.errorText };
     case 'info':
-      return { backgroundColor: '#1E293B', color: '#60A5FA' };
+      return { backgroundColor: colors.infoBg, color: colors.infoText };
     default:
       return {
         backgroundColor: colors.border,

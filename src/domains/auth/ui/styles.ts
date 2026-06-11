@@ -4,11 +4,18 @@ import {
   fontSize,
   fontWeight,
   FORM_CONTROL_HEIGHT,
+  hexAlpha,
   lineHeight,
   radius,
   spacing,
 } from '@/ui/theme';
 import type { ThemeColors } from '@/ui/theme/types';
+
+/** Auth splash overlay — transparent → deep brand navy over the hero image. */
+export const AUTH_OVERLAY_GRADIENT = ['#ffffff00', '#09101D69', '#09101D'];
+
+/** Logo tint on the auth hero (sits on the light upper band of the bg image). */
+export const AUTH_LOGO_COLOR = '#000000';
 
 export function createLoginScreenStyles(colors: ThemeColors) {
   return StyleSheet.create({
@@ -29,7 +36,7 @@ export function createLoginScreenStyles(colors: ThemeColors) {
       fontSize: 26,
       fontWeight: fontWeight.bold,
       textAlign: 'center',
-      color: '#fff',
+      color: colors.onMedia,
     },
     sub: {
       fontSize: fontSize.md,
@@ -37,7 +44,7 @@ export function createLoginScreenStyles(colors: ThemeColors) {
       textAlign: 'center',
       opacity: 0.8,
       marginBottom: spacing.sm,
-      color: '#fff',
+      color: colors.onMedia,
     },
     input: {
       borderWidth: StyleSheet.hairlineWidth,
@@ -90,7 +97,7 @@ export function createLoginScreenStyles(colors: ThemeColors) {
       marginTop: spacing.sm,
     },
     registerCtaText: {
-      color: 'rgba(255,255,255,0.8)',
+      color: hexAlpha(colors.onMedia, 0.8),
       fontSize: fontSize.sm,
     },
     logoContainer: {

@@ -91,6 +91,7 @@ const lightOverrides: Partial<ThemeColors> = {
   error:     '#DC2626',
   errorBg:   hexAlpha('#DC2626', 0.08),
   errorText: '#B91C1C',                // red-700: 6.2:1 on white ✓✓
+  errorMuted: hexAlpha('#DC2626', 0.12),
 
   // Success: green-700 throughout (5.2:1 on white ✓✓)
   success:       '#15803D',
@@ -98,6 +99,11 @@ const lightOverrides: Partial<ThemeColors> = {
   successText:   '#15803D',
   successButton: '#15803D',            // white text on this: 5.0:1 ✓✓
   successMuted:  hexAlpha('#15803D', 0.12),
+
+  // Warning: amber-600 base / amber-700 text (5.9:1 on white ✓✓)
+  warning:     '#D97706',
+  warningBg:   hexAlpha('#D97706', 0.10),
+  warningText: '#B45309',              // amber-700: readable caution copy on white
 
   // Info: sky-700 throughout (6.9:1 on white ✓✓)
   info:     '#0369A1',

@@ -7,9 +7,6 @@ import { spacing } from '@/ui/theme/core/spacing';
 import { fontSize, fontWeight, lineHeight } from '@/ui/theme/core/typography';
 import { hexAlpha } from '@/ui/theme/utils/colorUtils';
 
-/** Yellow accuracy hint above the form — matches web `text-yellow-300`. */
-const HINT_YELLOW = '#FDE68A';
-
 export function createContactScreenStyles(ui: ThemeColors) {
   return StyleSheet.create({
     root: { flex: 1, backgroundColor: ui.background },
@@ -41,7 +38,7 @@ export function createContactScreenStyles(ui: ThemeColors) {
     },
 
     hint: {
-      color: HINT_YELLOW,
+      color: ui.warningText,
       fontSize: fontSize.sm,
       lineHeight: lineHeight.normal,
     },

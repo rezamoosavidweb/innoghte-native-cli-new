@@ -44,6 +44,12 @@ export type ThemeColors = {
   primary: string;
   /** Foreground used on top of `primary`. */
   onPrimary: string;
+  /**
+   * Foreground for content rendered on top of media/images or saturated brand
+   * CTAs where it must stay light regardless of scheme (e.g. white labels and
+   * icons over photos, gradient headers, course/album media controls).
+   */
+  onMedia: string;
   /** Very translucent primary tint — selected states, highlight fills. */
   primarySoft: string;
   /** background primary tint — text buttons */
@@ -52,6 +58,10 @@ export type ThemeColors = {
   primaryDark: string;
   /** Secondary accent (sand in light mode, primary-adjacent in dark). */
   accent: string;
+  /** Secondary brand accent — warm orange ramp (chapter titles, secondary CTAs). */
+  secondary: string;
+  /** Foreground used on top of `secondary`. */
+  onSecondary: string;
 
   /** Error base (use for both bg + text when no contrast needed, e.g. tinted toast). */
   error: string;
@@ -59,6 +69,8 @@ export type ThemeColors = {
   errorBg: string;
   /** Error text — inline form errors, validation messages. */
   errorText: string;
+  /** Translucent error fill — badges / status chips (low-emphasis danger). */
+  errorMuted: string;
 
   /** Success base. */
   success: string;
@@ -70,6 +82,13 @@ export type ThemeColors = {
   successButton: string;
   /** Translucent success fill — badges / pills (low-emphasis confirmation). */
   successMuted: string;
+
+  /** Warning base — caution accents, pending status. */
+  warning: string;
+  /** Warning background — translucent fill for caution banners / pills. */
+  warningBg: string;
+  /** Warning text — yellow hints, pending labels (readable on the scheme bg). */
+  warningText: string;
 
   /** Info base (text). */
   info: string;
@@ -83,6 +102,8 @@ export type ThemeColors = {
 
   /** Modal / overlay scrim. */
   overlay: string;
+  /** Scrim laid over media (photos/video posters) so light text stays legible. */
+  mediaScrim: string;
 
   /** Header (top bar) surface. */
   headerBg: string;

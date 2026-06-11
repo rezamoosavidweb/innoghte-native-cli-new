@@ -1,8 +1,8 @@
 import { fontSize, fontWeight, spacing } from '@/ui/theme';
-import type { Theme } from '@react-navigation/native';
+import type { ThemeColors } from '@/ui/theme/types';
 import { StyleSheet } from 'react-native';
 
-export function createPublicCourseDetailStyles(colors: Theme['colors']) {
+export function createPublicCourseDetailStyles(colors: ThemeColors) {
   return StyleSheet.create({
     themText: { color: colors.text },
     primaryText: {
@@ -67,10 +67,10 @@ export function createPublicCourseDetailStyles(colors: Theme['colors']) {
       padding: spacing.lg,
     },
     whiteText: {
-      color: '#fff',
+      color: colors.onMedia,
     },
     htmlWhiteText: {
-      color: '#fff',
+      color: colors.onMedia,
     },
     fullInfo: {
       alignSelf: 'center',
@@ -92,8 +92,8 @@ export function createPublicCourseDetailStyles(colors: Theme['colors']) {
     },
     action: {
       flex: 1,
-      color: '#fff',
-      borderColor: '#fff',
+      color: colors.onMedia,
+      borderColor: colors.onMedia,
     },
     full: {
       fontSize: 14,
@@ -131,7 +131,7 @@ export function createPublicCourseDetailStyles(colors: Theme['colors']) {
     },
     detailsInfo: {
       textAlign: 'justify',
-      color: '#fff',
+      color: colors.onMedia,
     },
     bigDetailImage: {
       width: '100%',
@@ -149,7 +149,7 @@ export function createPublicCourseDetailStyles(colors: Theme['colors']) {
     },
     detailsInfoCenter: {
       textAlign: 'center',
-      color: '#fff',
+      color: colors.onMedia,
       fontWeight: fontWeight.bold,
     },
     /** Space inline SVG bullets from following text; avoid `gap` (unsupported on some RN Android). */
@@ -194,13 +194,13 @@ export function createPublicCourseDetailStyles(colors: Theme['colors']) {
     },
 
     chapterCardTitle: {
-      color: '#EC7D3E',
+      color: colors.secondary,
       fontWeight: '600',
       marginBottom: 4,
     },
 
     chapterCardShortInfo: {
-      color: '#333',
+      color: colors.textSecondary,
     },
 
     decorationLeftTop: {

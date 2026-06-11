@@ -24,6 +24,7 @@ import { Comments } from '@/domains/home/ui/Comments';
 import { createHomeScreenStyles } from '@/domains/home/ui/homeScreen.styles';
 import { QuickAccess } from '@/domains/home/ui/QuickAccess';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
+import { palette } from '@/ui/theme/colors';
 import {
   CollapsibleHeader,
   CollapsibleHeaderScrollView,
@@ -37,7 +38,7 @@ import BannerNew from '../ui/Banner/Banner';
  * Icon color at scroll=0 (transparent header, over hero banner).
  * White stays readable over any banner image in both light and dark themes.
  */
-const ICON_EXPANDED_COLOR = '#FFFFFF';
+const ICON_EXPANDED_COLOR = palette.white;
 
 const menuIconBase = StyleSheet.create({
   icon: { fontSize: 22, fontWeight: '600', paddingHorizontal: 4 },

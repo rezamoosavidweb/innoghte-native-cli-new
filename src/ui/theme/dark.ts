@@ -33,20 +33,28 @@ export const darkColors: ThemeColors = Object.freeze({
 
   primary: palette.primary[300],
   onPrimary: surfaceDark.page,
+  onMedia: palette.white,
   primarySoft: hexAlpha(palette.primary[300], 0.15),
   accent: palette.primary[300],
+  secondary: palette.secondary[700], // #EC7D3E
+  onSecondary: palette.white,
   primaryBg: palette.primary[50],
   primaryDark: palette.primary[600],
 
   error: feedback.errorBase,
   errorBg: feedback.errorBase,
   errorText: feedback.errorBase,
+  errorMuted: hexAlpha(feedback.errorBase, 0.15),
 
   success: feedback.successBase,
   successBg: feedback.successBase,
   successText: feedback.successBase,
   successButton: feedback.successButton,
   successMuted: hexAlpha(feedback.successBase, 0.15),
+
+  warning: palette.warning[400], // #FBBF24
+  warningBg: hexAlpha(palette.warning[400], 0.15),
+  warningText: palette.warning[200], // #FDE68A — readable on dark surfaces
 
   info: feedback.infoBase,
   infoBg,
@@ -55,6 +63,7 @@ export const darkColors: ThemeColors = Object.freeze({
   inputBackground: surfaceDark.card,
 
   overlay: hexAlpha('#000000', 0.55),
+  mediaScrim: hexAlpha('#000000', 0.52),
 
   headerBg: surfaceDark.card,
   headerForeground: palette.white,

@@ -1,5 +1,5 @@
 import { Text } from '@/shared/ui/Text';
-import { useTheme } from '@react-navigation/native';
+import { useThemeColors } from '@/ui/theme';
 import React from 'react';
 import { View } from 'react-native';
 import { createPublicCourseDetailStyles } from '../publicCourseDetail.styles';
@@ -20,7 +20,7 @@ interface Props {
 }
 
 const ChapterRow = ({ title, shortInfo, index }: Props) => {
-  const { colors } = useTheme();
+  const colors = useThemeColors();
   const s = createPublicCourseDetailStyles(colors);
 
   const config = getChapterConfig(index);

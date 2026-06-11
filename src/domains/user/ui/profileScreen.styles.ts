@@ -168,7 +168,7 @@ function buildProfileHeaderStyles(
     verifiedLabel: {
       fontSize: fontSize.xs,
       fontWeight: fontWeight.semibold,
-      color: '#ffffff',
+      color: palette.white,
       backgroundColor: palette.success[800],
       textAlign: 'right',
       paddingVertical: spacing.xs,

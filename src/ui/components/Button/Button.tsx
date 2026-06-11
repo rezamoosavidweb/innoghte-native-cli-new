@@ -12,7 +12,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 
-import { useThemeColors } from '@/ui/theme';
+import { hexAlpha, useThemeColors } from '@/ui/theme';
 
 import { createButtonStyles } from './Button.styles';
 
@@ -98,13 +98,13 @@ function ButtonInner({
 
   const a11yLabel = accessibilityLabelProp ?? title;
 
-  const indicatorColor = variant === 'filled' ? '#fff' : colors.primary;
+  const indicatorColor = variant === 'filled' ? colors.onMedia : colors.primary;
 
   const androidRipple =
     Platform.OS === 'android' && !isInactive
       ? variant === 'filled'
-        ? { color: 'rgba(255,255,255,0.22)', foreground: true }
-        : { color: 'rgba(0,0,0,0.08)', foreground: true }
+        ? { color: hexAlpha(colors.onMedia, 0.22), foreground: true }
+        : { color: hexAlpha(colors.text, 0.08), foreground: true }
       : undefined;
 
   const mergedAccessibilityState = React.useMemo(

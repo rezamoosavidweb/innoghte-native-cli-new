@@ -1,4 +1,4 @@
-import { useRoute, useTheme, type RouteProp } from '@react-navigation/native';
+import { useRoute, type RouteProp } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +20,7 @@ import { pickCoverSrc } from '@/domains/courses/utils/pickCoverSrc';
 import { useCatalogItemDetail } from '@/shared/catalog/hooks/useCatalogItemDetail';
 import { catalogKeys } from '@/shared/catalog/model/queryKeys';
 import { isDotIr } from '@/shared/config/resolveIsDotIr';
+import { useThemeColors } from '@/ui/theme';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { CartMainButtons } from '@/shared/ui/cart/CartMainButtons';
@@ -43,10 +44,14 @@ const getCurrencySymbol = (showCurrency: boolean = true) => {
   return isDotIr ? ' تومان' : '$';
 };
 
+// Decorative deep-brand header backdrops behind the course cover (design-fixed).
+const COURSE_PACKAGE_BACKDROP = '#111123';
+const COURSE_BACKDROP = '#001605';
+
 const PublicCourseDetailScreenComponent = () => {
   const navigation = useAppNavigation();
   const { width } = useWindowDimensions();
-  const { colors } = useTheme();
+  const colors = useThemeColors();
   const route = useRoute<RouteProp<DrawerParamList, 'PublicCourseDetail'>>();
   const courseId = route.params.courseId;
 
@@ -106,7 +111,7 @@ const PublicCourseDetailScreenComponent = () => {
         <Text style={[s.short, s.themText]}>{data?.short_info}</Text>
         <View style={s.container}>
           <BackgroundLayer
-            bgColor={data?.is_packge ? '#111123' : '#001605'}
+            bgColor={data?.is_packge ? COURSE_PACKAGE_BACKDROP : COURSE_BACKDROP}
             top={150}
             // bottom={data?.is_packge ? 0 : 150}
           />
@@ -122,7 +127,7 @@ const PublicCourseDetailScreenComponent = () => {
           )}
 
           <View style={s.fullInfo}>
-            <DiamondIcon style={s.diamond} color="#fff" />
+            <DiamondIcon style={s.diamond} color={colors.onMedia} />
             <RenderHTML
               contentWidth={width}
               source={{

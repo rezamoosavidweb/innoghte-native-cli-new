@@ -103,7 +103,7 @@ export function createCollaborationScreenStyles(
       alignItems: 'center',
       justifyContent: 'center',
     },
-    submitLabel: { color: '#FFFFFF', fontWeight: fontWeight.bold },
+    submitLabel: { color: ui.onMedia, fontWeight: fontWeight.bold },
     error: { color: ui.errorText, fontSize: fontSize.sm },
   });
 }

@@ -21,8 +21,6 @@ export type GiveGiftPickerStyles = {
   optionText: TextStyle;
 };
 
-export const GIVE_GIFT_EMAIL_HINT_HEX = '#facc15';
-
 export type GiveGiftStyles = {
   scrollInner: ViewStyle;
   screenTitle: TextStyle;
@@ -145,7 +143,7 @@ export function createGiveGiftStyles(
       gap: 4,
     },
     emailHint: {
-      color: GIVE_GIFT_EMAIL_HINT_HEX,
+      color: uiColors.warning,
       fontSize: fontSize.sm,
     },
     mobileDialInput: {
@@ -170,7 +168,7 @@ export function createGiveGiftStyles(
       backgroundColor: themeColors.primary,
     },
     submitLabel: {
-      color: '#FFFFFF',
+      color: uiColors.onMedia,
       textAlign: 'center',
       fontWeight: fontWeight.semibold,
       fontSize: fontSize.lg,
@@ -180,7 +178,7 @@ export function createGiveGiftStyles(
       marginHorizontal: spacing.sm,
       padding: 15,
       borderRadius: 10,
-      backgroundColor: 'rgba(125,125,125,0.19)',
+      backgroundColor: uiColors.surfaceSecondary,
       gap: 10,
       alignItems: 'stretch',
     },

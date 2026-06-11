@@ -29,6 +29,7 @@ import {
 } from '@/shared/ui/comments/dashboardComment.styles';
 import { CommentsPagination } from '@/shared/ui/comments/CommentsPagination';
 import { Button } from '@/ui/components/Button';
+import { palette } from '@/ui/theme/colors';
 
 export type DashboardCommentFormValues = z.infer<typeof validationSchema>;
 
@@ -40,7 +41,11 @@ export const dashboardCommentResolver = zodResolver(validationSchema);
 
 export type CommentDto = z.infer<typeof commentSchema>;
 
-const AVATAR_COLORS = ['#22c55e', '#ef4444', '#eab308'] as const;
+const AVATAR_COLORS = [
+  palette.success[500],
+  palette.danger[500],
+  palette.warning[500],
+] as const;
 const STAR_VALUES = [1, 2, 3, 4, 5];
 
 function avatarColorFor(userId: number): string {
@@ -350,7 +355,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   fieldError: {
-    color: '#f97316',
+    color: palette.danger[500],
     fontSize: 13,
   },
   ratingRow: {
@@ -371,16 +376,16 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   submitBtnText: {
-    color: '#fff',
+    color: palette.white,
     fontWeight: '700',
     fontSize: 16,
   },
   successText: {
-    color: '#22c55e',
+    color: palette.success[500],
     fontSize: 14,
   },
   errorText: {
-    color: '#ef4444',
+    color: palette.danger[500],
     fontSize: 14,
   },
   listContent: {

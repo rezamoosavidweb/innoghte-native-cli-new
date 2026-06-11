@@ -1,5 +1,9 @@
 import Logo from '@/assets/logo.svg';
 import { createAuthEntryScreenStyles } from '@/domains/auth/ui/authEntryScreen.styles';
+import {
+  AUTH_LOGO_COLOR,
+  AUTH_OVERLAY_GRADIENT,
+} from '@/domains/auth/ui/styles';
 import type { DrawerScreenProps } from '@react-navigation/drawer';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -35,11 +39,11 @@ const AuthEntryScreenComponent = (_props: Props) => {
     <ImageBackground source={BG_IMAGE} style={s.flex} resizeMode="cover">
       <LinearGradient
         locations={[0.3, 0.5, 1]}
-        colors={['#ffffff00', '#09101D69', '#09101D']}
+        colors={AUTH_OVERLAY_GRADIENT}
         style={s.overlay}
       />
       <View style={s.logoContainer}>
-        <Logo width={118} height={50} color="#000000" />
+        <Logo width={118} height={50} color={AUTH_LOGO_COLOR} />
       </View>
       <View style={s.inner}>
         <Button

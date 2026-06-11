@@ -26,7 +26,7 @@ export const DonationResultModal = React.memo(function DonationResultModal({
   const { colors } = theme;
   const semantic = pickSemantic(theme);
   const titleColor =
-    variant === 'error' ? '#F75555' : semantic.successText;
+    variant === 'error' ? semantic.error : semantic.successText;
 
   const s = useDonationResultModalStyles(
     colors.card,

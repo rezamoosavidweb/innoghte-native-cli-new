@@ -10,7 +10,11 @@ import { completePendingAuthNavigation } from '@/app/bridge/auth/protectedNaviga
 import { LoginForm } from '@/domains/auth/ui/forms/LoginForm';
 import { useLogin } from '@/domains/auth/hooks/useAuth';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
-import { createLoginScreenStyles } from '@/domains/auth/ui/styles';
+import {
+  AUTH_LOGO_COLOR,
+  AUTH_OVERLAY_GRADIENT,
+  createLoginScreenStyles,
+} from '@/domains/auth/ui/styles';
 import { Button } from '@/ui/components/Button';
 import { useThemeColors } from '@/ui/theme';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
@@ -44,11 +48,11 @@ const LoginScreenComponent = (_props: Props) => {
     <ImageBackground source={BG_IMAGE} style={s.flex} resizeMode="cover">
       <LinearGradient
         locations={[0.3, 0.5, 1]}
-        colors={['#ffffff00', '#09101D69', '#09101D']}
+        colors={AUTH_OVERLAY_GRADIENT}
         style={s.overlay}
       />
       <View style={s.logoContainer}>
-        <Logo width={118} height={50} color="#000000" />
+        <Logo width={118} height={50} color={AUTH_LOGO_COLOR} />
       </View>
       <KeyboardAvoidingView
         style={s.flex}

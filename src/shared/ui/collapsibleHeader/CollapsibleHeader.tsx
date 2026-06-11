@@ -19,8 +19,9 @@ import {
   COLLAPSIBLE_HEADER_DEFAULT_BAR_HEIGHT,
   type CollapsibleHeaderProps,
 } from '@/shared/ui/collapsibleHeader/types';
+import { palette } from '@/ui/theme/colors';
 
-const DEFAULT_EXPANDED_TITLE = '#FFFFFF';
+const DEFAULT_EXPANDED_TITLE = palette.white;
 
 function titleColors(
   backgroundColor: string,

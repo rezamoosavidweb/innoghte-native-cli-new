@@ -10,6 +10,7 @@ import {
   createChapterMediaThemedStyles,
 } from '@/domains/courses/ui/course-detail/courseChapterMediaArea.styles';
 import { Button } from '@/ui/components/Button';
+import { palette } from '@/ui/theme/colors';
 
 type JsonMediaItem = { uuid?: string; title?: string };
 
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   linkText: {
-    color: '#fff',
+    color: palette.white,
     fontWeight: '700',
     fontSize: 16,
   },

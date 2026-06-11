@@ -28,7 +28,7 @@ export function createButtonStyles(colors: ThemeColors) {
     filledLabel: {
       fontSize: fontSize.base,
       fontWeight: fontWeight.semibold,
-      color: '#fff',
+      color: colors.onMedia,
     },
     outlined: {
       width: '100%',

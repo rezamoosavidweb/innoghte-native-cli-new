@@ -28,7 +28,7 @@ export function createAuthTabsStyles(colors: ThemeColors) {
       color: colors.textSecondary,
     },
     tabLabelActive: {
-      color: '#ffffff',
+      color: colors.onMedia,
     },
   });
 }
