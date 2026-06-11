@@ -60,8 +60,8 @@ const forestPalette = {
 
 /** Spec-driven dark surface ramp (see design tokens). */
 const surfaceDark = {
-  /** Card background. */
-  card: '#1F222A',
+  /** Card background (design: matches drawer `#1E2025`). */
+  card: '#1E2025',
   /** Drawer background. */
   drawer: '#1E2025',
   /** Page / tab background. */
