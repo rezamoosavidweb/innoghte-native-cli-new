@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { DrawerScreenProps } from '@react-navigation/drawer';
-import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -27,35 +26,33 @@ import {
 } from '@/domains/contact/model/contactForm.schema';
 import { createContactScreenStyles } from '@/domains/contact/ui/contactScreen.styles';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
+import { isDotIr } from '@/shared/config/resolveIsDotIr';
 import { fireAndForget } from '@/shared/infra/http';
-import { showAppToast } from '@/shared/ui/toast';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
-import {
-  createNavScreenShellStyles,
-  flashListContentGutters,
-  useThemeColors,
-} from '@/ui/theme';
+import { showAppToast } from '@/shared/ui/toast';
 import { Button } from '@/ui/components/Button';
+import { InputField } from '@/ui/components/form/InputField';
+import { PhoneInput, defaultPhoneInputValue } from '@/ui/components/PhoneInput';
+import { Textarea } from '@/ui/components/Textarea';
+import { useThemeColors } from '@/ui/theme';
+
+import MailIcon from '@/assets/icons/inn/mail.svg';
+import UserIcon from '@/assets/icons/inn/user.svg';
+import SubjectIcon from '@/assets/icons/user-edit.svg';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Contact'>;
 
-function normalizeContactMobile(raw: string): string {
-  const d = raw.replace(/\D/g, '');
-  return d.startsWith('00') ? d : `00${d}`;
+const INFO_MAX_LENGTH = 200;
+
+/** Web sends `00${dial}`; PhoneInput already strips the national number to digits. */
+function contactMobileE164(dial: string): string {
+  return `00${dial.replace(/\D/g, '')}`;
 }
 
 export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
   const navigation = useAppNavigation();
-  const { colors } = useTheme();
   const ui = useThemeColors();
-  const shell = React.useMemo(
-    () => createNavScreenShellStyles(colors),
-    [colors],
-  );
-  const s = React.useMemo(
-    () => createContactScreenStyles(colors, ui),
-    [colors, ui],
-  );
+  const s = React.useMemo(() => createContactScreenStyles(ui), [ui]);
   const { t } = useTranslation();
 
   const categoriesQuery = useContactUsCategoriesQuery();
@@ -74,7 +71,7 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
     defaultValues: {
       full_name: '',
       email: '',
-      mobileDigits: '',
+      mobile: defaultPhoneInputValue(),
       title: '',
       category_id: '',
       info: '',
@@ -97,12 +94,14 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
     navigation.setOptions({ title: t('screens.contact.navTitle') });
   }, [navigation, t]);
 
-  const found = (categoriesQuery.data ?? []).find(c => String(c.id) === categoryId);
+  const found = (categoriesQuery.data ?? []).find(
+    c => String(c.id) === categoryId,
+  );
   const categoryLabel = found?.name ?? t('screens.contact.pickCategory');
 
   const startOtp = React.useCallback(
     async (values: ContactFormValues) => {
-      const mobile = normalizeContactMobile(values.mobileDigits);
+      const mobile = contactMobileE164(values.mobile.dial);
       setPendingPayload(values);
       try {
         const res = await sendOtp.mutateAsync({
@@ -113,7 +112,11 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
           showAppToast(t('screens.contact.errorGeneric'), 'error');
           return;
         }
-        otpSheet.show({ email: values.email.trim(), mobileE164: mobile, ttl: res.ttl });
+        otpSheet.show({
+          email: values.email.trim(),
+          mobileE164: mobile,
+          ttl: res.ttl,
+        });
         setOtp('');
         setOtpErr('');
       } catch {
@@ -138,7 +141,7 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
           title: pendingPayload.title.trim(),
           info: pendingPayload.info.trim(),
           category_id: pendingPayload.category_id,
-          mobile: normalizeContactMobile(pendingPayload.mobileDigits),
+          mobile: contactMobileE164(pendingPayload.mobile.dial),
         },
       })
       .then(() => {
@@ -165,97 +168,105 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
     startOtp(pendingPayload).catch(() => {});
   }, [pendingPayload, startOtp]);
 
+  const goTickets = React.useCallback(() => {
+    navigation.navigate('TicketListScreen');
+  }, [navigation]);
+
   const submitBusy = sendOtp.isPending || verifyCreate.isPending;
+
+  const renderLabel = (text: string) => (
+    <View style={s.fieldLabelRow}>
+      <Text style={s.fieldLabel}>{text}</Text>
+      <Text style={s.requiredMark}>*</Text>
+    </View>
+  );
 
   return (
     <KeyboardAvoidingView
-      style={shell.safe}
+      style={s.root}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={[
-          flashListContentGutters.standard,
-          s.scrollContent,
-        ]}
-      >
-        <Text style={s.heroTitle}>{t('screens.contact.navTitle')}</Text>
-        <Text style={s.heroLead}>{t('screens.contact.lead')}</Text>
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={s.scrollContent}
+        >
+          <Text style={s.lead}>{t('screens.contact.lead')}</Text>
 
-        <View style={s.darkBand}>
-          <Text style={s.darkBandTitle}>{t('screens.contact.supportIntro')}</Text>
-          <Button
-            layout="auto"
-            variant="text"
-            title={t('screens.contact.openTickets')}
-            style={s.linkBtn}
-            onPress={() => navigation.navigate('TicketListScreen')}
-            contentStyle={{ width: '100%' }}
-          >
-            <Text style={s.linkLabel}>{t('screens.contact.openTickets')}</Text>
-          </Button>
-
-          <Text style={s.hint}>{t('screens.contact.hintPhoneEmail')}</Text>
+          <Text style={s.methodsTitle}>
+            {t('screens.contact.methodsTitle')}
+          </Text>
+          <Text style={s.methodText}>{t('screens.contact.method1')}</Text>
+          <Text style={s.methodText}>
+            {t('screens.contact.method2Pre')}
+            <Text style={s.methodLink} onPress={goTickets}>
+              {t('screens.contact.method2Link')}
+            </Text>
+            {t('screens.contact.method2Post')}
+          </Text>
+          <Text style={s.methodText}>{t('screens.contact.method3')}</Text>
 
           <Controller
             control={control}
             name="full_name"
             render={({ field: { value, onChange, onBlur } }) => (
-              <View>
-                <Text style={s.fieldLabel}>{t('screens.contact.fullName')}</Text>
-                <TextInput
+              <View style={s.field}>
+                {renderLabel(t('screens.contact.fullName'))}
+                <InputField
+                  accessibilityLabel={t('screens.contact.fullName')}
+                  placeholder=""
                   value={value}
                   onChangeText={onChange}
                   onBlur={onBlur}
-                  style={[s.input, s.inputRtl]}
-                  placeholderTextColor={ui.textMuted}
+                  error={errors.full_name?.message}
+                  leadingIcon={
+                    <UserIcon width={20} height={20} color={ui.textMuted} />
+                  }
                 />
-                {errors.full_name ? (
-                  <Text style={s.error}>{errors.full_name.message}</Text>
-                ) : null}
               </View>
             )}
           />
+
+          <Text style={s.hint}>{t('screens.contact.hintPhoneEmail')}</Text>
 
           <Controller
             control={control}
             name="email"
             render={({ field: { value, onChange, onBlur } }) => (
-              <View>
-                <Text style={s.fieldLabel}>{t('screens.contact.email')}</Text>
-                <TextInput
+              <View style={s.field}>
+                {renderLabel(t('screens.contact.email'))}
+                <InputField
+                  accessibilityLabel={t('screens.contact.email')}
+                  placeholder=""
+                  keyboardType="email-address"
+                  forceInputLtr
                   value={value}
                   onChangeText={onChange}
                   onBlur={onBlur}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  style={[s.input, s.inputLtr]}
-                  placeholderTextColor={ui.textMuted}
+                  error={errors.email?.message}
+                  leadingIcon={
+                    <MailIcon width={20} height={20} color={ui.textMuted} />
+                  }
                 />
-                {errors.email ? (
-                  <Text style={s.error}>{errors.email.message}</Text>
-                ) : null}
               </View>
             )}
           />
 
           <Controller
             control={control}
-            name="mobileDigits"
+            name="mobile"
             render={({ field: { value, onChange, onBlur } }) => (
-              <View>
-                <Text style={s.fieldLabel}>{t('screens.contact.mobile')}</Text>
-                <TextInput
-                  value={value}
-                  onChangeText={onChange}
+              <View style={s.field}>
+                {renderLabel(t('screens.contact.mobile'))}
+                <PhoneInput
+                  accessibilityLabelDial={t('screens.contact.mobile')}
+                  placeholder={t('screens.contact.mobile')}
+                  value={value ?? defaultPhoneInputValue()}
+                  onChange={onChange}
                   onBlur={onBlur}
-                  keyboardType="phone-pad"
-                  style={[s.input, s.inputLtr]}
-                  placeholderTextColor={ui.textMuted}
+                  error={errors.mobile?.dial?.message}
+                  disableDropdown={isDotIr}
+                  defaultCountryIso={isDotIr ? 'ir' : undefined}
                 />
-                {errors.mobileDigits ? (
-                  <Text style={s.error}>{errors.mobileDigits.message}</Text>
-                ) : null}
               </View>
             )}
           />
@@ -264,24 +275,25 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
             control={control}
             name="title"
             render={({ field: { value, onChange, onBlur } }) => (
-              <View>
-                <Text style={s.fieldLabel}>{t('screens.contact.subject')}</Text>
-                <TextInput
+              <View style={s.field}>
+                {renderLabel(t('screens.contact.subject'))}
+                <InputField
+                  accessibilityLabel={t('screens.contact.subject')}
+                  placeholder=""
                   value={value}
                   onChangeText={onChange}
                   onBlur={onBlur}
-                  style={[s.input, s.inputRtl]}
-                  placeholderTextColor={ui.textMuted}
+                  error={errors.title?.message}
+                  leadingIcon={
+                    <SubjectIcon width={20} height={20} color={ui.textMuted} />
+                  }
                 />
-                {errors.title ? (
-                  <Text style={s.error}>{errors.title.message}</Text>
-                ) : null}
               </View>
             )}
           />
 
-          <View>
-            <Text style={s.fieldLabel}>{t('screens.contact.category')}</Text>
+          <View style={s.field}>
+            {renderLabel(t('screens.contact.category'))}
             <Button
               layout="auto"
               variant="text"
@@ -290,7 +302,11 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
               onPress={() => setCategoryModal(true)}
               contentStyle={{ width: '100%' }}
             >
-              <Text style={s.categorySelectorLabel}>{categoryLabel}</Text>
+              <Text
+                style={found ? s.categorySelectorLabel : s.categorySelectorPlaceholder}
+              >
+                {categoryLabel}
+              </Text>
             </Button>
             {errors.category_id ? (
               <Text style={s.error}>{errors.category_id.message}</Text>
@@ -301,21 +317,18 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
             control={control}
             name="info"
             render={({ field: { value, onChange, onBlur } }) => (
-              <View>
-                <Text style={s.fieldLabel}>{t('screens.contact.message')}</Text>
-                <TextInput
+              <View style={s.field}>
+                {renderLabel(t('screens.contact.message'))}
+                <Textarea
                   value={value}
                   onChangeText={onChange}
                   onBlur={onBlur}
-                  multiline
-                  maxLength={200}
+                  maxLength={INFO_MAX_LENGTH}
+                  minHeight={110}
                   placeholder={t('screens.contact.messagePh')}
-                  style={[s.input, s.inputRtl, s.area]}
-                  placeholderTextColor={ui.textMuted}
+                  accessibilityLabel={t('screens.contact.message')}
+                  error={errors.info?.message}
                 />
-                {errors.info ? (
-                  <Text style={s.error}>{errors.info.message}</Text>
-                ) : null}
               </View>
             )}
           />
@@ -334,10 +347,11 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
             <Text style={s.submitLabel}>{t('screens.contact.submit')}</Text>
           </Button>
 
-          <Text style={s.footnote}>{t('screens.contact.footnoteSupportHours')}</Text>
+          <Text style={s.footnote}>
+            {t('screens.contact.footnoteSupportHours')}
+          </Text>
           <Text style={s.footnote}>{t('screens.contact.footnoteReply')}</Text>
-        </View>
-      </ScrollView>
+        </ScrollView>
 
       <Modal
         visible={categoryModal}
@@ -393,9 +407,7 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
         <View style={s.modalBackdrop}>
           <View style={s.modalCard}>
             <Text style={s.modalTitle}>{t('screens.contact.otpTitle')}</Text>
-            <Text style={[s.heroLead, { color: colors.text }]}>
-              {t('screens.contact.otpHint')}
-            </Text>
+            <Text style={s.modalHint}>{t('screens.contact.otpHint')}</Text>
             <TextInput
               value={otp}
               onChangeText={setOtp}
@@ -414,7 +426,9 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
                 onPress={otpSheet.hide}
                 contentStyle={{ width: '100%' }}
               >
-                <Text style={s.smallBtnLabel}>{t('screens.contact.cancel')}</Text>
+                <Text style={s.smallBtnLabel}>
+                  {t('screens.contact.cancel')}
+                </Text>
               </Button>
               <Button
                 layout="auto"
@@ -424,7 +438,9 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
                 onPress={resendOtp}
                 contentStyle={{ width: '100%' }}
               >
-                <Text style={s.smallBtnLabel}>{t('screens.contact.otpResend')}</Text>
+                <Text style={s.smallBtnLabel}>
+                  {t('screens.contact.otpResend')}
+                </Text>
               </Button>
               <Button
                 layout="auto"

@@ -1,113 +1,92 @@
-import type { Theme } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 
 import type { ThemeColors } from '@/ui/theme/types';
 import { FORM_CONTROL_HEIGHT } from '@/ui/theme/core/formControlHeight';
 import { radius } from '@/ui/theme/core/radius';
 import { spacing } from '@/ui/theme/core/spacing';
-import { fontSize, fontWeight } from '@/ui/theme/core/typography';
+import { fontSize, fontWeight, lineHeight } from '@/ui/theme/core/typography';
 import { hexAlpha } from '@/ui/theme/utils/colorUtils';
 
-export function createContactScreenStyles(
-  nav: Theme['colors'],
-  ui: ThemeColors,
-) {
+/** Yellow accuracy hint above the form — matches web `text-yellow-300`. */
+const HINT_YELLOW = '#FDE68A';
+
+export function createContactScreenStyles(ui: ThemeColors) {
   return StyleSheet.create({
-    scrollContent: { paddingBottom: spacing['5xl'] },
-    heroTitle: {
-      fontSize: fontSize.xl,
-      fontWeight: fontWeight.bold,
-      color: nav.text,
-      marginBottom: spacing.sm,
-      textAlign: 'right',
-      writingDirection: 'rtl',
-    },
-    heroLead: {
-      fontSize: fontSize.md + 1,
-      color: ui.textSecondary,
-      marginBottom: spacing.lg,
-      textAlign: 'right',
-      writingDirection: 'rtl',
-    },
-    darkBand: {
-      backgroundColor: '#0A0D12',
-      borderRadius: radius.lg,
+    root: { flex: 1, backgroundColor: ui.background },
+    scrollContent: {
       padding: spacing.lg,
-      marginBottom: spacing.lg,
+      paddingBottom: spacing['5xl'],
       gap: spacing.md,
     },
-    darkBandTitle: {
-      color: '#FFFFFF',
+
+    lead: {
+      fontSize: fontSize.md + 1,
+      color: hexAlpha(ui.text, 0.85),
+      lineHeight: lineHeight.relaxed,
+    },
+
+    methodsTitle: {
+      color: ui.text,
       fontSize: fontSize.lg,
       fontWeight: fontWeight.bold,
-      textAlign: 'right',
-      writingDirection: 'rtl',
     },
-    linkBtn: {
-      alignSelf: 'flex-start',
-      height: FORM_CONTROL_HEIGHT,
-      justifyContent: 'center',
-    },
-    linkLabel: {
-      color: nav.primary,
-      fontWeight: fontWeight.semibold,
+    methodText: {
+      color: hexAlpha(ui.text, 0.85),
       fontSize: fontSize.base,
-      textAlign: 'right',
+      lineHeight: lineHeight.relaxed,
     },
+    methodLink: {
+      color: ui.primary,
+      fontWeight: fontWeight.semibold,
+    },
+
     hint: {
-      color: '#FDE68A',
+      color: HINT_YELLOW,
       fontSize: fontSize.sm,
-      textAlign: 'right',
-      writingDirection: 'rtl',
+      lineHeight: lineHeight.normal,
+    },
+
+    field: { gap: spacing.xs },
+    fieldLabelRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 2,
     },
     fieldLabel: {
-      color: '#FFFFFF',
+      color: ui.text,
       fontWeight: fontWeight.semibold,
-      marginBottom: spacing.xs,
-      textAlign: 'right',
-      writingDirection: 'rtl',
-    },
-    input: {
-      borderWidth: StyleSheet.hairlineWidth,
-      borderRadius: radius.md,
-      borderColor: hexAlpha('#FFFFFF', 0.22),
-      paddingHorizontal: spacing.md,
-      paddingVertical: 0,
-      height: FORM_CONTROL_HEIGHT,
-      color: '#FFFFFF',
-      backgroundColor: hexAlpha('#FFFFFF', 0.06),
       fontSize: fontSize.base,
     },
-    inputLtr: {
-      textAlign: 'left',
-      writingDirection: 'ltr',
+    requiredMark: {
+      color: ui.primary,
+      fontWeight: fontWeight.bold,
     },
-    inputRtl: {
-      textAlign: 'right',
-      writingDirection: 'rtl',
-    },
+
     categorySelector: {
       borderWidth: StyleSheet.hairlineWidth,
-      borderRadius: radius.md,
-      borderColor: hexAlpha('#FFFFFF', 0.22),
-      padding: spacing.md,
-      backgroundColor: hexAlpha('#FFFFFF', 0.06),
+      borderRadius: radius.lg - 2,
+      borderColor: ui.border,
+      height: FORM_CONTROL_HEIGHT,
+      paddingHorizontal: 14,
+      justifyContent: 'center',
+      backgroundColor: ui.inputBackground,
     },
     categorySelectorLabel: {
-      color: '#FFFFFF',
-      textAlign: 'right',
+      color: ui.text,
       fontSize: fontSize.base,
     },
-    area: {
-      minHeight: 110,
-      textAlignVertical: 'top',
+    categorySelectorPlaceholder: {
+      color: ui.textMuted,
+      fontSize: fontSize.base,
     },
-    error: { color: '#FCA5A5', fontSize: fontSize.sm, marginTop: 4 },
+
+    error: { color: ui.errorText, fontSize: fontSize.sm, marginTop: 4 },
+
     submit: {
-      marginTop: spacing.lg,
-      backgroundColor: '#67BD5C',
+      marginTop: spacing.sm,
+      backgroundColor: ui.primary,
       height: FORM_CONTROL_HEIGHT,
-      borderRadius: radius.md,
+      borderRadius: radius.lg - 2,
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -118,52 +97,48 @@ export function createContactScreenStyles(
       alignItems: 'center',
       justifyContent: 'center',
     },
-    submitLabelHidden: { opacity: 0 },
-    submitLoaderOverlay: {
-      ...StyleSheet.absoluteFill,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
     submitLabel: {
-      color: '#FFFFFF',
+      color: ui.onPrimary,
       fontWeight: fontWeight.bold,
       fontSize: fontSize.lg,
     },
+
     footnote: {
-      color: hexAlpha('#FFFFFF', 0.65),
+      color: hexAlpha(ui.text, 0.65),
       fontSize: fontSize.sm,
-      lineHeight: 20,
-      textAlign: 'justify',
-      writingDirection: 'rtl',
+      lineHeight: lineHeight.relaxed,
     },
+
     modalBackdrop: {
       flex: 1,
-      backgroundColor: hexAlpha('#000000', 0.45),
+      backgroundColor: ui.overlay,
       justifyContent: 'center',
       padding: spacing.xl,
     },
     modalCard: {
-      backgroundColor: nav.card,
+      backgroundColor: ui.card,
       borderRadius: radius.lg,
       padding: spacing.lg,
       gap: spacing.md,
     },
-    categoryScroll: {
-      maxHeight: 360,
-    },
+    categoryScroll: { maxHeight: 360 },
     modalTitle: {
       fontSize: fontSize.lg,
       fontWeight: fontWeight.bold,
-      color: nav.text,
-      textAlign: 'right',
+      color: ui.text,
+    },
+    modalHint: {
+      fontSize: fontSize.base,
+      color: ui.textSecondary,
     },
     otpInput: {
       borderWidth: StyleSheet.hairlineWidth,
       borderRadius: radius.md,
-      borderColor: nav.border,
+      borderColor: ui.border,
+      backgroundColor: ui.inputBackground,
       padding: spacing.md,
       fontSize: fontSize['2xl'],
-      color: nav.text,
+      color: ui.text,
       textAlign: 'center',
       writingDirection: 'ltr',
     },
@@ -171,25 +146,27 @@ export function createContactScreenStyles(
     categoryRow: {
       paddingVertical: spacing.md,
       borderBottomWidth: StyleSheet.hairlineWidth,
-      borderBottomColor: hexAlpha('#000000', 0.08),
+      borderBottomColor: ui.divider,
     },
     categoryRowLabel: {
       fontSize: fontSize.base,
-      color: nav.text,
-      textAlign: 'right',
+      color: ui.text,
     },
     smallBtn: {
       paddingVertical: spacing.sm,
       paddingHorizontal: spacing.md,
       borderRadius: radius.md,
       borderWidth: StyleSheet.hairlineWidth,
-      borderColor: nav.border,
+      borderColor: ui.border,
     },
     smallBtnPrimary: {
-      backgroundColor: nav.primary,
-      borderColor: nav.primary,
+      backgroundColor: ui.primary,
+      borderColor: ui.primary,
     },
-    smallBtnLabel: { color: nav.text, fontWeight: fontWeight.semibold },
-    smallBtnLabelOnPrimary: { color: '#FFFFFF', fontWeight: fontWeight.bold },
+    smallBtnLabel: { color: ui.text, fontWeight: fontWeight.semibold },
+    smallBtnLabelOnPrimary: {
+      color: ui.onPrimary,
+      fontWeight: fontWeight.bold,
+    },
   });
 }

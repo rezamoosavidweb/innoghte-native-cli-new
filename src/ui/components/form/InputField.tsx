@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, TextInput } from 'react-native';
+import { Platform, TextInput, View } from 'react-native';
 import { Text } from '@/shared/ui/Text';
 
 import { useThemeColors } from '@/ui/theme';
@@ -17,6 +17,8 @@ type Props = {
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   /** RTL placeholder + LTR typed text (email, mobile, password fields in Farsi UI) */
   forceInputLtr?: boolean;
+  /** Optional leading field icon; rendered at the start (right in RTL) of the input row. */
+  leadingIcon?: React.ReactNode;
 };
 
 export function InputField({
@@ -30,6 +32,7 @@ export function InputField({
   keyboardType = 'default',
   autoCapitalize = 'none',
   forceInputLtr = false,
+  leadingIcon,
 }: Props) {
   const colors = useThemeColors();
   const s = createFormFieldStyles(colors);
@@ -46,24 +49,35 @@ export function InputField({
         } as const)
       : null;
 
+  const textInput = (
+    <TextInput
+      accessibilityLabel={accessibilityLabel}
+      autoCapitalize={autoCapitalize}
+      keyboardType={keyboardType}
+      placeholder={placeholder}
+      placeholderTextColor={colors.textMuted}
+      value={value}
+      onChangeText={onChangeText}
+      onBlur={onBlur}
+      secureTextEntry={secureTextEntry}
+      style={[
+        leadingIcon ? s.rowInput : s.input,
+        textAlign ? { textAlign } : undefined,
+        androidInputMetrics,
+      ]}
+    />
+  );
+
   return (
     <>
-      <TextInput
-        accessibilityLabel={accessibilityLabel}
-        autoCapitalize={autoCapitalize}
-        keyboardType={keyboardType}
-        placeholder={placeholder}
-        placeholderTextColor={colors.textMuted}
-        value={value}
-        onChangeText={onChangeText}
-        onBlur={onBlur}
-        secureTextEntry={secureTextEntry}
-        style={[
-          s.input,
-          textAlign ? { textAlign } : undefined,
-          androidInputMetrics,
-        ]}
-      />
+      {leadingIcon ? (
+        <View style={s.row}>
+          <View style={s.rowIcon}>{leadingIcon}</View>
+          {textInput}
+        </View>
+      ) : (
+        textInput
+      )}
       {error ? <Text style={s.errorText}>{error}</Text> : null}
     </>
   );
