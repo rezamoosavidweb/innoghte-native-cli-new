@@ -279,13 +279,6 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
           />
           <DrawerItem
             {...itemProps}
-            label={t('drawer.contact')}
-            icon={icons.star2}
-            focused={currentRoute === 'Contact'}
-            onPress={go('Contact')}
-          />
-          <DrawerItem
-            {...itemProps}
             label={t('drawer.aboutUs')}
             icon={icons.star2}
             focused={currentRoute === 'AboutUs'}

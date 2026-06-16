@@ -7,6 +7,7 @@
 export {
   PhoneInput,
   defaultPhoneInputValue,
+  phoneValueToE164,
   type PhoneInputProps,
   type PhoneInputValue,
 } from './PhoneInput';

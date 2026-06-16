@@ -44,6 +44,10 @@ export const endpoints = {
     logout: 'api/v1/auth/logout',
     checkOtp: 'api/v1/checkotp',
     resendVerifyOtp: 'api/v1/auth/resend-verify-email-or-mobile',
+    /** Forget-password reset link by email — matches client-web `postForgetPasswordEmail`. */
+    forgetPasswordEmail: 'api/v1/forget-password',
+    /** Forget-password reset code by mobile — matches client-web `postForgetPasswordMobile`. */
+    forgetPasswordMobile: 'api/v1/forget-password-mobile',
   },
   /** Authenticated user — see {@link fetchAndApplyPurchasedProductIds}. */
   user: {

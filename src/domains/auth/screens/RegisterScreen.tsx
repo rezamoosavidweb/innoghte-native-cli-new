@@ -1,6 +1,6 @@
 import type { DrawerScreenProps } from '@react-navigation/drawer';
 import * as React from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
 import { Button } from '@/ui/components/Button';
@@ -10,7 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { completePendingAuthNavigation } from '@/app/bridge/auth/protectedNavigation';
 import { useRegister } from '@/domains/auth/hooks/useRegister';
-import { registerSchema, otpSchema, type RegisterFormType, type OtpFormType } from '@/domains/auth/model/registerFormSchema';
+import { registerSchema, type RegisterFormType } from '@/domains/auth/model/registerFormSchema';
 import { checkOtp, resendVerifyOtp } from '@/domains/auth/api/auth.service';
 import { ApiError } from '@/shared/infra/http/apiError';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
@@ -18,35 +18,16 @@ import { createRegisterScreenStyles } from '@/domains/auth/ui/registerScreen.sty
 import { useThemeColors } from '@/ui/theme';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { InputField } from '@/ui/components/form/InputField';
-import { PhoneInput, defaultPhoneInputValue } from '@/ui/components/PhoneInput';
+import { OtpVerification } from '@/ui/components/OtpVerification';
+import {
+  PhoneInput,
+  defaultPhoneInputValue,
+  phoneValueToE164,
+} from '@/ui/components/PhoneInput';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Register'>;
 
 const IS_DOT_IR = process.env.REACT_NATIVE_IS_DOT_IR === 'ir';
-
-const OTP_COUNTDOWN_SECONDS = 120;
-
-function useCountdown(seconds: number) {
-  const [remaining, setRemaining] = useState(seconds);
-  const active = remaining > 0;
-
-  useEffect(() => {
-    if (!active) return;
-    const id = setInterval(() => {
-      setRemaining(r => Math.max(0, r - 1));
-    }, 1000);
-    return () => clearInterval(id);
-  }, [active]);
-
-  const reset = React.useCallback(() => setRemaining(seconds), [seconds]);
-  return { remaining, reset, expired: remaining === 0 };
-}
-
-function formatCountdown(remaining: number) {
-  const m = Math.floor(remaining / 60);
-  const s = remaining % 60;
-  return `${m}:${String(s).padStart(2, '0')}`;
-}
 
 const RegisterScreenComponent = (_props: Props) => {
   const colors = useThemeColors();
@@ -57,10 +38,10 @@ const RegisterScreenComponent = (_props: Props) => {
 
   const [step, setStep] = useState<'form' | 'otp'>('form');
   const [identifiers, setIdentifiers] = useState({ email: '', mobile: '' });
+  const [otpCode, setOtpCode] = useState('');
   const [otpError, setOtpError] = useState<string | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isResending, setIsResending] = useState(false);
-  const { remaining, reset: resetCountdown, expired: countdownExpired } = useCountdown(OTP_COUNTDOWN_SECONDS);
 
   const registerApiError =
     registerMutation.error instanceof ApiError
@@ -102,10 +83,10 @@ const RegisterScreenComponent = (_props: Props) => {
   registerForm.register('ref_code');
 
   const submitRegister = registerForm.handleSubmit(async values => {
-    // Mirror web payload: mobile prefixed `00`, country_code is the ISO code
-    // (matches the previously migrated Contact screen's `00${dial}` convention).
+    // Mobile must be E.164 (`+<country><national>`); the backend rejects
+    // `00…`/national-only forms. `country_code` stays the ISO code (mirrors web).
     const normalizedEmail = values.email.trim().toLowerCase();
-    const normalizedMobile = `00${values.mobile.dial.replace(/\D/g, '')}`;
+    const normalizedMobile = phoneValueToE164(values.mobile);
     await registerMutation.mutateAsync({
       name: values.name.trim(),
       family: values.family.trim(),
@@ -119,21 +100,13 @@ const RegisterScreenComponent = (_props: Props) => {
     setStep('otp');
   });
 
-  const otpForm = useForm<OtpFormType>({
-    resolver: zodResolver(otpSchema),
-    mode: 'onBlur',
-    defaultValues: { otp: '' },
-  });
-
-  const otp = otpForm.watch('otp') ?? '';
-  otpForm.register('otp');
-
-  const submitOtp = otpForm.handleSubmit(async values => {
+  const submitOtp = React.useCallback(async () => {
+    if (!otpCode.trim()) return;
     setOtpError(null);
     setIsVerifying(true);
     try {
       await checkOtp({
-        otp: values.otp.trim(),
+        otp: otpCode.trim(),
         email_identifier: identifiers.email,
         mobile_identifier: identifiers.mobile,
       });
@@ -149,14 +122,13 @@ const RegisterScreenComponent = (_props: Props) => {
     } finally {
       setIsVerifying(false);
     }
-  });
+  }, [identifiers.email, identifiers.mobile, otpCode, t]);
 
-  const handleResend = async () => {
+  const handleResend = React.useCallback(async () => {
     setOtpError(null);
     setIsResending(true);
     try {
       await resendVerifyOtp({ type: 'both' });
-      resetCountdown();
     } catch (err) {
       setOtpError(
         err instanceof ApiError
@@ -168,16 +140,20 @@ const RegisterScreenComponent = (_props: Props) => {
     } finally {
       setIsResending(false);
     }
-  };
+  }, [t]);
 
   const handleEditInfo = () => {
     setStep('form');
-    otpForm.reset();
+    setOtpCode('');
     setOtpError(null);
   };
 
   const goToLogin = React.useCallback(() => {
     navigation.navigate('Login');
+  }, [navigation]);
+
+  const goToContact = React.useCallback(() => {
+    navigation.navigate('Contact');
   }, [navigation]);
 
   if (step === 'otp') {
@@ -191,44 +167,23 @@ const RegisterScreenComponent = (_props: Props) => {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <Text style={s.title}>{t('screens.register.otp.title')}</Text>
-          <Text style={s.sub}>{t('screens.register.otp.subtitle')}</Text>
-
-          {otpError ? <Text style={s.errorText}>{otpError}</Text> : null}
-
-          <InputField
-            accessibilityLabel={t('screens.register.otp.codeLabel')}
-            placeholder={t('screens.register.otp.codeLabel')}
-            keyboardType="phone-pad"
-            forceInputLtr
-            value={otp}
-            onChangeText={value =>
-              otpForm.setValue('otp', value, { shouldValidate: true, shouldDirty: true })
-            }
-            onBlur={() => otpForm.trigger('otp').catch(() => {})}
-            error={otpForm.formState.errors.otp?.message}
+          <OtpVerification
+            title={t('screens.register.otp.title')}
+            subtitle={t('screens.register.otp.subtitle')}
+            code={otpCode}
+            onChangeCode={setOtpCode}
+            onSubmit={submitOtp}
+            submitting={isVerifying}
+            submitLabel={t('screens.register.otp.submit')}
+            error={otpError}
+            onResend={handleResend}
+            resending={isResending}
+            notReceivedLabel={t('screens.register.otp.notReceived')}
+            resendLabel={t('screens.register.otp.resend')}
+            resendInLabel={t('screens.register.otp.resendIn')}
+            codeAccessibilityLabel={t('screens.register.otp.codeLabel')}
+            codePlaceholder={t('screens.register.otp.codeLabel')}
           />
-
-          <View style={s.resendRow}>
-            <Text style={s.resendText}>{t('screens.register.otp.notReceived')}</Text>
-            {countdownExpired ? (
-              <Button
-                layout="auto"
-                variant="text"
-                title={t('screens.register.otp.resend')}
-                onPress={handleResend}
-                disabled={isResending}
-                loading={isResending}
-                contentStyle={{ width: '100%' }}
-              >
-                <Text style={s.resendLink}>{t('screens.register.otp.resend')}</Text>
-              </Button>
-            ) : (
-              <Text style={s.resendTimer}>
-                {t('screens.register.otp.resendIn')} {formatCountdown(remaining)}
-              </Text>
-            )}
-          </View>
 
           <Button
             layout="auto"
@@ -240,13 +195,6 @@ const RegisterScreenComponent = (_props: Props) => {
           >
             <Text style={s.editInfoText}>{t('screens.register.otp.editInfo')}</Text>
           </Button>
-
-          <Button
-            variant="filled"
-            title={t('screens.register.otp.submit')}
-            onPress={submitOtp}
-            loading={isVerifying}
-          />
         </ScrollView>
       </KeyboardAvoidingView>
     );
@@ -404,6 +352,13 @@ const RegisterScreenComponent = (_props: Props) => {
             variant="text"
             title={t('screens.register.loginLink')}
             onPress={goToLogin}
+          />
+        </View>
+        <View style={s.loginCta}>
+          <Button
+            variant="text"
+            title={t('drawer.contact')}
+            onPress={goToContact}
           />
         </View>
       </ScrollView>

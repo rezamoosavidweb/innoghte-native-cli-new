@@ -46,9 +46,4 @@ export const registerSchema = z
     }
   });
 
-export const otpSchema = z.object({
-  otp: z.string().min(3, 'کد باید حداقل ۳ کاراکتر باشد.'),
-});
-
 export type RegisterFormType = z.infer<typeof registerSchema>;
-export type OtpFormType = z.infer<typeof otpSchema>;

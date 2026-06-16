@@ -35,6 +35,7 @@ import {
   useThemeColors,
 } from '@/ui/theme';
 import { Button } from '@/ui/components/Button';
+import { Select } from '@/ui/components/Select';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Collaboration'>;
 
@@ -164,35 +165,16 @@ export const CollaborationScreen = React.memo(function CollaborationScreen({
     [form, resume, submitMut, t],
   );
 
-  const chipSelect = React.useCallback(
-    (
-      options: { value: string; label: string }[],
-      field: keyof CollaborationFormValues,
-      current: string,
-    ) => (
-      <View style={s.chipRow}>
-        {options.map(o => (
-          <Button
-            key={o.value}
-            layout="auto"
-            variant="text"
-            title={o.label}
-            style={[s.chip, current === o.value ? s.chipOn : null]}
-            accessibilityState={{ selected: current === o.value }}
-            onPress={() =>
-              setValue(field, o.value, {
-                shouldValidate: true,
-                shouldDirty: true,
-              })
-            }
-            contentStyle={{ width: '100%' }}
-          >
-            <Text style={s.chipLabel}>{o.label}</Text>
-          </Button>
-        ))}
-      </View>
-    ),
-    [s, setValue],
+  const unitOptions = React.useMemo(
+    () =>
+      (catQuery.data ?? []).map(c => ({ value: String(c.id), label: c.name })),
+    [catQuery.data],
+  );
+
+  const setSelect = React.useCallback(
+    (field: keyof CollaborationFormValues) => (next: string) =>
+      setValue(field, next, { shouldValidate: true, shouldDirty: true }),
+    [setValue],
   );
 
   return (
@@ -321,54 +303,56 @@ export const CollaborationScreen = React.memo(function CollaborationScreen({
           ) : null}
 
           <Text style={s.label}>{t('screens.collaboration.gender')}</Text>
-          {chipSelect(GENDER, 'gender', watch('gender'))}
-          {errors.gender ? (
-            <Text style={s.error}>{errors.gender.message}</Text>
-          ) : null}
+          <Select
+            value={watch('gender')}
+            onChange={setSelect('gender')}
+            options={GENDER}
+            placeholder={t('screens.collaboration.selectPlaceholder')}
+            error={errors.gender?.message}
+            accessibilityLabel={t('screens.collaboration.gender')}
+            closeAccessibilityLabel={t('screens.collaboration.selectPlaceholder')}
+          />
 
           <Text style={s.label}>{t('screens.collaboration.marital')}</Text>
-          {chipSelect(MARITAL, 'marital_status', watch('marital_status'))}
-          {errors.marital_status ? (
-            <Text style={s.error}>{errors.marital_status.message}</Text>
-          ) : null}
+          <Select
+            value={watch('marital_status')}
+            onChange={setSelect('marital_status')}
+            options={MARITAL}
+            placeholder={t('screens.collaboration.selectPlaceholder')}
+            error={errors.marital_status?.message}
+            accessibilityLabel={t('screens.collaboration.marital')}
+            closeAccessibilityLabel={t('screens.collaboration.selectPlaceholder')}
+          />
 
           <Text style={s.label}>{t('screens.collaboration.experience')}</Text>
-          {chipSelect(EXP, 'experience', watch('experience'))}
-          {errors.experience ? (
-            <Text style={s.error}>{errors.experience.message}</Text>
-          ) : null}
+          <Select
+            value={watch('experience')}
+            onChange={setSelect('experience')}
+            options={EXP}
+            placeholder={t('screens.collaboration.selectPlaceholder')}
+            error={errors.experience?.message}
+            accessibilityLabel={t('screens.collaboration.experience')}
+            closeAccessibilityLabel={t('screens.collaboration.selectPlaceholder')}
+          />
 
           <Text style={s.label}>{t('screens.collaboration.unit')}</Text>
-          <View style={s.chipRow}>
-            {(catQuery.data ?? []).map(c => (
-              <Button
-                key={c.id}
-                layout="auto"
-                variant="text"
-                title={c.name}
-                style={[
-                  s.chip,
-                  categoryId === String(c.id) ? s.chipOn : null,
-                ]}
-                accessibilityState={{
-                  selected: categoryId === String(c.id),
-                }}
-                onPress={() =>
-                  setValue('work_with_us_category_id', String(c.id), {
-                    shouldValidate: true,
-                  })
-                }
-                contentStyle={{ width: '100%' }}
-              >
-                <Text style={s.chipLabel}>{c.name}</Text>
-              </Button>
-            ))}
-          </View>
-          {errors.work_with_us_category_id ? (
-            <Text style={s.error}>
-              {errors.work_with_us_category_id.message}
-            </Text>
-          ) : null}
+          <Select
+            value={categoryId}
+            onChange={setSelect('work_with_us_category_id')}
+            options={unitOptions}
+            placeholder={t('screens.collaboration.selectPlaceholder')}
+            error={errors.work_with_us_category_id?.message}
+            loading={catQuery.isLoading}
+            loadingLabel={t('screens.collaboration.selectLoading')}
+            isError={catQuery.isError}
+            errorLabel={t('screens.collaboration.selectError')}
+            onRetry={() => {
+              catQuery.refetch().catch(() => {});
+            }}
+            emptyLabel={t('screens.collaboration.selectEmpty')}
+            accessibilityLabel={t('screens.collaboration.unit')}
+            closeAccessibilityLabel={t('screens.collaboration.selectPlaceholder')}
+          />
 
           <Text style={s.label}>{t('screens.collaboration.city')}</Text>
           <Controller

@@ -44,6 +44,14 @@ const LoginScreenComponent = (_props: Props) => {
     navigation.navigate('Register');
   }, [navigation]);
 
+  const goToForgetPassword = React.useCallback(() => {
+    navigation.navigate('ForgetPassword');
+  }, [navigation]);
+
+  const goToContact = React.useCallback(() => {
+    navigation.navigate('Contact');
+  }, [navigation]);
+
   return (
     <ImageBackground source={BG_IMAGE} style={s.flex} resizeMode="cover">
       <LinearGradient
@@ -66,12 +74,26 @@ const LoginScreenComponent = (_props: Props) => {
             apiError={apiError}
             onSubmit={onSubmit}
           />
+          <View style={s.forgotRow}>
+            <Button
+              variant="text"
+              title={t('screens.login.forgetPassword')}
+              onPress={goToForgetPassword}
+            />
+          </View>
           <View style={s.registerCta}>
             <Text style={s.registerCtaText}>{t('screens.login.noAccount')}</Text>
             <Button
               variant="text"
               title={t('screens.login.registerLink')}
               onPress={goToRegister}
+            />
+          </View>
+          <View style={s.forgotRow}>
+            <Button
+              variant="text"
+              title={t('drawer.contact')}
+              onPress={goToContact}
             />
           </View>
         </View>

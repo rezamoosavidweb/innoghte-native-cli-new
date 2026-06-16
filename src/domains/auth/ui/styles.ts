@@ -107,5 +107,52 @@ export function createLoginScreenStyles(colors: ThemeColors) {
       right: 0,
       alignItems: 'center',
     },
+
+    // ── Forget-password additions ───────────────────────────────────────────
+    /** "فراموشی رمز عبور؟" link under the login form. */
+    forgotRow: {
+      alignItems: 'center',
+      marginTop: spacing.xs,
+    },
+    /** Sent-confirmation block (email/SMS dispatched). */
+    sentWrap: {
+      alignItems: 'center',
+      gap: spacing.sm,
+      paddingVertical: spacing.lg,
+    },
+    sentTitle: {
+      color: colors.onMedia,
+      fontSize: fontSize.lg,
+      fontWeight: fontWeight.bold,
+      textAlign: 'center',
+    },
+    sentBody: {
+      color: hexAlpha(colors.onMedia, 0.85),
+      fontSize: fontSize.base,
+      textAlign: 'center',
+      lineHeight: lineHeight.normal,
+    },
+    resendRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: spacing.xs,
+      marginTop: spacing.sm,
+    },
+    resendText: {
+      color: hexAlpha(colors.onMedia, 0.85),
+      fontSize: fontSize.sm,
+    },
+    resendLink: {
+      color: colors.primary,
+      fontSize: fontSize.sm,
+      fontWeight: fontWeight.semibold,
+    },
+    resendTimer: {
+      color: hexAlpha(colors.onMedia, 0.7),
+      fontSize: fontSize.sm,
+      fontWeight: fontWeight.semibold,
+    },
   });
 }

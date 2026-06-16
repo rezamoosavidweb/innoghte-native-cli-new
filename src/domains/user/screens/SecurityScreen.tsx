@@ -107,7 +107,7 @@ export const SecurityScreen = () => {
   }, [passwordMutation, resetPasswordFields]);
 
   const onForgetPassword = React.useCallback(() => {
-    navigateToAppLeaf(navigation, 'Login');
+    navigateToAppLeaf(navigation, 'ForgetPassword');
   }, [navigation]);
 
   const submitPassword = React.useMemo(

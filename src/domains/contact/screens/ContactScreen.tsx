@@ -5,11 +5,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import {
   KeyboardAvoidingView,
-  Modal,
   Platform,
   ScrollView,
-  StyleSheet,
-  TextInput,
   View,
 } from 'react-native';
 import { Text } from '@/shared/ui/Text';
@@ -30,9 +27,16 @@ import { isDotIr } from '@/shared/config/resolveIsDotIr';
 import { fireAndForget } from '@/shared/infra/http';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { showAppToast } from '@/shared/ui/toast';
+import { BottomSheet } from '@/ui/components/BottomSheet';
 import { Button } from '@/ui/components/Button';
 import { InputField } from '@/ui/components/form/InputField';
-import { PhoneInput, defaultPhoneInputValue } from '@/ui/components/PhoneInput';
+import { OtpVerification } from '@/ui/components/OtpVerification';
+import {
+  PhoneInput,
+  defaultPhoneInputValue,
+  phoneValueToE164,
+} from '@/ui/components/PhoneInput';
+import { Select } from '@/ui/components/Select';
 import { Textarea } from '@/ui/components/Textarea';
 import { useThemeColors } from '@/ui/theme';
 
@@ -43,11 +47,6 @@ import SubjectIcon from '@/assets/icons/user-edit.svg';
 type Props = DrawerScreenProps<DrawerParamList, 'Contact'>;
 
 const INFO_MAX_LENGTH = 200;
-
-/** Web sends `00${dial}`; PhoneInput already strips the national number to digits. */
-function contactMobileE164(dial: string): string {
-  return `00${dial.replace(/\D/g, '')}`;
-}
 
 export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
   const navigation = useAppNavigation();
@@ -60,7 +59,6 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
   const verifyCreate = useContactUsVerifyAndCreateMutation();
   const otpSheet = useContactOtpSheet();
 
-  const [categoryModal, setCategoryModal] = React.useState(false);
   const [otp, setOtp] = React.useState('');
   const [otpErr, setOtpErr] = React.useState('');
   const [pendingPayload, setPendingPayload] =
@@ -94,14 +92,18 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
     navigation.setOptions({ title: t('screens.contact.navTitle') });
   }, [navigation, t]);
 
-  const found = (categoriesQuery.data ?? []).find(
-    c => String(c.id) === categoryId,
+  const categoryOptions = React.useMemo(
+    () =>
+      (categoriesQuery.data ?? []).map(c => ({
+        value: String(c.id),
+        label: c.name,
+      })),
+    [categoriesQuery.data],
   );
-  const categoryLabel = found?.name ?? t('screens.contact.pickCategory');
 
   const startOtp = React.useCallback(
     async (values: ContactFormValues) => {
-      const mobile = contactMobileE164(values.mobile.dial);
+      const mobile = phoneValueToE164(values.mobile);
       setPendingPayload(values);
       try {
         const res = await sendOtp.mutateAsync({
@@ -141,7 +143,7 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
           title: pendingPayload.title.trim(),
           info: pendingPayload.info.trim(),
           category_id: pendingPayload.category_id,
-          mobile: contactMobileE164(pendingPayload.mobile.dial),
+          mobile: phoneValueToE164(pendingPayload.mobile),
         },
       })
       .then(() => {
@@ -294,23 +296,25 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
 
           <View style={s.field}>
             {renderLabel(t('screens.contact.category'))}
-            <Button
-              layout="auto"
-              variant="text"
-              title={categoryLabel}
-              style={s.categorySelector}
-              onPress={() => setCategoryModal(true)}
-              contentStyle={{ width: '100%' }}
-            >
-              <Text
-                style={found ? s.categorySelectorLabel : s.categorySelectorPlaceholder}
-              >
-                {categoryLabel}
-              </Text>
-            </Button>
-            {errors.category_id ? (
-              <Text style={s.error}>{errors.category_id.message}</Text>
-            ) : null}
+            <Select
+              value={categoryId}
+              onChange={v =>
+                setValue('category_id', v, { shouldValidate: true })
+              }
+              options={categoryOptions}
+              placeholder={t('screens.contact.pickCategory')}
+              error={errors.category_id?.message}
+              loading={categoriesQuery.isLoading}
+              loadingLabel={t('screens.contact.categoryLoading')}
+              isError={categoriesQuery.isError}
+              errorLabel={t('screens.contact.categoryError')}
+              onRetry={() => {
+                categoriesQuery.refetch().catch(() => {});
+              }}
+              emptyLabel={t('screens.contact.categoryEmpty')}
+              accessibilityLabel={t('screens.contact.category')}
+              closeAccessibilityLabel={t('screens.contact.cancel')}
+            />
           </View>
 
           <Controller
@@ -353,111 +357,37 @@ export const ContactScreen = React.memo(function ContactScreen(_props: Props) {
           <Text style={s.footnote}>{t('screens.contact.footnoteReply')}</Text>
         </ScrollView>
 
-      <Modal
-        visible={categoryModal}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setCategoryModal(false)}
-      >
-        <View style={s.modalBackdrop}>
-          <Button
-            layout="auto"
-            variant="text"
-            title="Dismiss"
-            accessibilityLabel="Dismiss"
-            style={StyleSheet.absoluteFill}
-            onPress={() => setCategoryModal(false)}
-          >
-            <View style={StyleSheet.absoluteFill} />
-          </Button>
-          <View style={s.modalCard}>
-            <ScrollView
-              keyboardShouldPersistTaps="handled"
-              style={s.categoryScroll}
-            >
-              {(categoriesQuery.data ?? []).map(c => (
-                <Button
-                  key={c.id}
-                  layout="auto"
-                  variant="text"
-                  title={c.name}
-                  style={s.categoryRow}
-                  onPress={() => {
-                    setValue('category_id', String(c.id), {
-                      shouldValidate: true,
-                    });
-                    setCategoryModal(false);
-                  }}
-                  contentStyle={{ width: '100%' }}
-                >
-                  <Text style={s.categoryRowLabel}>{c.name}</Text>
-                </Button>
-              ))}
-            </ScrollView>
-          </View>
-        </View>
-      </Modal>
-
-      <Modal
+      <BottomSheet
         visible={otpSheet.open}
-        transparent
-        animationType="slide"
-        onRequestClose={otpSheet.hide}
+        onClose={otpSheet.hide}
+        closeAccessibilityLabel={t('screens.contact.cancel')}
       >
-        <View style={s.modalBackdrop}>
-          <View style={s.modalCard}>
-            <Text style={s.modalTitle}>{t('screens.contact.otpTitle')}</Text>
-            <Text style={s.modalHint}>{t('screens.contact.otpHint')}</Text>
-            <TextInput
-              value={otp}
-              onChangeText={setOtp}
-              style={s.otpInput}
-              keyboardType="number-pad"
-              placeholder="------"
-              placeholderTextColor={ui.textMuted}
-            />
-            {otpErr ? <Text style={s.error}>{otpErr}</Text> : null}
-            <View style={s.row}>
-              <Button
-                layout="auto"
-                variant="text"
-                title={t('screens.contact.cancel')}
-                style={s.smallBtn}
-                onPress={otpSheet.hide}
-                contentStyle={{ width: '100%' }}
-              >
-                <Text style={s.smallBtnLabel}>
-                  {t('screens.contact.cancel')}
-                </Text>
-              </Button>
-              <Button
-                layout="auto"
-                variant="text"
-                title={t('screens.contact.otpResend')}
-                style={s.smallBtn}
-                onPress={resendOtp}
-                contentStyle={{ width: '100%' }}
-              >
-                <Text style={s.smallBtnLabel}>
-                  {t('screens.contact.otpResend')}
-                </Text>
-              </Button>
-              <Button
-                layout="auto"
-                variant="filled"
-                title={t('screens.contact.otpConfirm')}
-                style={[s.smallBtn, s.smallBtnPrimary]}
-                onPress={onConfirmOtp}
-                contentStyle={{ width: '100%' }}
-              >
-                <Text style={s.smallBtnLabelOnPrimary}>
-                  {t('screens.contact.otpConfirm')}
-                </Text>
-              </Button>
-            </View>
-          </View>
-        </View>
-      </Modal>
+        <OtpVerification
+          title={t('screens.contact.otpTitle')}
+          subtitle={t('screens.contact.otpHint')}
+          code={otp}
+          onChangeCode={setOtp}
+          onSubmit={onConfirmOtp}
+          submitting={verifyCreate.isPending}
+          submitLabel={t('screens.contact.otpConfirm')}
+          error={otpErr || null}
+          onResend={resendOtp}
+          resending={sendOtp.isPending}
+          notReceivedLabel={t('screens.contact.otpNotReceived')}
+          resendLabel={t('screens.contact.otpResend')}
+          resendInLabel={t('screens.contact.otpResendIn')}
+          codeAccessibilityLabel={t('screens.contact.otpTitle')}
+        />
+        <Button
+          layout="auto"
+          variant="text"
+          title={t('screens.contact.cancel')}
+          onPress={otpSheet.hide}
+          contentStyle={{ width: '100%' }}
+        >
+          <Text style={s.smallBtnLabel}>{t('screens.contact.cancel')}</Text>
+        </Button>
+      </BottomSheet>
     </KeyboardAvoidingView>
   );
 });

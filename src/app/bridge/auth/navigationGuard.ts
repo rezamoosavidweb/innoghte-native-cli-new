@@ -14,6 +14,8 @@ export const PUBLIC_LEAF_ROUTE_NAMES = new Set<string>([
   'Login',
   'Register',
   'Verify',
+  'ForgetPassword',
+  'Contact',
 ]);
 
 let installed = false;

@@ -13,12 +13,19 @@ type Props = {
   onBlur?: () => void;
   error?: string;
   secureTextEntry?: boolean;
-  keyboardType?: 'default' | 'email-address' | 'phone-pad';
+  keyboardType?: 'default' | 'email-address' | 'phone-pad' | 'number-pad';
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   /** RTL placeholder + LTR typed text (email, mobile, password fields in Farsi UI) */
   forceInputLtr?: boolean;
   /** Optional leading field icon; rendered at the start (right in RTL) of the input row. */
   leadingIcon?: React.ReactNode;
+  /**
+   * Enables SMS one-time-code autofill (iOS `oneTimeCode`, Android `sms-otp`).
+   * Use for OTP/verification code fields so the keyboard offers the received code.
+   */
+  oneTimeCode?: boolean;
+  autoFocus?: boolean;
+  maxLength?: number;
 };
 
 export function InputField({
@@ -33,6 +40,9 @@ export function InputField({
   autoCapitalize = 'none',
   forceInputLtr = false,
   leadingIcon,
+  oneTimeCode = false,
+  autoFocus = false,
+  maxLength,
 }: Props) {
   const colors = useThemeColors();
   const s = createFormFieldStyles(colors);
@@ -60,6 +70,11 @@ export function InputField({
       onChangeText={onChangeText}
       onBlur={onBlur}
       secureTextEntry={secureTextEntry}
+      autoFocus={autoFocus}
+      maxLength={maxLength}
+      textContentType={oneTimeCode ? 'oneTimeCode' : undefined}
+      autoComplete={oneTimeCode ? 'sms-otp' : undefined}
+      importantForAutofill={oneTimeCode ? 'yes' : undefined}
       style={[
         leadingIcon ? s.rowInput : s.input,
         textAlign ? { textAlign } : undefined,

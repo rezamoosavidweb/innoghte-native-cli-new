@@ -18,6 +18,14 @@ export const registerResponseSchema = z.object({
   message: z.string(),
 });
 
+/** Forget-password reset request — server returns `{ data: [], message }`. */
+export const forgetPasswordResponseSchema = z
+  .object({
+    data: z.unknown(),
+    message: z.string(),
+  })
+  .passthrough();
+
 export const userResponseSchema = z
   .object({
     data: z

@@ -48,3 +48,16 @@ export function createRootHeaderOptions(theme: Theme) {
     headerRight: undefined,
   };
 }
+
+/**
+ * Header options for public, navigated-to screens (e.g. Contact): a back button
+ * in the start slot instead of the drawer (hamburger) button, and no duplicate
+ * back on the far side. Use for screens that are NOT drawer items.
+ */
+export function createPublicHeaderOptions(theme: Theme) {
+  return {
+    ...createAppHeaderOptions(theme),
+    headerLeft: renderHeaderRight,
+    headerRight: undefined,
+  };
+}

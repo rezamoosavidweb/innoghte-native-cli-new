@@ -35,6 +35,10 @@ const AuthEntryScreenComponent = (_props: Props) => {
     navigation.navigate('Register');
   }, [navigation]);
 
+  const goToContact = React.useCallback(() => {
+    navigation.navigate('Contact');
+  }, [navigation]);
+
   return (
     <ImageBackground source={BG_IMAGE} style={s.flex} resizeMode="cover">
       <LinearGradient
@@ -55,6 +59,11 @@ const AuthEntryScreenComponent = (_props: Props) => {
           variant="outlined"
           title={t('screens.authEntry.register')}
           onPress={goToRegister}
+        />
+        <Button
+          variant="text"
+          title={t('drawer.contact')}
+          onPress={goToContact}
         />
       </View>
     </ImageBackground>

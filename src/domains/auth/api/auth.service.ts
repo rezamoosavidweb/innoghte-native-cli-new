@@ -1,6 +1,7 @@
 import { queryClient } from '@/app/queryClient';
 import { AUTH_USER_QUERY_KEY } from '@/domains/auth/model/queryKeys';
 import {
+  forgetPasswordResponseSchema,
   loginResponseSchema,
   registerResponseSchema,
   userResponseSchema,
@@ -13,6 +14,7 @@ import { fireAndForget, getApiClient } from '@/shared/infra/http';
 import { parseJsonResponse } from '@/shared/infra/http/parseJson';
 import type {
   CheckotpBodyType,
+  ForgetPasswordResponse,
   LoginBodyType,
   LoginResponse,
   RegisterBodyType,
@@ -77,6 +79,28 @@ export async function getUserForSplash(): Promise<UserResponseType> {
     ),
     userResponseSchema,
   );
+}
+
+export async function forgetPasswordEmail(
+  email: string,
+): Promise<ForgetPasswordResponse> {
+  return parseJsonResponse(
+    getApiClient().post(endpoints.auth.forgetPasswordEmail, {
+      json: { email },
+    }),
+    forgetPasswordResponseSchema,
+  ) as Promise<ForgetPasswordResponse>;
+}
+
+export async function forgetPasswordMobile(
+  mobile: string,
+): Promise<ForgetPasswordResponse> {
+  return parseJsonResponse(
+    getApiClient().post(endpoints.auth.forgetPasswordMobile, {
+      json: { mobile },
+    }),
+    forgetPasswordResponseSchema,
+  ) as Promise<ForgetPasswordResponse>;
 }
 
 export async function checkOtp(body: CheckotpBodyType): Promise<void> {

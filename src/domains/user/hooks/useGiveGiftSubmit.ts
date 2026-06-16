@@ -12,6 +12,7 @@ import { completeGiveGiftFlow } from '@/domains/user/services/completeGiveGiftFl
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { ApiError } from '@/shared/infra/http';
 import { showAppToast } from '@/shared/ui/toast';
+import { phoneValueToE164 } from '@/ui/components/PhoneInput';
 
 type Options = {
   form: Pick<
@@ -50,7 +51,7 @@ export function useGiveGiftSubmit({
         receiver_first_name: formData.name,
         receiver_last_name: formData.family,
         receiver_email: formData.email,
-        receiver_mobile: `00${formData.mobile.dial}`,
+        receiver_mobile: phoneValueToE164(formData.mobile),
         message: formData.comment,
         course_ids: selectedProducts,
       };

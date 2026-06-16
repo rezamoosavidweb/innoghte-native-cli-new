@@ -55,8 +55,11 @@ const ToastBanner = React.memo(function ToastBanner({
   insetBottom,
 }: ToastBannerProps) {
   const isError = payload.kind === 'error';
-  const backgroundColor = isError ? colors.errorBg : colors.successBg;
-  const textColor = isError ? colors.errorText : colors.successText;
+  // Solid feedback banner with a light foreground. `errorBg`/`errorText` (and the
+  // success pair) collapse to the same base color in dark mode → invisible text,
+  // so drive the fill from the base role and the label from `onMedia`.
+  const backgroundColor = isError ? colors.error : colors.success;
+  const textColor = colors.onMedia;
 
   const padStyle = React.useMemo(
     () => [

@@ -7,7 +7,6 @@ import { FORM_CONTROL_HEIGHT } from '@/ui/theme/core/formControlHeight';
 import { radius } from '@/ui/theme/core/radius';
 import { spacing } from '@/ui/theme/core/spacing';
 import { fontSize, fontWeight } from '@/ui/theme/core/typography';
-import { hexAlpha } from '@/ui/theme/utils/colorUtils';
 
 export function createCollaborationScreenStyles(
   nav: Theme['colors'],
@@ -62,20 +61,6 @@ export function createCollaborationScreenStyles(
       flexWrap: 'wrap',
     },
     half: { flex: 1, minWidth: 140 },
-    chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-    chip: {
-      paddingVertical: spacing.sm,
-      paddingHorizontal: spacing.md,
-      borderRadius: radius.md,
-      borderWidth: StyleSheet.hairlineWidth,
-      borderColor: nav.border,
-      backgroundColor: ui.inputBackground,
-    },
-    chipOn: {
-      borderColor: nav.primary,
-      backgroundColor: hexAlpha(nav.primary, 0.12),
-    },
-    chipLabel: { color: nav.text, fontSize: fontSize.sm },
     resumeBox: {
       borderStyle: 'dashed',
       borderWidth: 1,

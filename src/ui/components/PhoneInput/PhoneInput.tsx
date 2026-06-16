@@ -59,6 +59,18 @@ export function defaultPhoneInputValue(): PhoneInputValue {
     : { dial: '', countryCode: 'us', dialCode: '+1' };
 }
 
+/**
+ * Build an E.164 mobile string (`+<country><national>`) from a PhoneInput value.
+ * The dial field holds the national number (often with a leading 0), so the
+ * country code comes from `dialCode` and the leading zero is dropped — the API
+ * validates international numbers and rejects `00…`/national-only forms.
+ */
+export function phoneValueToE164(value: PhoneInputValue): string {
+  const country = value.dialCode.replace(/\D/g, '');
+  const national = value.dial.replace(/\D/g, '').replace(/^0+/, '');
+  return `+${country}${national}`;
+}
+
 function normalizeDialInput(raw: string): string {
   return raw.replace(/\D/g, '');
 }

@@ -15,6 +15,7 @@ import {
 } from '@/domains/albums';
 import {
   AuthEntryScreen,
+  ForgetPasswordScreen,
   LoginScreen,
   RegisterScreen,
   VerifyScreen,
@@ -58,6 +59,7 @@ import {
 import i18n from '@/shared/infra/i18n';
 import {
   createAppHeaderOptions,
+  createPublicHeaderOptions,
   createRootHeaderOptions,
 } from '@/app/navigation/appHeaderOptions';
 import { CustomDrawerContent } from '@/ui/layout/CustomDrawerContent';
@@ -351,6 +353,13 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
         drawerItemStyle: { display: 'none' },
       }),
     },
+    ForgetPassword: {
+      screen: ForgetPasswordScreen,
+      options: () => ({
+        drawerItemStyle: { display: 'none' },
+        headerShown: false,
+      }),
+    },
     Podcast: {
       screen: LegacyMenuPlaceholderScreen,
       options: () => extraLeafOptions('podcast', '🎙️'),
@@ -407,7 +416,10 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
     },
     Contact: {
       screen: ContactScreen,
-      options: () => extraLeafOptions('contact', '📧'),
+      options: ({ theme }) => ({
+        ...extraLeafOptions('contact', '📧'),
+        ...createPublicHeaderOptions(theme),
+      }),
     },
     Collaboration: {
       screen: CollaborationScreen,

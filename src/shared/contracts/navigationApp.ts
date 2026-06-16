@@ -34,6 +34,7 @@ export type DrawerParamList = {
   Login: { redirectTo?: string; preserveState?: boolean } | undefined;
   AuthEntry: undefined;
   Register: undefined;
+  ForgetPassword: undefined;
   Basket: { resumeCheckout?: boolean } | undefined;
   Podcast: undefined;
   Meditation: undefined;

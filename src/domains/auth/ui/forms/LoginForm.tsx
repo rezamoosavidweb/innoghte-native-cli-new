@@ -13,7 +13,10 @@ import { MobileLoginForm } from '@/domains/auth/ui/forms/MobileLoginForm';
 import { createLoginScreenStyles } from '@/domains/auth/ui/styles';
 import { Button } from '@/ui/components/Button';
 import { InputField } from '@/ui/components/form/InputField';
-import { defaultPhoneInputValue } from '@/ui/components/PhoneInput';
+import {
+  defaultPhoneInputValue,
+  phoneValueToE164,
+} from '@/ui/components/PhoneInput';
 import { useThemeColors } from '@/ui/theme';
 
 type Props = {
@@ -76,7 +79,7 @@ export function LoginForm({ isSubmitting, apiError, onSubmit }: Props) {
           : undefined,
       mobile:
         values.mode === 'mobile'
-          ? values.mobile.dial.replace(/\D/g, '')
+          ? phoneValueToE164(values.mobile)
           : undefined,
       remember: 1,
     });

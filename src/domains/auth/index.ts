@@ -7,6 +7,7 @@ export { useProtectedNavigation } from './hooks/useProtectedNavigation';
 export { AuthEntryScreen } from './screens/AuthEntryScreen';
 export { LoginScreen } from './screens/LoginScreen';
 export { RegisterScreen } from './screens/RegisterScreen';
+export { ForgetPasswordScreen } from './screens/ForgetPasswordScreen';
 export { VerifyScreen } from './screens/VerifyScreen';
 export {
   AuthService,
