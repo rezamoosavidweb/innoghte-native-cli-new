@@ -1,5 +1,5 @@
 import type { Theme } from '@react-navigation/native';
-import type { TextStyle, ViewStyle } from 'react-native';
+import { I18nManager, type TextStyle, type ViewStyle } from 'react-native';
 
 import {
   fontSize,
@@ -13,12 +13,25 @@ import { hexAlpha } from '@/ui/theme/utils/colorUtils';
 export type GiveGiftPickerStyles = {
   block: ViewStyle;
   label: TextStyle;
+  trigger: ViewStyle;
+  triggerPressed: ViewStyle;
+  triggerPlaceholder: TextStyle;
+  chipWrap: ViewStyle;
+  chip: ViewStyle;
+  chipText: TextStyle;
+  sheet: ViewStyle;
+  sheetHeader: ViewStyle;
+  sheetTitle: TextStyle;
+  sheetCount: TextStyle;
+  optionScroll: ViewStyle;
   optionList: ViewStyle;
   optionBase: ViewStyle;
   optionOn: ViewStyle;
   optionOff: ViewStyle;
   optionDisabled: ViewStyle;
   optionText: TextStyle;
+  optionTextSelected: TextStyle;
+  doneButton: ViewStyle;
 };
 
 export type GiveGiftStyles = {
@@ -63,8 +76,69 @@ export function createGiveGiftStyles(
       textAlign: 'right',
       writingDirection: 'rtl',
     },
+    trigger: {
+      minHeight: 54,
+      borderWidth: 1,
+      borderColor: uiColors.border,
+      borderRadius: radius.md,
+      backgroundColor: uiColors.inputBackground,
+      justifyContent: 'center',
+      paddingVertical: spacing.sm,
+      paddingHorizontal: spacing.md,
+    },
+    triggerPressed: {
+      opacity: 0.82,
+    },
+    triggerPlaceholder: {
+      color: uiColors.textMuted,
+      fontSize: fontSize.base,
+      textAlign: 'right',
+      writingDirection: 'rtl',
+    },
+    chipWrap: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: spacing.xs,
+      justifyContent: 'flex-start',
+    },
+    chip: {
+      borderRadius: radius.sm,
+      backgroundColor: uiColors.primary,
+      paddingVertical: spacing.xs,
+      paddingHorizontal: spacing.sm,
+    },
+    chipText: {
+      color: uiColors.onMedia,
+      fontSize: fontSize.sm,
+      writingDirection: 'rtl',
+    },
+    sheet: {
+      gap: spacing.md,
+      maxHeight: '78%',
+    },
+    sheetHeader: {
+      gap: spacing.xs,
+      alignItems: 'stretch',
+    },
+    sheetTitle: {
+      color: uiColors.text,
+      fontSize: fontSize.xl,
+      fontWeight: fontWeight.bold,
+      textAlign: 'right',
+      writingDirection: 'rtl',
+    },
+    sheetCount: {
+      color: uiColors.textMuted,
+      fontSize: fontSize.sm,
+      textAlign: 'right',
+      writingDirection: 'rtl',
+    },
+    optionScroll: {
+      flexShrink: 1,
+    },
     optionList: {
       gap: 6,
+      paddingBottom: spacing.xs,
     },
     optionBase: {
       borderWidth: 1,
@@ -88,6 +162,13 @@ export function createGiveGiftStyles(
       fontSize: fontSize.base,
       textAlign: 'right',
       writingDirection: 'rtl',
+    },
+    optionTextSelected: {
+      color: uiColors.primary,
+      fontWeight: fontWeight.bold,
+    },
+    doneButton: {
+      alignSelf: 'stretch',
     },
   };
 
@@ -147,7 +228,8 @@ export function createGiveGiftStyles(
       fontSize: fontSize.sm,
     },
     mobileDialInput: {
-      textAlign: 'left',
+      textAlign: I18nManager.isRTL ? 'right' : 'left',
+      writingDirection: 'ltr',
     },
     commentInput: {
       minHeight: 100,

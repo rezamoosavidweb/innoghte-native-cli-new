@@ -17,6 +17,7 @@
     "@gorhom/bottom-sheet": "^5.2.13",
     "@hookform/resolvers": "^5.2.2",
     "@kavimo-tehran/vis3-react-native": "^1.0.6",
+    "@react-native-documents/picker": "^12.0.2",
     "@react-navigation/bottom-tabs": "^7.15.9",
     "@react-navigation/drawer": "^7.9.8",
     "@react-navigation/native": "^7.2.2",

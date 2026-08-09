@@ -17,6 +17,9 @@ import {
   useReplyToTicketMutation,
   useTicketDetail,
 } from '@/domains/support/hooks/useTicketDetail';
+import { TicketAttachmentList } from '@/domains/support/components/TicketAttachmentList';
+import { TicketAttachmentPicker } from '@/domains/support/components/TicketAttachmentPicker';
+import type { TicketUploadFile } from '@/domains/support/model/createTicket.types';
 import type {
   TicketThreadAuthorRole,
   TicketThreadMessage,
@@ -54,6 +57,7 @@ const TicketMessageBubble = React.memo(function TicketMessageBubble({
         style={ticketStyles.bubbleBody}
         selectable
       />
+      <TicketAttachmentList attachments={msg.attachments} />
       <Text style={ticketStyles.bubbleTime}>
         {formatTsIso(msg.createdAt, language)}
       </Text>
@@ -88,6 +92,7 @@ export const TicketDetailScreen = React.memo(function TicketDetailScreen({
   const replyMutation = useReplyToTicketMutation(id);
 
   const [replyDraft, setReplyDraft] = React.useState('');
+  const [replyAttachments, setReplyAttachments] = React.useState<TicketUploadFile[]>([]);
 
   const placeholderReply = t(
     'screens.support.tickets.detail.replyPlaceholder',
@@ -106,10 +111,13 @@ export const TicketDetailScreen = React.memo(function TicketDetailScreen({
     if (!trimmed || replyMutation.isPending) {
       return;
     }
-    replyMutation.mutate(trimmed, {
-      onSuccess: () => setReplyDraft(''),
+    replyMutation.mutate({message: trimmed, attachments: replyAttachments}, {
+      onSuccess: () => {
+        setReplyDraft('');
+        setReplyAttachments([]);
+      },
     });
-  }, [replyDraft, replyMutation]);
+  }, [replyAttachments, replyDraft, replyMutation]);
 
   const replyBusy = replyMutation.isPending;
   const replyDisabled =
@@ -169,9 +177,13 @@ export const TicketDetailScreen = React.memo(function TicketDetailScreen({
             date: formatTsIso(detail.createdAt, i18n.language),
           })}
         </Text>
+        <Text style={ticketStyles.ticketMeta}>
+          {detail.category.replace(/_/g, ' ')} · {detail.priority}
+        </Text>
         {detail.description.length > 0 ? (
           <SafeHtmlContent html={detail.description} style={ticketStyles.notice} />
         ) : null}
+        <TicketAttachmentList attachments={detail.attachments} />
         {/* TODO: Replace with FlashList when ticket volume increases */}
         {detail.messages.map(msg => (
           <TicketMessageBubble
@@ -194,6 +206,11 @@ export const TicketDetailScreen = React.memo(function TicketDetailScreen({
             editable={!replyBusy}
             value={replyDraft}
             onChangeText={setReplyDraft}
+          />
+          <TicketAttachmentPicker
+            value={replyAttachments}
+            onChange={setReplyAttachments}
+            disabled={replyBusy}
           />
           <Button
             variant="filled"

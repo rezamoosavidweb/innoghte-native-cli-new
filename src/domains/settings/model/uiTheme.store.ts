@@ -20,7 +20,7 @@ const uiThemePersistStorage = createStorageServiceStateStorage();
 export const useUiThemeStore = create<UiThemeState>()(
   persist(
     set => ({
-      preference: 'light',
+      preference: 'dark',
       setPreference: p => set({ preference: p }),
       toggleTheme: () =>
         set(state => ({ preference: state.preference === 'dark' ? 'light' : 'dark' })),

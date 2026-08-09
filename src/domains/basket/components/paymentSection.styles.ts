@@ -63,7 +63,10 @@ export function usePaymentSectionStyles(semantic: ThemeColors) {
           backgroundColor: semantic.inputBackground,
           color: semantic.text,
           fontSize: fontSize.base,
+          textAlign: 'right',
+          writingDirection: 'rtl',
         },
+        inputLtr: { textAlign: 'left', writingDirection: 'ltr' },
         error: { fontSize: fontSize.sm, color: semantic.errorText },
         typeRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
         chip: {

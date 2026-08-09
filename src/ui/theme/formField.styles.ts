@@ -24,6 +24,8 @@ export function createFormFieldStyles(themeColors: ThemeColors) {
       borderColor: themeColors.border,
       color: themeColors.text,
       backgroundColor: themeColors.inputBackground,
+      textAlign: 'right',
+      writingDirection: 'rtl',
     },
     // Row variant used when an InputField renders a leading icon. The icon is
     // the first child so RTL places it at the start (right) of the field.
@@ -46,6 +48,8 @@ export function createFormFieldStyles(themeColors: ThemeColors) {
       paddingVertical: 0,
       fontSize: fontSize.base,
       color: themeColors.text,
+      textAlign: 'right',
+      writingDirection: 'rtl',
     },
     errorText: {
       color: themeColors.errorText,

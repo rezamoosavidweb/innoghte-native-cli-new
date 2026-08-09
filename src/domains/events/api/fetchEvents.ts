@@ -1,7 +1,6 @@
 import { parseJsonResponse } from '@/shared/infra/http/parseJson';
 import { getApiClient } from '@/shared/infra/http';
 import { endpoints } from '@/shared/infra/http/endpoints';
-import { normalizeListResponse } from '@/shared/infra/http/normalizeListResponse';
 import { mapEventItem, type EventType } from '@/domains/events/model/event.entities';
 import { eventsListResponseSchema } from '@/domains/events/model/schemas';
 
@@ -12,5 +11,10 @@ export async function fetchEvents(): Promise<readonly EventType[]> {
     getApiClient().get(endpoints.public.events),
     eventsListResponseSchema,
   );
-  return normalizeListResponse(result).map(mapEventItem);
+  const items = Array.isArray(result)
+    ? result
+    : Array.isArray(result.data)
+      ? result.data
+      : result.data?.data ?? [];
+  return items.map(mapEventItem);
 }

@@ -4,8 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import { useCurrentUser, useIsAuthenticated } from '@/domains/auth';
 import { useUiThemeStore } from '@/domains/settings';
-import { UserService } from '@/domains/user';
-import { fireAndForget } from '@/shared/infra/http';
 import { initialsFromDisplayName } from '@/shared/utils/initialsFromDisplayName';
 import { resolveDisplayName } from '@/shared/utils/resolveDisplayName';
 import { ErrorBoundary } from '@/ui/components/ErrorBoundary';
@@ -13,8 +11,6 @@ import { ToastHost } from '@/shared/ui/toast';
 import { ShellDrawerProvider } from '@/ui/layout/ShellDrawerContext';
 import { AppThemeProvider } from '@/ui/theme';
 import { StatusBarChromeProvider } from '@/ui/statusBar';
-
-UserService.registerPurchaseLookup();
 
 type BridgeShellProps = { children: React.ReactNode };
 
@@ -47,14 +43,6 @@ export function BridgeShell({ children }: BridgeShellProps) {
       avatarInitials: initialsFromDisplayName(displayName),
     };
   }, [isAuthenticated, t, user]);
-
-  React.useEffect(() => {
-    if (isAuthenticated) {
-      fireAndForget(UserService.refreshPurchasedProductIds());
-    } else {
-      UserService.clearPurchasedProductIds();
-    }
-  }, [isAuthenticated]);
 
   const shellDrawer = React.useMemo(
     () => ({

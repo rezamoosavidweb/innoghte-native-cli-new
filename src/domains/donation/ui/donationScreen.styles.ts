@@ -171,7 +171,9 @@ export const createDonationScreenStyles = (args: {
       fontSize: fontSize.base,
       paddingVertical: 0,
       textAlign: 'right',
+      writingDirection: 'rtl',
     },
+    inputLtr: { textAlign: 'left', writingDirection: 'ltr' },
     fieldError: { color: semantic.errorText, fontSize: fontSize.xs },
 
     footerRow: {

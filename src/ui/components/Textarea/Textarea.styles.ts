@@ -20,6 +20,7 @@ export function createTextareaStyles(colors: ThemeColors) {
       minHeight: 84,
       textAlignVertical: 'top',
       textAlign: 'right',
+      writingDirection: 'rtl',
       paddingVertical: 0,
     },
     footer: {

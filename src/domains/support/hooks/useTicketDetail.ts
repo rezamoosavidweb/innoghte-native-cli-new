@@ -10,6 +10,7 @@ import {
   replyToTicket,
 } from '@/domains/support/api/ticketsApi';
 import type { CreateTicketFields } from '@/domains/support/model/createTicket.types';
+import type { TicketUploadFile } from '@/domains/support/model/createTicket.types';
 import { ticketsKeys } from '@/domains/support/model/queryKeys';
 
 const STALE_TIME_MS = 5 * 60 * 1000;
@@ -29,7 +30,8 @@ export function useReplyToTicketMutation(ticketId: number) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (message: string) => replyToTicket(ticketId, message),
+    mutationFn: (input: {message: string; attachments: TicketUploadFile[]}) =>
+      replyToTicket(ticketId, input),
     onSuccess: () => {
       queryClient
         .invalidateQueries({ queryKey: ticketsKeys.detail(ticketId) })

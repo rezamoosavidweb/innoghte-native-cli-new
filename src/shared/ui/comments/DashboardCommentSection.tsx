@@ -353,6 +353,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     fontSize: 15,
+    textAlign: 'right',
+    writingDirection: 'rtl',
   },
   fieldError: {
     color: palette.danger[500],

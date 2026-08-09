@@ -135,9 +135,16 @@ const TicketListScreenComponent = (_props: Props) => {
 
   const showFullBleedLoading = isPending;
 
-  const isEmpty = isSuccess && flatData.length === 0;
-
   const refreshing = Boolean(isSuccess && flatData.length > 0 && isRefetching);
+
+  const listEmpty = React.useMemo(
+    () => (
+      <Text style={ticketStyles.notice}>
+        {t('screens.support.tickets.list.empty')}
+      </Text>
+    ),
+    [t, ticketStyles.notice],
+  );
 
   const refresh = React.useCallback(() => {
     queryClient
@@ -178,6 +185,7 @@ const TicketListScreenComponent = (_props: Props) => {
         estimatedItemSize={estimatedItemSize}
         ItemSeparatorComponent={Separator}
         ListHeaderComponent={listHeader}
+        ListEmptyComponent={listEmpty}
         contentContainerStyle={flashListContentGutters.standard}
         showsVerticalScrollIndicator={false}
         onEndReached={handleEndReached}
@@ -197,6 +205,7 @@ const TicketListScreenComponent = (_props: Props) => {
     handleEndReached,
     listFooter,
     listHeader,
+    listEmpty,
     refreshControl,
     renderTicketItem,
     scrollPropsForFlashList,
@@ -215,7 +224,7 @@ const TicketListScreenComponent = (_props: Props) => {
       isLoading={showFullBleedLoading}
       isError={Boolean(isError)}
       error={error}
-      isEmpty={isEmpty}
+      isEmpty={false}
       onRetry={retryOrRefetch}
       renderList={renderList}
       loadingMessage={t('screens.support.states.loading')}

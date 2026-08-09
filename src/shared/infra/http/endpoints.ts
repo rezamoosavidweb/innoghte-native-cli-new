@@ -2,13 +2,15 @@ export const endpoints = {
   public: {
     albums: 'api/v1/public/albums',
     courses: 'api/v1/public/courses',
+    categories: 'api/v1/public/categories',
+    createBlog: 'api/v1/public/blogs/create',
     /** Single course — matches client-web `getPublicCourseDetail`. */
     courseDetail: 'api/v1/public/courses/course',
     /** Course reviews / comments list — matches client-web `getPublicComments`. */
     comments: 'api/v1/public/courses/comments',
-    events: 'api/v1/public/events',
+    events: 'api/website/event_list',
     faq: 'api/v1/faq',
-    liveMeeting: 'api/v1/public/live-meetings',
+    liveMeeting: 'api/website/live_list',
     quickAccess: 'api/v1/public/quick-access',
     /** Anonymous cart — `X-Cart-Token` header (see client-web). */
     cartList: 'api/v1/public/carts',
@@ -27,6 +29,8 @@ export const endpoints = {
   /** Authenticated course actions — Bearer token (same paths as client-web dashboard). */
   coursesAuth: {
     createComment: 'api/v1/courses/comments/create',
+    giftRequest: (courseId: number) =>
+      `api/v1/courses/gift-request/${courseId}`,
   },
   auth: {
     login: 'api/v1/login',
@@ -52,6 +56,8 @@ export const endpoints = {
   /** Authenticated user — see {@link fetchAndApplyPurchasedProductIds}. */
   user: {
     purchasedProductIds: 'api/v1/user/purchased-product-ids',
+    sentPresents: 'api/v1/presents/sends',
+    receivedPresents: 'api/v1/presents/receivers',
     /** Order / purchase history — same path as client-web `getListOrders`. */
     orders: 'api/v1/orders',
   },

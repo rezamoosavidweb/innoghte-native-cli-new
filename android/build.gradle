@@ -27,5 +27,29 @@ allprojects {
     }
 }
 
+// AGP 8.12 asks library annotation-extraction for unpublished lint 31.12.0
+// artifacts. This publishing-only task is not needed by the debug application.
+subprojects { subproject ->
+    def debugTypedefFile = subproject.layout.buildDirectory.file(
+        "intermediates/annotations_typedef_file/debug/extractDebugAnnotations/typedefs.txt"
+    )
+    def prepareDebugTypedefs = subproject.tasks.register("prepareDebugTypedefs") {
+        outputs.file(debugTypedefFile)
+        doLast {
+            def output = debugTypedefFile.get().asFile
+            output.parentFile.mkdirs()
+            output.text = ""
+        }
+    }
+    subproject.tasks.configureEach { task ->
+        if (task.name == "extractDebugAnnotations") {
+            task.enabled = false
+        }
+        if (task.name == "syncDebugLibJars") {
+            task.dependsOn(prepareDebugTypedefs)
+        }
+    }
+}
+
 
 apply plugin: "com.facebook.react.rootproject"

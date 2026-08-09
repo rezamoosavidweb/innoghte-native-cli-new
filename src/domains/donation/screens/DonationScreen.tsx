@@ -393,7 +393,7 @@ export const DonationScreen = React.memo(function DonationScreen({
                   <View style={s.inputWrap}>
                     <MailIcon width={18} height={18} color={semantic.textMuted} />
                     <TextInput
-                      style={s.input}
+                      style={[s.input, s.inputLtr]}
                       autoCapitalize="none"
                       keyboardType="email-address"
                       value={field.value}

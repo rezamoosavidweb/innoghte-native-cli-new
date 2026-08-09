@@ -27,6 +27,8 @@ export const createDonationCreditCardFieldsStyles = (args: {
       height: FORM_CONTROL_HEIGHT,
       fontSize: fontSize.base,
       color: semantic.text,
+      textAlign: 'right',
+      writingDirection: 'rtl',
     },
     error: {
       fontSize: fontSize.xs,
@@ -51,8 +53,8 @@ export const createDonationCreditCardFieldsStyles = (args: {
       backgroundColor: semantic.primarySoft,
     },
     typeChipText: { fontSize: fontSize.xs, color: semantic.text },
-    inputLtr: { writingDirection: 'ltr' },
-    inputCenter: { textAlign: 'center' },
+    inputLtr: { textAlign: 'left', writingDirection: 'ltr' },
+    inputCenter: { textAlign: 'center', writingDirection: 'ltr' },
   });
 };
 

@@ -3,6 +3,7 @@ export type LiveMeetingType = {
   title_fa: string;
   package: number;
   price: number;
+  is_accessible: boolean;
   image_media: Array<{
     course_id: number;
     id: number;
@@ -16,6 +17,7 @@ export function mapLiveMeetingItem(item: Record<string, unknown>): LiveMeetingTy
     title_fa: String(item.title_fa ?? ''),
     package: Number(item.package ?? 0),
     price: Number(item.price ?? 0),
+    is_accessible: Boolean(item.is_accessible),
     image_media: Array.isArray(item.image_media)
       ? item.image_media.map((media, index) => {
           const m = media as Record<string, unknown>;

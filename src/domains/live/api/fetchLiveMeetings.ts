@@ -1,7 +1,6 @@
 import { parseJsonResponse } from '@/shared/infra/http/parseJson';
 import { getApiClient } from '@/shared/infra/http';
 import { endpoints } from '@/shared/infra/http/endpoints';
-import { normalizeListResponse } from '@/shared/infra/http/normalizeListResponse';
 import {
   mapLiveMeetingItem,
   type LiveMeetingType,
@@ -15,5 +14,12 @@ export async function fetchLiveMeetings(): Promise<readonly LiveMeetingType[]> {
     getApiClient().get(endpoints.public.liveMeeting),
     liveMeetingsListResponseSchema,
   );
-  return normalizeListResponse(result).map(mapLiveMeetingItem);
+  const items = Array.isArray(result)
+    ? result
+    : result.data ?? [
+        ...(result.package_lives ?? []),
+        ...(result.finished_lives ?? []),
+        ...(result.next_lives ?? []),
+      ];
+  return items.map(mapLiveMeetingItem);
 }

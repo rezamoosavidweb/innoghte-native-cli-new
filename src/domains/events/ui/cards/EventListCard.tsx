@@ -11,12 +11,12 @@ import {
 import type { EventType } from '@/domains/events/model/event.entities';
 import { useEventListCardStyles } from '@/domains/events/ui/cards/eventListCard.styles';
 import { Button } from '@/ui/components/Button';
+import { CartMainButtons } from '@/shared/ui/cart/CartMainButtons';
+import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 
 const PRICE_DIVISOR = 10;
 
 type Props = { item: EventType };
-
-function noop(): void {}
 
 function statusTranslationKey(
   state: string,
@@ -35,6 +35,7 @@ const EventListCardComponent = ({ item }: Props) => {
   const { t } = useTranslation();
   const { colors: themeColors } = useTheme();
   const s = useEventListCardStyles(themeColors);
+  const navigation = useAppNavigation();
   const uri = item.image_media[0]?.src;
   const [failed, setFailed] = React.useState(false);
   const price = formatPriceForApp(
@@ -44,6 +45,14 @@ const EventListCardComponent = ({ item }: Props) => {
   const capacity = formatNumberForApp(item.remain_capacity ?? 0);
   const isUpcoming = item.state === 'upcoming';
   const eventType = item.event_detail?.type ?? 'workshop';
+
+  const openPublicDetail = React.useCallback(() => {
+    navigation.navigate('PublicCourseDetail', {courseId: item.id});
+  }, [item.id, navigation]);
+
+  const openPurchasedDetail = React.useCallback(() => {
+    navigation.navigate('CourseDetail', {courseId: item.id});
+  }, [item.id, navigation]);
 
   return (
     <View style={s.card}>
@@ -86,7 +95,7 @@ const EventListCardComponent = ({ item }: Props) => {
             layout="auto"
             variant="filled"
             title={t('events.registerInfo')}
-            onPress={noop}
+            onPress={openPublicDetail}
             style={s.successBtn}
             contentStyle={{ width: '100%' }}
           >
@@ -94,25 +103,22 @@ const EventListCardComponent = ({ item }: Props) => {
           </Button>
         ) : isUpcoming && eventType === 'workshop' ? (
           <>
+            <CartMainButtons
+              courseId={item.id}
+              isFull={item.remain_capacity === 0}
+              isAccessible={item.is_accessible}
+              onPressPrimary={openPurchasedDetail}
+              containerStyle={s.successBtn}
+            />
             <Button
               layout="auto"
               variant="outlined"
               title={t('courses.moreInformation')}
-              onPress={noop}
+              onPress={openPublicDetail}
               style={s.outlineBtn}
               contentStyle={{ width: '100%' }}
             >
               <Text style={s.outlineTxt}>{t('courses.moreInformation')}</Text>
-            </Button>
-            <Button
-              layout="auto"
-              variant="filled"
-              title={t('courses.buy')}
-              onPress={noop}
-              style={s.successBtn}
-              contentStyle={{ width: '100%' }}
-            >
-              <Text style={s.btnSuccessText}>{t('courses.buy')}</Text>
             </Button>
           </>
         ) : (
@@ -120,7 +126,7 @@ const EventListCardComponent = ({ item }: Props) => {
             layout="auto"
             variant="filled"
             title={t('courses.moreInformation')}
-            onPress={noop}
+            onPress={openPublicDetail}
             style={s.primaryBtn}
             contentStyle={{ width: '100%' }}
           >

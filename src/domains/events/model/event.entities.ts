@@ -4,6 +4,7 @@ export type EventType = {
   state: string;
   price: number;
   remain_capacity: number;
+  is_accessible: boolean;
   image_media: Array<{
     course_id: number;
     id: number;
@@ -24,6 +25,7 @@ export function mapEventItem(item: Record<string, unknown>): EventType {
     state: String(item.state ?? 'unknown'),
     price: Number(item.price ?? 0),
     remain_capacity: Number(item.remain_capacity ?? 0),
+    is_accessible: Boolean(item.is_accessible),
     image_media: Array.isArray(item.image_media)
       ? item.image_media.map((media, index) => {
           const m = media as Record<string, unknown>;

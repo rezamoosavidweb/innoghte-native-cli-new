@@ -157,7 +157,7 @@ export const PaymentSection = React.memo(function PaymentSection({
                   <View style={s.field}>
                     <Text style={s.label}>شماره کارت</Text>
                     <TextInput
-                      style={s.input}
+                      style={[s.input, s.inputLtr]}
                       value={field.value}
                       onChangeText={t => field.onChange(formatCardNumber(t))}
                       onBlur={field.onBlur}
@@ -181,7 +181,7 @@ export const PaymentSection = React.memo(function PaymentSection({
                       <View style={s.field}>
                         <Text style={s.label}>ماه MM</Text>
                         <TextInput
-                          style={s.input}
+                          style={[s.input, s.inputLtr]}
                           value={field.value}
                           onChangeText={field.onChange}
                           onBlur={field.onBlur}
@@ -206,7 +206,7 @@ export const PaymentSection = React.memo(function PaymentSection({
                       <View style={s.field}>
                         <Text style={s.label}>سال YYYY</Text>
                         <TextInput
-                          style={s.input}
+                          style={[s.input, s.inputLtr]}
                           value={field.value}
                           onChangeText={field.onChange}
                           onBlur={field.onBlur}
@@ -231,7 +231,7 @@ export const PaymentSection = React.memo(function PaymentSection({
                   <View style={s.field}>
                     <Text style={s.label}>CVV</Text>
                     <TextInput
-                      style={s.input}
+                      style={[s.input, s.inputLtr]}
                       value={field.value}
                       onChangeText={field.onChange}
                       onBlur={field.onBlur}

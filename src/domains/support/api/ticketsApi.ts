@@ -7,10 +7,12 @@ import { z } from 'zod';
 
 import type {
   Ticket,
+  TicketAttachment,
   TicketDetail,
   TicketThreadAuthorRole,
   TicketThreadMessage,
 } from '@/domains/support/model/ticket.types';
+import type { CreateTicketFields, TicketUploadFile } from '@/domains/support/model/createTicket.types';
 import { parseJsonResponse } from '@/shared/infra/http';
 import { getApiClient } from '@/shared/infra/http/appHttpClient';
 import type { PageWithPagination } from '@/shared/lib/infiniteList/defaultGetNextPageParam';
@@ -47,6 +49,7 @@ const ticketResponseWireSchema = z.object({
   user_id: z.union([z.number(), z.null()]),
   created_at: z.string(),
   updated_at: z.string(),
+  attachments: z.unknown().optional().nullable(),
 });
 
 const ticketDetailWireSchema = z
@@ -58,6 +61,8 @@ const ticketDetailWireSchema = z
     category: z.union([z.string(), z.null()]).optional(),
     created_at: z.string(),
     description: z.string().optional(),
+    priority: z.union([z.string(), z.null()]).optional(),
+    attachments: z.unknown().optional().nullable(),
     ticket_responses: z.array(ticketResponseWireSchema).optional(),
   })
   .passthrough();
@@ -86,6 +91,40 @@ function mapThreadRole(response: z.infer<typeof ticketResponseWireSchema>): Tick
   return response.admin_author_id !== null ? 'staff' : 'user';
 }
 
+function parsePossiblyEncodedJson(value: unknown): unknown {
+  let current = value;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    if (typeof current !== 'string' || current.trim() === '') break;
+    try {
+      current = JSON.parse(current) as unknown;
+    } catch {
+      return [];
+    }
+  }
+  return current;
+}
+
+/** API sometimes returns attachment JSON double-encoded; normalize safely. */
+export function parseTicketAttachments(value: unknown): TicketAttachment[] {
+  const parsed = parsePossiblyEncodedJson(value);
+  if (!Array.isArray(parsed)) return [];
+
+  return parsed.flatMap(item => {
+    if (!item || typeof item !== 'object') return [];
+    const row = item as Record<string, unknown>;
+    const path = typeof row.path === 'string' ? row.path : '';
+    const originalName =
+      typeof row.original_name === 'string' ? row.original_name : '';
+    if (!path || !originalName) return [];
+    return [{
+      path,
+      originalName,
+      mimeType: typeof row.mime_type === 'string' ? row.mime_type : '',
+      size: Number(row.size ?? 0),
+    }];
+  });
+}
+
 function mapTicketDetailWire(data: z.infer<typeof ticketDetailWireSchema>): TicketDetail {
   const rawCategory = data.category;
   const category =
@@ -99,6 +138,7 @@ function mapTicketDetailWire(data: z.infer<typeof ticketDetailWireSchema>): Tick
       body: response.message,
       authorRole: mapThreadRole(response),
       createdAt: response.created_at,
+      attachments: parseTicketAttachments(response.attachments),
     }));
 
   return {
@@ -109,6 +149,8 @@ function mapTicketDetailWire(data: z.infer<typeof ticketDetailWireSchema>): Tick
     category,
     createdAt: data.created_at,
     description: data.description ?? '',
+    priority: typeof data.priority === 'string' ? data.priority : '',
+    attachments: parseTicketAttachments(data.attachments),
     messages,
   };
 }
@@ -164,16 +206,22 @@ const createEnvelopeSchema = z.object({
   message: z.string().optional(),
 });
 
-export async function createTicketDraft(input: {
-  title: string;
-  description: string;
-}): Promise<number> {
+function appendAttachment(fd: FormData, file: TicketUploadFile): void {
+  fd.append('attachments[]', {
+    uri: file.uri,
+    name: file.name,
+    type: file.mimeType,
+  } as unknown as Blob);
+}
+
+export async function createTicketDraft(input: CreateTicketFields): Promise<number> {
   const ky = getApiClient();
   const fd = new FormData();
   fd.append('title', input.title);
   fd.append('description', input.description);
-  fd.append('category', 'general_support');
-  fd.append('priority', 'medium');
+  fd.append('category', input.category);
+  fd.append('priority', input.priority);
+  input.attachments.forEach(file => appendAttachment(fd, file));
 
   const raw = await parseJsonResponse(
     ky.post('api/v1/tickets/create', { body: fd }),
@@ -191,10 +239,14 @@ export async function createTicketDraft(input: {
   return payload.id;
 }
 
-export async function replyToTicket(id: number, message: string): Promise<void> {
+export async function replyToTicket(
+  id: number,
+  input: {message: string; attachments: TicketUploadFile[]},
+): Promise<void> {
   const ky = getApiClient();
   const fd = new FormData();
-  fd.append('message', message);
+  fd.append('message', input.message);
+  input.attachments.forEach(file => appendAttachment(fd, file));
 
   await ky.post(`api/v1/tickets/${id}/reply`, { body: fd });
 }

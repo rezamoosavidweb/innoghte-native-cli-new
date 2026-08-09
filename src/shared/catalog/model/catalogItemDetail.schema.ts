@@ -11,6 +11,8 @@ export const catalogItemDetailSchema = z.looseObject({
   from_album: z.string().nullable(),
   color: z.string().nullable(),
   price: z.number(),
+  discount_price: z.number().nullable().optional(),
+  duration: z.string().nullable().optional(),
   is_accessible: z.boolean().nullable().optional(),
   is_downloadable: z.number().optional(),
   requirements: z.string().nullable(),
@@ -47,6 +49,18 @@ export const catalogItemDetailSchema = z.looseObject({
     )
     .optional(),
   remain_capacity: z.number().nullable().optional(),
+  audio_book_detail: z
+    .looseObject({
+      section1_description: z.string().nullable().optional(),
+      section2_title: z.string().nullable().optional(),
+      section2_description: z.string().nullable().optional(),
+      section3_title: z.string().nullable().optional(),
+      section3_description: z.string().nullable().optional(),
+      section4_title: z.string().nullable().optional(),
+      section4_description: z.string().nullable().optional(),
+    })
+    .nullable()
+    .optional(),
 });
 
 export const catalogItemDetailResponseSchema = z.looseObject({

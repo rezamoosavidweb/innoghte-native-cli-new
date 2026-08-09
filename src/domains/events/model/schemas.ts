@@ -7,7 +7,12 @@ export const eventsListResponseSchema = z.union([
   z.array(eventItemSchema),
   z
     .object({
-      data: z.array(eventItemSchema).optional(),
+      data: z
+        .union([
+          z.array(eventItemSchema),
+          z.object({ data: z.array(eventItemSchema).optional() }).passthrough(),
+        ])
+        .optional(),
     })
     .passthrough(),
 ]);

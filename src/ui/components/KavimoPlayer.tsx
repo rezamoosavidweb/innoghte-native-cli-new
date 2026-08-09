@@ -6,11 +6,7 @@ export interface KavimoPlayerProps {
   onEnded?: (action: any) => void;
   activeChapterMedia?: string | null;
 }
-export function KavimoPlayer({
-  autoPlay,
-  onEnded,
-  activeChapterMedia,
-}: KavimoPlayerProps) {
+export function KavimoPlayer({ activeChapterMedia }: KavimoPlayerProps) {
   const url = new URL(activeChapterMedia || '');
   const parts = url.pathname.split('/').filter(Boolean);
   const domainName = url.hostname;

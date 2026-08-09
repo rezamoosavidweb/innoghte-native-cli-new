@@ -1,4 +1,8 @@
 {
+  "common": {
+    "yes": "Yes",
+    "no": "No"
+  },
   "tabs": {
     "home": "Home",
     "mycourses": "My courses",
@@ -21,9 +25,10 @@
     "verify": "Verify",
     "help": "Help",
     "about": "About",
-    "publicAlbums": "Public album tracks",
+    "publicAlbums": "Albums",
+    "audioBooks": "The Art of Living",
     "myCourses": "My learning hub",
-    "publicCourses": "Public courses",
+    "publicCourses": "Courses",
     "liveMeetings": "Live meetings",
     "events": "Events",
     "login": "Sign in",
@@ -35,6 +40,7 @@
     "listening": "Listening",
     "writing": "Writing",
     "privateConsultation": "Private consultation",
+    "tutorial": "How to use",
     "donation": "Donation",
     "basket": "Basket",
     "aboutUs": "About us",
@@ -60,6 +66,8 @@
     "publicCourseDetail": "Course overview",
     "publicAlbumDetail": "Album overview",
     "albumDetail": "My album",
+    "publicAudioBookDetail": "The Art of Living audiobook",
+    "audioBookDetail": "My audiobook",
     "section": {
       "services": "Services",
       "experience": "Experience"
@@ -165,6 +173,29 @@
       "moreInformation": "More info",
       "itemsCountLabel": "Items"
     },
+    "audioBooks": {
+      "loading": "Loading audiobook…",
+      "error": "Could not load the audiobook.",
+      "empty": "No audiobook is available."
+    },
+    "audioBookDetail": {
+      "title": "The Art of Living audiobook",
+      "loading": "Loading audiobook…",
+      "error": "Could not load audiobook details.",
+      "empty": "Audiobook not found.",
+      "downloadable": "Downloadable",
+      "accessType": "Access",
+      "price": "Price",
+      "preview": "Audio preview",
+      "narrator": "Narrator",
+      "duration": "Duration",
+      "comments": "User comments"
+    },
+    "experienceCatalog": {
+      "loading": "Loading content…",
+      "error": "Could not load content.",
+      "empty": "No content is available in this section yet."
+    },
     "myCoursesHub": {
       "subtitle": "Browse courses, albums, and more — same hub as the legacy app.",
       "comingSoonTitle": "Coming soon",
@@ -207,6 +238,7 @@
       "accountActive": "Your account is active.",
       "accountInactive": "Your account is inactive.",
       "sectionExperiences": "Experiences",
+      "sectionProducts": "My products",
       "sectionFinancial": "Financial & gifts",
       "sectionSupportLegal": "Support & legal",
       "financialMenu": {
@@ -223,6 +255,8 @@
       "menu": {
         "myCourses": "My Courses",
         "myAlbums": "My Albums",
+        "myLiveMeetings": "My live meetings",
+        "audioBooks": "The Art of Living",
         "meditations": "Meditations",
         "readings": "Readings",
         "writings": "Writings",
@@ -335,8 +369,12 @@
           "title": "Create ticket",
           "subtitle": "Describe the topic and details.",
           "fieldTitle": "Subject",
+          "fieldCategory": "Category",
+          "fieldPriority": "Priority",
           "fieldDescription": "Description",
           "titlePlaceholder": "Short summary",
+          "categoryPlaceholder": "Choose a category",
+          "priorityPlaceholder": "Choose a priority",
           "descriptionPlaceholder": "Explain the situation…",
           "submit": "Submit ticket",
           "successToast": "Ticket submitted successfully. Please wait for support to respond.",
@@ -350,6 +388,30 @@
           "sendReply": "Send reply",
           "authorYou": "You",
           "authorStaff": "Support"
+        },
+        "categories": {
+          "technical_issue": "Technical issue",
+          "course_content": "Course content",
+          "billing": "Billing",
+          "feature_request": "Feature request",
+          "bug_report": "Bug report",
+          "general_support": "General support"
+        },
+        "priorities": {
+          "low": "Low",
+          "medium": "Medium",
+          "high": "High",
+          "urgent": "Urgent"
+        },
+        "attachments": {
+          "label": "Attachments",
+          "pick": "Choose files",
+          "hint": "Up to 5 files, 2 MB each; JPG, PNG and PDF only",
+          "remove": "Remove",
+          "invalidTitle": "Invalid file",
+          "invalidBody": "Choose up to 5 JPG, PNG or PDF files, no larger than 2 MB each.",
+          "errorTitle": "File picker error",
+          "errorBody": "The file could not be selected. Try again."
         }
       }
     },

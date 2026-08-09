@@ -8,6 +8,9 @@ export const liveMeetingsListResponseSchema = z.union([
   z
     .object({
       data: z.array(liveMeetingItemSchema).optional(),
+      package_lives: z.array(liveMeetingItemSchema).optional(),
+      finished_lives: z.array(liveMeetingItemSchema).optional(),
+      next_lives: z.array(liveMeetingItemSchema).optional(),
     })
     .passthrough(),
 ]);

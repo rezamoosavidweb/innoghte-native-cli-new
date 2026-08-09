@@ -1,52 +1,114 @@
 import type { DrawerScreenProps } from '@react-navigation/drawer';
-import { useTheme } from '@react-navigation/native';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ScrollView, View } from 'react-native';
-import { Text } from '@/shared/ui/Text';
+import { RefreshControl, ScrollView } from 'react-native';
 
-import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import {
-  flashListContentGutters,
-  pickSemantic,
-  createNavScreenShellStyles,
-} from '@/ui/theme';
+  fetchGiftHistory,
+  type GiftHistoryItem,
+  type GiftHistoryKind,
+} from '@/domains/user/api/giftHistoryApi';
+import { GiftDetailsModal } from '@/domains/user/components/giftHistory/GiftDetailsModal';
+import { GiftHistoryTable } from '@/domains/user/components/giftHistory/GiftHistoryTable';
+import { giftSubScreenStyles as styles } from '@/domains/user/screens/giftSubScreen.styles';
+import type { DrawerParamList } from '@/shared/contracts/navigationApp';
+import { ListStateView } from '@/shared/ui/list-states/ListStateView';
 
-import { useGiftSubScreenStyles } from '@/domains/user/screens/giftSubScreen.styles';
-
-type GiftLeafName = 'GiftSend' | 'GiftReceived' | 'GiftSent';
-
+type GiftLeafName = 'GiftReceived' | 'GiftSent';
 type Props = DrawerScreenProps<DrawerParamList, GiftLeafName>;
-
-const TITLE_SUFFIX: Record<GiftLeafName, 'send' | 'received' | 'sent'> = {
-  GiftSend: 'send',
-  GiftReceived: 'received',
-  GiftSent: 'sent',
-};
 
 export const GiftSubScreen = React.memo(function GiftSubScreen({ route }: Props) {
   const { t } = useTranslation();
-  const theme = useTheme();
-  const { colors } = theme;
-  const semantic = pickSemantic(theme);
-  const shell = createNavScreenShellStyles(colors);
+  const queryClient = useQueryClient();
+  const kind: GiftHistoryKind = route.name === 'GiftReceived' ? 'received' : 'sent';
+  const queryKey = React.useMemo(() => ['giftHistory', kind] as const, [kind]);
+  const [selectedGift, setSelectedGift] = React.useState<GiftHistoryItem | null>(null);
+  const { data, isPending, isError, error, isSuccess, isRefetching, refetch } =
+    useQuery({
+      queryKey,
+      queryFn: () => fetchGiftHistory(kind),
+    });
+  const rows = React.useMemo(() => data ?? [], [data]);
+  const title = kind === 'received' ? 'هدیه‌های دریافت شده' : 'هدیه‌های داده شده';
+  const emptyText = kind === 'received'
+    ? 'اطلاعاتی برای نمایش وجود ندارد.'
+    : 'هنوز هدیه‌ای ارسال نکرده‌اید.';
 
-  const suffix = TITLE_SUFFIX[route.name];
-  const title = t(`screens.gift.leaf.${suffix}.title`);
-  const body = t(`screens.gift.leaf.${suffix}.body`);
+  React.useEffect(() => {
+    setSelectedGift(null);
+  }, [kind]);
 
-  const s = useGiftSubScreenStyles(colors, semantic);
+  const refresh = React.useCallback(() => {
+    queryClient.invalidateQueries({ queryKey }).catch(() => {});
+  }, [queryClient, queryKey]);
+  const retry = React.useCallback(() => {
+    refetch().catch(() => {});
+  }, [refetch]);
+  const openDetails = React.useCallback(
+    (item: GiftHistoryItem) => {
+      if (kind === 'sent') {
+        setSelectedGift(item);
+      }
+    },
+    [kind],
+  );
+  const closeDetails = React.useCallback(() => setSelectedGift(null), []);
+
+  const renderList = React.useCallback(
+    () => (
+      <>
+        <ScrollView
+          bounces
+          contentContainerStyle={styles.content}
+          refreshControl={
+            <RefreshControl
+              refreshing={Boolean(isSuccess && isRefetching)}
+              onRefresh={refresh}
+            />
+          }
+        >
+          <GiftHistoryTable
+            rows={rows}
+            kind={kind}
+            title={title}
+            emptyText={emptyText}
+            onGiftPress={openDetails}
+          />
+        </ScrollView>
+        <GiftDetailsModal item={selectedGift} onClose={closeDetails} />
+      </>
+    ),
+    [
+      closeDetails,
+      emptyText,
+      isRefetching,
+      isSuccess,
+      kind,
+      openDetails,
+      refresh,
+      rows,
+      selectedGift,
+      title,
+    ],
+  );
 
   return (
-    <ScrollView
-      contentContainerStyle={flashListContentGutters.standard}
-      keyboardShouldPersistTaps="handled"
-    >
-      <View style={shell.safe}>
-        <Text style={s.title}>{title}</Text>
-        <Text style={s.body}>{body}</Text>
-      </View>
-    </ScrollView>
+    <ListStateView
+      isLoading={isPending}
+      isError={isError}
+      error={error}
+      isEmpty={false}
+      onRetry={retry}
+      renderList={renderList}
+      loadingMessage="در حال دریافت هدیه‌ها…"
+      errorTitle="دریافت اطلاعات هدیه‌ها ناموفق بود."
+      emptyTitle={t(
+        `screens.gift.leaf.${kind === 'received' ? 'received' : 'sent'}.body`,
+      )}
+      retryLabel={t('listStates.retry')}
+      safeAreaEdges={['left', 'right', 'bottom']}
+    />
   );
 });
 GiftSubScreen.displayName = 'GiftSubScreen';

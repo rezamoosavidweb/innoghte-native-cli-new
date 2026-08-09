@@ -67,6 +67,8 @@ export function createPhoneInputStyles(colors: ThemeColors) {
       fontSize: fontSize.base,
       color: colors.text,
       backgroundColor: colors.inputBackground,
+      textAlign: 'left',
+      writingDirection: 'ltr',
     },
     errorText: {
       marginTop: spacing.xs,
@@ -111,6 +113,8 @@ export function createPhoneInputStyles(colors: ThemeColors) {
       fontSize: fontSize.base,
       color: colors.text,
       backgroundColor: colors.inputBackground,
+      textAlign: 'left',
+      writingDirection: 'ltr',
     },
     listContent: {
       paddingBottom: spacing['3xl'],

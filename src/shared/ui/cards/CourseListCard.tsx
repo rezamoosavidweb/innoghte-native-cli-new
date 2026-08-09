@@ -21,6 +21,7 @@ const PRICE_DISPLAY_DIVISOR = 10;
 
 type CourseListCardProps = {
   course: CatalogItem;
+  detailKind?: 'course' | 'audioBook';
 };
 
 function buildStarString(points: number): string {
@@ -71,7 +72,10 @@ const CourseInfoRow = React.memo(function CourseInfoRow({
 });
 CourseInfoRow.displayName = 'CourseInfoRow';
 
-const CourseListCardComponent = ({ course }: CourseListCardProps) => {
+const CourseListCardComponent = ({
+  course,
+  detailKind = 'course',
+}: CourseListCardProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const { colors } = theme;
@@ -82,16 +86,32 @@ const CourseListCardComponent = ({ course }: CourseListCardProps) => {
   const navigation = useAppNavigation();
 
   const onPressPrimary = React.useCallback(() => {
+    if (detailKind === 'audioBook') {
+      protectedNavigate(navigation, 'AudioBookDetail', {
+        courseId: course.id,
+      });
+      return;
+    }
     protectedNavigate(navigation, 'CourseDetail', { courseId: course.id });
-  }, [course.id, navigation]);
+  }, [course.id, detailKind, navigation]);
 
   const onPressSecondary = React.useCallback(() => {
+    if (detailKind === 'audioBook') {
+      navigation.navigate('PublicAudioBookDetail', {
+        audioBookId: course.id,
+      });
+      return;
+    }
     navigation.navigate('PublicCourseDetail', { courseId: course.id });
-  }, [navigation, course.id]);
+  }, [detailKind, navigation, course.id]);
 
   const imageUri = course.image_media[0]?.src;
+  const effectivePrice =
+    course.discountPrice > 0 && course.discountPrice < course.price
+      ? course.discountPrice
+      : course.price;
   const displayPrice = formatPriceForApp(
-    (course.price ?? 0) / PRICE_DISPLAY_DIVISOR,
+    (effectivePrice ?? 0) / PRICE_DISPLAY_DIVISOR,
     t('courses.currency'),
   );
   const chapters = formatNumberForApp(course.itemsCount);

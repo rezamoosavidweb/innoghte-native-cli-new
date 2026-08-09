@@ -59,7 +59,7 @@ export function useGiveGiftSubmit({
       await completeGiveGiftFlow(body, selectedProducts);
 
       showAppToast(t('screens.giveGift.successToast'), 'success');
-      navigation.navigate('GiftScreen');
+      navigation.navigate('MainTabs', {screen: 'Cart'});
       setLoading(false);
     } catch (error) {
       setLoading(false);

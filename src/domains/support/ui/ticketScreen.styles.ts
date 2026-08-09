@@ -1,5 +1,5 @@
 import type { Theme } from '@react-navigation/native';
-import { StyleSheet } from 'react-native';
+import { I18nManager, StyleSheet } from 'react-native';
 
 import {
   fontSize,
@@ -23,7 +23,7 @@ export function createTicketScreenStyles(colors: Theme['colors']) {
           opacity: 0.85,
           lineHeight: fontSize.sm * 1.5,
           marginBottom: spacing.sm,
-          textAlign: 'right',
+          textAlign: I18nManager.isRTL ? 'left' : 'right',
           writingDirection: 'rtl',
         },
         headerRow: {
@@ -172,7 +172,10 @@ export function createTicketScreenStyles(colors: Theme['colors']) {
           writingDirection: 'rtl',
         },
         multiline: {
+          height: 120,
           minHeight: 120,
+          paddingTop: spacing.md,
+          paddingBottom: spacing.md,
           textAlignVertical: 'top',
         },
         submitBtn: {
@@ -233,6 +236,51 @@ export function createTicketScreenStyles(colors: Theme['colors']) {
         replyRow: {
           gap: spacing.sm,
           marginTop: spacing.md,
+        },
+        attachmentSection: {
+          gap: spacing.sm,
+          marginTop: spacing.sm,
+        },
+        attachmentPicker: {
+          width: '100%',
+          borderRadius: radius.sm,
+          borderStyle: 'dashed',
+          borderColor: colors.primary,
+          backgroundColor: hexAlpha(colors.primary, 0.08),
+        },
+        attachmentHint: {
+          fontSize: fontSize.sm - 1,
+          color: colors.text,
+          opacity: 0.62,
+          textAlign: 'right',
+          writingDirection: 'rtl',
+        },
+        attachmentRow: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: spacing.sm,
+          paddingVertical: spacing.xs,
+          borderBottomWidth: StyleSheet.hairlineWidth,
+          borderBottomColor: colors.border,
+        },
+        attachmentName: {
+          flex: 1,
+          fontSize: fontSize.sm,
+          color: colors.text,
+          textAlign: 'right',
+        },
+        attachmentRemove: {
+          paddingHorizontal: spacing.sm,
+          minWidth: 56,
+        },
+        remoteAttachmentList: {
+          gap: spacing.xs,
+          marginTop: spacing.xs,
+        },
+        remoteAttachmentButton: {
+          alignSelf: 'flex-end',
+          paddingHorizontal: 0,
         },
         createTicketLink: {
           paddingVertical: spacing.sm,

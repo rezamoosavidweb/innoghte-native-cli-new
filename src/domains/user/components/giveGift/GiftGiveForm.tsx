@@ -28,8 +28,12 @@ export type GiftGiveFormProps = {
   mobileDefaults: GiveGiftFormType['mobile'];
   coursesPending: boolean;
   albumsPending: boolean;
+  rooyeKhatsPending: boolean;
+  audioBooksPending: boolean;
   courseOptions: readonly CatalogItem[];
   albumOptions: readonly CatalogItem[];
+  rooyeKhatOptions: readonly CatalogItem[];
+  audioBookOptions: readonly CatalogItem[];
   purchasedError: string;
   setPurchasedError: React.Dispatch<React.SetStateAction<string>>;
   interactionBusy: boolean;
@@ -46,8 +50,12 @@ export const GiftGiveForm = React.memo(function GiftGiveForm({
   mobileDefaults,
   coursesPending,
   albumsPending,
+  rooyeKhatsPending,
+  audioBooksPending,
   courseOptions,
   albumOptions,
+  rooyeKhatOptions,
+  audioBookOptions,
   purchasedError,
   setPurchasedError,
   interactionBusy,
@@ -93,7 +101,6 @@ export const GiftGiveForm = React.memo(function GiftGiveForm({
                   onBlur={field.onBlur}
                   placeholderTextColor={semantic.textMuted}
                   style={formField.input}
-                  textAlign="right"
                 />
               </GiveGiftLabeledField>
             )}
@@ -116,7 +123,6 @@ export const GiftGiveForm = React.memo(function GiftGiveForm({
                   onBlur={field.onBlur}
                   placeholderTextColor={semantic.textMuted}
                   style={formField.input}
-                  textAlign="right"
                 />
               </GiveGiftLabeledField>
             )}
@@ -143,7 +149,7 @@ export const GiftGiveForm = React.memo(function GiftGiveForm({
                 placeholder="ایمیل هدیه گیرنده"
                 placeholderTextColor={semantic.textMuted}
                 style={formField.input}
-                textAlign="left"
+                textAlign={field.value.length > 0 ? 'left' : 'right'}
                 autoCorrect={false}
               />
             </GiveGiftLabeledField>
@@ -218,6 +224,46 @@ export const GiftGiveForm = React.memo(function GiftGiveForm({
           )}
         />
 
+        <Controller
+          control={control}
+          name="selectionGroup.rooyeKhats"
+          render={({ field }) => (
+            <GiftProductMultiPicker
+              label="روی‌خط‌ها"
+              loading={rooyeKhatsPending}
+              disabled={interactionBusy}
+              options={rooyeKhatOptions}
+              selected={field.value ?? []}
+              onChange={next => {
+                setPurchasedError('');
+                field.onChange(next);
+              }}
+              styles={styles.picker}
+              activityColor={semantic.textMuted}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="selectionGroup.audioBooks"
+          render={({ field }) => (
+            <GiftProductMultiPicker
+              label="کتاب‌ها"
+              loading={audioBooksPending}
+              disabled={interactionBusy}
+              options={audioBookOptions}
+              selected={field.value ?? []}
+              onChange={next => {
+                setPurchasedError('');
+                field.onChange(next);
+              }}
+              styles={styles.picker}
+              activityColor={semantic.textMuted}
+            />
+          )}
+        />
+
         {errors.selectionGroup?.message ? (
           <Text style={formField.errorText}>{errors.selectionGroup.message}</Text>
         ) : null}
@@ -245,7 +291,6 @@ export const GiftGiveForm = React.memo(function GiftGiveForm({
                 onBlur={field.onBlur}
                 placeholder="اینجا بنویسید..."
                 placeholderTextColor={semantic.textMuted}
-                textAlign="right"
               />
             </GiveGiftLabeledField>
           )}

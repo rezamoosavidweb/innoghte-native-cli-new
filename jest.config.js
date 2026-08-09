@@ -1,5 +1,6 @@
 module.exports = {
   preset: '@react-native/jest-preset',
+  watchman: false,
   // Order: Reanimated mock before anything imports drawer/reanimated; RNGH before App.
   setupFiles: [
     '<rootDir>/jest.native-mocks.js',

@@ -70,6 +70,7 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
     () => ({
       courses: svgIcon(CourseIcon, colors.text, 20),
       albums: svgIcon(AlbumIcon, colors.text, 20),
+      audioBooks: svgIcon(ReadingIcon, colors.text, 20),
       liveMeetings: svgIcon(LiveIcon, colors.text, 21),
       meditation: svgIcon(MeditationIcon, colors.text, 45),
       writing: svgIcon(WritingIcon, colors.text, 45),
@@ -208,6 +209,13 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
           />
           <DrawerItem
             {...itemProps}
+            label={t('drawer.audioBooks')}
+            icon={icons.audioBooks}
+            focused={currentRoute === 'AudioBooks'}
+            onPress={go('AudioBooks')}
+          />
+          <DrawerItem
+            {...itemProps}
             label={t('drawer.liveMeetings')}
             icon={icons.liveMeetings}
             focused={currentRoute === 'LiveMeetings'}
@@ -283,6 +291,13 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
             icon={icons.star2}
             focused={currentRoute === 'AboutUs'}
             onPress={go('AboutUs')}
+          />
+          <DrawerItem
+            {...itemProps}
+            label={t('drawer.tutorial')}
+            icon={icons.docPlain}
+            focused={currentRoute === 'Tutorial'}
+            onPress={go('Tutorial')}
           />
           <DrawerItem
             {...itemProps}

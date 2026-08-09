@@ -18,7 +18,20 @@ module.exports = mergeConfig(defaultConfig, {
     babelTransformerPath: require.resolve('react-native-svg-transformer'),
   },
   resolver: {
+    // Watchman on Windows can stall indefinitely while registering this large
+    // dependency tree. Metro's Node watcher is reliable once native outputs are
+    // excluded by the block list below.
+    useWatchman: false,
     assetExts: assetExts.filter((ext) => ext !== 'svg'),
     sourceExts: [...sourceExts, 'svg'],
+    // Native build outputs are large, generated trees and are never imported by
+    // the JS bundle. Excluding them keeps Metro/Watchman startup reliable on
+    // Windows after an Android build has populated these directories.
+    blockList: [
+      defaultConfig.resolver.blockList,
+      /[/\\]android[/\\]app[/\\](?:build|\.cxx)(?:[/\\].*)?$/,
+      /[/\\]android[/\\](?:build|\.gradle)(?:[/\\].*)?$/,
+      /[/\\]ios[/\\]build(?:[/\\].*)?$/,
+    ],
   },
 });

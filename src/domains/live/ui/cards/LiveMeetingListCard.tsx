@@ -1,19 +1,20 @@
+import {useTheme} from '@react-navigation/native';
 import * as React from 'react';
-import {Image, View} from 'react-native';
-import { useTheme } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
-import { Text } from '@/shared/ui/Text';
+import {useTranslation} from 'react-i18next';
+import {View} from 'react-native';
 
-import { formatPriceForApp } from '@/shared/infra/i18n/formatLocaleNumbers';
-import { isProductPurchased } from '@/shared/purchases';
-import type { ProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
-import { createProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
-import type { LiveMeetingType } from '@/domains/live/model/liveMeeting.entities';
-import { Button } from '@/ui/components/Button';
+import type {LiveMeetingType} from '@/domains/live/model/liveMeeting.entities';
+import {formatPriceForApp} from '@/shared/infra/i18n/formatLocaleNumbers';
+import {useAppNavigation} from '@/shared/lib/navigation/useAppNavigation';
+import {CatalogListItemCard} from '@/shared/ui/cards/CatalogListItemCard';
+import type {ProductListCardStyles} from '@/shared/ui/cards/productListCard.styles';
+import {createProductListCardStyles} from '@/shared/ui/cards/productListCard.styles';
+import {CartMainButtons} from '@/shared/ui/cart/CartMainButtons';
+import {Text} from '@/shared/ui/Text';
 
 const PRICE_DISPLAY_DIVISOR = 10;
 
-type Props = { item: LiveMeetingType };
+type Props = {item: LiveMeetingType};
 
 const TypeBadge = React.memo(function TypeBadge({
   isPackage,
@@ -22,100 +23,70 @@ const TypeBadge = React.memo(function TypeBadge({
   isPackage: boolean;
   s: ProductListCardStyles;
 }) {
-  const { t } = useTranslation();
-  const label = isPackage ? t('courses.package') : t('courses.normal');
+  const {t} = useTranslation();
   return (
     <View style={[s.badge, isPackage ? s.badgePackage : null]}>
-      <Text style={s.badgeText}>{label}</Text>
+      <Text style={s.badgeText}>
+        {isPackage ? t('courses.package') : t('courses.normal')}
+      </Text>
     </View>
   );
 });
 TypeBadge.displayName = 'TypeBadge';
 
-function noop(): void {}
-
-const LiveMeetingListCardComponent = ({ item }: Props) => {
-  const { t } = useTranslation();
+const LiveMeetingListCardComponent = ({item}: Props) => {
+  const {t} = useTranslation();
   const theme = useTheme();
-  const { colors } = theme;
-  const s = createProductListCardStyles(colors, theme);
-  const purchased = isProductPurchased(item.id);
-  const uri = item.image_media[0]?.src;
-  const [failed, setFailed] = React.useState(false);
+  const s = React.useMemo(
+    () => createProductListCardStyles(theme.colors, theme),
+    [theme],
+  );
+  const navigation = useAppNavigation();
+
   const price = formatPriceForApp(
     (item.price ?? 0) / PRICE_DISPLAY_DIVISOR,
     t('courses.currency'),
   );
 
+  const onPressPrimary = React.useCallback(() => {
+    navigation.navigate('CourseDetail', {courseId: item.id});
+  }, [item.id, navigation]);
+
+  const onPressSecondary = React.useCallback(() => {
+    navigation.navigate('PublicCourseDetail', {courseId: item.id});
+  }, [item.id, navigation]);
+
+  const metaBlock = (
+    <>
+      <View style={s.infoRow}>
+        <Text style={s.infoLabel}>{t('courses.productType')}</Text>
+        <TypeBadge isPackage={!!item.package} s={s} />
+      </View>
+      <View style={s.infoRow}>
+        <Text style={s.infoLabel}>{t('courses.price')}</Text>
+        <Text style={s.infoValue}>{price}</Text>
+      </View>
+    </>
+  );
+
   return (
-    <View style={s.card}>
-      <View style={s.headerRow}>
-        <View style={s.headerTitleOnly}>
-          <Text style={s.title} numberOfLines={3}>
-            {item.title_fa}
-          </Text>
-        </View>
-        {!failed && uri ? (
-          <Image
-            source={{ uri }}
-            style={s.thumb}
-            onError={() => {
-              setFailed(true);
-            }}
-            accessibilityIgnoresInvertColors
-          />
-        ) : (
-          <View style={[s.thumb, s.imagePlaceholder]}>
-            <Text style={s.placeholderGlyph}>▣</Text>
-          </View>
-        )}
-      </View>
-      <View style={s.metaBlock}>
-        <View style={s.infoRow}>
-          <Text style={s.infoLabel}>{t('courses.productType')}</Text>
-          <TypeBadge isPackage={!!item.package} s={s} />
-        </View>
-        <View style={s.infoRow}>
-          <Text style={s.infoLabel}>{t('courses.price')}</Text>
-          <Text style={s.infoValue}>{price}</Text>
-        </View>
-      </View>
-      <View style={s.actionsRow}>
-        {purchased ? (
-          <Button
-            layout="auto"
-            variant="filled"
-            title={t('courses.show')}
-            onPress={noop}
-            style={s.buttonPrimary}
-            contentStyle={{ width: '100%' }}
-          >
-            <Text style={s.buttonPrimaryText}>{t('courses.show')}</Text>
-          </Button>
-        ) : (
-          <>
-            <Button
-              layout="auto"
-              variant="outlined"
-              title={t('courses.moreInformation')}
-              onPress={noop}
-              style={s.secondaryBtn}
-              contentStyle={{ width: '100%' }}
-            />
-            <Button
-              layout="auto"
-              variant="filled"
-              title={t('courses.buy')}
-              onPress={noop}
-              style={s.buttonSuccess}
-              contentStyle={{ width: '100%' }}
-            >
-              <Text style={s.buttonSuccessText}>{t('courses.buy')}</Text>
-            </Button>
-          </>
-        )}
-      </View>
-    </View>
+    <CatalogListItemCard
+      title={item.title_fa}
+      imageUri={item.image_media[0]?.src}
+      showSecondaryButton={!item.is_accessible}
+      styles={s}
+      metaBlock={metaBlock}
+      cartSlot={
+        <CartMainButtons
+          courseId={item.id}
+          isFull={false}
+          isAccessible={item.is_accessible}
+          onPressPrimary={onPressPrimary}
+        />
+      }
+      secondaryButtonText={t('courses.moreInformation')}
+      onPressSecondary={onPressSecondary}
+    />
   );
 };
 

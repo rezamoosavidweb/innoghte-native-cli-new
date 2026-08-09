@@ -4,6 +4,7 @@ import * as React from 'react';
 import AlbumIcon from '@/assets/icons/inn/album.svg';
 import CourseIcon from '@/assets/icons/inn/course.svg';
 import ListeningIcon from '@/assets/icons/inn/listening.svg';
+import LiveIcon from '@/assets/icons/inn/live.svg';
 import MeditationIcon from '@/assets/icons/inn/meditation.svg';
 import ReadingIcon from '@/assets/icons/inn/reading.svg';
 import WritingIcon from '@/assets/icons/inn/writing.svg';
@@ -17,6 +18,8 @@ export type ProfileMenuRowConfig = {
   readonly titleKey:
     | 'myCourses'
     | 'myAlbums'
+    | 'myLiveMeetings'
+    | 'audioBooks'
     | 'meditations'
     | 'readings'
     | 'writings'
@@ -32,6 +35,18 @@ const PROFILE_ACTION_MENU: readonly ProfileMenuRowConfig[] = [
     route: 'Courses',
   },
   { id: 'my-albums', icon: AlbumIcon, titleKey: 'myAlbums', route: 'Albums' },
+  {
+    id: 'my-live-meetings',
+    icon: LiveIcon,
+    titleKey: 'myLiveMeetings',
+    route: 'LiveMeetings',
+  },
+  {
+    id: 'audio-books',
+    icon: ReadingIcon,
+    titleKey: 'audioBooks',
+    route: 'AudioBooks',
+  },
 ] as const;
 
 const PROFILE_EXPERIENCES_MENU: readonly ProfileMenuRowConfig[] = [

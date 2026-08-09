@@ -27,6 +27,7 @@ export type DrawerParamList = {
   Faqs: undefined;
   About: undefined;
   Albums: undefined;
+  AudioBooks: undefined;
   Courses: undefined;
   LiveMeetings: undefined;
   Events: undefined;
@@ -42,6 +43,7 @@ export type DrawerParamList = {
   Listening: undefined;
   Writing: undefined;
   PrivateConsultation: undefined;
+  Tutorial: undefined;
   Donation: DonationScreenParams | undefined;
   /** Post-checkout gateway-callback result (deep link: `payment/result`). */
   PaymentResult: PaymentResultParams | undefined;
@@ -58,6 +60,10 @@ export type DrawerParamList = {
   AlbumDetail: { albumId: number };
   /** Public album marketing — `albumId` matches list + API. */
   PublicAlbumDetail: { albumId: number };
+  /** Public Art of Living audio-book marketing / purchase page. */
+  PublicAudioBookDetail: { audioBookId: number };
+  /** Purchased audio-book chapters + media. */
+  AudioBookDetail: { courseId: number };
   /** Dev / demo drawer route — accepts optional query for SearchScreen subtitle. */
   Search: { query?: string } | undefined;
   /** Demo: collapsible header on scroll. */

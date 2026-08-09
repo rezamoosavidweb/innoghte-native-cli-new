@@ -30,7 +30,15 @@ type Props = DrawerScreenProps<DrawerParamList, 'CreateTicketScreen'>;
 
 const ticketDraftSchema = z.object({
   title: z.string().min(1),
+  category: z.string().min(1, 'انتخاب دسته‌بندی الزامی است.'),
+  priority: z.string().min(1),
   description: z.string().min(1),
+  attachments: z.array(z.object({
+    uri: z.string().min(1),
+    name: z.string().min(1),
+    mimeType: z.string().min(1),
+    size: z.number().max(2 * 1024 * 1024),
+  })).max(5),
 });
 
 export const CreateTicketScreen = React.memo(function CreateTicketScreen(
@@ -51,11 +59,18 @@ export const CreateTicketScreen = React.memo(function CreateTicketScreen(
 
   const form = useForm<CreateTicketFields>({
     resolver: zodResolver(ticketDraftSchema),
-    defaultValues: { title: '', description: '' },
+    defaultValues: {
+      title: '',
+      category: '',
+      priority: 'medium',
+      description: '',
+      attachments: [],
+    },
     mode: 'onBlur',
   });
 
-  const interactionBusy = form.formState.isSubmitting;
+  const interactionBusy =
+    form.formState.isSubmitting || createMutation.isPending;
 
   const onValid = React.useCallback(
     async (values: CreateTicketFields) => {

@@ -72,8 +72,7 @@ export function useProfileScreenModel(): ProfileScreenModel {
   const dividerStyles = createSectionDividerStyles(colors, theme);
 
   const generalMenuItems = useProfileGeneralMenus(t);
-  // const { actionItems, experienceItems } = useProfileMenus(t);
-  const { experienceItems } = useProfileMenus(t);
+  const { actionItems, experienceItems } = useProfileMenus(t);
   const financialMenuItems = useProfileFinancialMenus(t);
   const supportMenuItems = useProfileSupportMenus(t);
 
@@ -99,6 +98,11 @@ export function useProfileScreenModel(): ProfileScreenModel {
         items: generalMenuItems,
       },
       {
+        key: 'products',
+        title: t('screens.profile.sectionProducts'),
+        items: actionItems,
+      },
+      {
         key: 'financial',
         title: t('screens.profile.sectionFinancial'),
         items: financialMenuItems,
@@ -117,6 +121,7 @@ export function useProfileScreenModel(): ProfileScreenModel {
     [
       t,
       generalMenuItems,
+      actionItems,
       financialMenuItems,
       experienceItems,
       supportMenuItems,

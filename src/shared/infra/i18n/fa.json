@@ -1,4 +1,8 @@
 {
+  "common": {
+    "yes": "دارد",
+    "no": "ندارد"
+  },
   "tabs": {
     "home": "خانه",
     "courses": "دوره‌ها",
@@ -22,9 +26,10 @@
     "verify": "تأیید",
     "help": "راهنما",
     "about": "درباره ما",
-    "publicAlbums": "قطعات آلبوم عمومی",
+    "publicAlbums": "آلبوم‌ها",
+    "audioBooks": "کتاب هنر زندگی کردن",
     "myCourses": "مرکز یادگیری من",
-    "publicCourses": "دوره‌های عمومی",
+    "publicCourses": "دوره‌ها",
     "liveMeetings": "جلسات زنده",
     "events": "رویدادها",
     "login": "ورود",
@@ -36,6 +41,7 @@
     "listening": "شنیدن",
     "writing": "نوشتن",
     "privateConsultation": "مشاوره خصوصی",
+    "tutorial": "نحوه استفاده",
     "donation": "کمک مالی",
     "basket": "سبد خرید",
     "aboutUs": "دربارهٔ ما",
@@ -61,6 +67,8 @@
     "publicCourseDetail": "معرفی دوره",
     "publicAlbumDetail": "معرفی آلبوم",
     "albumDetail": "آلبوم من",
+    "publicAudioBookDetail": "کتاب صوتی هنر زندگی",
+    "audioBookDetail": "کتاب صوتی من",
     "section": {
       "services": "خدمات",
       "experience": "تجربه کن"
@@ -166,6 +174,29 @@
       "moreInformation": "اطلاعات بیشتر",
       "itemsCountLabel": "تعداد"
     },
+    "audioBooks": {
+      "loading": "در حال بارگذاری کتاب صوتی…",
+      "error": "بارگذاری کتاب صوتی ناموفق بود.",
+      "empty": "کتاب صوتی در دسترس نیست."
+    },
+    "audioBookDetail": {
+      "title": "کتاب صوتی هنر زندگی",
+      "loading": "در حال بارگذاری کتاب صوتی…",
+      "error": "دریافت اطلاعات کتاب صوتی ناموفق بود.",
+      "empty": "کتاب صوتی یافت نشد.",
+      "downloadable": "قابلیت دانلود",
+      "accessType": "نحوه استفاده",
+      "price": "قیمت",
+      "preview": "بخشی از کتاب صوتی",
+      "narrator": "با صدای",
+      "duration": "مدت زمان",
+      "comments": "نظر کاربران"
+    },
+    "experienceCatalog": {
+      "loading": "در حال بارگذاری محتوا…",
+      "error": "دریافت محتوا ناموفق بود.",
+      "empty": "هنوز محتوایی در این بخش وجود ندارد."
+    },
     "myCoursesHub": {
       "subtitle": "دوره‌ها، آلبوم‌ها و بیشتر — همان مرکز اپ قدیمی.",
       "comingSoonTitle": "به‌زودی",
@@ -208,6 +239,7 @@
       "accountActive": "حساب شما فعال است.",
       "accountInactive": "حساب شما غیرفعال است.",
       "sectionExperiences": "تجربه‌ها",
+      "sectionProducts": "محصولات من",
       "sectionFinancial": "مالی و هدایا",
       "sectionSupportLegal": "پشتیبانی و حقوقی",
       "financialMenu": {
@@ -224,6 +256,8 @@
       "menu": {
         "myCourses": "دوره‌های من",
         "myAlbums": "آلبوم‌های من",
+        "myLiveMeetings": "روی خط‌های من",
+        "audioBooks": "کتاب هنر زندگی کردن",
         "meditations": "مدیتیشن‌ها",
         "readings": "مطالعه‌ها",
         "writings": "نوشتن‌ها",
@@ -336,8 +370,12 @@
           "title": "تیکت جدید",
           "subtitle": "موضوع و توضیحات را تکمیل کنید.",
           "fieldTitle": "موضوع",
+          "fieldCategory": "دسته‌بندی",
+          "fieldPriority": "اولویت",
           "fieldDescription": "توضیحات",
           "titlePlaceholder": "خلاصه درخواست",
+          "categoryPlaceholder": "انتخاب دسته‌بندی",
+          "priorityPlaceholder": "انتخاب اولویت",
           "descriptionPlaceholder": "شرح جزئیات…",
           "submit": "ارسال تیکت",
           "successToast": "تیکت با موفقیت ثبت شد؛ منتظر پاسخ پشتیبانی باشید.",
@@ -351,6 +389,30 @@
           "sendReply": "ارسال پیام",
           "authorYou": "شما",
           "authorStaff": "تیم پشتیبانی"
+        },
+        "categories": {
+          "technical_issue": "مشکل فنی",
+          "course_content": "محتوای دوره",
+          "billing": "مالی",
+          "feature_request": "درخواست ویژگی",
+          "bug_report": "گزارش باگ",
+          "general_support": "پشتیبانی عمومی"
+        },
+        "priorities": {
+          "low": "کم",
+          "medium": "متوسط",
+          "high": "زیاد",
+          "urgent": "فوری"
+        },
+        "attachments": {
+          "label": "پیوست‌ها",
+          "pick": "انتخاب فایل",
+          "hint": "حداکثر ۵ فایل، هر کدام تا ۲ مگابایت؛ فرمت‌های JPG، PNG و PDF",
+          "remove": "حذف",
+          "invalidTitle": "فایل نامعتبر",
+          "invalidBody": "فقط JPG، PNG یا PDF تا حجم ۲ مگابایت پذیرفته می‌شود. حداکثر ۵ فایل انتخاب کنید.",
+          "errorTitle": "خطای انتخاب فایل",
+          "errorBody": "فایل انتخاب نشد. دوباره تلاش کنید."
         }
       }
     },
@@ -395,8 +457,8 @@
       "empty": "رویدادی در دسترس نیست."
     },
     "publicAlbums": {
-      "loading": "در حال بارگذاری آلبوم عمومی…",
-      "error": "بارگذاری آلبوم عمومی ناموفق بود.",
+      "loading": "در حال بارگذاری آلبوم‌ها…",
+      "error": "بارگذاری آلبوم‌ها ناموفق بود.",
       "empty": "آلبومی یافت نشد."
     },
     "example": {

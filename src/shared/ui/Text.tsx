@@ -28,16 +28,22 @@ export const Text = React.forwardRef<RNText, TextProps>(
             textAlign: I18nManager.isRTL ? 'left' : 'right',
           }
         : undefined;
+      const rtlLogicalStart: TextStyle | undefined =
+        isFa && (flat?.textAlign == null || flat.textAlign === 'right')
+          ? { textAlign: I18nManager.isRTL ? 'left' : 'right' }
+          : undefined;
 
       if (flat?.fontFamily) {
-        return rtlFaBase ? [rtlFaBase, style] : style;
+        return rtlFaBase
+          ? [rtlFaBase, style, rtlLogicalStart]
+          : style;
       }
 
       const family = getFontFamily(locale, fontWeightHintFromStyle(flat?.fontWeight));
       const baseFace: TextStyle = { fontFamily: family };
       const stack =
         flat?.fontWeight != null ? [baseFace, style, { fontWeight: 'normal' }] : [baseFace, style];
-      return rtlFaBase ? [rtlFaBase, ...stack] : stack;
+      return rtlFaBase ? [rtlFaBase, ...stack, rtlLogicalStart] : stack;
     }, [locale, style]);
 
     return <RNText ref={ref} style={resolvedStyle as RNTextProps['style']} {...rest} />;

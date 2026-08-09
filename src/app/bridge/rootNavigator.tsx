@@ -6,13 +6,16 @@ import * as React from 'react';
 
 import { useDrawerGlyphStyles } from '@/app/bridge/drawerGlyph.styles';
 import { CollapsibleHeaderExampleScreen } from '@/app/examples/CollapsibleHeaderExampleScreen';
-import { LegacyMenuPlaceholderScreen } from '@/app/navigation/LegacyMenuPlaceholderScreen';
 import { SplashScreen } from '@/app/splash/SplashScreen';
 import {
   AlbumDetailScreen,
   AlbumsScreen,
   PublicAlbumDetailScreen,
 } from '@/domains/albums';
+import {
+  AudioBooksScreen,
+  PublicAudioBookDetailScreen,
+} from '@/domains/audioBooks';
 import {
   AuthEntryScreen,
   ForgetPasswordScreen,
@@ -30,6 +33,13 @@ import {
 } from '@/domains/courses';
 import { DonationScreen } from '@/domains/donation';
 import { EventsScreen } from '@/domains/events';
+import {
+  ListeningScreen,
+  MeditationScreen,
+  PodcastScreen,
+  ReadingScreen,
+  WritingScreen,
+} from '@/domains/experiences';
 import { PaymentResultScreen } from '@/domains/payment';
 import { HomeScreen } from '@/domains/home';
 import { CopyrightScreen, TermsScreen } from '@/domains/legal';
@@ -41,9 +51,11 @@ import {
   CreateTicketScreen,
   FaqsScreen,
   HelpScreen,
-  SupportLegalPlaceholderScreen,
+  PrivateConsultationScreen,
+  SupportServicesScreen,
   TicketDetailScreen,
   TicketListScreen,
+  TutorialScreen,
 } from '@/domains/support';
 import { TransactionsScreen } from '@/domains/transactions';
 import {
@@ -59,6 +71,7 @@ import {
 import i18n from '@/shared/infra/i18n';
 import {
   createAppHeaderOptions,
+  createPurchaseHeaderOptions,
   createPublicHeaderOptions,
   createRootHeaderOptions,
 } from '@/app/navigation/appHeaderOptions';
@@ -317,19 +330,38 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
     },
     Albums: {
       screen: AlbumsScreen,
-      options: () => extraLeafOptions('publicAlbums', '🎵'),
+      options: ({theme}) => ({
+        ...extraLeafOptions('publicAlbums', '🎵'),
+        ...createPurchaseHeaderOptions(theme),
+      }),
+    },
+    AudioBooks: {
+      screen: AudioBooksScreen,
+      options: ({theme}) => ({
+        ...extraLeafOptions('audioBooks', '📖'),
+        ...createPurchaseHeaderOptions(theme),
+      }),
     },
     Courses: {
       screen: CoursesScreen,
-      options: () => extraLeafOptions('publicCourses', '📚'),
+      options: ({theme}) => ({
+        ...extraLeafOptions('publicCourses', '📚'),
+        ...createPurchaseHeaderOptions(theme),
+      }),
     },
     LiveMeetings: {
       screen: LiveMeetingsScreen,
-      options: () => extraLeafOptions('liveMeetings', '🌐'),
+      options: ({theme}) => ({
+        ...extraLeafOptions('liveMeetings', '🌐'),
+        ...createPurchaseHeaderOptions(theme),
+      }),
     },
     Events: {
       screen: EventsScreen,
-      options: () => extraLeafOptions('events', '📅'),
+      options: ({theme}) => ({
+        ...extraLeafOptions('events', '📅'),
+        ...createPurchaseHeaderOptions(theme),
+      }),
     },
     Login: {
       screen: LoginScreen,
@@ -361,28 +393,32 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
       }),
     },
     Podcast: {
-      screen: LegacyMenuPlaceholderScreen,
+      screen: PodcastScreen,
       options: () => extraLeafOptions('podcast', '🎙️'),
     },
     Meditation: {
-      screen: LegacyMenuPlaceholderScreen,
+      screen: MeditationScreen,
       options: () => extraLeafOptions('meditation', '🧘'),
     },
     Reading: {
-      screen: LegacyMenuPlaceholderScreen,
+      screen: ReadingScreen,
       options: () => extraLeafOptions('reading', '📖'),
     },
     Listening: {
-      screen: LegacyMenuPlaceholderScreen,
+      screen: ListeningScreen,
       options: () => extraLeafOptions('listening', '🎧'),
     },
     Writing: {
-      screen: LegacyMenuPlaceholderScreen,
+      screen: WritingScreen,
       options: () => extraLeafOptions('writing', '✍️'),
     },
     PrivateConsultation: {
-      screen: LegacyMenuPlaceholderScreen,
+      screen: PrivateConsultationScreen,
       options: () => extraLeafOptions('privateConsultation', '💬'),
+    },
+    Tutorial: {
+      screen: TutorialScreen,
+      options: () => extraLeafOptions('tutorial', '▶️'),
     },
     Basket: {
       screen: BasketScreen,
@@ -396,22 +432,15 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
       screen: PaymentResultScreen,
       // Gateway redirect: innoghte://payment/result?Authority=…&Status=… → params.
       linking: { path: 'payment/result' },
-      // TEMP preview seed: tapping the drawer entry opens with these example
-      // callback values. Real values arrive via the `payment/result` deep link
-      // (provided params override these). Remove `initialParams` for production.
-      initialParams: {
-        Authority: 'S00000000000000000000000000000v22vpz',
-        Status: 'OK',
-        gatewayName: 'zarinpal',
-      },
       options: () => ({
         title: 'نتیجه پرداخت',
         drawerLabel: 'نتیجه پرداخت',
         drawerIcon: drawerIcon('🧾'),
+        drawerItemStyle: { display: 'none' },
       }),
     },
     AboutUs: {
-      screen: LegacyMenuPlaceholderScreen,
+      screen: AboutScreen,
       options: () => extraLeafOptions('aboutUs', '🏛️'),
     },
     Contact: {
@@ -426,13 +455,14 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
       options: () => extraLeafOptions('collaboration', '🤝'),
     },
     LiveMeetingOverview: {
-      screen: LegacyMenuPlaceholderScreen,
+      screen: LiveMeetingsScreen,
       options: () => extraLeafOptions('liveMeetingOverview', '📡'),
     },
     PublicCourseDetail: {
       screen: PublicCourseDetailScreen,
-      options: () => ({
+      options: ({theme}) => ({
         ...extraLeafOptions('publicCourseDetail', '📘'),
+        ...createPurchaseHeaderOptions(theme),
         drawerItemStyle: { display: 'none' },
       }),
     },
@@ -445,8 +475,9 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
     },
     PublicAlbumDetail: {
       screen: PublicAlbumDetailScreen,
-      options: () => ({
+      options: ({theme}) => ({
         ...extraLeafOptions('publicAlbumDetail', '💿'),
+        ...createPurchaseHeaderOptions(theme),
         drawerItemStyle: { display: 'none' },
       }),
     },
@@ -454,6 +485,21 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
       screen: AlbumDetailScreen,
       options: () => ({
         ...extraLeafOptions('albumDetail', '🎵'),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    PublicAudioBookDetail: {
+      screen: PublicAudioBookDetailScreen,
+      options: ({theme}) => ({
+        ...extraLeafOptions('publicAudioBookDetail', '📖'),
+        ...createPurchaseHeaderOptions(theme),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    AudioBookDetail: {
+      screen: CourseDetailScreen,
+      options: () => ({
+        ...extraLeafOptions('audioBookDetail', '🎧'),
         drawerItemStyle: { display: 'none' },
       }),
     },
@@ -525,7 +571,7 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
       }),
     },
     SupportServices: {
-      screen: SupportLegalPlaceholderScreen,
+      screen: SupportServicesScreen,
       options: () => ({
         ...extraLeafOptions('supportServices', '🛠️'),
         drawerItemStyle: { display: 'none' },

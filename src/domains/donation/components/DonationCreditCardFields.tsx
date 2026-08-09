@@ -190,7 +190,7 @@ export const DonationCreditCardFields = React.memo(
             <View style={s.field}>
               <Text style={s.label}>CVV</Text>
               <TextInput
-                style={s.input}
+                style={[s.input, s.inputLtr]}
                 keyboardType="number-pad"
                 maxLength={4}
                 secureTextEntry

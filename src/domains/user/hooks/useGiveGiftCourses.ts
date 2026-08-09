@@ -16,9 +16,23 @@ const ALBUM_CATEGORY_FILTERS = {
   perPage: undefined,
 } as const;
 
+const ROOYE_KHAT_CATEGORY_FILTERS = {
+  categoryId: 8,
+  page: undefined,
+  perPage: undefined,
+} as const;
+
+const AUDIO_BOOK_CATEGORY_FILTERS = {
+  categoryId: 11,
+  page: undefined,
+  perPage: undefined,
+} as const;
+
 export function useGiveGiftCourses() {
   const coursesQuery = useCatalogItems(COURSE_CATEGORY_FILTERS);
   const albumsQuery = useCatalogItems(ALBUM_CATEGORY_FILTERS);
+  const rooyeKhatsQuery = useCatalogItems(ROOYE_KHAT_CATEGORY_FILTERS);
+  const audioBooksQuery = useCatalogItems(AUDIO_BOOK_CATEGORY_FILTERS);
 
   const courseOptions = React.useMemo(() => {
     const list = coursesQuery.data ?? [];
@@ -30,10 +44,24 @@ export function useGiveGiftCourses() {
     [albumsQuery.data],
   );
 
+  const rooyeKhatOptions = React.useMemo(
+    () => rooyeKhatsQuery.data ?? [],
+    [rooyeKhatsQuery.data],
+  );
+
+  const audioBookOptions = React.useMemo(
+    () => audioBooksQuery.data ?? [],
+    [audioBooksQuery.data],
+  );
+
   return {
     coursesQuery,
     albumsQuery,
+    rooyeKhatsQuery,
+    audioBooksQuery,
     courseOptions,
     albumOptions,
+    rooyeKhatOptions,
+    audioBookOptions,
   };
 }

@@ -2,7 +2,7 @@ import * as React from 'react';
 import type { Theme } from '@react-navigation/native';
 
 import { mainTabHeaderTitleStyle, pickSemantic } from '@/ui/theme';
-import { HeaderBackButton } from './components/HeaderBackButton';
+import { BasketHeaderButton } from '@/app/bridge/BasketHeaderButton';
 import { HeaderDrawerButton } from './components/HeaderDrawerButton';
 
 type TintProps = { tintColor?: string };
@@ -12,19 +12,18 @@ function renderHeaderLeft({ tintColor }: TintProps) {
   return <HeaderDrawerButton tintColor={tintColor} />;
 }
 
-function renderHeaderRight({ tintColor }: TintProps) {
-  return <HeaderBackButton tintColor={tintColor} />;
+function renderBasketHeaderRight({ tintColor }: TintProps) {
+  return <BasketHeaderButton tintColor={tintColor} />;
 }
 
 /**
  * Base header options for all authenticated screens.
  *
  * Layout (logical, RTL-aware):
- *   [start]  DrawerButton  |  Title (centered)  |  BackButton  [end]
+ *   [start]  DrawerButton  |  Title (centered)  |  BasketButton  [end]
  *
  * In Persian RTL: DrawerButton is on the physical right (start = right),
- * BackButton is on the physical left (end = left). Mirrors for LTR.
- * BackButton renders null automatically when navigation.canGoBack() is false.
+ * BasketButton is on the physical left (end = left). Mirrors for LTR.
  */
 export function createAppHeaderOptions(theme: Theme) {
   const s = pickSemantic(theme);
@@ -34,7 +33,7 @@ export function createAppHeaderOptions(theme: Theme) {
     headerTitleStyle: mainTabHeaderTitleStyle,
     headerTitleAlign: 'center' as const,
     headerLeft: renderHeaderLeft,
-    headerRight: renderHeaderRight,
+    headerRight: renderBasketHeaderRight,
   };
 }
 
@@ -43,9 +42,14 @@ export function createAppHeaderOptions(theme: Theme) {
  * regardless of navigation history (e.g. tab backBehavior: 'history').
  */
 export function createRootHeaderOptions(theme: Theme) {
+  return createAppHeaderOptions(theme);
+}
+
+/** Purchase-capable screens: basket + live count replaces physical-left back. */
+export function createPurchaseHeaderOptions(theme: Theme) {
   return {
     ...createAppHeaderOptions(theme),
-    headerRight: undefined,
+    headerRight: renderBasketHeaderRight,
   };
 }
 
@@ -55,9 +59,5 @@ export function createRootHeaderOptions(theme: Theme) {
  * back on the far side. Use for screens that are NOT drawer items.
  */
 export function createPublicHeaderOptions(theme: Theme) {
-  return {
-    ...createAppHeaderOptions(theme),
-    headerLeft: renderHeaderRight,
-    headerRight: undefined,
-  };
+  return createAppHeaderOptions(theme);
 }
