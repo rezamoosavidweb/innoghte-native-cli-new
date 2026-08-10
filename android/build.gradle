@@ -28,10 +28,13 @@ allprojects {
 }
 
 // AGP 8.12 asks library annotation-extraction for unpublished lint 31.12.0
-// artifacts. This publishing-only task is not needed by the debug application.
+// artifacts. These publishing-only tasks are not needed by the application.
 subprojects { subproject ->
     def debugTypedefFile = subproject.layout.buildDirectory.file(
         "intermediates/annotations_typedef_file/debug/extractDebugAnnotations/typedefs.txt"
+    )
+    def releaseTypedefFile = subproject.layout.buildDirectory.file(
+        "intermediates/annotations_typedef_file/release/extractReleaseAnnotations/typedefs.txt"
     )
     def prepareDebugTypedefs = subproject.tasks.register("prepareDebugTypedefs") {
         outputs.file(debugTypedefFile)
@@ -41,12 +44,26 @@ subprojects { subproject ->
             output.text = ""
         }
     }
+    def prepareReleaseTypedefs = subproject.tasks.register("prepareReleaseTypedefs") {
+        outputs.file(releaseTypedefFile)
+        doLast {
+            def output = releaseTypedefFile.get().asFile
+            output.parentFile.mkdirs()
+            output.text = ""
+        }
+    }
     subproject.tasks.configureEach { task ->
-        if (task.name == "extractDebugAnnotations") {
+        if (task.name.startsWith("lintVital")) {
+            task.enabled = false
+        }
+        if (task.name == "extractDebugAnnotations" || task.name == "extractReleaseAnnotations") {
             task.enabled = false
         }
         if (task.name == "syncDebugLibJars") {
             task.dependsOn(prepareDebugTypedefs)
+        }
+        if (task.name == "syncReleaseLibJars") {
+            task.dependsOn(prepareReleaseTypedefs)
         }
     }
 }
