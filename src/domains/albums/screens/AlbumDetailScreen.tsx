@@ -93,7 +93,9 @@ const ChapterRow = React.memo(function ChapterRow({
       <Text style={[styles.chapterTitle, themed.title]} numberOfLines={2}>
         {chapter.title_fa}
       </Text>
-      <Text style={themed.bullet}>{active ? '●' : '▶'}</Text>
+      <Text style={[styles.chapterBullet, themed.bullet]}>
+        {active ? '●' : '▶'}
+      </Text>
     </Button>
   );
 });
@@ -406,6 +408,12 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 8,
     fontSize: 15,
+  },
+  chapterBullet: {
+    fontSize: 14,
+    lineHeight: 18,
+    includeFontPadding: false,
+    transform: [{ translateY: 2 }],
   },
   commentsBlock: {
     marginTop: 16,

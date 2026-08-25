@@ -191,7 +191,6 @@ const mainTabs = createBottomTabNavigator<TabParamList>({
       options: { headerShown: false },
     },
     Services: ServicesScreen,
-    Faqs: FaqsScreen,
     Cart: BasketScreen,
     Profile: ProfileScreen,
   },
@@ -452,7 +451,10 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
     },
     Collaboration: {
       screen: CollaborationScreen,
-      options: () => extraLeafOptions('collaboration', '🤝'),
+      options: () => ({
+        ...extraLeafOptions('collaboration', '🤝'),
+        drawerItemStyle: { display: 'none' },
+      }),
     },
     LiveMeetingOverview: {
       screen: LiveMeetingsScreen,

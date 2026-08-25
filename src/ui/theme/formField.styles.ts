@@ -42,6 +42,24 @@ export function createFormFieldStyles(themeColors: ThemeColors) {
     rowIcon: {
       marginEnd: 10,
     },
+    secureToggle: {
+      width: 32,
+      height: 32,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginStart: 6,
+    },
+    secureTogglePressed: {
+      opacity: 0.6,
+    },
+    eyeSlash: {
+      position: 'absolute',
+      width: 22,
+      height: StyleSheet.hairlineWidth * 2,
+      borderRadius: 1,
+      backgroundColor: themeColors.textMuted,
+      transform: [{ rotate: '-42deg' }],
+    },
     rowInput: {
       flex: 1,
       height: '100%',

@@ -2,21 +2,33 @@ import * as React from 'react';
 import { useMemo } from 'react';
 import type { TextInput } from 'react-native';
 
+export const donationAmountOptions = {
+  ir: {
+    defaultAmount: '200000',
+    presets: ['200000', '400000'],
+  },
+  com: {
+    defaultAmount: '5',
+    presets: ['5', '25'],
+  },
+} as const;
+
 export function useDonationAmountState(isDotIr: boolean) {
-  const [activeButton, setActiveButton] = React.useState(() =>
-    isDotIr ? '50000' : '5',
+  const options = isDotIr
+    ? donationAmountOptions.ir
+    : donationAmountOptions.com;
+  const [activeButton, setActiveButton] = React.useState<string>(
+    options.defaultAmount,
   );
-  const [amount, setAmount] = React.useState(() =>
-    isDotIr ? '50000' : '5',
-  );
+  const [amount, setAmount] = React.useState<string>(options.defaultAmount);
   const [isCustomAmount, setIsCustomAmount] = React.useState(false);
   const amountRef = React.useRef<TextInput>(null);
 
   const resetAmountAfterGatewayVerify = React.useCallback(() => {
-    setAmount(isDotIr ? '50000' : '5');
-    setActiveButton(isDotIr ? '50000' : '5');
+    setAmount(options.defaultAmount);
+    setActiveButton(options.defaultAmount);
     setIsCustomAmount(false);
-  }, [isDotIr]);
+  }, [options.defaultAmount]);
 
   const handlePresetAmount = React.useCallback((value: string) => {
     setAmount(value);
@@ -41,8 +53,8 @@ export function useDonationAmountState(isDotIr: boolean) {
 
   const preset = useMemo(
     () => ({
-      isIrPreset50: isDotIr && activeButton === '50000' && !isCustomAmount,
-      isIrPreset250: isDotIr && activeButton === '250000' && !isCustomAmount,
+      isIrPreset200: isDotIr && activeButton === '200000' && !isCustomAmount,
+      isIrPreset400: isDotIr && activeButton === '400000' && !isCustomAmount,
       isComPreset5: !isDotIr && activeButton === '5' && !isCustomAmount,
       isComPreset25: !isDotIr && activeButton === '25' && !isCustomAmount,
     }),

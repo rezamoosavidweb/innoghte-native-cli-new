@@ -91,6 +91,15 @@ const PublicCourseDetailScreenComponent = () => {
 
   const purchased = Boolean(data?.is_accessible);
 
+  const publicOutlineItems = React.useMemo(() => {
+    const chapters = data?.chapters ?? [];
+    if (chapters.length > 0) {
+      return chapters;
+    }
+
+    return data?.included_courses ?? [];
+  }, [data?.chapters, data?.included_courses]);
+
   const onPressPrimary = React.useCallback(() => {
     navigation.navigate('CourseDetail', { courseId });
   }, [navigation, courseId]);
@@ -111,9 +120,9 @@ const PublicCourseDetailScreenComponent = () => {
         <Text style={[s.short, s.themText]}>{data?.short_info}</Text>
         <View style={s.container}>
           <BackgroundLayer
-            bgColor={data?.is_packge ? COURSE_PACKAGE_BACKDROP : COURSE_BACKDROP}
+            bgColor={data?.is_package ? COURSE_PACKAGE_BACKDROP : COURSE_BACKDROP}
             top={150}
-            // bottom={data?.is_packge ? 0 : 150}
+            // bottom={data?.is_package ? 0 : 150}
           />
           {!imgFailed && coverUri && (
             <Image
@@ -170,7 +179,7 @@ const PublicCourseDetailScreenComponent = () => {
           <Details data={data?.details} />
           {/* <KavimoPlayer activeChapterMedia={data?.demo || ''} /> */}
         </View>
-        <PublicChapters data={data?.chapters || []} />
+        <PublicChapters data={publicOutlineItems} />
         <ClientCommentsSection
           title={t('screens.courseDetail.commentsTitle')}
           courseId={courseId}

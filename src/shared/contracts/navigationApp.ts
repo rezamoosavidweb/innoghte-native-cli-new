@@ -8,7 +8,6 @@ import type { VerifyChannel } from './verification';
 export type TabParamList = {
   Home: undefined;
   Services: undefined;
-  Faqs: undefined;
   Cart: undefined;
   Profile: { userId?: string } | undefined;
 };

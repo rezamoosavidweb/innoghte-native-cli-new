@@ -5,7 +5,14 @@ module.exports = {
   plugins: [
     [
       'babel-plugin-transform-inline-environment-variables',
-      { include: ['REACT_NATIVE_IS_DOT_IR', 'IS_DOT_IR'] },
+      {
+        include: [
+          'REACT_NATIVE_IS_DOT_IR',
+          'IS_DOT_IR',
+          'REACT_NATIVE_IS_SHOW_ZARINPAL',
+          'REACT_NATIVE_IS_SHOW_VANDAR',
+        ],
+      },
     ],
     '@babel/plugin-transform-export-namespace-from',
     [

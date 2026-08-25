@@ -36,11 +36,6 @@ export function createCartItemStyles(colors: ThemeColors) {
       fontWeight: fontWeight.semibold,
       color: colors.text,
     },
-    strike: {
-      fontSize: fontSize.sm,
-      textDecorationLine: 'line-through',
-      color: colors.textMuted,
-    },
     thumbWrap: {
       width: 70,
       height: 70,

@@ -6,7 +6,10 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import type { LoginBodyType } from '@/domains/auth/model/apiTypes';
-import { loginSchema, type LoginFormType } from '@/domains/auth/model/schema';
+import {
+  createLoginSchema,
+  type LoginFormType,
+} from '@/domains/auth/model/schema';
 import { AuthTabs } from '@/domains/auth/ui/AuthTabs';
 import { EmailLoginForm } from '@/domains/auth/ui/forms/EmailLoginForm';
 import { MobileLoginForm } from '@/domains/auth/ui/forms/MobileLoginForm';
@@ -34,8 +37,17 @@ export function LoginForm({ isSubmitting, apiError, onSubmit }: Props) {
     () => createLoginScreenStyles(colors),
     [colors],
   );
+  const validationSchema = React.useMemo(
+    () =>
+      createLoginSchema({
+        invalidEmail: t('screens.login.errors.invalidEmail'),
+        invalidMobile: t('screens.login.errors.invalidMobile'),
+        passwordMin: t('screens.login.errors.passwordMin'),
+      }),
+    [t],
+  );
   const form = useForm<LoginFormType>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(validationSchema),
     defaultValues: {
       mode: 'email',
       email: '',
@@ -134,6 +146,10 @@ export function LoginForm({ isSubmitting, apiError, onSubmit }: Props) {
         accessibilityLabel={t('screens.login.password')}
         placeholder={t('screens.login.passwordPlaceholder')}
         secureTextEntry
+        secureTextToggle={{
+          showLabel: t('screens.login.showPassword'),
+          hideLabel: t('screens.login.hidePassword'),
+        }}
         forceInputLtr
         value={password}
         onChangeText={value =>

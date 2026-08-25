@@ -299,13 +299,6 @@ export const CustomDrawerContent = React.memo(function CustomDrawerContent(
             focused={currentRoute === 'Tutorial'}
             onPress={go('Tutorial')}
           />
-          <DrawerItem
-            {...itemProps}
-            label={t('drawer.collaboration')}
-            icon={icons.handHeart}
-            focused={currentRoute === 'Collaboration'}
-            onPress={go('Collaboration')}
-          />
         </DrawerContentScrollView>
 
         <View style={staticDrawerStyles.footer}>

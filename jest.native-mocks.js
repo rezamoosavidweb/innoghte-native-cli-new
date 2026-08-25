@@ -20,3 +20,10 @@ jest.mock('react-native-image-picker', () => ({
   launchCamera: jest.fn(),
   launchImageLibrary: jest.fn(),
 }));
+
+jest.mock('@react-native-documents/picker', () => ({
+  errorCodes: { OPERATION_CANCELED: 'OPERATION_CANCELED' },
+  isErrorWithCode: jest.fn(() => false),
+  pick: jest.fn(),
+  types: { images: 'image/*', pdf: 'application/pdf' },
+}));

@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import type { SvgProps } from 'react-native-svg';
 
-import FaqIcon from '@/assets/icons/inn/faq.svg';
 import CategoryIcon from '@/assets/icons/inn/category.svg';
 import HomeIcon from '@/assets/icons/inn/home.svg';
 import LoginIcon from '@/assets/icons/login.svg';
@@ -16,7 +15,6 @@ import { spacing } from '@/ui/theme';
 const TAB_ICON: Record<MainTabScreenName, React.ComponentType<SvgProps>> = {
   Home: HomeIcon,
   Services: CategoryIcon,
-  Faqs: FaqIcon,
   Cart: ShoppingTrollyIcon,
   Profile: LoginIcon,
 };

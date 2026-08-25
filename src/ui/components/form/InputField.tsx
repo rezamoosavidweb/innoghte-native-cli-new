@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Platform, TextInput, View } from 'react-native';
+import { Platform, Pressable, TextInput, View } from 'react-native';
 import { Text } from '@/shared/ui/Text';
+import EyeIcon from '@/assets/icons/inn/eye.svg';
 
 import { useThemeColors } from '@/ui/theme';
 import { createFormFieldStyles } from '@/ui/theme/formField.styles';
@@ -13,6 +14,8 @@ type Props = {
   onBlur?: () => void;
   error?: string;
   secureTextEntry?: boolean;
+  /** Adds an accessible show/hide control for secure text fields. */
+  secureTextToggle?: { showLabel: string; hideLabel: string };
   keyboardType?: 'default' | 'email-address' | 'phone-pad' | 'number-pad';
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   /** RTL placeholder + LTR typed text (email, mobile, password fields in Farsi UI) */
@@ -36,6 +39,7 @@ export function InputField({
   onBlur,
   error,
   secureTextEntry,
+  secureTextToggle,
   keyboardType = 'default',
   autoCapitalize = 'none',
   forceInputLtr = false,
@@ -46,6 +50,9 @@ export function InputField({
 }: Props) {
   const colors = useThemeColors();
   const s = createFormFieldStyles(colors);
+  const [isSecureTextVisible, setIsSecureTextVisible] = React.useState(false);
+  const hasSecureTextToggle = Boolean(secureTextEntry && secureTextToggle);
+  const hasAccessory = Boolean(leadingIcon || hasSecureTextToggle);
 
   const textAlign = forceInputLtr
     ? value.length > 0 ? 'left' : 'right'
@@ -69,14 +76,14 @@ export function InputField({
       value={value}
       onChangeText={onChangeText}
       onBlur={onBlur}
-      secureTextEntry={secureTextEntry}
+      secureTextEntry={Boolean(secureTextEntry && !isSecureTextVisible)}
       autoFocus={autoFocus}
       maxLength={maxLength}
       textContentType={oneTimeCode ? 'oneTimeCode' : undefined}
       autoComplete={oneTimeCode ? 'sms-otp' : undefined}
       importantForAutofill={oneTimeCode ? 'yes' : undefined}
       style={[
-        leadingIcon ? s.rowInput : s.input,
+        hasAccessory ? s.rowInput : s.input,
         textAlign ? { textAlign } : undefined,
         androidInputMetrics,
       ]}
@@ -85,10 +92,32 @@ export function InputField({
 
   return (
     <>
-      {leadingIcon ? (
+      {hasAccessory ? (
         <View style={s.row}>
-          <View style={s.rowIcon}>{leadingIcon}</View>
+          {leadingIcon ? <View style={s.rowIcon}>{leadingIcon}</View> : null}
           {textInput}
+          {hasSecureTextToggle && secureTextToggle ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={
+                isSecureTextVisible
+                  ? secureTextToggle.hideLabel
+                  : secureTextToggle.showLabel
+              }
+              accessibilityState={{ selected: isSecureTextVisible }}
+              hitSlop={10}
+              onPress={() => {
+                setIsSecureTextVisible(current => !current);
+              }}
+              style={({ pressed }) => [
+                s.secureToggle,
+                pressed ? s.secureTogglePressed : null,
+              ]}
+            >
+              <EyeIcon width={22} height={22} color={colors.textMuted} />
+              {isSecureTextVisible ? <View style={s.eyeSlash} /> : null}
+            </Pressable>
+          ) : null}
         </View>
       ) : (
         textInput

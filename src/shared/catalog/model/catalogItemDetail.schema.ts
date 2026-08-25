@@ -30,6 +30,15 @@ export const catalogItemDetailSchema = z.looseObject({
       }),
     )
     .optional(),
+  included_courses: z
+    .array(
+      z.looseObject({
+        id: z.number(),
+        title_fa: z.string(),
+        short_info: z.string().nullable().optional(),
+      }),
+    )
+    .optional(),
   medias: z
     .array(
       z.looseObject({

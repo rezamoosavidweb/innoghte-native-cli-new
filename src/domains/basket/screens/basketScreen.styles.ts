@@ -32,11 +32,6 @@ export function createBasketScreenStyles(
       fontSize: fontSize.base,
     },
     priceRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-    strike: {
-      textDecorationLine: 'line-through',
-      color: colors.textMuted,
-      fontSize: fontSize.sm,
-    },
     total: {
       fontWeight: fontWeight.semibold,
       color: colors.text,

@@ -34,8 +34,7 @@ export const CartItem = React.memo(function CartItem({
   const isGift = giftsCourseIds.includes(item.course_id);
   const isDisabled = !isGift && Boolean(course?.is_accessible);
   const title = course?.title_fa ?? '—';
-  const hasDiscount =
-    course?.discount_price != null && course.discount_price !== course.price;
+  const payablePrice = course?.discount_price ?? course?.price ?? 0;
 
   const s = createCartItemStyles(colors);
 
@@ -101,18 +100,7 @@ export const CartItem = React.memo(function CartItem({
           <View style={s.metaRow}>
             <Text style={s.metaLabel}>قیمت:</Text>
             <View style={s.priceValue}>
-              {hasDiscount ? (
-                <>
-                  <Text style={s.strike}>
-                    {formatTomanFa(course?.price ?? 0)}
-                  </Text>
-                  <Text style={s.price}>
-                    {formatTomanFa(course?.discount_price ?? 0)}
-                  </Text>
-                </>
-              ) : (
-                <Text style={s.price}>{formatTomanFa(course?.price ?? 0)}</Text>
-              )}
+              <Text style={s.price}>{formatTomanFa(payablePrice)}</Text>
             </View>
           </View>
         )}

@@ -35,6 +35,7 @@ import {
 import { clearDonationRouteParams } from '@/domains/donation/model/donationScreenNavigation';
 import { DONATION_LAST_CHECKOUT_GATEWAY_KEY } from '@/domains/donation/model/storageKeys';
 import {
+  DONATION_COMMENT_MAX_LENGTH,
   donationFormResolver,
   type DonationCreditCartErrors,
   type DonationFormType,
@@ -244,8 +245,8 @@ export const DonationScreen = React.memo(function DonationScreen({
   const isPayProcessing =
     donateMutation.isPending || isSubmitting || isCheckoutLocked;
 
-  const preset1On = preset.isIrPreset50 || preset.isComPreset5;
-  const preset2On = preset.isIrPreset250 || preset.isComPreset25;
+  const preset1On = preset.isIrPreset200 || preset.isComPreset5;
+  const preset2On = preset.isIrPreset400 || preset.isComPreset25;
 
   return (
     <KeyboardAvoidingView
@@ -257,9 +258,9 @@ export const DonationScreen = React.memo(function DonationScreen({
         contentContainerStyle={s.scrollContent}
       >
         <View style={s.topSection}>
-          <Text style={s.topTitle}>دوست و همراه عزیز سلام،</Text>
+          <Text style={s.topTitle}>حمایت مالی</Text>
           <Text style={s.topSubtitle}>
-            از اینکه با حمایت مالی من را در ادامه مسیر همراهی میکنی، سپاسگزارم.
+            از اینکه با حمایت مالی ما را در ادامه مسیر همراهی میکنی، سپاسگزار هستیم.
           </Text>
         </View>
 
@@ -278,6 +279,8 @@ export const DonationScreen = React.memo(function DonationScreen({
               keyboardType="decimal-pad"
               value={groupThousands(amount)}
               onChangeText={onAmountChangeText}
+              editable={isCustomAmount}
+              accessibilityLabel="مبلغ حمایت مالی"
             />
             <Text style={s.currency}>{isDotIr ? 'تومان' : 'دلار'}</Text>
           </View>
@@ -286,25 +289,25 @@ export const DonationScreen = React.memo(function DonationScreen({
             <Button
               layout="auto"
               variant="text"
-              title={isDotIr ? '50,000' : '$5'}
-              onPress={() => handlePresetAmount(isDotIr ? '50000' : '5')}
+              title={isDotIr ? '200,000' : '$5'}
+              onPress={() => handlePresetAmount(isDotIr ? '200000' : '5')}
               style={[s.amtBtn, preset1On && s.amtBtnOn]}
               contentStyle={{ width: '100%' }}
             >
               <Text style={[s.amtBtnText, preset1On && s.amtBtnTextOn]}>
-                {isDotIr ? '50,000' : '$5'}
+                {isDotIr ? '200,000' : '$5'}
               </Text>
             </Button>
             <Button
               layout="auto"
               variant="text"
-              title={isDotIr ? '250,000' : '$25'}
-              onPress={() => handlePresetAmount(isDotIr ? '250000' : '25')}
+              title={isDotIr ? '400,000' : '$25'}
+              onPress={() => handlePresetAmount(isDotIr ? '400000' : '25')}
               style={[s.amtBtn, preset2On && s.amtBtnOn]}
               contentStyle={{ width: '100%' }}
             >
               <Text style={[s.amtBtnText, preset2On && s.amtBtnTextOn]}>
-                {isDotIr ? '250,000' : '$25'}
+                {isDotIr ? '400,000' : '$25'}
               </Text>
             </Button>
           </View>
@@ -321,39 +324,30 @@ export const DonationScreen = React.memo(function DonationScreen({
           </Button>
         </View>
 
-        <View style={s.paymentGroup}>
-          <Text style={s.paymentHeading}>
-            {isDotIr ? 'انتخاب درگاه' : 'روش پرداخت'}
-          </Text>
-          {!isDotIr ? (
-            <>
-              <Controller
-                name="paymentType"
-                control={control}
-                render={({ field }) => (
-                  <SelectPaymentType
-                    value={field.value}
-                    onChange={v => {
-                      field.onChange(v);
-                      handlePaymentTypeChange(v);
-                    }}
-                  />
-                )}
-              />
-              {paymentType === 'credit_card' ? (
-                <DonationCreditCardFields
-                  control={control}
-                  errors={cartErrors}
+        {!isDotIr ? (
+          <View style={s.paymentGroup}>
+            <Text style={s.paymentHeading}>روش پرداخت</Text>
+            <Controller
+              name="paymentType"
+              control={control}
+              render={({ field }) => (
+                <SelectPaymentType
+                  value={field.value}
+                  onChange={v => {
+                    field.onChange(v);
+                    handlePaymentTypeChange(v);
+                  }}
                 />
-              ) : null}
-            </>
-          ) : (
-            <DonationSelectGateway
-              gateway={gateway === 'zarinpal' ? 'zarinpal' : 'vandar'}
-              onChange={setGateway}
+              )}
             />
-          )}
-        </View>
+            {paymentType === 'credit_card' ? (
+              <DonationCreditCardFields
+                control={control}
+                errors={cartErrors}
+              />
+            ) : null}
+          </View>
+        ) : null}
 
         <View style={s.sepLine} />
 
@@ -389,7 +383,7 @@ export const DonationScreen = React.memo(function DonationScreen({
               control={control}
               render={({ field }) => (
                 <View>
-                  <Text style={s.label}>پست الکترونیکی</Text>
+                  <Text style={s.label}>آدرس ایمیل</Text>
                   <View style={s.inputWrap}>
                     <MailIcon width={18} height={18} color={semantic.textMuted} />
                     <TextInput
@@ -418,13 +412,23 @@ export const DonationScreen = React.memo(function DonationScreen({
                     value={field.value ?? ''}
                     onChangeText={field.onChange}
                     onBlur={field.onBlur}
-                    maxLength={250}
+                    maxLength={DONATION_COMMENT_MAX_LENGTH}
                     placeholder="اینجا بنویسید..."
                   />
                 </View>
               )}
             />
           </View>
+
+          {isDotIr ? (
+            <View style={s.paymentGroup}>
+              <Text style={s.paymentHeading}>انتخاب درگاه</Text>
+              <DonationSelectGateway
+                gateway={gateway === 'zarinpal' ? 'zarinpal' : 'vandar'}
+                onChange={setGateway}
+              />
+            </View>
+          ) : null}
 
           <View style={s.footerRow}>
             <Text style={s.total}>

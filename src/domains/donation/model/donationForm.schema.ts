@@ -3,6 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { FieldErrors } from 'react-hook-form';
 import { z } from 'zod';
 
+export const DONATION_COMMENT_MAX_LENGTH = 320;
+
 const userInfoValidationSchema = z.object({
   fullName: z
     .string({ message: 'این فیلد الزامی است.' })
@@ -33,7 +35,7 @@ const creditCardValidationSchema = z.object({
     .regex(/^[0-9]+$/, { message: 'CVV را به درستی  وارد کنید' }),
 });
 
-const donationValidation = z.discriminatedUnion('paymentType', [
+export const donationValidationSchema = z.discriminatedUnion('paymentType', [
   z.object({
     paymentType: z.literal('credit_card'),
     cart: creditCardValidationSchema,
@@ -45,8 +47,8 @@ const donationValidation = z.discriminatedUnion('paymentType', [
   }),
 ]);
 
-export const donationFormResolver = zodResolver(donationValidation);
-export type DonationFormType = z.infer<typeof donationValidation>;
+export const donationFormResolver = zodResolver(donationValidationSchema);
+export type DonationFormType = z.infer<typeof donationValidationSchema>;
 export type DonationCreditCartType = z.infer<typeof creditCardValidationSchema>;
 export type DonationCreditCartErrors = FieldErrors<{
   cart: Omit<DonationCreditCartType, 'cardNumber'> & { cardNumber: string };

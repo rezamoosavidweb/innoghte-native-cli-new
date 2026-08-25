@@ -299,8 +299,6 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
     );
   }
 
-  const showStrike = totals.displayPrice !== totals.displayDiscountPrice;
-
   return (
     <SafeAreaView style={s.flex} edges={['left', 'right']}>
       {isPendingList ? (
@@ -324,11 +322,6 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
             <View style={s.totalRow}>
               <Text style={s.totalLabel}>جمع کل</Text>
               <View style={s.priceRow}>
-                {showStrike ? (
-                  <Text style={s.strike}>
-                    {formatTomanFa(totals.displayPrice)}
-                  </Text>
-                ) : null}
                 <Text style={s.total}>
                   {formatTomanFa(totals.displayDiscountPrice)}
                 </Text>

@@ -627,6 +627,8 @@
       "email": "Email",
       "mobile": "Mobile",
       "password": "Password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
       "submit": "Sign in",
       "signingIn": "Signing in…",
       "credentialsHelper": "Use your app credentials to continue.",
@@ -634,7 +636,12 @@
       "demoMessage": "Auth is not wired in this build.",
       "noAccount": "Don't have an account?",
       "registerLink": "Sign up",
-      "forgetPassword": "Forgot your password?"
+      "forgetPassword": "Forgot your password?",
+      "errors": {
+        "invalidEmail": "Enter a valid email address.",
+        "invalidMobile": "Enter a valid mobile number.",
+        "passwordMin": "Password must be at least 6 characters."
+      }
     },
     "forgetPassword": {
       "title": "Reset password",

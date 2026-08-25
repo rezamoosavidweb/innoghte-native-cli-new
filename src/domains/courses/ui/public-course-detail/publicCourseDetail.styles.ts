@@ -44,14 +44,19 @@ export function createPublicCourseDetailStyles(colors: ThemeColors) {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+      minHeight: 72,
       gap: spacing.xl,
     },
     floatingActionPriceContainer: {
       flex: 1,
     },
-    floatingActionPriceText: {},
+    floatingActionPriceText: {
+      color: colors.text,
+      textAlign: 'center',
+    },
     floatingActionBtn: {
       flex: 1.8,
+      alignSelf: 'center',
     },
     title: {
       fontSize: 22,
@@ -163,6 +168,7 @@ export function createPublicCourseDetailStyles(colors: ThemeColors) {
       position: 'relative',
     },
     chapterTitle: {
+      color: colors.text,
       textAlign: 'center',
       fontSize: 20,
       fontWeight: 'bold',

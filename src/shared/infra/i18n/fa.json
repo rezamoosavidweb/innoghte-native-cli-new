@@ -631,6 +631,8 @@
       "mobilePlaceholder": "موبایل خود را وارد کنید",
       "password": "رمز عبور",
       "passwordPlaceholder": "رمز عبور خود را وارد کنید",
+      "showPassword": "نمایش رمز عبور",
+      "hidePassword": "مخفی کردن رمز عبور",
       "submit": "ورود",
       "signingIn": "در حال ورود…",
       "credentialsHelper": "با اعتبارنامهٔ اپ خود ادامه دهید.",
@@ -638,7 +640,12 @@
       "demoMessage": "احراز هویت در این نسخه وصل نشده است.",
       "noAccount": "اکانت نداری؟",
       "registerLink": "ثبت نام",
-      "forgetPassword": "رمز عبور خود را فراموش کرده‌اید؟"
+      "forgetPassword": "رمز عبور خود را فراموش کرده‌اید؟",
+      "errors": {
+        "invalidEmail": "لطفاً یک ایمیل معتبر وارد کنید.",
+        "invalidMobile": "لطفاً یک شماره موبایل معتبر وارد کنید.",
+        "passwordMin": "رمز عبور باید حداقل ۶ کاراکتر باشد."
+      }
     },
     "forgetPassword": {
       "title": "فراموشی رمز عبور",
