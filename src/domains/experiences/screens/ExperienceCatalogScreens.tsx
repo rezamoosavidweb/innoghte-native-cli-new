@@ -51,6 +51,7 @@ function ExperienceCatalog({ kind }: { kind: ExperienceKind }) {
     fetchNextPage,
     isFetchingNextPage,
     isRefetching,
+    flashListScrollMemory,
   } = useInfiniteCatalogItems({
     categoryId,
     perPage: kind === 'meditation' || kind === 'listening' ? 6 : 5,
@@ -59,7 +60,11 @@ function ExperienceCatalog({ kind }: { kind: ExperienceKind }) {
   const category = categoryQuery.data?.find(item => item.id === categoryId);
 
   const renderItem = React.useCallback<ListRenderItem<CatalogItem>>(
-    ({ item }) => <ExperienceCard item={item} kind={kind} />,
+    ({ item }) => (
+      <View style={styles.itemSpacing}>
+        <ExperienceCard item={item} kind={kind} />
+      </View>
+    ),
     [kind],
   );
 
@@ -93,31 +98,40 @@ function ExperienceCatalog({ kind }: { kind: ExperienceKind }) {
 
   const renderFooter = React.useCallback(
     () => (
-      <View>
+      <View style={styles.paginationFooter}>
         <ListFooterLoader visible={isFetchingNextPage} />
       </View>
     ),
     [isFetchingNextPage],
   );
 
+  const { captureRef, scrollPropsForFlashList, shouldSuppressEndReached } =
+    flashListScrollMemory;
+
+  const handleEndReached = React.useCallback(() => {
+    if (shouldSuppressEndReached()) {
+      return;
+    }
+    fetchNextPage().catch(() => {});
+  }, [fetchNextPage, shouldSuppressEndReached]);
+
   const renderList = React.useCallback(
     () => (
       <FlashList<CatalogItem>
+        ref={captureRef}
         data={flatData}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
         estimatedItemSize={
           kind === 'meditation' || kind === 'listening' ? 720 : 620
         }
-        ItemSeparatorComponent={Separator}
         ListHeaderComponent={renderHeader}
         ListFooterComponent={renderFooter}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
-        onEndReached={() => {
-          fetchNextPage().catch(() => {});
-        }}
+        onEndReached={handleEndReached}
         onEndReachedThreshold={0.35}
+        {...scrollPropsForFlashList}
         refreshControl={
           <RefreshControl
             refreshing={isSuccess && flatData.length > 0 && isRefetching}
@@ -129,8 +143,9 @@ function ExperienceCatalog({ kind }: { kind: ExperienceKind }) {
     ),
     [
       colors.primary,
-      fetchNextPage,
+      captureRef,
       flatData,
+      handleEndReached,
       isRefetching,
       isSuccess,
       kind,
@@ -138,6 +153,7 @@ function ExperienceCatalog({ kind }: { kind: ExperienceKind }) {
       renderFooter,
       renderHeader,
       renderItem,
+      scrollPropsForFlashList,
     ],
   );
 
@@ -157,10 +173,6 @@ function ExperienceCatalog({ kind }: { kind: ExperienceKind }) {
     />
   );
 }
-
-const Separator = React.memo(function Separator() {
-  return <View style={styles.separator} />;
-});
 
 export const MeditationScreen = React.memo(() => (
   <ExperienceCatalog kind="meditation" />
@@ -182,11 +194,17 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   header: { gap: 8, marginBottom: 22 },
-  heading: { textAlign: 'right', fontSize: 25, fontWeight: '800' },
+  heading: {
+    textAlign: 'center',
+    fontSize: 25,
+    fontWeight: '800',
+    marginBottom: 6,
+  },
   description: {
     textAlign: 'justify',
     writingDirection: 'rtl',
     lineHeight: 28,
   },
-  separator: { height: 18 },
+  itemSpacing: { marginBottom: 18 },
+  paginationFooter: { minHeight: 56 },
 });

@@ -10,7 +10,7 @@ export const catalogItemDetailSchema = z.looseObject({
   full_info: z.string(),
   from_album: z.string().nullable(),
   color: z.string().nullable(),
-  price: z.number(),
+  price: z.number().nullable().transform(value => value ?? 0),
   discount_price: z.number().nullable().optional(),
   duration: z.string().nullable().optional(),
   is_accessible: z.boolean().nullable().optional(),
@@ -25,6 +25,8 @@ export const catalogItemDetailSchema = z.looseObject({
         id: z.number(),
         title_fa: z.string(),
         url: z.string().nullable().optional(),
+        audio_media_url: z.string().nullable().optional(),
+        duration: z.string().nullable().optional(),
         short_info: z.string().nullable().optional(),
         full_info: z.string().nullable().optional(),
       }),
@@ -42,11 +44,38 @@ export const catalogItemDetailSchema = z.looseObject({
   medias: z
     .array(
       z.looseObject({
+        id: z.number().optional(),
         type: z.string(),
         src: z.string(),
+        url: z.string().nullable().optional(),
+        priority: z.number().optional(),
+        duration: z.string().nullable().optional(),
         is_cover: z.boolean().optional(),
       }),
     )
+    .optional(),
+  album_details: z
+    .array(
+      z.looseObject({
+        id: z.number(),
+        title: z.string(),
+        image: z.string(),
+        url: z.string(),
+        duration: z.union([z.string(), z.number()]).nullable().optional(),
+      }),
+    )
+    .optional(),
+  event_detail: z
+    .looseObject({
+      start_at: z.string().nullable().optional(),
+      end_at: z.string().nullable().optional(),
+      state: z.string().nullable().optional(),
+      location: z.string().nullable().optional(),
+      location_info: z.string().nullable().optional(),
+      registration_info: z.string().nullable().optional(),
+      type: z.string().nullable().optional(),
+    })
+    .nullable()
     .optional(),
   details: z
     .array(

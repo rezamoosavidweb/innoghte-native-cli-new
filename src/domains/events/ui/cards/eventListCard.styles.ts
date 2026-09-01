@@ -61,18 +61,19 @@ export function createEventListCardStyles(
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      gap: spacing.md,
+      width: '100%',
     },
     label: {
       fontSize: fontSize.md,
       fontWeight: fontWeight.medium,
-      flexShrink: 0,
+      flex: 1,
+      textAlign: 'right',
       color: themeColors.text,
     },
     value: {
       fontSize: fontSize.md,
       flex: 1,
-      textAlign: 'right',
+      textAlign: 'left',
       color: themeColors.text,
     },
     actions: {

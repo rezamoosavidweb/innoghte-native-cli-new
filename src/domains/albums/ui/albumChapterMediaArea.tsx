@@ -1,44 +1,24 @@
 import * as React from 'react';
-import { Linking, StyleSheet, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { WebView } from 'react-native-webview';
 
 import { Text } from '@/shared/ui/Text';
+import { hexAlpha } from '@/ui/theme/utils/colorUtils';
 
-import {
-  createChapterMediaPlaceholderStyles,
-  createChapterMediaThemedStyles,
-} from '@/domains/courses/ui/course-detail/courseChapterMediaArea.styles';
-import { Button } from '@/ui/components/Button';
-import { palette } from '@/ui/theme/colors';
-
-type JsonMediaItem = { uuid?: string; title?: string };
-
-type Parsed =
-  | { kind: 'json-array'; items: JsonMediaItem[] }
-  | { kind: 'url'; url: string }
-  | { kind: 'html' };
-
-function parseMedia(raw: string | null | undefined): Parsed | null {
-  if (!raw?.trim()) {
-    return null;
-  }
-  try {
-    const parsed = JSON.parse(raw) as unknown;
-    if (Array.isArray(parsed)) {
-      return { kind: 'json-array', items: parsed as JsonMediaItem[] };
-    }
-  } catch {
-    /* fall through */
-  }
-  const m = raw.trim();
-  if (m.startsWith('https://') || m.startsWith('http://')) {
-    return { kind: 'url', url: m };
-  }
-  if (m.includes('<')) {
-    return { kind: 'html' };
-  }
-  return null;
+function escapeHtmlAttribute(value: string): string {
+  return value.replace(
+    /[&<>"']/g,
+    character =>
+      ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+      })[character] ?? character,
+  );
 }
 
 export type AlbumChapterMediaAreaProps = {
@@ -48,119 +28,84 @@ export type AlbumChapterMediaAreaProps = {
 const AlbumChapterMediaAreaComponent = ({
   activeChapterMedia,
 }: AlbumChapterMediaAreaProps) => {
-  const { t } = useTranslation();
   const { colors } = useTheme();
+  const { t } = useTranslation();
+  const normalizedUrl = activeChapterMedia?.trim() ?? '';
 
-  const parsedBlocks = React.useMemo(
-    () => parseMedia(activeChapterMedia),
-    [activeChapterMedia],
+  const html = React.useMemo(
+    () =>
+      `<!doctype html><html dir="rtl"><head><meta name="viewport" content="width=device-width,initial-scale=1" /></head><body style="margin:0;background:transparent;display:flex;align-items:center;height:72px"><audio controls preload="metadata" controlslist="nodownload" style="width:100%;height:54px" src="${escapeHtmlAttribute(normalizedUrl)}"></audio></body></html>`,
+    [normalizedUrl],
   );
 
-  const openUrl = React.useCallback((url: string) => {
-    Linking.openURL(url).catch(() => {});
-  }, []);
-
-  const placeholderChrome = createChapterMediaPlaceholderStyles(colors);
-  const themedChrome = createChapterMediaThemedStyles(colors);
-
-  if (!activeChapterMedia?.trim()) {
+  if (!normalizedUrl) {
     return (
-      <View style={[styles.placeholder, placeholderChrome.placeholderBg]}>
-        <Text style={[styles.placeholderGlyph, placeholderChrome.glyph]}>▶</Text>
-      </View>
-    );
-  }
-
-  if (!parsedBlocks) {
-    return null;
-  }
-
-  if (parsedBlocks.kind === 'json-array') {
-    return (
-      <View style={[styles.box, themedChrome.boxBorder]}>
-        {parsedBlocks.items.map((item, idx) => (
-          <View key={item.uuid ?? `i-${idx}`} style={styles.jsonRow}>
-            {item.title ? (
-              <Text style={[styles.jsonTitle, themedChrome.jsonTitle]}>
-                {item.title}
-              </Text>
-            ) : null}
-            <Text style={[styles.hint, themedChrome.hint]}>
-              {t('screens.coursePlayer.externalPlaybackHint')}
-            </Text>
-          </View>
-        ))}
-      </View>
-    );
-  }
-
-  if (parsedBlocks.kind === 'url') {
-    return (
-      <Button
-        layout="auto"
-        variant="text"
-        title={t('screens.coursePlayer.openMedia')}
-        style={[styles.linkBtn, themedChrome.linkBtn]}
-        onPress={() => {
-          openUrl(parsedBlocks.url);
-        }}
-        contentStyle={{ width: '100%' }}
+      <View
+        style={[
+          styles.empty,
+          {
+            borderColor: colors.border,
+            backgroundColor: hexAlpha(colors.text, 0.04),
+          },
+        ]}
       >
-        <Text style={styles.linkText}>{t('screens.coursePlayer.openMedia')}</Text>
-      </Button>
+        <Text style={[styles.emptyIcon, { color: colors.text }]}>♫</Text>
+        <Text style={[styles.emptyText, { color: colors.text }]}>
+          {t('screens.albumDetail.noAudio')}
+        </Text>
+      </View>
     );
   }
 
   return (
-    <View style={[styles.box, themedChrome.boxBorder]}>
-      <Text style={[styles.hint, themedChrome.hint]}>
-        {t('screens.coursePlayer.htmlMediaHint')}
-      </Text>
+    <View
+      style={[
+        styles.playerFrame,
+        { borderColor: colors.border, backgroundColor: colors.card },
+      ]}
+    >
+      <WebView
+        key={normalizedUrl}
+        originWhitelist={['*']}
+        source={{ html, baseUrl: 'https://innoghte.ir' }}
+        style={styles.player}
+        scrollEnabled={false}
+        mediaPlaybackRequiresUserAction
+        allowsInlineMediaPlayback
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  placeholder: {
+  playerFrame: {
     width: '100%',
-    aspectRatio: 16 / 9,
-    borderRadius: 12,
+    height: 74,
+    borderRadius: 8,
+    borderWidth: StyleSheet.hairlineWidth,
+    overflow: 'hidden',
+    paddingHorizontal: 4,
+  },
+  player: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
+  empty: {
+    minHeight: 74,
+    borderRadius: 8,
+    borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 3,
   },
-  placeholderGlyph: {
-    fontSize: 44,
-    opacity: 0.45,
+  emptyIcon: {
+    fontSize: 22,
+    opacity: 0.65,
   },
-  box: {
-    width: '100%',
-    borderRadius: 12,
-    borderWidth: StyleSheet.hairlineWidth,
-    padding: 12,
-    gap: 8,
-  },
-  jsonRow: {
-    gap: 4,
-    marginBottom: 6,
-  },
-  jsonTitle: {
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  hint: {
-    fontSize: 14,
-    lineHeight: 20,
-    opacity: 0.85,
-  },
-  linkBtn: {
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  linkText: {
-    color: palette.white,
-    fontWeight: '700',
-    fontSize: 16,
+  emptyText: {
+    fontSize: 13,
+    opacity: 0.7,
+    textAlign: 'center',
   },
 });
 

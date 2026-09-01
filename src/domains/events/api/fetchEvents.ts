@@ -8,7 +8,9 @@ export { type EventType } from '@/domains/events/model/event.entities';
 
 export async function fetchEvents(): Promise<readonly EventType[]> {
   const result = await parseJsonResponse(
-    getApiClient().get(endpoints.public.events),
+    getApiClient().get(endpoints.public.events, {
+      headers: { Scope: 'com' },
+    }),
     eventsListResponseSchema,
   );
   const items = Array.isArray(result)

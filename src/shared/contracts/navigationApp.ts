@@ -53,6 +53,8 @@ export type DrawerParamList = {
   LiveMeetingOverview: undefined;
   /** Public course marketing / purchase — `courseId` matches list + API. */
   PublicCourseDetail: { courseId: number };
+  /** Public event detail — `eventId` matches the events list + catalog detail API. */
+  PublicEventDetail: { eventId: number };
   /** Purchased course chapters + media — `courseId` matches detail. */
   CourseDetail: { courseId: number };
   /** Purchased album chapters + media — `albumId` matches list + public course API id. */

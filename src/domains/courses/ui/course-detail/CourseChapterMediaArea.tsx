@@ -1,44 +1,118 @@
 import * as React from 'react';
-import { Linking, StyleSheet, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
-
-import { Text } from '@/shared/ui/Text';
+import { WebView } from 'react-native-webview';
 
 import {
-  createChapterMediaPlaceholderStyles,
-  createChapterMediaThemedStyles,
-} from '@/domains/courses/ui/course-detail/courseChapterMediaArea.styles';
-import { Button } from '@/ui/components/Button';
-import { palette } from '@/ui/theme/colors';
+  KavimoPlayer,
+  parseKavimoSource,
+} from '@/ui/components/KavimoPlayer';
+import { Text } from '@/shared/ui/Text';
 
-type JsonMediaItem = { uuid?: string; title?: string };
+import { createChapterMediaPlaceholderStyles } from '@/domains/courses/ui/course-detail/courseChapterMediaArea.styles';
 
-type Parsed =
+type JsonMediaItem = {
+  uuid?: string;
+  title?: string;
+  type?: string;
+  url?: string;
+};
+
+export type ParsedCourseMedia =
   | { kind: 'json-array'; items: JsonMediaItem[] }
   | { kind: 'url'; url: string }
-  | { kind: 'html' };
+  | { kind: 'html'; html: string };
 
-function parseMedia(raw: string | null | undefined): Parsed | null {
+export function parseCourseMedia(
+  raw: string | null | undefined,
+): ParsedCourseMedia | null {
   if (!raw?.trim()) {
     return null;
   }
+  const media = raw.trim();
   try {
-    const parsed = JSON.parse(raw) as unknown;
+    const parsed = JSON.parse(media) as unknown;
     if (Array.isArray(parsed)) {
       return { kind: 'json-array', items: parsed as JsonMediaItem[] };
     }
   } catch {
-    /* fall through */
+    /* The API also returns plain URLs and iframe HTML. */
   }
-  const m = raw.trim();
-  if (m.startsWith('https://') || m.startsWith('http://')) {
-    return { kind: 'url', url: m };
+  if (media.startsWith('https://') || media.startsWith('http://')) {
+    return { kind: 'url', url: media };
   }
-  if (m.includes('<')) {
-    return { kind: 'html' };
+  if (media.includes('<')) {
+    return { kind: 'html', html: media };
   }
   return null;
+}
+
+function isDirectVideoUrl(url: string): boolean {
+  return /\.(?:mp4|webm|m3u8)(?:$|[?#])/i.test(url);
+}
+
+function responsiveMediaHtml(content: string): string {
+  return `<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <style>
+      html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #000; }
+      iframe, video { position: absolute; inset: 0; width: 100% !important; height: 100% !important; border: 0; background: #000; }
+    </style>
+  </head>
+  <body>${content}</body>
+</html>`;
+}
+
+function directVideoMarkup(url: string): string {
+  return `<video controls autoplay playsinline controlslist="nodownload"><source src="${url}" /></video>`;
+}
+
+function EmbeddedMedia({ html }: { html: string }) {
+  return (
+    <View style={styles.webPlayer}>
+      <WebView
+        source={{
+          html: responsiveMediaHtml(html),
+          baseUrl: 'https://innoghte.ir',
+        }}
+        style={styles.webView}
+        originWhitelist={['*']}
+        allowsFullscreenVideo
+        allowsInlineMediaPlayback
+        mediaPlaybackRequiresUserAction={false}
+        javaScriptEnabled
+        domStorageEnabled
+        scrollEnabled={false}
+        setSupportMultipleWindows={false}
+      />
+    </View>
+  );
+}
+
+function UrlMedia({ url }: { url: string }) {
+  if (isDirectVideoUrl(url)) {
+    return <EmbeddedMedia html={directVideoMarkup(url)} />;
+  }
+  if (parseKavimoSource(url)) {
+    return <KavimoPlayer activeChapterMedia={url} />;
+  }
+  return (
+    <View style={styles.webPlayer}>
+      <WebView
+        source={{ uri: url }}
+        style={styles.webView}
+        originWhitelist={['*']}
+        allowsFullscreenVideo
+        allowsInlineMediaPlayback
+        mediaPlaybackRequiresUserAction={false}
+        javaScriptEnabled
+        domStorageEnabled
+        setSupportMultipleWindows={false}
+      />
+    </View>
+  );
 }
 
 export type CourseChapterMediaAreaProps = {
@@ -48,78 +122,45 @@ export type CourseChapterMediaAreaProps = {
 const CourseChapterMediaAreaComponent = ({
   activeChapterMedia,
 }: CourseChapterMediaAreaProps) => {
-  const { t } = useTranslation();
   const { colors } = useTheme();
-
-  const parsedBlocks = React.useMemo(
-    () => parseMedia(activeChapterMedia),
+  const parsedMedia = React.useMemo(
+    () => parseCourseMedia(activeChapterMedia),
     [activeChapterMedia],
   );
-
-  const openUrl = React.useCallback((url: string) => {
-    Linking.openURL(url).catch(() => {});
-  }, []);
-
   const placeholderChrome = createChapterMediaPlaceholderStyles(colors);
-  const themedChrome = createChapterMediaThemedStyles(colors);
 
   if (!activeChapterMedia?.trim()) {
     return (
       <View style={[styles.placeholder, placeholderChrome.placeholderBg]}>
-        <Text style={[styles.placeholderGlyph, placeholderChrome.glyph]}>
-          ▶
-        </Text>
+        <Text style={[styles.placeholderGlyph, placeholderChrome.glyph]}>▶</Text>
       </View>
     );
   }
 
-  if (!parsedBlocks) {
+  if (!parsedMedia) {
     return null;
   }
 
-  if (parsedBlocks.kind === 'json-array') {
-    return (
-      <View style={[styles.box, themedChrome.boxBorder]}>
-        {parsedBlocks.items.map((item, idx) => (
-          <View key={item.uuid ?? `i-${idx}`} style={styles.jsonRow}>
-            {item.title ? (
-              <Text style={[styles.jsonTitle, themedChrome.jsonTitle]}>
-                {item.title}
-              </Text>
-            ) : null}
-            <Text style={[styles.hint, themedChrome.hint]}>
-              {t('screens.coursePlayer.externalPlaybackHint')}
-            </Text>
-          </View>
-        ))}
-      </View>
-    );
+  if (parsedMedia.kind === 'url') {
+    return <UrlMedia url={parsedMedia.url} />;
   }
 
-  if (parsedBlocks.kind === 'url') {
-    return (
-      <Button
-        layout="auto"
-        variant="text"
-        title={t('screens.coursePlayer.openMedia')}
-        style={[styles.linkBtn, themedChrome.linkBtn]}
-        onPress={() => {
-          openUrl(parsedBlocks.url);
-        }}
-        contentStyle={{ width: '100%' }}
-      >
-        <Text style={styles.linkText}>
-          {t('screens.coursePlayer.openMedia')}
-        </Text>
-      </Button>
-    );
+  if (parsedMedia.kind === 'html') {
+    return <EmbeddedMedia html={parsedMedia.html} />;
   }
 
   return (
-    <View style={[styles.box, themedChrome.boxBorder]}>
-      <Text style={[styles.hint, themedChrome.hint]}>
-        {t('screens.coursePlayer.htmlMediaHint')}
-      </Text>
+    <View style={styles.mediaList}>
+      {parsedMedia.items.map((item, index) => (
+        <View key={item.uuid ?? item.url ?? `media-${index}`} style={styles.mediaItem}>
+          {item.title ? (
+            <Text style={[styles.mediaTitle, { color: colors.text }]}>
+              {item.title}
+            </Text>
+          ) : null}
+          {item.url ? <UrlMedia url={item.url} /> : null}
+        </View>
+      ))}
     </View>
   );
 };
@@ -136,35 +177,28 @@ const styles = StyleSheet.create({
     fontSize: 44,
     opacity: 0.45,
   },
-  box: {
+  webPlayer: {
     width: '100%',
+    aspectRatio: 16 / 9,
+    overflow: 'hidden',
     borderRadius: 12,
-    borderWidth: StyleSheet.hairlineWidth,
-    padding: 12,
+    backgroundColor: '#000',
+  },
+  webView: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
+  mediaList: {
+    width: '100%',
+    gap: 14,
+  },
+  mediaItem: {
     gap: 8,
   },
-  jsonRow: {
-    gap: 4,
-    marginBottom: 6,
-  },
-  jsonTitle: {
+  mediaTitle: {
     fontSize: 15,
-    fontWeight: '600',
-  },
-  hint: {
-    fontSize: 14,
-    lineHeight: 20,
-    opacity: 0.85,
-  },
-  linkBtn: {
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  linkText: {
-    color: palette.white,
     fontWeight: '700',
-    fontSize: 16,
+    textAlign: 'right',
   },
 });
 

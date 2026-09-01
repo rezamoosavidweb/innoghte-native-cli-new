@@ -1,6 +1,14 @@
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
-import { Linking, ScrollView, StyleSheet, View } from 'react-native';
+import {
+  Alert,
+  Linking,
+  NativeModules,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 import { isDotIr } from '@/shared/config/resolveIsDotIr';
 import { Text } from '@/shared/ui/Text';
@@ -16,6 +24,23 @@ const TUTORIALS = [
   ['هدیه به دیگری', '9.%D9%87%D8%AF%DB%8C%D9%87.mp4'],
 ] as const;
 
+type VideoPlayerNativeModule = {
+  open(url: string): Promise<void>;
+};
+
+async function openTutorialVideo(videoUrl: string): Promise<void> {
+  if (Platform.OS === 'android') {
+    const videoPlayer = NativeModules.VideoPlayer as VideoPlayerNativeModule | undefined;
+    if (!videoPlayer) {
+      throw new Error('VideoPlayer native module is unavailable');
+    }
+    await videoPlayer.open(videoUrl);
+    return;
+  }
+
+  await Linking.openURL(videoUrl);
+}
+
 export function TutorialScreen() {
   const { colors } = useTheme();
   return (
@@ -24,19 +49,35 @@ export function TutorialScreen() {
       <Text style={[styles.body, { color: colors.text }]}>
         با مشاهده ویدئوهای زیر می‌توانید نحوه ثبت‌نام، خرید و استفاده از خدمات را بیاموزید.
       </Text>
-      {TUTORIALS.map(([title, file]) => (
-        <View key={file} style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
-          <Text style={[styles.cardTitle, { color: colors.text }]}>{title}</Text>
-          <Button
-            layout="auto"
-            variant="outlined"
-            title="پخش ویدئوی آموزشی"
-            onPress={() =>
-              Linking.openURL(`https://dl.innoghte.${scope}/amoozesh-site/${file}`).catch(() => {})
-            }
-          />
-        </View>
-      ))}
+      {TUTORIALS.map(([title, file]) => {
+        const videoUrl = `https://dl.innoghte.${scope}/amoozesh-site/${file}`;
+        return (
+          <View
+            key={file}
+            style={[
+              styles.card,
+              { backgroundColor: colors.card, borderColor: colors.border },
+            ]}
+          >
+            <Text style={[styles.cardTitle, { color: colors.text }]}>
+              {title}
+            </Text>
+            <Button
+              layout="auto"
+              variant="outlined"
+              title="پخش ویدئوی آموزشی"
+              onPress={() => {
+                openTutorialVideo(videoUrl).catch(() => {
+                  Alert.alert(
+                    'پخش ویدئو ممکن نیست',
+                    'لطفاً یک پخش‌کننده ویدئو روی دستگاه نصب کنید.',
+                  );
+                });
+              }}
+            />
+          </View>
+        );
+      })}
     </ScrollView>
   );
 }

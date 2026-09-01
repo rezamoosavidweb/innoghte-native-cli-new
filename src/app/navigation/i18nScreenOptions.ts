@@ -74,6 +74,7 @@ const EXTRA_DRAWER_LABELS = {
   terms: 'drawer.terms',
   copyright: 'drawer.copyright',
   publicCourseDetail: 'drawer.publicCourseDetail',
+  publicEventDetail: 'drawer.publicEventDetail',
   coursePlayer: 'drawer.coursePlayer',
   publicAlbumDetail: 'drawer.publicAlbumDetail',
   albumDetail: 'drawer.albumDetail',

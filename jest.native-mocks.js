@@ -16,6 +16,11 @@ jest.mock('react-native-webview', () => {
   return { WebView: View, default: View };
 });
 
+jest.mock('@kavimo-tehran/vis3-react-native', () => {
+  const { View } = require('react-native');
+  return { Vis3: View, default: View };
+});
+
 jest.mock('react-native-image-picker', () => ({
   launchCamera: jest.fn(),
   launchImageLibrary: jest.fn(),

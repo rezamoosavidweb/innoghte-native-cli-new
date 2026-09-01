@@ -47,11 +47,11 @@ const EventListCardComponent = ({ item }: Props) => {
   const eventType = item.event_detail?.type ?? 'workshop';
 
   const openPublicDetail = React.useCallback(() => {
-    navigation.navigate('PublicCourseDetail', {courseId: item.id});
+    navigation.navigate('PublicEventDetail', { eventId: item.id });
   }, [item.id, navigation]);
 
   const openPurchasedDetail = React.useCallback(() => {
-    navigation.navigate('CourseDetail', {courseId: item.id});
+    navigation.navigate('PublicEventDetail', { eventId: item.id });
   }, [item.id, navigation]);
 
   return (

@@ -38,7 +38,9 @@ export function createApiTransport(prefix: string, auth: HttpAuthHooks) {
       beforeRequest: [
         ({ request, options }) => {
           request.headers.set('Accept', 'application/json');
-          request.headers.set('Scope', scopeHeader);
+          if (!request.headers.has('Scope')) {
+            request.headers.set('Scope', scopeHeader);
+          }
           const token = auth.getAccessToken();
           if (token) {
             request.headers.set('Authorization', `Bearer ${token}`);

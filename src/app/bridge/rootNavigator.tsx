@@ -32,7 +32,7 @@ import {
   PublicCourseDetailScreen,
 } from '@/domains/courses';
 import { DonationScreen } from '@/domains/donation';
-import { EventsScreen } from '@/domains/events';
+import { EventDetailScreen, EventsScreen } from '@/domains/events';
 import {
   ListeningScreen,
   MeditationScreen,
@@ -464,6 +464,14 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
       screen: PublicCourseDetailScreen,
       options: ({theme}) => ({
         ...extraLeafOptions('publicCourseDetail', '📘'),
+        ...createPurchaseHeaderOptions(theme),
+        drawerItemStyle: { display: 'none' },
+      }),
+    },
+    PublicEventDetail: {
+      screen: EventDetailScreen,
+      options: ({theme}) => ({
+        ...extraLeafOptions('publicEventDetail', '📅'),
         ...createPurchaseHeaderOptions(theme),
         drawerItemStyle: { display: 'none' },
       }),

@@ -65,6 +65,7 @@
     "courseDetail": "جزئیات دوره",
     "coursePlayer": "پخش دوره",
     "publicCourseDetail": "معرفی دوره",
+    "publicEventDetail": "جزئیات رویداد",
     "publicAlbumDetail": "معرفی آلبوم",
     "albumDetail": "آلبوم من",
     "publicAudioBookDetail": "کتاب صوتی هنر زندگی",
@@ -157,7 +158,22 @@
       "empty": "آلبوم یافت نشد.",
       "chaptersHeading": "قطعات آلبوم «{{title}}»",
       "nextTrack": "قطعه بعد: {{title}}",
-      "notAccessible": "این آلبوم برای حساب شما فعال نیست."
+      "notAccessible": "این آلبوم برای حساب شما فعال نیست.",
+      "trackNumber": "قطعه {{number}}",
+      "noAudio": "فایل صوتی این قطعه در دسترس نیست."
+    },
+    "eventDetail": {
+      "loading": "در حال بارگذاری رویداد…",
+      "error": "بارگذاری جزئیات رویداد ناموفق بود.",
+      "empty": "رویداد یافت نشد.",
+      "location": "محل برگزاری",
+      "date": "تاریخ برگزاری",
+      "time": "ساعت برگزاری",
+      "schedule": "برنامه‌های رویداد",
+      "venue": "محل برگزاری",
+      "registration": "شرایط ثبت‌نام",
+      "registrationEnded": "زمان ثبت‌نام این رویداد به پایان رسیده است.",
+      "comments": "دیدگاه شرکت‌کنندگان رویداد"
     },
     "publicAlbumDetail": {
       "title": "معرفی آلبوم",
@@ -590,7 +606,7 @@
       "fullName": "نام و نام خانوادگی",
       "email": "ایمیل",
       "mobile": "شماره موبایل",
-      "save": "دخیره",
+      "save": "ذخیره",
       "saving": "لطفا صبر کنید...",
       "success": "بروزرسانی با موفقیت انجام شد.",
       "errorGeneric": "متاسفیم! مشکلی پیش آمده است. لطفا بعدا دوباره تلاش کنید."

@@ -95,14 +95,18 @@ export function SupportServicesScreen() {
               loading={activation.isPending}
               onPress={activate}
             />
+            <Button
+              layout="auto"
+              variant="outlined"
+              title="خرید دوره شروع بیداری"
+              onPress={() =>
+                navigation.navigate('PublicCourseDetail', {
+                  courseId: SUPPORT_COURSE_ID,
+                })
+              }
+            />
           </>
         )}
-        <Button
-          layout="auto"
-          variant="outlined"
-          title="خرید دوره شروع بیداری"
-          onPress={() => navigation.navigate('PublicCourseDetail', { courseId: SUPPORT_COURSE_ID })}
-        />
       </View>
     </ScrollView>
   );

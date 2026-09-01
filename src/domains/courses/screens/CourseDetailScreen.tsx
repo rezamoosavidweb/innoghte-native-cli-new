@@ -59,6 +59,9 @@ function createChapterRowStyles(colors: Theme['colors'], active: boolean) {
     idle: { opacity: 1 },
     title: { color: colors.text },
     bullet: { color: active ? colors.primary : hexAlpha(colors.text, 0.53) },
+    icon: {
+      borderColor: active ? colors.primary : hexAlpha(colors.text, 0.53),
+    },
   });
 }
 
@@ -93,9 +96,11 @@ const ChapterRow = React.memo(function ChapterRow({
       <Text style={[styles.chapterTitle, themed.title]} numberOfLines={2}>
         {chapter.title_fa}
       </Text>
-      <Text style={[styles.chapterBullet, themed.bullet]}>
-        {active ? '●' : '▶'}
-      </Text>
+      <View style={[styles.chapterIcon, themed.icon]}>
+        <Text style={[styles.chapterIconGlyph, themed.bullet]}>
+          {active ? '●' : '◀'}
+        </Text>
+      </View>
     </Button>
   );
 });
@@ -406,12 +411,23 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 8,
     fontSize: 15,
-  },
-  chapterBullet: {
-    fontSize: 14,
-    lineHeight: 18,
+    lineHeight: 22,
     includeFontPadding: false,
-    transform: [{ translateY: 2 }],
+  },
+  chapterIcon: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 2,
+  },
+  chapterIconGlyph: {
+    fontSize: 12,
+    lineHeight: 14,
+    includeFontPadding: false,
+    textAlign: 'center',
   },
   commentsBlock: {
     marginTop: 16,
