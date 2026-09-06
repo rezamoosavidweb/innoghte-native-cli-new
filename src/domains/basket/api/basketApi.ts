@@ -1,4 +1,4 @@
-import { isDotIr, scopeHeader } from '@/shared/config/resolveIsDotIr';
+import { commerceMarket } from '@/shared/config/commerceMarket';
 import { endpoints, parseJsonResponse } from '@/shared/infra/http';
 import { getApiClient } from '@/shared/infra/http/appHttpClient';
 
@@ -17,7 +17,6 @@ export async function fetchPublicCartList(
   const res = await parseJsonResponse(
     getApiClient().get(endpoints.public.cartList, {
       headers: {
-        Scope: scopeHeader,
         'X-Cart-Token': cartToken,
       },
     }),
@@ -33,7 +32,6 @@ export async function deleteCartLine(
   const path = `${endpoints.public.cartDestroy}/${cartLineId}`;
   const response = await getApiClient().delete(path, {
     headers: {
-      Scope: scopeHeader,
       'X-Cart-Token': cartToken,
     },
   });
@@ -45,7 +43,6 @@ export async function deleteCartByToken(cartToken: string): Promise<void> {
     endpoints.public.cartDeleteByToken,
     {
       headers: {
-        Scope: scopeHeader,
         'X-Cart-Token': cartToken,
       },
     },
@@ -63,7 +60,6 @@ export async function validateDiscountCode(params: {
         course_ids: params.courseIds,
         discount_code: params.discountCode,
       },
-      headers: { Scope: scopeHeader },
     }),
     publicCheckDiscountResponseSchema,
   );
@@ -77,13 +73,13 @@ export type CreateBasketPaymentBody = {
   payment_method: 'paypal' | 'credit_card';
   discount_code?: string;
   present_id?: string;
-  cardNumber?: string;
+  card_number?: string;
   type?: string;
   cvv?: string;
-  expireMonth?: string;
-  expireYear?: string;
-  fistName?: string;
-  lastName?: string;
+  expiry_month?: string;
+  expiry_year?: string;
+  first_name?: string;
+  last_name?: string;
 };
 
 export async function createBasketPayment(
@@ -91,11 +87,13 @@ export async function createBasketPayment(
 ): Promise<CreatePaymentResult> {
   // `.ir` uses the gateway endpoint; `.com` uses the PayPal endpoint
   // (mirrors client-web `isDotIr ? postCreatePayment : postCreatePaymentPaypal`).
-  const path = isDotIr ? endpoints.payment.create : endpoints.payment.createPaypal;
+  const path =
+    commerceMarket.checkoutKind === 'iran_gateway'
+      ? endpoints.payment.create
+      : endpoints.payment.createPaypal;
   return parseJsonResponse(
     getApiClient().post(path, {
       json: body,
-      headers: { Scope: scopeHeader },
     }),
     createPaymentResponseSchema,
   );

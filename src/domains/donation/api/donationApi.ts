@@ -2,7 +2,6 @@
  * Public donation payment API — paths relative to HTTP client prefix
  * ({@link resolveApiBaseUrl}: `API_BASE_URL` / `REACT_NATIVE_API_URL`).
  */
-import { scopeHeader } from '@/shared/config/resolveIsDotIr';
 import { parseJsonResponse } from '@/shared/infra/http';
 import { getApiClient } from '@/shared/infra/http/appHttpClient';
 
@@ -29,7 +28,6 @@ export async function postCreateDonationIr(
   return parseJsonResponse(
     getApiClient().post(paths.createIr, {
       json: body,
-      headers: { Scope: scopeHeader },
     }),
     publicDonationResponseSchema,
   );
@@ -41,7 +39,6 @@ export async function postCreateDonationCom(
   return parseJsonResponse(
     getApiClient().post(paths.createCom, {
       json: body,
-      headers: { Scope: scopeHeader },
     }),
     publicDonationResponseSchema,
   );

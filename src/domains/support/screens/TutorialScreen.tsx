@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 
-import { isDotIr } from '@/shared/config/resolveIsDotIr';
+import { isDotIr } from '@/shared/config/commerceMarket';
 import { Text } from '@/shared/ui/Text';
 import { Button } from '@/ui/components/Button';
 

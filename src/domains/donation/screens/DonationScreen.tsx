@@ -42,7 +42,7 @@ import {
 } from '@/domains/donation/model/donationForm.schema';
 import { useDonationScreenStyles } from '@/domains/donation/ui/donationScreen.styles';
 import { toPersianNumber } from '@/domains/donation/utils/paymentFormatting';
-import { isDotIr } from '@/shared/config/resolveIsDotIr';
+import { isDotIr } from '@/shared/config/commerceMarket';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { StorageService } from '@/shared/infra/storage/storage.service';
 import { groupThousands } from '@/shared/utils/groupThousands';

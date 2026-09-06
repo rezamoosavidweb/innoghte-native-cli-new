@@ -4,7 +4,7 @@ import {
   giveGiftFormResolver,
   type GiveGiftFormType,
 } from '@/domains/user/model/giveGiftFormSchema';
-import { isDotIr } from '@/shared/config/resolveIsDotIr';
+import { isDotIr } from '@/shared/config/commerceMarket';
 
 const mobileDefaults = {
   dialCode: isDotIr ? '+98' : '+1',

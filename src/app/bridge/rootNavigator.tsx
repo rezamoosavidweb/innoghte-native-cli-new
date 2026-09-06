@@ -40,7 +40,7 @@ import {
   ReadingScreen,
   WritingScreen,
 } from '@/domains/experiences';
-import { PaymentResultScreen } from '@/domains/payment';
+import { PaymentGatewayScreen, PaymentResultScreen } from '@/domains/payment';
 import { HomeScreen } from '@/domains/home';
 import { CopyrightScreen, TermsScreen } from '@/domains/legal';
 import { LiveMeetingsScreen } from '@/domains/live';
@@ -426,6 +426,15 @@ export const rootNavigator = createDrawerNavigator<DrawerParamList>({
     Donation: {
       screen: DonationScreen,
       options: () => extraLeafOptions('donation', '❤️'),
+    },
+    PaymentGateway: {
+      screen: PaymentGatewayScreen,
+      options: () => ({
+        title: 'درگاه پرداخت',
+        drawerLabel: 'درگاه پرداخت',
+        drawerIcon: drawerIcon('💳'),
+        drawerItemStyle: { display: 'none' },
+      }),
     },
     PaymentResult: {
       screen: PaymentResultScreen,

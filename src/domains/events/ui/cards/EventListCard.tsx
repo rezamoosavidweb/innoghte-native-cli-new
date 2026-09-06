@@ -4,17 +4,13 @@ import { useTheme } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Text } from '@/shared/ui/Text';
 
-import {
-  formatNumberForApp,
-  formatPriceForApp,
-} from '@/shared/infra/i18n/formatLocaleNumbers';
+import { formatNumberForApp } from '@/shared/infra/i18n/formatLocaleNumbers';
+import { formatCommercePrice } from '@/shared/config/commerceMarket';
 import type { EventType } from '@/domains/events/model/event.entities';
 import { useEventListCardStyles } from '@/domains/events/ui/cards/eventListCard.styles';
 import { Button } from '@/ui/components/Button';
 import { CartMainButtons } from '@/shared/ui/cart/CartMainButtons';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
-
-const PRICE_DIVISOR = 10;
 
 type Props = { item: EventType };
 
@@ -38,10 +34,7 @@ const EventListCardComponent = ({ item }: Props) => {
   const navigation = useAppNavigation();
   const uri = item.image_media[0]?.src;
   const [failed, setFailed] = React.useState(false);
-  const price = formatPriceForApp(
-    (item.price ?? 0) / PRICE_DIVISOR,
-    t('courses.currency'),
-  );
+  const price = formatCommercePrice(item.price ?? 0);
   const capacity = formatNumberForApp(item.remain_capacity ?? 0);
   const isUpcoming = item.state === 'upcoming';
   const eventType = item.event_detail?.type ?? 'workshop';

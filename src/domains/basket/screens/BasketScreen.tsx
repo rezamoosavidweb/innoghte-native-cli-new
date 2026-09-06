@@ -35,9 +35,10 @@ import {
   type BasketPaymentFormType,
 } from '@/domains/basket/model/paymentFormSchema';
 import { buildBasketPaymentPayload } from '@/domains/basket/services/buildBasketPaymentPayload';
-import { openExternalPaymentUrl } from '@/domains/basket/services/openExternalPaymentUrl';
-import { formatTomanFa } from '@/domains/basket/utils/formatTomanFa';
-import { isDotIr } from '@/shared/config/resolveIsDotIr';
+import {
+  formatCommercePrice,
+  isDotIr,
+} from '@/shared/config/commerceMarket';
 import type {
   DrawerParamList,
   TabParamList,
@@ -176,7 +177,7 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
     };
   }, [isAuthed, pendingDiscountCode, discountIds, mutateValidateDiscount]);
 
-  const payAndOpenUrl = React.useCallback(
+  const createCheckout = React.useCallback(
     async (data: BasketPaymentFormType) => {
       const body = buildBasketPaymentPayload({
         payableCourseIds: payableIds,
@@ -194,7 +195,14 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
           deleteCartByToken(cartToken).catch(() => {});
         }
         setDiscount(null);
-        await openExternalPaymentUrl(url);
+        navigation.navigate('PaymentGateway', {
+          url,
+          gatewayName: isDotIr
+            ? gateway
+            : data.paymentType === 'credit_card'
+              ? 'creditCard'
+              : 'paypal',
+        });
       }
     },
     [
@@ -205,6 +213,7 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
       gift.presentId,
       payableIds,
       paymentMutation,
+      navigation,
       setDiscount,
     ],
   );
@@ -224,7 +233,7 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
         return;
       }
       try {
-        await payAndOpenUrl(data);
+        await createCheckout(data);
       } catch (e) {
         if (e instanceof ApiError && e.status === 401) {
           redirectToLoginForCheckout(navigation);
@@ -234,7 +243,7 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
         Alert.alert('خطا', msg);
       }
     },
-    [navigation, payAndOpenUrl, payableIds.length, termsAccepted],
+    [navigation, createCheckout, payableIds.length, termsAccepted],
   );
 
   const submitHandler = React.useMemo(
@@ -323,7 +332,7 @@ function BasketScreenInner({ route }: { route: BasketScreenRouteProp }) {
               <Text style={s.totalLabel}>جمع کل</Text>
               <View style={s.priceRow}>
                 <Text style={s.total}>
-                  {formatTomanFa(totals.displayDiscountPrice)}
+                  {formatCommercePrice(totals.displayDiscountPrice)}
                 </Text>
               </View>
             </View>

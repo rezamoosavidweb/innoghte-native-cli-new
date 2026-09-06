@@ -1,7 +1,10 @@
 import type { NavigatorScreenParams } from '@react-navigation/native';
 
 import type { DonationScreenParams } from '@/shared/contracts/navigationDonation';
-import type { PaymentResultParams } from '@/shared/contracts/navigationPayment';
+import type {
+  PaymentGatewayScreenParams,
+  PaymentResultParams,
+} from '@/shared/contracts/navigationPayment';
 import type { VerifyChannel } from './verification';
 
 /** Bottom tabs — primary app sections. */
@@ -44,6 +47,8 @@ export type DrawerParamList = {
   PrivateConsultation: undefined;
   Tutorial: undefined;
   Donation: DonationScreenParams | undefined;
+  /** In-app browser for the bank/PayPal hand-off and callback capture. */
+  PaymentGateway: PaymentGatewayScreenParams;
   /** Post-checkout gateway-callback result (deep link: `payment/result`). */
   PaymentResult: PaymentResultParams | undefined;
   AboutUs: undefined;

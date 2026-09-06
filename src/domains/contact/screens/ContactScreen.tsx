@@ -23,7 +23,7 @@ import {
 } from '@/domains/contact/model/contactForm.schema';
 import { createContactScreenStyles } from '@/domains/contact/ui/contactScreen.styles';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
-import { isDotIr } from '@/shared/config/resolveIsDotIr';
+import { isDotIr } from '@/shared/config/commerceMarket';
 import { fireAndForget } from '@/shared/infra/http';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { showAppToast } from '@/shared/ui/toast';

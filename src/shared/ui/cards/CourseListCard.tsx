@@ -8,16 +8,14 @@ import { Text } from '@/shared/ui/Text';
 import type { CatalogItem } from '@/shared/catalog/model/entities';
 import {
   formatNumberForApp,
-  formatPriceForApp,
 } from '@/shared/infra/i18n/formatLocaleNumbers';
+import { formatCommercePrice } from '@/shared/config/commerceMarket';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { CatalogListItemCard } from '@/shared/ui/cards/CatalogListItemCard';
 import type { ProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
 import { createProductListCardStyles } from '@/shared/ui/cards/productListCard.styles';
 import { CartMainButtons } from '@/shared/ui/cart/CartMainButtons';
 import { protectedNavigate } from '@/app/bridge/auth';
-
-const PRICE_DISPLAY_DIVISOR = 10;
 
 type CourseListCardProps = {
   course: CatalogItem;
@@ -110,10 +108,7 @@ const CourseListCardComponent = ({
     course.discountPrice > 0 && course.discountPrice < course.price
       ? course.discountPrice
       : course.price;
-  const displayPrice = formatPriceForApp(
-    (effectivePrice ?? 0) / PRICE_DISPLAY_DIVISOR,
-    t('courses.currency'),
-  );
+  const displayPrice = formatCommercePrice(effectivePrice ?? 0);
   const chapters = formatNumberForApp(course.itemsCount);
 
   const metaBlock = React.useMemo(

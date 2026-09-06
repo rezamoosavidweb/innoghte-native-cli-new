@@ -15,14 +15,12 @@ import { pickCoverSrc } from '@/domains/courses/utils/pickCoverSrc';
 import { useCatalogItemDetail } from '@/shared/catalog/hooks/useCatalogItemDetail';
 import { catalogKeys } from '@/shared/catalog/model/queryKeys';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
-import { formatPriceForApp } from '@/shared/infra/i18n/formatLocaleNumbers';
+import { formatCommercePrice } from '@/shared/config/commerceMarket';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { CartMainButtons } from '@/shared/ui/cart/CartMainButtons';
 import { ClientCommentsSection } from '@/shared/ui/comments';
 import { ListStateView } from '@/shared/ui/list-states/ListStateView';
 import { Text } from '@/shared/ui/Text';
-
-const IR_PRICE_DIVISOR = 10;
 
 function escapeHtmlAttribute(value: string): string {
   return value.replace(
@@ -109,8 +107,8 @@ const PublicAudioBookDetailScreenComponent = () => {
   const renderBody = React.useCallback(() => {
     if (!data) return <></>;
     const detail = data.audio_book_detail;
-    const displayPrice = (data.discount_price ?? data.price) / IR_PRICE_DIVISOR;
-    const originalPrice = data.price / IR_PRICE_DIVISOR;
+    const displayPrice = data.discount_price ?? data.price;
+    const originalPrice = data.price;
     return (
       <ScrollView
         style={styles.scroll}
@@ -146,11 +144,11 @@ const PublicAudioBookDetailScreenComponent = () => {
           />
           <InfoRow
             label={t('screens.audioBookDetail.price')}
-            value={formatPriceForApp(displayPrice, t('courses.currency'))}
+            value={formatCommercePrice(displayPrice)}
           />
           {data.discount_price && data.discount_price < data.price ? (
             <Text style={[styles.originalPrice, { color: colors.text }]}>
-              {formatPriceForApp(originalPrice, t('courses.currency'))}
+              {formatCommercePrice(originalPrice)}
             </Text>
           ) : null}
           <CartMainButtons

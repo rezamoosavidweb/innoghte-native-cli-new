@@ -4,15 +4,13 @@ import {useTranslation} from 'react-i18next';
 import {View} from 'react-native';
 
 import type {LiveMeetingType} from '@/domains/live/model/liveMeeting.entities';
-import {formatPriceForApp} from '@/shared/infra/i18n/formatLocaleNumbers';
+import {formatCommercePrice} from '@/shared/config/commerceMarket';
 import {useAppNavigation} from '@/shared/lib/navigation/useAppNavigation';
 import {CatalogListItemCard} from '@/shared/ui/cards/CatalogListItemCard';
 import type {ProductListCardStyles} from '@/shared/ui/cards/productListCard.styles';
 import {createProductListCardStyles} from '@/shared/ui/cards/productListCard.styles';
 import {CartMainButtons} from '@/shared/ui/cart/CartMainButtons';
 import {Text} from '@/shared/ui/Text';
-
-const PRICE_DISPLAY_DIVISOR = 10;
 
 type Props = {item: LiveMeetingType};
 
@@ -43,10 +41,7 @@ const LiveMeetingListCardComponent = ({item}: Props) => {
   );
   const navigation = useAppNavigation();
 
-  const price = formatPriceForApp(
-    (item.price ?? 0) / PRICE_DISPLAY_DIVISOR,
-    t('courses.currency'),
-  );
+  const price = formatCommercePrice(item.price ?? 0);
 
   const onPressPrimary = React.useCallback(() => {
     navigation.navigate('CourseDetail', {courseId: item.id});

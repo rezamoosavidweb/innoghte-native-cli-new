@@ -1,4 +1,4 @@
-import { isDotIr } from '@/shared/config/resolveIsDotIr';
+import { isDotIr } from '@/shared/config/commerceMarket';
 
 /**
  * Normalize a free-text mobile into E.164 (`+<country><national>`), matching the

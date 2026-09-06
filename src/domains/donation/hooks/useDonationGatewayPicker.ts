@@ -2,7 +2,7 @@ import type { DrawerScreenProps } from '@react-navigation/drawer';
 import * as React from 'react';
 import { useEffect, useMemo } from 'react';
 
-import { resolveShowZarinpal } from '@/domains/donation/model/env';
+import { defaultIranPaymentGateway } from '@/shared/config/commerceMarket';
 import { DONATION_LAST_CHECKOUT_GATEWAY_KEY } from '@/domains/donation/model/storageKeys';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { StorageService } from '@/shared/infra/storage/storage.service';
@@ -11,7 +11,7 @@ type DonationRoute = DrawerScreenProps<DrawerParamList, 'Donation'>['route'];
 
 export function useDonationGatewayPicker(route: DonationRoute, isDotIr: boolean) {
   const [gateway, setGateway] = React.useState<string>(() =>
-    isDotIr ? (resolveShowZarinpal() ? 'zarinpal' : 'vandar') : 'paypal',
+    isDotIr ? defaultIranPaymentGateway : 'paypal',
   );
 
   useEffect(() => {

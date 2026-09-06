@@ -2,9 +2,13 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { createStorageServiceStateStorage } from '@/shared/infra/storage/createStorageServiceAdapter';
+import {
+  defaultIranPaymentGateway,
+  type IranPaymentGateway,
+} from '@/shared/config/commerceMarket';
 
 export type BasketPaymentMethod = 'paypal' | 'credit_card';
-export type BasketIrGateway = 'zarinpal' | 'vandar';
+export type BasketIrGateway = IranPaymentGateway;
 
 export type BasketCheckoutPersist = {
   termsAccepted: boolean;
@@ -33,7 +37,7 @@ export const useBasketCheckoutStore = create<BasketCheckoutState>()(
     set => ({
       termsAccepted: false,
       paymentMethod: 'paypal',
-      gatewayName: 'zarinpal',
+      gatewayName: defaultIranPaymentGateway,
       pendingDiscountCode: null,
       autoResumeCheckout: false,
 

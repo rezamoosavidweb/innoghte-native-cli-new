@@ -2,7 +2,7 @@ import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { Linking, ScrollView, StyleSheet, View } from 'react-native';
 
-import { isDotIr } from '@/shared/config/resolveIsDotIr';
+import { isDotIr } from '@/shared/config/commerceMarket';
 import { Text } from '@/shared/ui/Text';
 import { Button } from '@/ui/components/Button';
 

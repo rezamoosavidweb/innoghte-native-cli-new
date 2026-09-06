@@ -6,6 +6,7 @@ import { Text } from '@/shared/ui/Text';
 import { useDonationSelectGatewayStyles } from '@/domains/donation/ui/donationSelectGateway.styles';
 import { pickSemantic } from '@/ui/theme';
 import { Button } from '@/ui/components/Button';
+import { enabledIranGateways } from '@/shared/config/commerceMarket';
 
 export type DonationSelectGatewayProps = {
   gateway: 'vandar' | 'zarinpal';
@@ -25,28 +26,23 @@ export const DonationSelectGateway = React.memo(function DonationSelectGateway({
 
   return (
     <View style={s.row}>
-      <Button
-        layout="auto"
-        variant="text"
-        title="زرین‌پال"
-        onPress={() => onChange('zarinpal')}
-        style={[s.chip, gateway === 'zarinpal' && s.chipActive]}
-        accessibilityState={{ selected: gateway === 'zarinpal' }}
-        contentStyle={{ width: '100%' }}
-      >
-        <Text style={s.chipLabel}>زرین‌پال</Text>
-      </Button>
-      <Button
-        layout="auto"
-        variant="text"
-        title="وندار"
-        onPress={() => onChange('vandar')}
-        style={[s.chip, gateway === 'vandar' && s.chipActive]}
-        accessibilityState={{ selected: gateway === 'vandar' }}
-        contentStyle={{ width: '100%' }}
-      >
-        <Text style={s.chipLabel}>وندار</Text>
-      </Button>
+      {enabledIranGateways.map(item => {
+        const label = item === 'zarinpal' ? 'زرین‌پال' : 'وندار';
+        return (
+          <Button
+            key={item}
+            layout="auto"
+            variant="text"
+            title={label}
+            onPress={() => onChange(item)}
+            style={[s.chip, gateway === item && s.chipActive]}
+            accessibilityState={{ selected: gateway === item }}
+            contentStyle={{ width: '100%' }}
+          >
+            <Text style={s.chipLabel}>{label}</Text>
+          </Button>
+        );
+      })}
     </View>
   );
 });

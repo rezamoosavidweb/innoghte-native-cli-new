@@ -19,7 +19,7 @@ import {
   type EditProfileFormType,
 } from '@/domains/user/model/editProfileForm.schema';
 import { createEditProfileScreenStyles } from '@/domains/user/ui/editProfileScreen.styles';
-import { isDotIr } from '@/shared/config/resolveIsDotIr';
+import { isDotIr } from '@/shared/config/commerceMarket';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { Text } from '@/shared/ui/Text';
 import { resolveAvatarUri } from '@/shared/utils/resolveAvatarUri';

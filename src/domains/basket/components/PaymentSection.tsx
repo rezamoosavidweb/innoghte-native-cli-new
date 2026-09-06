@@ -14,7 +14,12 @@ import {
   basketCartTypeOptions,
   type BasketCreditCartErrors,
 } from '@/domains/basket/model/paymentFormSchema';
-import { isDotIr } from '@/shared/config/resolveIsDotIr';
+import {
+  defaultIranPaymentGateway,
+  enabledIranGateways,
+  isDotIr,
+  isIranGatewayEnabled,
+} from '@/shared/config/commerceMarket';
 import { formatCardNumber } from '@/shared/utils/paymentFormatting';
 import { Button } from '@/ui/components/Button';
 import { pickSemantic } from '@/ui/theme';
@@ -45,6 +50,12 @@ export const PaymentSection = React.memo(function PaymentSection({
     },
     [setGateway],
   );
+
+  React.useEffect(() => {
+    if (isDotIr && !isIranGatewayEnabled(gateway)) {
+      setGateway(defaultIranPaymentGateway);
+    }
+  }, [gateway, setGateway]);
 
   return (
     <View>
@@ -250,26 +261,23 @@ export const PaymentSection = React.memo(function PaymentSection({
         </View>
       ) : (
         <View style={s.gatewayRow}>
-          <Button
-            layout="auto"
-            variant="text"
-            title="زرین‌پال"
-            onPress={() => onGatewayPress('zarinpal')}
-            style={[s.gw, gateway === 'zarinpal' && s.gwOn]}
-            contentStyle={{ width: '100%' }}
-          >
-            <Text style={s.gwLbl}>زرین‌پال</Text>
-          </Button>
-          <Button
-            layout="auto"
-            variant="text"
-            title="وندار"
-            onPress={() => onGatewayPress('vandar')}
-            style={[s.gw, gateway === 'vandar' && s.gwOn]}
-            contentStyle={{ width: '100%' }}
-          >
-            <Text style={s.gwLbl}>وندار</Text>
-          </Button>
+          {enabledIranGateways.map(item => {
+            const label = item === 'zarinpal' ? 'زرین‌پال' : 'وندار';
+            return (
+              <Button
+                key={item}
+                layout="auto"
+                variant="text"
+                title={label}
+                onPress={() => onGatewayPress(item)}
+                style={[s.gw, gateway === item && s.gwOn]}
+                accessibilityState={{ selected: gateway === item }}
+                contentStyle={{ width: '100%' }}
+              >
+                <Text style={s.gwLbl}>{label}</Text>
+              </Button>
+            );
+          })}
         </View>
       )}
     </View>

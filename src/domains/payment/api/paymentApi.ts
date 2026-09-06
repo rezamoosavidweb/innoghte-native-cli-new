@@ -1,4 +1,3 @@
-import { scopeHeader } from '@/shared/config/resolveIsDotIr';
 import { endpoints, parseJsonResponse } from '@/shared/infra/http';
 import { getApiClient } from '@/shared/infra/http/appHttpClient';
 
@@ -23,9 +22,7 @@ export async function getVerifyPayment(
   if (params.PayerID) search.set('PayerID', params.PayerID);
 
   return parseJsonResponse(
-    getApiClient().get(`${endpoints.payment.verify}?${search.toString()}`, {
-      headers: { Scope: scopeHeader },
-    }),
+    getApiClient().get(`${endpoints.payment.verify}?${search.toString()}`),
     verifyPaymentResponseSchema,
   );
 }
@@ -37,13 +34,12 @@ export async function getVerifyPayment(
 export async function getVerifyPaymentPaypal(
   params: ResolvedPaymentParams,
 ): Promise<VerifyPaymentResult> {
-  const search = new URLSearchParams({ gateway_name: params.gatewayName });
+  const search = new URLSearchParams({ gateway_name: 'paypal' });
   if (params.token) search.set('paymentId', params.token);
 
   return parseJsonResponse(
     getApiClient().get(
       `${endpoints.payment.verifyPaypal}?${search.toString()}`,
-      { headers: { Scope: scopeHeader } },
     ),
     verifyPaymentResponseSchema,
   );

@@ -20,7 +20,7 @@ export function usePaymentVerify(params: ResolvedPaymentParams) {
   return useQuery({
     queryKey: paymentKeys.verify(verifySignature(params)),
     queryFn: () =>
-      params.gatewayName === 'paypal'
+      params.gatewayName === 'paypal' || params.gatewayName === 'creditCard'
         ? getVerifyPaymentPaypal(params)
         : getVerifyPayment(params),
     enabled: canVerify(params),

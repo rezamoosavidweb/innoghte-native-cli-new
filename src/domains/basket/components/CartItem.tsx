@@ -8,7 +8,7 @@ import {
   asCourseLike,
   coursePrimaryImageSrc,
 } from '@/domains/basket/model/courseGuards';
-import { formatTomanFa } from '@/domains/basket/utils/formatTomanFa';
+import { formatCommercePrice } from '@/shared/config/commerceMarket';
 import { useThemeColors } from '@/ui/theme';
 import { Button } from '@/ui/components/Button';
 import CloseIcon from '@/assets/icons/inn/close.svg';
@@ -100,7 +100,7 @@ export const CartItem = React.memo(function CartItem({
           <View style={s.metaRow}>
             <Text style={s.metaLabel}>قیمت:</Text>
             <View style={s.priceValue}>
-              <Text style={s.price}>{formatTomanFa(payablePrice)}</Text>
+              <Text style={s.price}>{formatCommercePrice(payablePrice)}</Text>
             </View>
           </View>
         )}

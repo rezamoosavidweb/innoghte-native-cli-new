@@ -11,7 +11,7 @@ import { navigateToAppLeaf } from '@/app/bridge/auth';
 import { useCurrentUser } from '@/domains/auth/hooks/useCurrentUser';
 import { mapUserDtoToProfileHeaderUser } from '@/domains/user/model/profileHeaderUser';
 import type { VerifyChannel } from '@/shared/contracts/verification';
-import { isDotIr } from '@/shared/config/resolveIsDotIr';
+import { isDotIr } from '@/shared/config/commerceMarket';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
 import { Text } from '@/shared/ui/Text';
 import { toPersianNumber } from '@/shared/utils/toPersianNumber';

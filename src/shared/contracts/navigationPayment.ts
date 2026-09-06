@@ -6,7 +6,16 @@
  * `token` / `PayerID`. `gatewayName` selects the verify endpoint and defaults
  * to the region's gateway when absent.
  */
-export type PaymentGatewayName = 'zarinpal' | 'vandar' | 'paypal';
+export type PaymentGatewayName =
+  | 'zarinpal'
+  | 'vandar'
+  | 'paypal'
+  | 'creditCard';
+
+export type PaymentGatewayScreenParams = {
+  url: string;
+  gatewayName: PaymentGatewayName;
+};
 
 export type PaymentResultParams = {
   Authority?: string;

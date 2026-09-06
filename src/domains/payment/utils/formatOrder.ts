@@ -1,7 +1,8 @@
-import { isDotIr } from '@/shared/config/resolveIsDotIr';
+import {
+  formatCommercePrice,
+  isDotIr,
+} from '@/shared/config/commerceMarket';
 import type { PaymentGatewayName } from '@/shared/contracts/navigationPayment';
-
-const LANG = isDotIr ? 'fa-IR' : 'en-US';
 
 const FA_MONTHS = [
   'ژانویه',
@@ -24,15 +25,7 @@ const FA_MONTHS = [
  */
 export function formatOrderPrice(value: number): string {
   if (!value) return 'رایگان';
-  if (isDotIr) {
-    const toman = value / 10;
-    try {
-      return `${new Intl.NumberFormat(LANG).format(toman)} تومان`;
-    } catch {
-      return `${toman} تومان`;
-    }
-  }
-  return `$${value}`;
+  return formatCommercePrice(value);
 }
 
 /** Persian long-date for `.ir`; Gregorian month name (Persian) otherwise. */
@@ -58,6 +51,7 @@ const GATEWAY_LABEL: Record<PaymentGatewayName, string> = {
   zarinpal: 'پرداخت امن زرین‌پال',
   vandar: 'پرداخت امن وندار',
   paypal: 'PayPal',
+  creditCard: 'کارت اعتباری',
 };
 
 /** Payment-method label for the order summary. */

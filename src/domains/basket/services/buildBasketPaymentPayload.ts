@@ -1,4 +1,7 @@
-import { isDotIr } from '@/shared/config/resolveIsDotIr';
+import {
+  commerceMarket,
+  type CommerceMarket,
+} from '@/shared/config/commerceMarket';
 
 import type { CreateBasketPaymentBody } from '@/domains/basket/api/basketApi';
 import type {
@@ -17,15 +20,17 @@ export type BuildPaymentInput = {
   paymentMethod: BasketPaymentMethod;
   discount: CheckDiscountCodeDto | null;
   form: BasketPaymentFormType;
+  market?: CommerceMarket;
 };
 
 export function buildBasketPaymentPayload(
   input: BuildPaymentInput,
 ): CreateBasketPaymentBody {
+  const market = input.market ?? commerceMarket;
   const body: Record<string, unknown> = {
     course_ids: input.payableCourseIds,
     order_type: 'normal',
-    gateway_name: isDotIr ? input.gateway : 'paypal',
+    gateway_name: market.isDotIr ? input.gateway : 'paypal',
     payment_method: input.paymentMethod,
   };
 
@@ -48,13 +53,13 @@ export function buildBasketPaymentPayload(
       el => el.value === String(cartForm.cardType),
     );
     Object.assign(body, {
-      fistName: cartForm.fistName,
-      lastName: cartForm.lastName,
-      cardNumber: cartForm.cardNumber,
+      first_name: cartForm.fistName,
+      last_name: cartForm.lastName,
+      card_number: cartForm.cardNumber.replace(/\s+/g, ''),
       cvv: cartForm.cvv,
-      expireMonth: cartForm.expireMonth,
-      expireYear: cartForm.expireYear,
-      type: cardTypeOption?.label,
+      expiry_month: cartForm.expireMonth,
+      expiry_year: cartForm.expireYear,
+      type: cardTypeOption?.label.toLowerCase(),
     });
   }
 

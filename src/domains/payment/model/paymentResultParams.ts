@@ -1,4 +1,7 @@
-import { isDotIr } from '@/shared/config/resolveIsDotIr';
+import {
+  defaultIranPaymentGateway,
+  isDotIr,
+} from '@/shared/config/commerceMarket';
 import type {
   PaymentGatewayName,
   PaymentResultParams,
@@ -22,7 +25,7 @@ export function resolvePaymentParams(
 }
 
 export function defaultGatewayName(): PaymentGatewayName {
-  return isDotIr ? 'zarinpal' : 'paypal';
+  return isDotIr ? defaultIranPaymentGateway : 'paypal';
 }
 
 /**
@@ -43,14 +46,20 @@ export function deriveUnifiedStatus(
   if (p.gatewayName === 'paypal') {
     return p.PayerID ? 'OK' : 'NOK';
   }
+  if (p.gatewayName === 'creditCard') {
+    return p.token ? 'OK' : 'NOK';
+  }
   return undefined;
 }
 
 /** Whether enough params are present to attempt verification (matches web `enabled`). */
 export function canVerify(p: ResolvedPaymentParams): boolean {
-  const hasPaypal = Boolean(p.token && p.payment_status);
+  const hasInternational =
+    (p.gatewayName === 'paypal' || p.gatewayName === 'creditCard') &&
+    Boolean(p.token || p.PayerID);
   const hasIr = Boolean(p.Authority && p.Status);
-  return Boolean(p.gatewayName) && (hasPaypal || hasIr || Boolean(p.PayerID));
+  const hasVandar = Boolean(p.token && p.payment_status);
+  return Boolean(p.gatewayName) && (hasInternational || hasIr || hasVandar);
 }
 
 /** Stable signature for the verify query key. */

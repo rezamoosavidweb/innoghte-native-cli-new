@@ -12,7 +12,7 @@ import { useGiveGiftCourses } from '@/domains/user/hooks/useGiveGiftCourses';
 import { useGiveGiftForm } from '@/domains/user/hooks/useGiveGiftForm';
 import { useGiveGiftScroll } from '@/domains/user/hooks/useGiveGiftScroll';
 import { useGiveGiftSubmit } from '@/domains/user/hooks/useGiveGiftSubmit';
-import { isDotIr } from '@/shared/config/resolveIsDotIr';
+import { isDotIr } from '@/shared/config/commerceMarket';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import {
   flashListContentGutters,

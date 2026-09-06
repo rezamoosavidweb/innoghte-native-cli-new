@@ -19,7 +19,11 @@ import { createPublicCourseDetailStyles } from '@/domains/courses/ui/public-cour
 import { pickCoverSrc } from '@/domains/courses/utils/pickCoverSrc';
 import { useCatalogItemDetail } from '@/shared/catalog/hooks/useCatalogItemDetail';
 import { catalogKeys } from '@/shared/catalog/model/queryKeys';
-import { isDotIr } from '@/shared/config/resolveIsDotIr';
+import {
+  apiPriceToDisplayAmount,
+  commerceMarket,
+  isDotIr,
+} from '@/shared/config/commerceMarket';
 import { useThemeColors } from '@/ui/theme';
 import type { DrawerParamList } from '@/shared/contracts/navigationApp';
 import { useAppNavigation } from '@/shared/lib/navigation/useAppNavigation';
@@ -32,16 +36,13 @@ import { Button } from '@/ui/components/Button';
 import RenderHTML from 'react-native-render-html';
 
 const formatPrice = (value: number) => {
-  const numValue = value || 0;
-  if (isDotIr) {
-    return (numValue / 10).toLocaleString('fa');
-  }
-  return numValue.toLocaleString();
+  const displayValue = apiPriceToDisplayAmount(value || 0);
+  return displayValue.toLocaleString(isDotIr ? 'fa-IR' : 'en-US');
 };
 
 const getCurrencySymbol = (showCurrency: boolean = true) => {
   if (!showCurrency) return '';
-  return isDotIr ? ' تومان' : '$';
+  return isDotIr ? ` ${commerceMarket.displayCurrency}` : commerceMarket.displayCurrency;
 };
 
 // Decorative deep-brand header backdrops behind the course cover (design-fixed).

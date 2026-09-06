@@ -1,6 +1,9 @@
 import ky, { HTTPError, type Options } from 'ky';
 
-import { scopeHeader } from '@/shared/config/resolveIsDotIr';
+import {
+  COMMERCE_CONFIG,
+  getCommerceMarket,
+} from '@/shared/config/commerceMarket';
 import { ApiError, type ApiErrorPayload } from '@/shared/infra/http/apiError';
 import { resolveApiBaseUrl } from '@/shared/infra/http/resolveBaseUrl';
 
@@ -38,8 +41,11 @@ export function createApiTransport(prefix: string, auth: HttpAuthHooks) {
       beforeRequest: [
         ({ request, options }) => {
           request.headers.set('Accept', 'application/json');
-          if (!request.headers.has('Scope')) {
-            request.headers.set('Scope', scopeHeader);
+          if (!request.headers.has(COMMERCE_CONFIG.backendScopeHeaderName)) {
+            request.headers.set(
+              COMMERCE_CONFIG.backendScopeHeaderName,
+              getCommerceMarket().scope,
+            );
           }
           const token = auth.getAccessToken();
           if (token) {

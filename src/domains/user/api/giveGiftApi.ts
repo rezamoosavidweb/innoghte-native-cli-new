@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 import { cartDtoSchema, type CartDto } from '@/domains/basket/model/schemas';
-import { scopeHeader } from '@/shared/config/resolveIsDotIr';
 import { ApiError, parseJsonResponse } from '@/shared/infra/http';
 import { getApiClient } from '@/shared/infra/http/appHttpClient';
 
@@ -43,7 +42,6 @@ export async function postCreateGivePresent(body: {
   return parseJsonResponse(
     getApiClient().post(CREATE_PRESENT_PATH, {
       json: body,
-      headers: { Scope: scopeHeader },
     }),
     givePresentCreatedSchema,
   );
@@ -55,7 +53,6 @@ export async function deleteAllAnonymousCartItems(
 ): Promise<void> {
   const response = await getApiClient().delete(PUBLIC_CART_DELETE_TOKEN_PATH, {
     headers: {
-      Scope: scopeHeader,
       'X-Cart-Token': cartToken,
     },
   });
@@ -73,7 +70,6 @@ export async function postAnonymousCartCreate(params: {
   const res = await parseJsonResponse(
     getApiClient().post(PUBLIC_CART_CREATE_PATH, {
       headers: {
-        Scope: scopeHeader,
         'X-Cart-Token': params.cartToken,
       },
       json: { course_id: params.courseId },
