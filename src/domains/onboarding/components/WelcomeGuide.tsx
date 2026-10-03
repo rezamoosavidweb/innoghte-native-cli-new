@@ -25,8 +25,26 @@ import { createWelcomeGuideStyles } from '@/domains/onboarding/ui/welcomeGuide.s
 import { Text } from '@/shared/ui/Text';
 import { useThemeColors } from '@/ui/theme';
 
-export function WelcomeGuide({ ready }: { ready: boolean }) {
-  const { visible, dismiss } = useWelcomeGuide(ready);
+export function WelcomeGuide({
+  ready,
+  userId,
+}: {
+  ready: boolean;
+  userId: number | null;
+}) {
+  return userId === null ? null : (
+    <AccountWelcomeGuide key={userId} ready={ready} userId={userId} />
+  );
+}
+
+function AccountWelcomeGuide({
+  ready,
+  userId,
+}: {
+  ready: boolean;
+  userId: number;
+}) {
+  const { visible, dismiss } = useWelcomeGuide(ready, userId);
   // Mount a fresh pager only when shown; no gestures/animations during bootstrap.
   return visible ? <WelcomeGuideModal onDismiss={dismiss} /> : null;
 }

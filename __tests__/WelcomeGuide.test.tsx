@@ -4,7 +4,10 @@ import { act, create, type ReactTestRenderer } from 'react-test-renderer';
 import { I18nextProvider } from 'react-i18next';
 
 import { WelcomeGuide } from '@/domains/onboarding';
-import { WELCOME_GUIDE_STORAGE_KEY } from '@/domains/onboarding/model/welcomeGuide';
+import {
+  WELCOME_GUIDE_STORAGE_KEY,
+  welcomeGuideStorageKey,
+} from '@/domains/onboarding/model/welcomeGuide';
 import i18n, { initI18n } from '@/shared/infra/i18n';
 import { StorageService } from '@/shared/infra/storage/storage.service';
 import { TypographyProvider } from '@/shared/ui/TypographyContext';
@@ -34,14 +37,16 @@ jest.mock('react-native-reanimated-carousel', () => {
 });
 
 const values = new Map<string, string>();
+const USER_ID = 42;
+const userStorageKey = welcomeGuideStorageKey(USER_ID);
 let renderer: ReactTestRenderer;
 
-function tree(ready = true) {
+function tree(ready = true, userId: number | null = USER_ID) {
   return (
     <I18nextProvider i18n={i18n}>
       <TypographyProvider>
         <AppThemeProvider colorScheme="dark">
-          <WelcomeGuide ready={ready} />
+          <WelcomeGuide ready={ready} userId={userId} />
         </AppThemeProvider>
       </TypographyProvider>
     </I18nextProvider>
@@ -89,7 +94,7 @@ test('waits for bootstrap and does not mark an interrupted tour as completed', (
   expect(renderer.root.findAllByType(Modal)).toHaveLength(0);
   act(() => renderer.update(tree(true)));
   expect(renderer.root.findAllByType(Modal)).toHaveLength(1);
-  expect(values.has(WELCOME_GUIDE_STORAGE_KEY)).toBe(false);
+  expect(values.has(userStorageKey)).toBe(false);
   act(() => renderer.unmount());
   mount();
   expect(
@@ -110,7 +115,7 @@ test('visits all five Persian slides, goes back, then completes and stays dismis
         .length,
     ).toBeGreaterThan(0);
   }
-  expect(values.has(WELCOME_GUIDE_STORAGE_KEY)).toBe(false);
+  expect(values.has(userStorageKey)).toBe(false);
   press('welcome-guide-previous');
   expect(
     renderer.root.findAllByProps({ testID: 'welcome-guide-slide-live' }).length,
@@ -118,7 +123,7 @@ test('visits all five Persian slides, goes back, then completes and stays dismis
   press('welcome-guide-next');
   press('welcome-guide-next');
   expect(renderer.root.findAllByType(Modal)).toHaveLength(0);
-  expect(values.get(WELCOME_GUIDE_STORAGE_KEY)).toBe('1');
+  expect(values.get(userStorageKey)).toBe('1');
   act(() => renderer.unmount());
   mount();
   expect(renderer.root.findAllByType(Modal)).toHaveLength(0);
@@ -128,7 +133,7 @@ test.each(['skip', 'android-back'])('%s dismisses persistently', action => {
   mount();
   if (action === 'skip') press('welcome-guide-skip');
   else act(() => renderer.root.findByType(Modal).props.onRequestClose());
-  expect(values.get(WELCOME_GUIDE_STORAGE_KEY)).toBe('1');
+  expect(values.get(userStorageKey)).toBe('1');
   expect(renderer.root.findAllByType(Modal)).toHaveLength(0);
   act(() => renderer.unmount());
   mount();
@@ -174,5 +179,61 @@ test('English navigation preserves the same logical order with LTR offsets', asy
   press('welcome-guide-previous');
   expect(
     renderer.root.findAllByProps({ testID: 'welcome-guide-slide-live' }).length,
+  ).toBeGreaterThan(0);
+});
+
+test('an old pre-login completion does not suppress the signed-in guide', () => {
+  values.set(WELCOME_GUIDE_STORAGE_KEY, '1');
+  mount();
+  expect(renderer.root.findAllByType(Modal)).toHaveLength(1);
+  expect(values.has(userStorageKey)).toBe(false);
+});
+
+test('waits for the account after login and keeps completion across logout and login', () => {
+  act(() => {
+    renderer = create(tree(false, null));
+  });
+  expect(renderer.root.findAllByType(Modal)).toHaveLength(0);
+  act(() => renderer.update(tree(true, null)));
+  expect(renderer.root.findAllByType(Modal)).toHaveLength(0);
+  expect(values.size).toBe(0);
+
+  act(() => renderer.update(tree(true, USER_ID)));
+  expect(renderer.root.findAllByType(Modal)).toHaveLength(1);
+  press('welcome-guide-skip');
+  act(() => renderer.update(tree(false, null)));
+  expect(renderer.root.findAllByType(Modal)).toHaveLength(0);
+  act(() => renderer.update(tree(true, USER_ID)));
+  expect(renderer.root.findAllByType(Modal)).toHaveLength(0);
+});
+
+test('completion belongs to the account and a different account starts on slide one', () => {
+  mount();
+  press('welcome-guide-skip');
+  act(() => renderer.update(tree(true, 99)));
+  expect(renderer.root.findAllByType(Modal)).toHaveLength(1);
+  measurePager();
+  expect(
+    renderer.root.findAllByProps({ testID: 'welcome-guide-slide-welcome' })
+      .length,
+  ).toBeGreaterThan(0);
+  expect(values.has(welcomeGuideStorageKey(99))).toBe(false);
+  press('welcome-guide-skip');
+  expect(values.get(welcomeGuideStorageKey(99))).toBe('1');
+  act(() => renderer.update(tree(true, USER_ID)));
+  expect(renderer.root.findAllByType(Modal)).toHaveLength(0);
+});
+
+test('logout during the guide does not complete it', () => {
+  mount();
+  press('welcome-guide-next');
+  act(() => renderer.update(tree(false, null)));
+  expect(renderer.root.findAllByType(Modal)).toHaveLength(0);
+  expect(values.size).toBe(0);
+  act(() => renderer.update(tree(true, USER_ID)));
+  measurePager();
+  expect(
+    renderer.root.findAllByProps({ testID: 'welcome-guide-slide-welcome' })
+      .length,
   ).toBeGreaterThan(0);
 });

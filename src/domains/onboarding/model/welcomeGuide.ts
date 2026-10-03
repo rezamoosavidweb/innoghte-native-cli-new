@@ -13,12 +13,17 @@ export const WELCOME_SLIDES = [
 
 export type WelcomeSlide = (typeof WELCOME_SLIDES)[number];
 
-export function hasCompletedWelcomeGuide(): boolean {
-  return StorageService.getString(WELCOME_GUIDE_STORAGE_KEY) === GUIDE_VERSION;
+export function welcomeGuideStorageKey(userId: number): string {
+  // The old installation-wide flag may have been set before login. Do not reuse it.
+  return `${WELCOME_GUIDE_STORAGE_KEY}:user:${userId}`;
 }
 
-export function completeWelcomeGuide(): void {
-  StorageService.setString(WELCOME_GUIDE_STORAGE_KEY, GUIDE_VERSION);
+export function hasCompletedWelcomeGuide(userId: number): boolean {
+  return StorageService.getString(welcomeGuideStorageKey(userId)) === GUIDE_VERSION;
+}
+
+export function completeWelcomeGuide(userId: number): void {
+  StorageService.setString(welcomeGuideStorageKey(userId), GUIDE_VERSION);
 }
 
 /** The carousel uses physical LTR offsets; Persian pages advance to the right. */
