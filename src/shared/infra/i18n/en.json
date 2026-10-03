@@ -1,4 +1,46 @@
 {
+  "welcomeGuide": {
+    "label": "Your Innoghte guide",
+    "skip": "Skip for now",
+    "next": "Continue",
+    "previous": "Back",
+    "start": "Let’s get started",
+    "progress": "{{current}} of {{total}}",
+    "goToSlide": "Go to slide {{number}}",
+    "swipeHint": "Swipe left or right to explore",
+    "slides": {
+      "welcome": {
+        "tag": "A fresh beginning",
+        "title": "Welcome to Innoghte",
+        "description": "A space to learn, listen and grow. Take a quick tour and discover what you can do with Innoghte.",
+        "hint": "Five small steps to start your journey"
+      },
+      "courses": {
+        "tag": "Make room to grow",
+        "title": "Your learning journey",
+        "description": "Explore Courses to find a topic and read its introduction. The courses you purchase are available in My Learning Center.",
+        "hint": "Open Courses in the bottom navigation"
+      },
+      "albums": {
+        "tag": "A moment for yourself",
+        "title": "Find your next listen",
+        "description": "Discover albums and audio content. Open an album, browse its tracks and listen to the content available to you.",
+        "hint": "Open Albums in the bottom navigation"
+      },
+      "live": {
+        "tag": "Better together",
+        "title": "Be part of the moment",
+        "description": "Visit Live Sessions and Events in the app menu. Check upcoming times, explore the details and find out how to join.",
+        "hint": "App menu → Live Sessions and Events"
+      },
+      "profile": {
+        "tag": "Your own space",
+        "title": "Made for your journey",
+        "description": "Your profile brings together your learning, purchases and gifts. If you need a hand, contact support through Tickets.",
+        "hint": "Open Profile in the bottom navigation"
+      }
+    }
+  },
   "common": {
     "yes": "Yes",
     "no": "No"

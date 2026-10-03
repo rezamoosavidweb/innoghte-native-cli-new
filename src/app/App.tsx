@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { installNavigationGuard } from '@/app/bridge/auth/navigationGuard';
 import { APP_LINKING_PREFIXES } from '@/app/bridge/auth/linkingAuth';
 import { rootNavigator } from '@/app/bridge/rootNavigator';
+import { WelcomeGuideBridge } from '@/app/bridge/WelcomeGuideBridge';
 import { navigationRef } from '@/shared/infra/navigation/navigationRef';
 import { RootProviders } from '@/app/providers/RootProviders';
 import { useAppTheme } from '@/ui/theme';
@@ -38,6 +39,7 @@ const AppNavigation = React.memo(function AppNavigation() {
         linking={linking}
         key={i18nInstance.language}
       />
+      <WelcomeGuideBridge />
     </>
   );
 });
